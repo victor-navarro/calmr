@@ -1,0 +1,32 @@
+Package: heidi
+Title: An R-based HeiDI simulator
+Version: 0.0.0.9000
+Authors@R: 
+    person("Victor", "Navarro", , "navarrov@cardiff.ac.uk", role = c("aut", "cre"))
+Description: Tools to simulate using HeiDI.
+License: GPL (>= 3)
+Imports: 
+    dplyr,
+    ggbeeswarm,
+    ggplot2,
+    htmltools,
+    magrittr,
+    patchwork,
+    rhandsontable,
+    shiny,
+    shinyalert,
+    shinydashboard,
+    stringr,
+    svDialogs,
+    tibble,
+    tidyr
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+VignetteBuilder: 
+    knitr
+Config/testthat/edition: 3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2

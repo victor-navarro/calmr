@@ -1,0 +1,109 @@
+---
+title: "heidi_basics"
+author: "Victor Navarro"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{heidi_basics}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(heidi)
+```
+
+# Using heidi in R
+
+## Requirements
+To successfully simulate using HeiDI, the only requirements are a data.frame specifying the groups, phases, and trials of the experiment, and (optionally, although recommended), a data.frame with saliency parameters for all the stimuli in the experiment.
+
+## The design data.frame
+In the so-called design data.frame, the user specifies their experimental design. A few rules about the data.frame:
+
+0 - Each row represents a group.
+1 - Its first column contains the group labels.
+2 - The remaining columns are organized in pairs. The first column of each pair specifies the trials to give in the phase, whereas the second column of each pair specifies whether the trials within a phase are should be randomized.
+
+Let's build our design matrix.
+
+```{r}
+
+my_blocking <- data.frame(Group = c("Exp", "Control"),
+                          Phase1 = c("10A(US)", "10C(US)"),
+                          R1 = c(FALSE, FALSE),
+                          Phase2 = c("10AB(US)", "10AB(US)"),
+                          R2 = c(FALSE, FALSE),
+                          Test = c("1A/1B", "1A/1B"),
+                          R3 = c(FALSE, FALSE))
+my_blocking
+```
+
+Fairly simple!
+A few observations about the trial notation:
+0 - Trials are preceded by a number. That number represents the number of times that trial will be given in each phase. "10A(US)" means that the "A(US)" trial will be given 10 times.
+1 - The presence and absence of the unconditioned stimulus (US) is not denoted with the traditional "+" and "-" symbols. Instead, we use parenthesis to denote "named" stimuli. These can be thought as a single element with a complex name (i.e., with more than one character). As such, "(US)" denotes a single element representing the US.
+2 - The "/" character is used as a trial separator (it does not imply randomization by itself). Thus, "1A/1B" specifies that a single "A" trial and a single "B" trial will be given during that phase. Randomization of trials is specified in the other columns.
+
+If you ever want to check if your trials string will work with the simulator, you can use `trialParser`.
+That function returns a list with trial_names (the name of the trial), trial_repeats (the number of times each trial is given), a trial_list (a list with the components of each trial), and stimuli (the stimuli found in the trial string).
+
+```{r}
+trialParser("AB/10AC")  #not specifying a number of AB trials. Bad practice!
+trialParser("10AB(AB)(US)") #considering a configural cue for elements AB
+
+```
+
+
+## The parameters table
+
+You will be able to run a simulation with only an experiment data.frame, the simulation function will use default saliency values for each stimulus. Whenever you want specific saliency values for the stimuli in your experiment, you should pass a data.frame with parameters for all your stimuli. Let's specify such a table for our experiment.
+
+```{r}
+my_pars <- data.frame(Stimulus = c("A", "B", "C", "US"), Alpha = c(0.3, 0.3, 0.3, 0.5))
+my_pars
+```
+
+### Additional options
+
+The final ingredient is a list with simulation options. We can get a default one with `getHeidiOpts`, and modify them accordingly.
+
+```{r}
+my_opts <- getHeidiOpts()
+my_opts
+my_opts$iterations <- 10
+my_opts
+
+```
+
+### Simulating
+
+And we can finally simulate the model with `runHeidi`. By default, the function returns a list with the relevant data. Let's see.
+
+```{r}
+my_sim <- runHeidi(design_df = my_blocking,
+                   param_df = my_pars,
+                   options = my_opts)
+names(my_sim) #contains information about weights (ws), v-values (vs), and r-values (rs)
+head(my_sim$vs)
+
+```
+
+## Plotting
+
+But, we rarely want the raw data. If you are like me, you will want to see some plots. Let's use `makePlots` to do just that.
+
+```{r}
+my_plots = makePlots(my_sim)
+my_plots$`Exp Split Vs`
+my_plots$`Control Split Vs`
+
+
+```
+
