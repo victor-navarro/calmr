@@ -1,7 +1,7 @@
 #' Plotting functions for heidi models
 #' @return A list with ggplot objects
 #' @seealso parseHeidiResults
-#' @importFrom magrittr %>%
+#' @import magrittr
 #' @name heidi_plots
 NULL
 #> NULL

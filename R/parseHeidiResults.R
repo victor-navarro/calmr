@@ -3,7 +3,7 @@
 #' @returns A list containing parsed ws, vs, and rs.
 #' @seealso runHeidi
 #' @export
-#' @importFrom magrittr %>%
+#' @import magrittr
 parseHeidiResults <- function(raw_results){
   #expects a tibble with one row per group
   #returns a list with all the relevant data for exporting (and plotting)

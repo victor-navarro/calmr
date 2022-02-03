@@ -3,7 +3,7 @@
 #' @param stims A character vector with stimuli.
 #' @param default_val Default alpha value.
 #' @param mod A model list, as returned by trainPavHEIDI.
-#' @importFrom magrittr %>%
+#' @import magrittr
 #' @name heidi_helpers
 NULL
 #> NULL
