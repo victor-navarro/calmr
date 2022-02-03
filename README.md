@@ -18,4 +18,5 @@ If you managed to build the vignettes, there's a vignette showing the basics of 
 
 Or better yet, launch the visual interface (will open a browser window) via
 
-`heidi::heidi_app()`
+`library(heidi)`
+`heidi_app()`
