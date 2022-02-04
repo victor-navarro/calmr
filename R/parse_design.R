@@ -5,7 +5,7 @@
 #' @note
 #' \itemize{
 #' \item{
-#' Each entry in even-numbered columns of df is a string formatted as per trialParser.
+#' Each entry in even-numbered columns of df is a string formatted as per trial_parser.
 #' }
 #' \item{
 #' Each element of the returned list list is itself a list of length (ncol(df)-1)/2, the number of phases
@@ -13,10 +13,10 @@
 #' }
 #' @examples
 #' df <- data.frame(Group = c('Group 1', 'Group 2'), P1 = c('10AB(US)', '10A(US)'), R1 = c(TRUE, TRUE))
-#' parseDesign(df)
-#' @seealso trialParser
+#' parse_design(df)
+#' @seealso trial_parser
 #' @export
-parseDesign <- function(df){
+parse_design <- function(df){
   design_list = vector('list', nrow(df))
   phases = colnames(df)
   groups = df[, 'Group']
@@ -27,7 +27,7 @@ parseDesign <- function(df){
                             phase = phases[p],
                             parse_string = df[g, p],
                             randomize = df[g, p+1]),
-                       trialParser(df[g, p]))
+                       trial_parser(df[g, p]))
     }
     design_list[[g]] = glist
   }

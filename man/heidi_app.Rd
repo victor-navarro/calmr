@@ -4,10 +4,10 @@
 \alias{heidi_app}
 \title{Run the heidi GUI}
 \usage{
-heidi_app(browser = TRUE)
+heidi_app(browser = FALSE)
 }
 \arguments{
-\item{browser}{A logical specifying whether the app should be launched into a browser. Default = TRUE.}
+\item{browser}{A logical specifying whether the app should be launched into a browser. Default = FALSE.}
 }
 \description{
 Starts a shiny application

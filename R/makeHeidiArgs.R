@@ -1,21 +1,21 @@
 #' Make a tibble to fit a heidi model
 #'
-#' @param design A design list, as returned by parseDesign
-#' @param pars A parameter data.frame as returned by getParams
+#' @param design A design list, as returned by parse_design
+#' @param pars A parameter data.frame as returned by get_params
 #' @param opts A list with options
 #'
 #' @return A tibble with the arguments required to run the model. Each row represents a group in the experimental design.
 #'
-#' @seealso parseDesign, getParams
+#' @seealso parse_design, get_params
 #' @examples
 #' df <- data.frame(Group = c('Group 1', 'Group 2'), P1 = c('10AB(US)', '10A(US)'), R1 = c(TRUE, TRUE))
-#' des <- parseDesign(df)
-#' ps <- getParams(des, 0.2)
-#' makeHeidiArgs(design = des, pars = ps, opts = list(iterations = 1))
+#' des <- parse_design(df)
+#' ps <- get_params(des, 0.2)
+#' make_heidi_args(design = des, pars = ps, opts = list(iterations = 1))
 #'
 #' @export
 
-makeHeidiArgs <- function(design, pars, opts){
+make_heidi_args <- function(design, pars, opts){
   #Returns a tibble to run design in a rowwise manner (each row is a group)
 
   #the only challenge here is to create a master list of trials (trials)
