@@ -10,7 +10,7 @@ parse_design(df)
 \item{df}{A data.frame of dimensions Groups, 2*Phases+1}
 }
 \value{
-A list of length nrow(df), the number of groups in the table.
+A tibble containing the parsed design in long format.
 }
 \description{
 Parse each string in a data.frame
@@ -19,9 +19,6 @@ Parse each string in a data.frame
 \itemize{
 \item{
 Each entry in even-numbered columns of df is a string formatted as per trial_parser.
-}
-\item{
-Each element of the returned list list is itself a list of length (ncol(df)-1)/2, the number of phases
 }
 }
 }

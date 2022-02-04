@@ -5,3 +5,4 @@ inst/doc
 .httr-oauth
 .DS_Store
 /inst/heidi_app/rsconnect/
+/inst/heidi_app/heidi_app_deployment.R

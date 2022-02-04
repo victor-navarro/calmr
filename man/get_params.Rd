@@ -4,10 +4,10 @@
 \alias{get_params}
 \title{Returns a data.frame with parameters for stimuli contained in design}
 \usage{
-get_params(design_list, default_par)
+get_params(design, default_par)
 }
 \arguments{
-\item{design_list}{A list with the experimental design, as returned by parse_design}
+\item{design}{A tibble with the experimental design, as returned by parse_design}
 
 \item{default_par}{A float between 0 and 1.}
 }
