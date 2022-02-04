@@ -16,7 +16,12 @@ If you managed to build the vignettes, there's a vignette showing the basics of 
 
 `vignette("heidi_basics", package = "heidi")`
 
-Or better yet, launch the visual interface (will open a browser window) via
+Or better yet, launch the visual interface via
 
-`library(heidi)`
-`heidi_app()`
+```
+library(heidi)
+heidi_app()
+```
+![How to use](/assets/images/gui_demo.gif)
+
+

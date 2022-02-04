@@ -12,7 +12,7 @@ ui <- shinydashboard::dashboardPage(
                                                             shiny::actionButton(inputId = "groupadd", label = "Group+", class = 'btn-s'),
                                                             shiny::actionButton(inputId = "phaserm", label = "Phase-", class = 'btn-s'),
                                                             shiny::actionButton(inputId = "phaseadd", label = "Phase+", class = 'btn-s'),
-                                                            shiny::actionButton(inputId = "parsedesign", label = "Parse Design", class = 'btn-s'),
+                                                            shiny::actionButton(inputId = "parse_design", label = "Parse Design", class = 'btn-s'),
                                                             htmltools::div(style="display:inline-block;",
                                                                            shiny::conditionalPanel("output.parsed",
                                                                                                    shiny::actionButton(inputId = 'runmodel', label = 'Run Model', class = 'btn-s')))

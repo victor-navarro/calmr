@@ -2,19 +2,22 @@
 % Please edit documentation in R/heidi_helpers.R
 \name{heidi_helpers}
 \alias{heidi_helpers}
-\alias{genSSWeights}
-\alias{parseWs}
-\alias{parseVs}
-\alias{parseRs}
+\alias{gen_ss_weights}
+\alias{parse_ws}
+\alias{parse_vs}
+\alias{parse_rs}
+\alias{parse_heidi_results}
 \title{An assortment of functions to help heidi}
 \usage{
-genSSWeights(stims, default_val = 0)
+gen_ss_weights(stims, default_val = 0)
 
-parseWs(mod)
+parse_ws(mod)
 
-parseVs(mod)
+parse_vs(mod)
 
-parseRs(mod)
+parse_rs(mod)
+
+parse_heidi_results(raw_results)
 }
 \arguments{
 \item{stims}{A character vector with stimuli.}
@@ -22,7 +25,9 @@ parseRs(mod)
 \item{default_val}{Default alpha value.}
 
 \item{mod}{A model list, as returned by trainPavHEIDI.}
+
+\item{raw_results}{A tibble with model information, as return by run_heidi}
 }
 \description{
-genSSWeights generates a named array with model weights. parseWs, parseVs, and parseRs parse the raw outputs of trainPavHEIDI into a readable format.
+gen_ss_weights generates a named array with model weights. parse_ws, parse_vs, parse_rs and parse_heidi_results parse the raw outputs of trainPavHEIDI into a readable format.
 }

@@ -51,12 +51,12 @@ A few observations about the trial notation:
 1 - The presence and absence of the unconditioned stimulus (US) is not denoted with the traditional "+" and "-" symbols. Instead, we use parenthesis to denote "named" stimuli. These can be thought as a single element with a complex name (i.e., with more than one character). As such, "(US)" denotes a single element representing the US.
 2 - The "/" character is used as a trial separator (it does not imply randomization by itself). Thus, "1A/1B" specifies that a single "A" trial and a single "B" trial will be given during that phase. Randomization of trials is specified in the other columns.
 
-If you ever want to check if your trials string will work with the simulator, you can use `trialParser`.
+If you ever want to check if your trials string will work with the simulator, you can use `trial_parser`.
 That function returns a list with trial_names (the name of the trial), trial_repeats (the number of times each trial is given), a trial_list (a list with the components of each trial), and stimuli (the stimuli found in the trial string).
 
 ```{r}
-trialParser("AB/10AC")  #not specifying a number of AB trials. Bad practice!
-trialParser("10AB(AB)(US)") #considering a configural cue for elements AB
+trial_parser("AB/10AC")  #not specifying a number of AB trials. Bad practice!
+trial_parser("10AB(AB)(US)") #considering a configural cue for elements AB
 
 ```
 
@@ -72,10 +72,10 @@ my_pars
 
 ### Additional options
 
-The final ingredient is a list with simulation options. We can get a default one with `getHeidiOpts`, and modify them accordingly.
+The final ingredient is a list with simulation options. We can get a default one with `get_heidi_opts`, and modify them accordingly.
 
 ```{r}
-my_opts <- getHeidiOpts()
+my_opts <- get_heidi_opts()
 my_opts
 my_opts$iterations <- 10
 my_opts
@@ -84,10 +84,10 @@ my_opts
 
 ### Simulating
 
-And we can finally simulate the model with `runHeidi`. By default, the function returns a list with the relevant data. Let's see.
+And we can finally simulate the model with `run_heidi`. By default, the function returns a list with the relevant data. Let's see.
 
 ```{r}
-my_sim <- runHeidi(design_df = my_blocking,
+my_sim <- run_heidi(design_df = my_blocking,
                    param_df = my_pars,
                    options = my_opts)
 names(my_sim) #contains information about weights (ws), v-values (vs), and r-values (rs)
@@ -97,13 +97,12 @@ head(my_sim$vs)
 
 ## Plotting
 
-But, we rarely want the raw data. If you are like me, you will want to see some plots. Let's use `makePlots` to do just that.
+But, we rarely want the raw data. If you are like me, you will want to see some plots. Let's use `make_plots` to do create some plots, and `patch_plots` to display them.
 
 ```{r}
-my_plots = makePlots(my_sim)
-my_plots$`Exp Split Vs`
-my_plots$`Control Split Vs`
-
-
+my_plots = make_plots(my_sim)
+plot_names = names(my_plots)
+plot_names
+patch_plots(plots = my_plots, selection = plot_names[c(3, 6)])
 ```
 

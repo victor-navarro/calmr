@@ -101,25 +101,26 @@ shiny::shinyServer(function(input, output) {
     }
   })
 
-  shiny::observeEvent(input$parsedesign, {
+  shiny::observeEvent(input$parse_design, {
     design_df(rhandsontable::hot_to_r(input$design_tbl))
-    parsed_design(parseDesign(design_df()))
-    param_df(getParams(parsed_design(), input$defaultpar))
+    parsed_design(parse_design(design_df()))
+    param_df(get_params(parsed_design(), input$defaultpar))
     parsed(TRUE)
   })
 
   shiny::observeEvent(input$runmodel, {
     tryCatch({
       #use design_df and param_df to create a tibble containing all necessary arguments for heidi
-      heidi_df = makeHeidiArgs(parsed_design(), param_df(), sim_options())
+      heidi_df = heidi::make_heidi_args(parsed_design(), param_df(), sim_options())
       #run heidi, run!
-      raw_results(heidi_df %>% dplyr::rowwise() %>% dplyr::mutate(mod_data = list(train_pavHEIDI(stim_alphas, stim_cons, genSSWeights(stim_names), tps, trials, stim_names))))
+      raw_results(heidi_df %>% dplyr::rowwise() %>% dplyr::mutate(mod_data = list(heidi::train_pav_heidi(stim_alphas, stim_cons, heidi::gen_ss_weights(stim_names), tps, trials, trialnames))))
       #parse results
-      parsed_results(parseHeidiResults(raw_results()))
+      parsed_results(heidi::parse_heidi_results(raw_results()))
       #make plots
-      plots(makePlots(parsed_results()))
+      plots(heidi::make_plots(parsed_results()))
       ran(TRUE)
     }, error = function(x){
+      print(x)
       shinyalert::shinyalert(
         title = "Error!", text = "Something went wrong. Please check your parameters.", size = "s", closeOnEsc = TRUE, closeOnClickOutside = TRUE, html = FALSE,
         type = "error", showConfirmButton = TRUE, showCancelButton = FALSE, confirmButtonText = "OK", confirmButtonCol = "#AEDEF4")
@@ -140,7 +141,7 @@ shiny::shinyServer(function(input, output) {
 
   shiny::observeEvent(input$defaultpar, {
     if (!is.null(parsed_design()) & parsed()){
-      param_df(getParams(parsed_design(), input$defaultpar))
+      param_df(heidi::get_params(parsed_design(), input$defaultpar))
     }
   })
 
@@ -169,7 +170,6 @@ shiny::shinyServer(function(input, output) {
 
 
   #### Other reactives
-
   shiny::observeEvent(plots(), {
     plot_names = names(plots())
     #remember selection, it gets annoying to reselect plots when playing with alpha
@@ -224,7 +224,7 @@ shiny::shinyServer(function(input, output) {
 
   output$plot <- shiny::renderPlot({
     if (!is.null(plots())){
-      patchPlots(plots(), selected_plots(), plot_options())
+      heidi::patch_plots(plots(), selected_plots(), plot_options())
     }
   })
 

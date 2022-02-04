@@ -2,7 +2,7 @@
 #' @description Runs the model given a data.frame containing the experimental design and parameters.
 #' @param design_df A data.frame of dimensions G,2*P+1; where G is the number of groups and P is the number of phases.
 #' @param param_df A data.frame of dimensions N,2; where N is the number of stimuli in the experimental design.
-#' @param options A list of options, as returned by getHeidiOpts.
+#' @param options A list of options, as returned by get_heidi_opts.
 #' @param parse A logical specifying whether the results should be parsed. Default = TRUE.
 #' @note
 #' The specification of design_df should adhere to the following rules:
@@ -29,12 +29,12 @@
 #' }
 #' }
 #' @return A list with parsed results or a tibble with raw results
-#' @seealso getHeidiOpts, parseDesign, trainPavHEIDI, parseHeidiResults
+#' @seealso get_heidi_opts, parse_design, trainPavHEIDI, parse_heidi_results
 #' @export
-runHeidi <- function(design_df, param_df = NULL, options = NULL, parse = T){
+run_heidi <- function(design_df, param_df = NULL, options = NULL, parse = T){
   default_alpha = .2
-  parsed_design = parseDesign(design_df)
-  auto_params = getParams(parsed_design, default_par = default_alpha) #generate parameters
+  parsed_design = parse_design(design_df)
+  auto_params = get_params(parsed_design, default_par = default_alpha) #generate parameters
   #check if parameters were passed
   if (is.null(param_df)){
     param_df = auto_params
@@ -46,21 +46,21 @@ runHeidi <- function(design_df, param_df = NULL, options = NULL, parse = T){
     }
   }
   #check if options were passed
-  auto_opts = getHeidiOpts()
+  auto_opts = get_heidi_opts()
   if (is.null(options)){
     options = auto_opts
   }else{
     #check if the user covered all the options requested
     if (any(!(names(auto_opts) %in% names(options)))){
-      stop("Error: Did not supply some of the options required to fit the model. Please see getHeidiOpts")
+      stop("Error: Did not supply some of the options required to fit the model. Please see get_heidi_opts")
     }
   }
   #make the tibble
-  heidi_df = makeHeidiArgs(parsed_design, param_df, options)
+  heidi_df = make_heidi_args(parsed_design, param_df, options)
   #run the model
-  results = heidi_df %>% dplyr::rowwise() %>% dplyr::mutate(mod_data = list(train_pavHEIDI(stim_alphas, stim_cons, genSSWeights(stim_names), tps, trials, trialnames)))
+  results = heidi_df %>% dplyr::rowwise() %>% dplyr::mutate(mod_data = list(train_pav_heidi(stim_alphas, stim_cons, gen_ss_weights(stim_names), tps, trials, trialnames)))
   if (parse){
-    results = parseHeidiResults(results)
+    results = parse_heidi_results(results)
   }
   return(results)
 }

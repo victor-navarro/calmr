@@ -14,7 +14,7 @@
 #' }
 #' @note The array w contains the associations for all stimuli involved in the experiment. Entry i,j specifies the associative strength between stimulus i to stimulus j. Entry j,i specifies the opposite direction.
 #' @export
-train_pavHEIDI <- function(sals, cons, w, ts, trials, trialnames, targets = 'US'){
+train_pav_heidi <- function(sals, cons, w, ts, trials, trialnames, targets = 'US'){
   maxstim = dim(w)[1]
   ws = array(NA, dim = c(length(ts), dim(w)),
              dimnames = list(NULL, rownames(w), colnames(w)))

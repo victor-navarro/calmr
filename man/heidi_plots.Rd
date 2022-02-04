@@ -2,24 +2,36 @@
 % Please edit documentation in R/heidi_plots.R
 \name{heidi_plots}
 \alias{heidi_plots}
-\alias{makePlots}
-\alias{plotWeights}
-\alias{plotVs}
-\alias{plotRs}
+\alias{make_plots}
+\alias{plot_weights}
+\alias{plot_vs}
+\alias{plot_rs}
+\alias{patch_plots}
+\alias{get_plot_opts}
 \title{Plotting functions for heidi models}
 \usage{
-makePlots(dat)
+make_plots(dat)
 
-plotWeights(vals)
+plot_weights(vals)
 
-plotVs(vals)
+plot_vs(vals)
 
-plotRs(vals)
+plot_rs(vals)
+
+patch_plots(plots, selection, options = get_plot_opts())
+
+get_plot_opts(common_scale = TRUE)
 }
 \arguments{
-\item{dat}{A list containing data.frames with parsed weights, r values, and v values, as returned by parseHeidiResults.}
+\item{dat}{A list containing data.frames with parsed weights, r values, and v values, as returned by parse_heidi_results.}
 
 \item{vals}{A data.frame containing parsed values}
+
+\item{plots}{A named list with plots}
+
+\item{selection}{A character vector with the selected plots}
+
+\item{options}{A list with options}
 }
 \value{
 A list with ggplot objects
@@ -27,6 +39,11 @@ A list with ggplot objects
 \description{
 Plotting functions for heidi models
 }
+\note{
+\itemize{
+\item{Plotting options are obtained via get_plot_opts(). For now, only plotting in a common y-axis is supported.
+}}
+}
 \seealso{
-parseHeidiResults
+parse_heidi_results
 }
