@@ -32,6 +32,8 @@ get_plot_opts(common_scale = TRUE)
 \item{selection}{A character vector with the selected plots}
 
 \item{options}{A list with options}
+
+\item{common_scalle}{A logical. Whether to plot the data in a common y-scale.}
 }
 \value{
 A list with ggplot objects

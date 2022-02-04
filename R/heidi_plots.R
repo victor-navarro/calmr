@@ -10,6 +10,7 @@ NULL
 #' @param plots A named list with plots
 #' @param selection A character vector with the selected plots
 #' @param options A list with options
+#' @param common_scalle A logical. Whether to plot the data in a common y-scale.
 #' @note
 #' \itemize{
 #' \item{Plotting options are obtained via get_plot_opts(). For now, only plotting in a common y-axis is supported.
