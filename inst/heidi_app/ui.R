@@ -1,7 +1,6 @@
 library(shiny)
 library(shinydashboard)
 library(shinyalert)
-library(svDialogs)
 library(tidyr)
 library(dplyr)
 library(ggbeeswarm)
@@ -39,15 +38,11 @@ ui <- shinydashboard::dashboardPage(
                          shinydashboard::box(width = 12,
                                              title = "Import/Export",
                                              htmltools::div(
-                                               shiny::actionButton("savedesign", "Save Sim", icon = shiny::icon("save"), class = "btn-s", width = "50%"),
-                                               shiny::actionButton("loaddesign", "Load Sim", icon = shiny::icon("folder-open"), class = "btn-s", width = "50%")
-                                             ),
-                                             htmltools::br(),
-                                             htmltools::div(
-                                               shiny::actionButton("exportresults", "Save Data", icon = shiny::icon("file-download"), class = "btn-s", width = "50%"),
-                                               #shiny::actionButton("exportmodel", "Save Model", icon = shiny::icon("file-download"), class = "btn-s", width = "50%")
+                                               shiny::fileInput("loaddesign", "Load Sim", multiple = FALSE, accept = c(".rds"), buttonLabel = "...", width = "79%"),
+                                               htmltools::div(style = "margin-top: -15px"),
+                                               shiny::downloadButton("savedesign", "Save Sim", icon = shiny::icon("save"), class = "btn-s"),
+                                               shiny::downloadButton("exportresults", "Save Data", icon = shiny::icon("file-download"), class = "btn-s")
                                              )
-
                          )
       ),
       shiny::column(width = 3,

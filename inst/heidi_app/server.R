@@ -1,5 +1,3 @@
-
-
 #base_df <- data.frame(Group = "Group 1", P1 = "", R1 = TRUE)
 base_df <- data.frame(Group = c("True", "Pseudo"),
                       P1 = c("10AB(US)/10AC", "5AB(US)/5AB/5AC(US)/5AC"),
@@ -28,48 +26,26 @@ shiny::shinyServer(function(input, output) {
   parsed_results = shiny::reactiveVal()
 
   #### Input Logic ####
-
-  shiny::observeEvent(input$savedesign, {
-    fpath = svDialogs::dlg_save(default = "my_simulation.rds", title = "Save design to...")$res
-    if (length(fpath)){
-      ext = tools::file_ext(fpath)
-      if (!(nchar(ext) | !(stringr::str_to_lower(ext) !=  'rds'))){fpath = paste0(fpath, '.rds')}
-      saveRDS(list(design_df = design_df(),
-                   parsed_design = parsed_design(),
-                   param_df = param_df(),
-                   plots = plots(),
-                   selected_plots = selected_plots(),
-                   sim_options = sim_options(),
-                   plot_options = plot_options(),
-                   parsed = parsed(),
-                   ran = ran(),
-                   raw_results = raw_results(),
-                   parsed_results = parsed_results()), fpath)
-    }
-  })
-
   shiny::observeEvent(input$loaddesign, {
-    fpath = svDialogs::dlg_open(title = "Load design from...", multiple = F, filters = c('RDS Files (*.RDS)', '*.RDS'))$res
-    if (length(fpath)){
-      dsg = readRDS(fpath)
-      design_df(dsg$design_df)
-      parsed_design(dsg$parsed_design)
-      param_df(dsg$param_df)
-      plots(dsg$plots)
-      selected_plots(dsg$selected_plots)
-      sim_options(dsg$sim_options)
+    dsg = readRDS(input$loaddesign$datapath)
+    design_df(dsg$design_df)
+    parsed_design(dsg$parsed_design)
+    param_df(dsg$param_df)
+    plots(dsg$plots)
+    selected_plots(dsg$selected_plots)
+    sim_options(dsg$sim_options)
 
-      #set some of the options/selections
-      shiny::updateSelectInput(inputId = "plot_selection", selected = selected_plots(), choices = names(plots))
-      shiny::updateSliderInput(inputId = 'iterations', value = sim_options()$iterations)
-      plot_options(dsg$plot_options)
-      shiny::updateCheckboxInput(inputId = "common_scale", value = plot_options()$common_scale)
-      #set some of the internal states
-      parsed(dsg$parsed)
-      ran(dsg$ran)
-      raw_results(dsg$raw_results)
-      parsed_results(dsg$parsed_results)
-    }
+    #set some of the options/selections
+    shiny::updateSelectInput(inputId = "plot_selection", selected = selected_plots(), choices = names(plots))
+    shiny::updateSliderInput(inputId = 'iterations', value = sim_options()$iterations)
+    plot_options(dsg$plot_options)
+    shiny::updateCheckboxInput(inputId = "common_scale", value = plot_options()$common_scale)
+    #set some of the internal states
+    parsed(dsg$parsed)
+    ran(dsg$ran)
+    raw_results(dsg$raw_results)
+    parsed_results(dsg$parsed_results)
+
   })
 
   shiny::observeEvent(input$groupadd, {
@@ -147,30 +123,6 @@ shiny::shinyServer(function(input, output) {
     }
   })
 
-  shiny::observeEvent(input$exportresults, {
-    if (!is.null(parsed_results())){
-      fpath = svDialogs::dlg_save(default = "simulation_results.ods", title = "Save results to...")$res
-      if (length(fpath)){
-        ext = tools::file_ext(fpath)
-        if (!(nchar(ext) | !(stringr::str_to_lower(ext) !=  'ods'))){fpath = paste0(fpath, '.ods')}
-        #check if we need to update
-        if (basename(fpath) %in% dir(dirname(fpath))){
-          update_ods = T
-        }else{
-          update_ods = F
-        }
-        dat = parsed_results()
-        sheet_names = names(dat)
-        #write
-        for (s in sheet_names){
-          readODS::write_ods(as.data.frame(dat[[s]]), path = fpath, sheet = s, append = T, update = update_ods)
-        }
-      }
-    }
-
-  })
-
-
   #### Other reactives
   shiny::observeEvent(plots(), {
     plot_names = names(plots())
@@ -229,6 +181,29 @@ shiny::shinyServer(function(input, output) {
       heidi::patch_plots(plots(), selected_plots(), plot_options())
     }
   })
+
+  output$savedesign <- shiny::downloadHandler(
+    filename = "my_design.rds",
+    content = function(fpath){
+      saveRDS(list(design_df = design_df(),
+                   parsed_design = parsed_design(),
+                   param_df = param_df(),
+                   plots = plots(),
+                   selected_plots = selected_plots(),
+                   sim_options = sim_options(),
+                   plot_options = plot_options(),
+                   parsed = parsed(),
+                   ran = ran(),
+                   raw_results = raw_results(),
+                   parsed_results = parsed_results()), fpath)
+    }
+  )
+
+  output$exportresults <- shiny::downloadHandler(
+    filename = "my_simulation_results.xlsx",
+    content = function(fpath){
+      openxlsx::write.xlsx(parsed_results(), file = fpath, overwrite = TRUE)
+    })
 
   shiny::outputOptions(output, "parsed", suspendWhenHidden = FALSE)
   shiny::outputOptions(output, "ran", suspendWhenHidden = FALSE)

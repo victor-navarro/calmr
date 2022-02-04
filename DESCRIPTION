@@ -13,13 +13,13 @@ Imports:
     ggplot2,
     htmltools,
     magrittr,
+    openxlsx,
     patchwork,
     rhandsontable,
     shiny,
     shinyalert,
     shinydashboard,
     stringr,
-    svDialogs,
     tibble,
     tidyr
 Suggests: 
