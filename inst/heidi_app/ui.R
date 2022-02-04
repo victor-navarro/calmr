@@ -1,3 +1,18 @@
+library(shiny)
+library(shinydashboard)
+library(shinyalert)
+library(svDialogs)
+library(tidyr)
+library(dplyr)
+library(ggbeeswarm)
+library(htmltools)
+library(magrittr)
+library(patchwork)
+library(rhandsontable)
+library(stringr)
+library(tibble)
+library(heidi)
+
 ui <- shinydashboard::dashboardPage(
   shinydashboard::dashboardHeader(title = "HeiDI Simulator"),
   shinydashboard::dashboardSidebar(disable = T),
