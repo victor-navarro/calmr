@@ -55,7 +55,7 @@ ui <- shinydashboard::dashboardPage(
                     ),
                     shinydashboard::box(width = NULL,
                                         title = "Preferences",
-                                        shiny::sliderInput(inputId = 'iterations', label = 'Sim Iterations', min = 1, max = 100, value = 1, ticks = FALSE),
+                                        shiny::sliderInput(inputId = 'iterations', label = 'Sim Iterations', min = 1, max = 200, value = 1, ticks = FALSE),
                                         shiny::checkboxInput(inputId = "common_scale", label = 'Plot in Common Scale', value = T)
                     )
       ),

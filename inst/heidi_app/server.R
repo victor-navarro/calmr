@@ -90,12 +90,24 @@ shiny::shinyServer(function(input, output) {
     tryCatch({
       #use design_df and param_df to create a tibble containing all necessary arguments for heidi
       heidi_df = heidi::make_heidi_args(parsed_design(), param_df(), sim_options())
+      iterations = sim_options()$iterations
       #run heidi, run!
-      raw_results(heidi_df %>% dplyr::rowwise() %>% dplyr::mutate(mod_data = list(heidi::train_pav_heidi(stim_alphas, stim_cons, heidi::gen_ss_weights(stim_names), tps, trials, trial_names, phase))))
+      shiny::withProgress(message = "Simulating...", value = 0, {
+        raw_results(heidi_df %>% dplyr::rowwise() %>% dplyr::mutate(mod_data = list({
+          shiny::incProgress(1/iterations, detail = paste("iteration =", iteration))
+          heidi::train_pav_heidi(stim_alphas, stim_cons, heidi::gen_ss_weights(stim_names), tps, trials, trial_names, phase)
+        })))
+      })
       #parse results
-      parsed_results(heidi::parse_heidi_results(raw_results()))
-      #make plots
-      plots(heidi::make_plots(parsed_results()))
+      shiny::withProgress(message = "Parsing results...", value = 0, {
+        parsed_results(heidi::parse_heidi_results(raw_results()))
+        shiny::setProgress(1)
+      })
+
+      shiny::withProgress(message = "Making plots...", value = 0, {
+        plots(heidi::make_plots(parsed_results()))
+        shiny::setProgress(1)
+      })
       ran(TRUE)
     }, error = function(x){
       print(x)
