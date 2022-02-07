@@ -4,7 +4,16 @@
 \alias{train_pav_heidi}
 \title{Trains a Pavlovian HeiDI}
 \usage{
-train_pav_heidi(sals, cons, w, ts, trials, trialnames, targets = "US")
+train_pav_heidi(
+  sals,
+  cons,
+  w,
+  ts,
+  trials,
+  trial_names = NULL,
+  phase = NULL,
+  targets = "US"
+)
 }
 \arguments{
 \item{sals}{A named vector with stimulus saliencies.}
@@ -17,7 +26,9 @@ train_pav_heidi(sals, cons, w, ts, trials, trialnames, targets = "US")
 
 \item{trials}{A list of length T, with character vectors specifying the stimuli involved in each trial. T is the number of unique trials in the experiment.}
 
-\item{trialnames}{A character vector of length T with the names of the trials}
+\item{trial_names}{(optional) A character vector of length T with the names of the trials}
+
+\item{phase}{(optional) A character vector of length T with the names of the phases}
 
 \item{targets}{A character vector specifying the target stimulus for each trial. Under development. For now, just the US.}
 }
@@ -26,7 +37,7 @@ A list with
 \itemize{
 \item{ws - An array of dimensions P,S,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment.}
 \item{rs,combvs, chainvs - Lists of length P with the r-values, combination vs, and chain vs.}
-\item{ts, trials, trialnames -  Carryover for further processing. See Arguments.}
+\item{ts, trials, trial_names, phase -  Carryover for further processing. See Arguments.}
 }
 }
 \description{

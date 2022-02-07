@@ -26,13 +26,13 @@ make_heidi_args <- function(design, pars, opts){
   #the only challenge here is to create a master list of trials (trials)
   #and sample the training for each group (ts)
 
-  #create master lists of trials and trialnames
+  #create master lists of trials and trial_names
   tinfo = design %>% tidyr::unnest_wider(trial_info) %>% dplyr::select(trial_list, trial_names)
-  trialnames_masterlist = do.call('c', tinfo$trial_names)
+  trial_names_masterlist = do.call('c', tinfo$trial_names)
   trial_masterlist = do.call('c', tinfo$trial_list)
   #reduce
-  trial_masterlist = trial_masterlist[!duplicated(trialnames_masterlist)]
-  trialnames_masterlist = trialnames_masterlist[!duplicated(trialnames_masterlist)]
+  trial_masterlist = trial_masterlist[!duplicated(trial_names_masterlist)]
+  trial_names_masterlist = trial_names_masterlist[!duplicated(trial_names_masterlist)]
 
   #we can sample now
   #Dom, if you are reading this, I apologize for this bit
@@ -41,14 +41,14 @@ make_heidi_args <- function(design, pars, opts){
     tidyr::unnest_wider(trial_info) %>%
     dplyr::rowwise() %>%
     #the pointers are returned by the function .sample_trial
-    dplyr::mutate(tps = list(.sample_trial(trial_names, trial_repeats, randomize, trialnames_masterlist))) %>%
+    dplyr::mutate(tps = list(.sample_trial(trial_names, trial_repeats, randomize, trial_names_masterlist))) %>%
     dplyr::mutate(phaselab = list(rep(phase, length(tps)))) %>%
     #one last manipulation to concatenate phases into single rows
     dplyr::group_by(iteration, group) %>%
     dplyr::summarize(tps = list(unlist(tps)), phase = list(unlist(phaselab))) %>%
     #and add the remainder of the relevant information
     dplyr::mutate(trials = list(trial_masterlist),
-           trialnames = list(trialnames_masterlist),
+           trial_names = list(trial_names_masterlist),
            stim_names = list(snames),
            stim_alphas = list(alphas),
            stim_cons = list(cons))

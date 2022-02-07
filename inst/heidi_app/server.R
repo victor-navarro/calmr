@@ -91,7 +91,7 @@ shiny::shinyServer(function(input, output) {
       #use design_df and param_df to create a tibble containing all necessary arguments for heidi
       heidi_df = heidi::make_heidi_args(parsed_design(), param_df(), sim_options())
       #run heidi, run!
-      raw_results(heidi_df %>% dplyr::rowwise() %>% dplyr::mutate(mod_data = list(heidi::train_pav_heidi(stim_alphas, stim_cons, heidi::gen_ss_weights(stim_names), tps, trials, trialnames))))
+      raw_results(heidi_df %>% dplyr::rowwise() %>% dplyr::mutate(mod_data = list(heidi::train_pav_heidi(stim_alphas, stim_cons, heidi::gen_ss_weights(stim_names), tps, trials, trial_names, phase))))
       #parse results
       parsed_results(heidi::parse_heidi_results(raw_results()))
       #make plots

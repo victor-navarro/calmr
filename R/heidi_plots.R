@@ -20,9 +20,9 @@ NULL
 make_plots <- function(dat){
   plotlist = list()
   for (g in unique(dat$ws$group)){
-    plotlist[[paste(g, 'Distributed Rs')]] = plot_rs(dat$rs[dat$rs$group == g, ]) + ggplot2::labs(title = g)
-    plotlist[[paste(g, 'S-S')]] = plot_weights(dat$ws[dat$ws$group == g, ]) + ggplot2::labs(title = g)
-    plotlist[[paste(g, 'Split Vs')]] = plot_vs(dat$vs[dat$vs$group == g, ]) + ggplot2::labs(title = g)
+    plotlist[[paste0(g, ': Rs')]] = plot_rs(dat$rs[dat$rs$group == g, ]) + ggplot2::labs(title = g)
+    plotlist[[paste0(g, ': Ws')]] = plot_weights(dat$ws[dat$ws$group == g, ]) + ggplot2::labs(title = g)
+    plotlist[[paste0(g, ': Vs')]] = plot_vs(dat$vs[dat$vs$group == g, ]) + ggplot2::labs(title = g)
   }
   return(plotlist)
 }
@@ -31,29 +31,34 @@ make_plots <- function(dat){
 #' @export
 plot_weights <- function(vals){
   vals %>%
-    dplyr::group_by(trial, s1, s2) %>%
+    dplyr::group_by(trial, phase, s1, s2) %>%
     dplyr::summarise(value = mean(value), .groups = "drop") %>%
-    ggplot2::ggplot(ggplot2::aes(x = trial, y = value, colour = s1)) +
-    ggplot2::geom_line() + ggplot2::geom_point() +
+    ggplot2::ggplot(ggplot2::aes(x = trial, y = value, colour = s2)) +
+    ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
+    ggplot2::geom_line() +
+    ggplot2::geom_point() +
     ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
     ggplot2::scale_colour_discrete(drop = FALSE) +
-    ggplot2::facet_wrap(~s2) +
-    ggplot2::labs(x = 'Trial', y = 'Strength', colour = 'Predictor') +
+    ggplot2::facet_wrap(~s1) +
+    ggplot2::labs(x = 'Trial', y = 'Strength', colour = 'Predictee') +
     ggplot2::theme_bw()
 }
 #' @rdname heidi_plots
 #' @export
 plot_vs <- function(vals){
   vals %>%
-    dplyr::group_by(trial, trial_type, v_type, s1, s2) %>%
+    dplyr::group_by(trial, phase, trial_type, v_type, s1, s2) %>%
     dplyr::summarise(value = mean(value), .groups = "drop") %>%
-    ggplot2::ggplot(ggplot2::aes(x = trial, y = value, colour = trial_type, linetype = v_type, shape = v_type)) +
-    ggplot2::geom_line() + ggplot2::geom_point(fill = 'white') +
+    ggplot2::ggplot(ggplot2::aes(x = trial, y = value, colour = s1, linetype = v_type, shape = v_type)) +
+    ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
+    ggplot2::geom_line() +
+    ggplot2::geom_point(fill = 'white') +
     ggplot2::scale_shape_manual(values = c(16, 21), drop = FALSE) +
     ggplot2::scale_colour_discrete(drop = FALSE) +
     ggplot2::scale_linetype_discrete(drop = FALSE) +
-    ggplot2::labs(x = 'Trial', y = 'V value', colour = 'Trial Type',shape = 'V type', linetype = 'V type') +
-    ggplot2::facet_grid(s1~s2) +
+    ggplot2::labs(x = 'Trial', y = 'V value', colour = 'Stimulus',
+                  shape = 'V type', linetype = 'V type') +
+    ggplot2::facet_grid(phase+trial_type~s2, scales = 'free_x') +
     ggplot2::theme_bw()
 }
 
@@ -61,12 +66,14 @@ plot_vs <- function(vals){
 #' @export
 plot_rs <- function(vals){
   vals %>%
-    dplyr::group_by(trial, s1, s2, trial_type) %>%
+    dplyr::group_by(trial, phase, trial_type, s1, s2) %>%
     dplyr::summarise(value = mean(value), .groups = "drop") %>%
     ggplot2::ggplot(ggplot2::aes(x = trial, y = value, colour = s1)) +
-    ggplot2::geom_line() +  ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
+    ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
+    ggplot2::geom_line() +
+    ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
     ggplot2::scale_colour_discrete(drop = FALSE) +
-    ggplot2::facet_grid(s2~trial_type, scales = 'free_x') +
+    ggplot2::facet_grid(phase+trial_type~s2, scales = 'free_x') +
     ggplot2::labs(x = 'Trial', y = 'R value', colour = 'Stimulus') +
     ggplot2::theme_bw()
 }

@@ -4,17 +4,18 @@
 #' @param w A named array of dimensions S,S; where S is the number of stimuli.
 #' @param ts A vector of trial pointers for training, as a function of trials.
 #' @param trials A list of length T, with character vectors specifying the stimuli involved in each trial. T is the number of unique trials in the experiment.
-#' @param trialnames A character vector of length T with the names of the trials
+#' @param trial_names (optional) A character vector of length T with the names of the trials
+#' @param phase (optional) A character vector of length T with the names of the phases
 #' @param targets A character vector specifying the target stimulus for each trial. Under development. For now, just the US.
 #' @return A list with
 #' \itemize{
 #' \item{ws - An array of dimensions P,S,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment.}
 #' \item{rs,combvs, chainvs - Lists of length P with the r-values, combination vs, and chain vs.}
-#' \item{ts, trials, trialnames -  Carryover for further processing. See Arguments.}
+#' \item{ts, trials, trial_names, phase -  Carryover for further processing. See Arguments.}
 #' }
 #' @note The array w contains the associations for all stimuli involved in the experiment. Entry i,j specifies the associative strength between stimulus i to stimulus j. Entry j,i specifies the opposite direction.
 #' @export
-train_pav_heidi <- function(sals, cons, w, ts, trials, trialnames, targets = 'US'){
+train_pav_heidi <- function(sals, cons, w, ts, trials, trial_names = NULL, phase = NULL, targets = 'US'){
   maxstim = dim(w)[1]
   ws = array(NA, dim = c(length(ts), dim(w)),
              dimnames = list(NULL, rownames(w), colnames(w)))
@@ -59,7 +60,7 @@ train_pav_heidi <- function(sals, cons, w, ts, trials, trialnames, targets = 'US
     combvs[[t]] = combV
     chainvs[[t]] = chainV
   }
-  dat = list(ws = ws, rs = rs, combvs = combvs, chainvs = chainvs, ts = ts, trials = trials, trialnames = trialnames)
+  dat = list(ws = ws, rs = rs, combvs = combvs, chainvs = chainvs, ts = ts, trials = trials, trial_names = trial_names, phase = phase)
   return(dat)
 }
 
