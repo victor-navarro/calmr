@@ -25,10 +25,13 @@ make_heidi_args <- function(design, pars, opts){
 
   #the only challenge here is to create a master list of trials (trials)
   #and sample the training for each group (ts)
-
   #create master lists of trials and trial_names
   tinfo = design %>% tidyr::unnest_wider(trial_info) %>% dplyr::select(trial_list, trial_names)
-  trial_names_masterlist = do.call('c', tinfo$trial_names)
+  if (class(tinfo$trial_names) == "list"){
+    trial_names_masterlist = do.call('c', tinfo$trial_names)
+  }else{
+    trial_names_masterlist = tinfo$trial_names
+  }
   trial_masterlist = do.call('c', tinfo$trial_list)
   #reduce
   trial_masterlist = trial_masterlist[!duplicated(trial_names_masterlist)]

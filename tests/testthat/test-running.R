@@ -20,5 +20,19 @@ test_that("model can run", {
     trial_parser("10AB(US)")$stimuli, c("A", "B", "US"))
   expect_setequal(
     trial_parser("10AB(AB)(US)")$stimuli, c("A", "B", "AB", "US"))
+  expect_setequal(
+    trial_parser("10A(US)")$stimuli, c("A", "US"))
+
+  #thank you Dom
+  #test for a case in which there is only one type of trial per cell
+  simple_df = data.frame(Group = c("Over", "Ctrl"),
+                         P1 = c("10AB(US)", "10A(US)"),
+                         R1 = c(TRUE, TRUE),
+                         P2 = c("1A", "1A"),
+                         R2 = c(TRUE, TRUE))
+  simple_pars = data.frame(Stimulus = c("A", "B", "US"), Alpha = c(0.1, 0.2, 0.3))
+  expect_named(run_heidi(simple_df, param_df = simple_pars), c("ws", "vs", "rs"))
+
+
 
 })

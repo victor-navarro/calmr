@@ -4,6 +4,12 @@ base_df <- data.frame(Group = c("True", "Pseudo"),
                       R1 = c(TRUE, TRUE),
                       P2 = c("1A", "1A"),
                       R2 = c(TRUE, TRUE))
+# base_df <- data.frame(Group = c("Over", "Ctrl"),
+#                       P1 = c("10AB(US)", "10A(US)"),
+#                       R1 = c(TRUE, TRUE),
+#                       P2 = c("1A", "1A"),
+#                       R2 = c(TRUE, TRUE))
+
 
 base_plot_options <- list(common_scale = TRUE)
 base_sim_options <- list(iterations = 1)
