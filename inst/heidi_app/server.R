@@ -47,12 +47,21 @@ shiny::shinyServer(function(input, output) {
     plots(dsg$plots)
     selected_plots(dsg$selected_plots)
     sim_options(dsg$sim_options)
+    plot_filters(dsg$plot_filters)
 
     #set some of the options/selections
     shiny::updateSelectInput(inputId = "plot_selection", selected = selected_plots(), choices = names(plots))
     shiny::updateSliderInput(inputId = 'iterations', value = sim_options()$iterations)
     plot_options(dsg$plot_options)
     shiny::updateCheckboxInput(inputId = "common_scale", value = plot_options()$common_scale)
+    shiny::updateSelectInput(inputId = "phase_selection", selected = dsg$plot_filters$phase, choices = parsed_design()$phase)
+    shiny::updateSelectInput(inputId = "trial_type_selection", selected = dsg$plot_filters$trial_type, choices = parsed_design() %>%
+                               filter(phase %in% dsg$plot_filters$phase) %>%
+                               unnest_wider(trial_info) %>%
+                               select(trial_names) %>%
+                               unlist() %>%
+                               unique())
+
     #set some of the internal states
     parsed(dsg$parsed)
     ran(dsg$ran)
@@ -268,6 +277,7 @@ shiny::shinyServer(function(input, output) {
                    selected_plots = selected_plots(),
                    sim_options = sim_options(),
                    plot_options = plot_options(),
+                   plot_filters = plot_filters(),
                    parsed = parsed(),
                    ran = ran(),
                    raw_results = raw_results(),

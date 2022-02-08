@@ -1,0 +1,39 @@
+---
+title: "heidi_math"
+author: "Navarro, Honey, and Dwyer"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{heidi_math}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# The mathematics behind HeiDI
+
+The HeiDI model has three major components: 1) reciprocal associations between stimuli, 2) the combination of those associations to make predictions, and 3) the expression of those predictions into observable responses.
+
+## Reciprocal associations between stimuli
+
+Whenever a trial is given, the organism learns associations among stimuli. The association between two stimuli, $i$ and $j$ is denoted via $V_{i,j}$. The association $V_{i,j}$ represents a directional expectation: the expectation of receiving $j$ after being presented with $i$. Furthermore, its value represents the nature of this association. If positive, the presentation of $i$ "excites" the representation of $j$. If negative, the presentation of $i$ "inhibits" the representation of $j$.
+
+
+HeiDI posits that organisms not only learn "forward" associations between stimuli, but also their reciprocal, or "backward" associations. Thus, if organisms are presented with $i \rightarrow j$, organisms not only learn about $V_{i,j}$, but also about $V_{j, i}$, or the expectation of receiving $i$ after being presented with $i$.
+
+### Learning rules
+
+The learning rules for HeiDI are relatively simple, after trial $n$, the associations between stimuli $i$ and $j$ are expressed as
+
+$$ V_{i,j, n} = V_{i,j, n-1} + \Delta V_{i,j, n} $$
+$$ V_{j,i, n} = V_{j,i, n-1} + \Delta V_{j,i, n} $$
+
+where $V_{j,i, n-1}$ and $V_{i,j, n-1}$ are the associations between $i$ and $j$ on trial $n-1$, and the $\Delta V_{i,j, n}$ and $\Delta V_{i,j, n}$ terms quantify the amount of learning as a result of trial $n$. Those "delta" terms are computed using an error-correction mechanism with a pooled error term, as:
+
+$$\Delta V_{i,j} = \alpha_i\alpha_j(c\alpha_j - \sum_{k}^{K}\delta_kV_{k,j})$$
+
+where $\alpha_i$ and $\alpha_j$ are parameters representing the saliency of stimuli $i$ and $j$, respectively, $c$ is a scaling constant, $\delta_k$ is a quantity representing the presence or absence of stimulus $k$ (1 or 0, respectively), and $K$ are all stimuli in the experiment. The term denoting the trial, $n$, is omitted for simplicity. Similarly, the delta term $\Delta V_{i,j}$ is calculated as:
+
+$$\Delta V_{j,i} = \alpha_j\alpha_i(c\alpha_i - \sum_{k}^{K}\delta_kV_{k,i})$$
+
+### Combination rules
+
+Direct vs Mediated?

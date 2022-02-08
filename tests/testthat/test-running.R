@@ -14,7 +14,7 @@ test_that("package works", {
   #model can run
   expect_named(run_heidi(df, param_df = pars), c("ws", "vs", "rs"))
   #multiple plots can be obtained
-  expect_equal(length(make_plots(run_heidi(df, pars)), 6))
+  expect_equal(length(make_plots(run_heidi(df, pars))), 8)
   #### trial_parser tests ####
   expect_setequal(
     trial_parser("10AB(US)")$stimuli, c("A", "B", "US"))

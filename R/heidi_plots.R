@@ -74,6 +74,8 @@ plot_vs <- function(vals, bars = F){
                                   pattern_colour = NA, pattern_fill = 'white',
                                   pattern_spacing = 0.01) +
       ggpattern::scale_pattern_manual(values = c('stripe', 'none')) +
+      ggplot2::labs(x = 'Trial', y = 'V value', fill = 'Source',
+                    pattern = 'V type', linetype = 'V type') +
       ggplot2::theme_bw() +
       ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)) +
       ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
@@ -115,7 +117,6 @@ patch_plots <- function(plots, selection, options = get_plot_opts()){
         plots[[p]] = plots[[p]] + ggplot2::coord_cartesian(ylim = c(miny, maxy))
       }
     }
-
     patch = plots[[selection[1]]]
     if (selected > 1){
       for (p in selection[2:selected]){
