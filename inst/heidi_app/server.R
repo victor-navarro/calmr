@@ -1,15 +1,21 @@
 #base_df <- data.frame(Group = "Group 1", P1 = "", R1 = TRUE)
-base_df <- data.frame(Group = c("True", "Pseudo"),
-                      P1 = c("10AB(US)/10AC", "5AB(US)/5AB/5AC(US)/5AC"),
-                      R1 = c(TRUE, TRUE),
-                      P2 = c("1A", "1A"),
-                      R2 = c(TRUE, TRUE))
+# base_df <- data.frame(Group = c("True", "Pseudo"),
+#                       P1 = c("10AB(US)/10AC", "5AB(US)/5AB/5AC(US)/5AC"),
+#                       R1 = c(TRUE, TRUE),
+#                       P2 = c("1A", "1A"),
+#                       R2 = c(TRUE, TRUE))
 # base_df <- data.frame(Group = c("Over", "Ctrl"),
 #                       P1 = c("10AB(US)", "10A(US)"),
 #                       R1 = c(TRUE, TRUE),
 #                       P2 = c("1A", "1A"),
 #                       R2 = c(TRUE, TRUE))
-
+base_df <- data.frame(Group = c("R+"),
+                      P1 = c("8A(US)/8X(US)/8C(US)/8BX/8DX"),
+                      R1 = c(TRUE),
+                      P2 = c("10AB(US)"),
+                      R2 = c(TRUE),
+                      P3 = c("1AD/1BC"),
+                      R3 = c(TRUE))
 
 base_plot_options <- list(common_scale = TRUE)
 base_sim_options <- list(iterations = 1)
@@ -30,6 +36,7 @@ shiny::shinyServer(function(input, output) {
   ran = shiny::reactiveVal(FALSE)
   raw_results = shiny::reactiveVal()
   parsed_results = shiny::reactiveVal()
+  plot_filters = shiny::reactiveVal()
 
   #### Input Logic ####
   shiny::observeEvent(input$loaddesign, {
@@ -109,9 +116,8 @@ shiny::shinyServer(function(input, output) {
         parsed_results(heidi::parse_heidi_results(raw_results()))
         shiny::setProgress(1)
       })
-
       shiny::withProgress(message = "Making plots...", value = 0, {
-        plots(heidi::make_plots(parsed_results()))
+        plots(heidi::make_plots(heidi::filter_heidi_results(parsed_results(), plot_filters())))
         shiny::setProgress(1)
       })
       ran(TRUE)
@@ -139,6 +145,39 @@ shiny::shinyServer(function(input, output) {
     if (!is.null(parsed_design()) & parsed()){
       param_df(heidi::get_params(parsed_design(), input$defaultpar))
     }
+  })
+
+  #populating the phase selectInput and the options
+  shiny::observeEvent(parsed_design(), {
+    if (!is.null(parsed_design())){
+      ph_choices = unique(parsed_design()$phase)
+      t_choices = parsed_design() %>%
+        unnest_wider(trial_info) %>%
+        select(trial_names) %>%
+        unlist() %>%
+        unique()
+    }
+    shiny::updateSelectInput(inputId = "phase_selection",
+                             choices = ph_choices,
+                             selected = ph_choices)
+
+    shiny::updateSelectInput(inputId = "trial_type_selection",
+                             choices = t_choices,
+                             selected = t_choices)
+  })
+
+  #populating the trial_type selectInput
+  shiny::observeEvent(input$phase_selection, {
+    if (!is.null(parsed_design())){
+      t_choices = parsed_design() %>%
+        filter(phase %in% input$phase_selection) %>%
+        unnest_wider(trial_info) %>%
+        select(trial_names) %>%
+        unlist() %>%
+        unique()
+      shiny::updateSelectInput(inputId = "trial_type_selection", choices = t_choices, selected = t_choices)
+    }
+
   })
 
   #### Other reactives
@@ -169,6 +208,25 @@ shiny::shinyServer(function(input, output) {
     selected_plots(input$plot_selection)
   })
 
+  shiny::observeEvent(input$phase_selection, {
+    filters = plot_filters()
+    filters$phase = input$phase_selection
+    plot_filters(filters)
+    shiny::withProgress(message = "Making plots...", value = 0, {
+      plots(heidi::make_plots(heidi::filter_heidi_results(parsed_results(), plot_filters())))
+      shiny::setProgress(1)
+    })
+  })
+
+  shiny::observeEvent(input$trial_type_selection, {
+    filters = plot_filters()
+    filters$trial_type = input$trial_type_selection
+    plot_filters(filters)
+    shiny::withProgress(message = "Making plots...", value = 0, {
+      plots(heidi::make_plots(heidi::filter_heidi_results(parsed_results(), plot_filters())))
+      shiny::setProgress(1)
+    })
+  })
 
   #### Outputs ####
 

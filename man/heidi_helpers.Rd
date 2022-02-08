@@ -7,6 +7,7 @@
 \alias{parse_vs}
 \alias{parse_rs}
 \alias{parse_heidi_results}
+\alias{filter_heidi_results}
 \title{An assortment of functions to help heidi}
 \usage{
 gen_ss_weights(stims, default_val = 0)
@@ -18,6 +19,8 @@ parse_vs(mod)
 parse_rs(mod)
 
 parse_heidi_results(raw_results)
+
+filter_heidi_results(parsed_results, filters)
 }
 \arguments{
 \item{stims}{A character vector with stimuli.}
@@ -26,7 +29,11 @@ parse_heidi_results(raw_results)
 
 \item{mod}{A model list, as returned by trainPavHEIDI.}
 
-\item{raw_results}{A tibble with model information, as return by run_heidi}
+\item{raw_results}{A tibble with model information, as returned by run_heidi}
+
+\item{parsed_results}{A list with parsed results, as returned by parse_heidi_results}
+
+\item{filters}{A named list containing "phase" and "trial_type" character vectors, for filtering data.}
 }
 \description{
 gen_ss_weights generates a named array with model weights. parse_ws, parse_vs, parse_rs and parse_heidi_results parse the raw outputs of trainPavHEIDI into a readable format.

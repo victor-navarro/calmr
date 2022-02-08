@@ -3,18 +3,18 @@
 \name{heidi_plots}
 \alias{heidi_plots}
 \alias{make_plots}
-\alias{plot_weights}
+\alias{plot_ws}
 \alias{plot_vs}
 \alias{plot_rs}
 \alias{patch_plots}
 \alias{get_plot_opts}
 \title{Plotting functions for heidi models}
 \usage{
-make_plots(dat)
+make_plots(dat, filters)
 
-plot_weights(vals)
+plot_ws(vals)
 
-plot_vs(vals)
+plot_vs(vals, bars = F)
 
 plot_rs(vals)
 
@@ -26,6 +26,8 @@ get_plot_opts(common_scale = TRUE)
 \item{dat}{A list containing data.frames with parsed weights, r values, and v values, as returned by parse_heidi_results.}
 
 \item{vals}{A data.frame containing parsed values}
+
+\item{bars}{A logical stipulating whether to summarize and use stacked bars, instead of points and lines.}
 
 \item{plots}{A named list with plots}
 

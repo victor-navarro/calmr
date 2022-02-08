@@ -74,12 +74,14 @@ train_pav_heidi <- function(sals, cons, w, ts, trials, trial_names = NULL, phase
   #
   #returns a matrix of dimensions pre x post, with the combV values
 
-  #if (db_trial == 10) browser()
-  mat = array(0, dim = c(length(pre), length(post)), dimnames = list(pre, post))
+  #intial implementation used invidual terms that were later summed
+  #late implementation just returns
+
+  #if (db_trial == 1) browser()
+  #if (length(pre) > 1)
+  mat = array(0, dim = c(1, length(post)), dimnames = list(paste0(pre, collapse = ''), post))
   for (po in post){
-    for (pr in pre){
-      mat[pr, post] = w[pr, po]+w[po, pr]/cs[po]*w[pr, po]
-    }
+      mat[1, po] = sum(w[pre, po])+(sum(w[pre, po])*(sum(w[po, pre]))/cs[po])
   }
   return(mat)
 }
@@ -113,7 +115,8 @@ train_pav_heidi <- function(sals, cons, w, ts, trials, trial_names = NULL, phase
 .distR <- function(sals, combv, chainv, db_trial = NA){
   #Distributes the associative strength among all stimuli (sals)
   #returns a matrix of dimensions length(sals) x length(V)
-  mat = (sals/sum(abs(sals)))%*%t(colSums(combv+chainv))
+  #if (nrow(chainv) > 1) browser()
+  mat = (sals/sum(abs(sals)))%*%(combv+colSums(chainv))
   rownames(mat) = names(sals)
   return(mat)
 }

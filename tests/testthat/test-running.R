@@ -1,4 +1,4 @@
-test_that("model can run", {
+test_that("package works", {
   df = data.frame(Group = c("True", "Pseudo"),
                   P1 = c("10AB(US)/10AC", "5AB(US)/5AB/5AC(US)/5AC"),
                   R1 = c(TRUE, TRUE),
@@ -14,7 +14,7 @@ test_that("model can run", {
   #model can run
   expect_named(run_heidi(df, param_df = pars), c("ws", "vs", "rs"))
   #multiple plots can be obtained
-  expect_equal(length(make_plots(run_heidi(df, pars))), 6)
+  expect_equal(length(make_plots(run_heidi(df, pars)), 6))
   #### trial_parser tests ####
   expect_setequal(
     trial_parser("10AB(US)")$stimuli, c("A", "B", "US"))
