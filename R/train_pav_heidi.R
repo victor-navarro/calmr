@@ -104,7 +104,7 @@ train_pav_heidi <- function(sals, cons, w, ts, trials, trial_names = NULL, phase
     for (pr in pre){
       int = setdiff(allstims, c(pre, po)) #find the intermediate stimuli that are absent
       if (length(int)){
-        mat[pr, po] = sum(sapply(int, function(i) sum(w[pr, i]*sum(.combV(w, i, po, cs, db_trial)[, po])/cs[po])))
+        mat[pr, po] = sum(sapply(int, function(i) sum(w[pr, i]*.combV(w, i, po, cs, db_trial)[, po]/cs[po])))
       }
     }
   }
@@ -116,7 +116,7 @@ train_pav_heidi <- function(sals, cons, w, ts, trials, trial_names = NULL, phase
   #Distributes the associative strength among all stimuli (sals)
   #returns a matrix of dimensions length(sals) x length(V)
   #if (nrow(chainv) > 1) browser()
-  mat = (sals/sum(abs(sals)))%*%(combv+colSums(chainv))
+  mat = (sals/sum(sals))%*%(combv+colSums(chainv))
   rownames(mat) = names(sals)
   return(mat)
 }
@@ -135,10 +135,10 @@ train_pav_heidi <- function(sals, cons, w, ts, trials, trial_names = NULL, phase
   allstims = rownames(w)
   return(
     sapply(absent, function(ab){
-      sum(sapply(pre, function(pr){
+      abs(sum(sapply(pre, function(pr){
         int = setdiff(setdiff(allstims, ab), pr)
         return(w[pr, ab] + sum(sapply(int, function(i) w[pr, i]*w[i, ab]/cs[ab], USE.NAMES = F)))
-      }))
+      })))
     })
   )
 }

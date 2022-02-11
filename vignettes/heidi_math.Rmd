@@ -1,39 +1,114 @@
 ---
 title: "heidi_math"
-author: "Navarro, Honey, and Dwyer"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{heidi_math}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+author: "Victor Navarro"
+output:
+  pdf_document: default
+  word_document: default
 ---
 
 # The mathematics behind HeiDI
 
-The HeiDI model has three major components: 1) reciprocal associations between stimuli, 2) the combination of those associations to make predictions, and 3) the expression of those predictions into observable responses.
+The HeiDI model has four major components: 1) the acquisition of reciprocal associations between stimuli, 2) the pooling of those associations to activate stimulus representations, 3) the distribution of those activations into stimulus-specific response units, and 4) the generation of responses.
 
-## Reciprocal associations between stimuli
+## 1 - Acquiring reciprocal associations
 
-Whenever a trial is given, the organism learns associations among stimuli. The association between two stimuli, $i$ and $j$ is denoted via $V_{i,j}$. The association $V_{i,j}$ represents a directional expectation: the expectation of receiving $j$ after being presented with $i$. Furthermore, its value represents the nature of this association. If positive, the presentation of $i$ "excites" the representation of $j$. If negative, the presentation of $i$ "inhibits" the representation of $j$.
+Whenever a trial is given, HeiDI learns associations among stimuli. The association between two stimuli, $i$ and $j$ is denoted via $v_{i,j}$. The association $v_{i,j}$ represents a directional expectation: the expectation of $j$ after being presented with $i$. Furthermore, its value represents the nature of the effect that $i$ has over the representation of $j$. If positive, the presentation of $i$ "excites" the representation of $j$. If negative, the presentation of $i$ "inhibits" the representation of $j$.
+
+HeiDI not only learns "forward" associations between stimuli, but also their reciprocal, or "backward" associations. Thus, if organisms are presented with $i \rightarrow j$, organisms not only learn about $v_{i,j}$, but also about $v_{j, i}$, or the expectation of receiving $i$ after being presented with $j$. Note that, for the sake of brevity, the learning equations below are only specified for forward associations.
+
+### 1.1 - The stimulus expectation rule
+
+HeiDI generates expectations about stimuli. The expectation of stimulus $j$ ($e_j$) is expressed as 
+
+$$
+\tag{Eq. 1}
+e_j  = \sum_{k}^{K}x_kv_{k,j}
+$$
+
+where $K$ is the set containing all stimuli in the experiment, and $x_k$ is a quantity denoting the presence or absence of stimulus $k$ (1 or 0, respectively)^[
+We go the extra length of specifying $x$ quantities because the stimulus expectation and learning rules can be vectorized, as $\textbf{e} = \textbf{x}V$ and $\Delta V = (\textbf{x}\odot\textbf{a})'  (c(\textbf{x}\odot\textbf{a})-\textbf{e})$, respectively. Here, the matrix $V$ contains all associations between each pair of stimuli, the row vectors $\textbf x$ and $\textbf a$ denote the presence and salience of all stimuli $K$, the $\odot$ symbol specifies element-wise multiplication, and the $'$ symbol denotes transposition. Note further that the $\Delta V$ matrix must be made hollow before summing it to $V$.
+].
+
+### 1.2 - Learning rule
+
+HeiDI learns the appropriate expectations via error-correction mechanisms. After trial $t$, the association between stimuli $i$ and $j$ is expressed as
+
+$$
+\tag{Eq. 2}
+v_{i,j, t} = v_{i,j, t-1} + \Delta v_{i,j, t}
+$$
+
+where $v_{j,i, t-1}$ is the forward association between $i$ and $j$ on trial $t-1$, and $\Delta v_{i,j, t}$ is the change in that association as a result of trial $t$. That delta term uses a pooled error term and is expressed as
+
+$$
+\tag{Eq. 3}
+\Delta v_{i,j} = x_i\alpha_i(x_jc\alpha_j - e_j)
+$$
+where $\alpha_i$ and $\alpha_j$ are parameters representing the salience of stimuli $i$ and $j$, respectively ($0 \le \alpha \le 1$), $c$ is a scaling constant ($c = 1$). Note that the term denoting the trial, $t$ has been  omitted here for simplicity.
+
+## 2 - Pooling the strength of associations
+
+HeiDI pools its stimulus associations to activate stimulus-specific representations. The activation of the representation for stimulus $j$, $a_j$, is defined as:
+
+$$
+\tag{Eq. 4}
+a_{j,M} = o_{j,M} + h_{j,M}
+$$
+
+where $o_{j,M}$ denotes the c**o**mbined associative strength towards stimulus $j$ in presence of stimuli $M$, and $h_{j,M}$ denotes the c**h**ained associative strength towards stimulus $j$ in presence of stimuli $M$. 
+
+### 2.1 - Combined associative strength
+
+The quantity $o_{j,M}$ is the result of combining the associative strength of forwards and backwards associations to and from stimulus $j$ as
+
+$$
+\tag{Eq. 5}
+o_{j,M} = \sum_{m \neq j}^{M}v_{m,j} + \left(\frac{\sum_{m \neq j}^{M}v_{m,j} \sum_{m \neq j}^{M}v_{j,m}}{c}\right)
+$$
+
+where each of the sums above run over all stimuli $M$ presented in the trial, that are also different from stimulus $j$.^[An alternative formulation of this equation could be $\sum_{m \neq j}^{M} v_{m,j} + (v_{m,j} v_{j,m})$ but, although the this alternative formulation is positively related to Eq. 5, we have not compared their behavior exhaustively.] The left hand term describes how the forward associations from stimuli $M$ to $j$ affect the representation of $j$, whereas the right hand term describes how the backward associations that $j$ has with  stimuli $M$ affect its own representation (although these are modulated by the forward associations themselves).
+
+### 2.2 - Chained associative strength
+
+The quantity $h_{j,M}$ captures the indirect associative strength that the stimuli $M$ have with $j$, via absent stimuli. As such, $h_{j,M}$ is defined as
 
 
-HeiDI posits that organisms not only learn "forward" associations between stimuli, but also their reciprocal, or "backward" associations. Thus, if organisms are presented with $i \rightarrow j$, organisms not only learn about $V_{i,j}$, but also about $V_{j, i}$, or the expectation of receiving $i$ after being presented with $i$.
+$$
+\tag{Eq. 6}
+h_{j,M} = \sum_{m \neq j}^{M} \sum_{n}^{N}\frac{v_{m,n}o_{j,n}}{c}
+$$
 
-### Learning rules
+where N are the stimuli not presented on the trial (i.e., K-M). Note the re-use of $o$, the quantity defined in Eq. 5. This equation allows absent stimuli $N$ to influence the representation of stimulus $j$, as long as they have an association with present stimuli $M$.
 
-The learning rules for HeiDI are relatively simple, after trial $n$, the associations between stimuli $i$ and $j$ are expressed as
+## 3 - Distributing strength into stimulus-specific response units
 
-$$ V_{i,j, n} = V_{i,j, n-1} + \Delta V_{i,j, n} $$
-$$ V_{j,i, n} = V_{j,i, n-1} + \Delta V_{j,i, n} $$
+HeiDI then distributes the pooled stimulus-specific strength among all $K$ stimuli, according to their relative salience. The activation of response unit $j$, $R_j$ is expressed as
 
-where $V_{j,i, n-1}$ and $V_{i,j, n-1}$ are the associations between $i$ and $j$ on trial $n-1$, and the $\Delta V_{i,j, n}$ and $\Delta V_{i,j, n}$ terms quantify the amount of learning as a result of trial $n$. Those "delta" terms are computed using an error-correction mechanism with a pooled error term, as:
+$$
+\tag{Eq. 7}
+R_j = \frac{\theta(j)}{\sum_{k}^{K}\theta(k)}a_{j,M}
+$$
 
-$$\Delta V_{i,j} = \alpha_i\alpha_j(c\alpha_j - \sum_{k}^{K}\delta_kV_{k,j})$$
+As $K$ can include both present and absent stimuli, the $\theta$ function returns the salience of stimulus $k$ depending on whether it is absent (i.e., $k \in N$) or not (i.e., $k \in M$), as
 
-where $\alpha_i$ and $\alpha_j$ are parameters representing the saliency of stimuli $i$ and $j$, respectively, $c$ is a scaling constant, $\delta_k$ is a quantity representing the presence or absence of stimulus $k$ (1 or 0, respectively), and $K$ are all stimuli in the experiment. The term denoting the trial, $n$, is omitted for simplicity. Similarly, the delta term $\Delta V_{i,j}$ is calculated as:
+$$
+\tag{Eq. 8}
+\theta(k) = 
+\begin{cases}
+    \left| \sum_{m}^{M}\left( v_{m,k}+\sum_{n \neq k}^{N}\frac{v_{m,n}v_{n,k}}{c}\right) \right|,& \text{if } k \in N\\
+    \alpha_k, & \text{otherwise}
+\end{cases}
+$$
 
-$$\Delta V_{j,i} = \alpha_j\alpha_i(c\alpha_i - \sum_{k}^{K}\delta_kV_{k,i})$$
+Note that the quantity for absent stimuli is absolute, in order to prevent negative $\theta$ values due to inhibitory associations^[An alternative, and perhaps more naturalistic parametrization of this rule would be to use $min[0,\theta(n)]$, where $min$ is the minimum function and $n$ is an absent stimulus. ReLUs are extensively used in neural networks] ^[Another alternative that avoids both the use of absolute values or a rectifying mechanism would be to use quantities of $e^{\theta(k)}$ instead of $\theta(k)$ as they naturally deal with negative quantities.]. Also note a summation term is used on the left-hand side of the expression for an absent stimulus. It implies that all the present stimuli $M$ contribute to the salience of stimulus $k$. Finally, note on the right side of the same expression that the present stimuli contribute not only via the direct association each of them have with $k$, $v_{m,k}$, but also through associative chains with other absent stimuli (c.f., Eq. 6).
 
-### Combination rules
+## 4 - Generating responses
 
-Direct vs Mediated?
+Finally, HeiDI responds. The response-generating mechanisms in HeiDI are currently underspecified. In its current version, HeiDI's responses are the product of the activation of stimulus-specific response units and the connection that those units have with specific motor units. As such, the activation of motor unit $q$, $r_q$, is given by
+
+$$
+\tag{Eq. 9}
+r_q = R_jw_{j,q}
+$$
+
+where $w_{j,q}$ is a weight representing the association between stimulus-specific unit $j$ and motor unit $q$.

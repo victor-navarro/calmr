@@ -19,7 +19,7 @@ NULL
 #' }}
 #' @import patchwork
 #' @export
-make_plots <- function(dat, filters){
+make_plots <- function(dat){
   plotlist = list()
   for (g in unique(dat$ws$group)){
     plotlist[[paste0(g, ': Rs')]] = plot_rs(dat$rs %>% dplyr::filter(group == g)) + ggplot2::labs(title = g)
@@ -38,7 +38,7 @@ plot_ws <- function(vals){
     ggplot2::ggplot(ggplot2::aes(x = trial, y = value, colour = s2)) +
     ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
     ggplot2::geom_line() +
-    ggplot2::geom_point() +
+    ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
     ggplot2::scale_colour_discrete(drop = FALSE) +
     ggplot2::scale_x_continuous(breaks = NULL) +
     ggplot2::facet_wrap(~s1) +
@@ -55,7 +55,7 @@ plot_vs <- function(vals, bars = F){
     plt = summ %>%
       ggplot2::ggplot(ggplot2::aes(x = trial, y = value, colour = s1, linetype = v_type, shape = v_type)) +
       ggplot2::geom_line() +
-      ggplot2::geom_point(fill = 'white') +
+      ggbeeswarm::geom_beeswarm(groupOnX =FALSE, fill = "white") +
       ggplot2::scale_shape_manual(values = c(21, 16), drop = FALSE) +
       ggplot2::scale_colour_discrete(drop = FALSE) +
       ggplot2::scale_linetype_manual(values = c('dashed', 'solid'), drop = FALSE) +
