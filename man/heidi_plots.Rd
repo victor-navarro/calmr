@@ -10,7 +10,7 @@
 \alias{get_plot_opts}
 \title{Plotting functions for heidi models}
 \usage{
-make_plots(dat, filters)
+make_plots(dat)
 
 plot_ws(vals)
 

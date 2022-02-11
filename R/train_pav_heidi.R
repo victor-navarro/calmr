@@ -22,7 +22,6 @@ train_pav_heidi <- function(sals, cons, w, ts, trials, trial_names = NULL, phase
   rs = combvs = chainvs = vector('list', length(ts))
   stimnames = array(NA, dim = c(length(ts), maxstim))
   snames = rownames(w)
-
   for (t in 1:length(ts)){
     stims = trials[[ts[t]]]
     oh_stims = .makeOH(stims, snames)
@@ -136,8 +135,12 @@ train_pav_heidi <- function(sals, cons, w, ts, trials, trial_names = NULL, phase
   return(
     sapply(absent, function(ab){
       abs(sum(sapply(pre, function(pr){
+        ch = 0
         int = setdiff(setdiff(allstims, ab), pr)
-        return(w[pr, ab] + sum(sapply(int, function(i) w[pr, i]*w[i, ab]/cs[ab], USE.NAMES = F)))
+        if (length(int)){
+          ch = sum(sapply(int, function(i) w[pr, i]*w[i, ab]/cs[ab], USE.NAMES = F))
+        }
+        return(w[pr, ab] + ch)
       })))
     })
   )

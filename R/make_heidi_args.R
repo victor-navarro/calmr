@@ -37,24 +37,39 @@ make_heidi_args <- function(design, pars, opts){
   trial_masterlist = trial_masterlist[!duplicated(trial_names_masterlist)]
   trial_names_masterlist = trial_names_masterlist[!duplicated(trial_names_masterlist)]
 
+  #get some stimulus data and parameteres
+  sdata = design %>% dplyr::group_by(group) %>%
+    tidyr::unnest_wider(trial_info) %>%
+    #this bit saves us having to crunch data about stimuli that are not present in group but are present in the other
+    dplyr::group_by(group) %>%
+    dplyr::mutate(stim_names = list(unique(unlist(stimuli)))) %>%
+    #this bit puts the required alphas and constants, on a row by row basis
+    dplyr::rowwise() %>%
+    dplyr::mutate(stim_alphas = list(alphas[unlist(stim_names)]),
+                  stim_cons = list(cons[unlist(stim_names)])) %>%
+    dplyr::select(group, stim_names, stim_alphas, stim_cons) %>%
+    dplyr::distinct()
+
   #we can sample now
   #Dom, if you are reading this, I apologize for this bit
   #It basically creates a tibble of iterations*groups*phases, with pointers for trials in the masterlist
-  tb = tidyr::expand_grid(iteration = 1:opts$iterations, design) %>%
+
+  tb = design %>%
     tidyr::unnest_wider(trial_info) %>%
+    tidyr::expand_grid(iteration = 1:opts$iterations) %>%
     dplyr::rowwise() %>%
     #the pointers are returned by the function .sample_trial
     dplyr::mutate(tps = list(.sample_trial(trial_names, trial_repeats, randomize, trial_names_masterlist))) %>%
     dplyr::mutate(phaselab = list(rep(phase, length(tps)))) %>%
     #one last manipulation to concatenate phases into single rows
     dplyr::group_by(iteration, group) %>%
-    dplyr::summarize(tps = list(unlist(tps)), phase = list(unlist(phaselab))) %>%
-    #and add the remainder of the relevant information
+    dplyr::summarize(tps = list(unlist(tps)), phase = list(unlist(phaselab)))
+
+  #now put the trial and stimulus information back
+  tb = tb %>% dplyr::rowwise() %>%
     dplyr::mutate(trials = list(trial_masterlist),
-           trial_names = list(trial_names_masterlist),
-           stim_names = list(snames),
-           stim_alphas = list(alphas),
-           stim_cons = list(cons))
+                  trial_names = list(trial_names_masterlist),
+                  sdata[sdata$group == group, ])
   tb
 }
 
