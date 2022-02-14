@@ -1,9 +1,11 @@
 ---
 title: "heidi_math"
 author: "Victor Navarro"
-output:
-  pdf_document: default
-  word_document: default
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{heidi_math}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 # The mathematics behind HeiDI

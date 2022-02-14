@@ -6,8 +6,10 @@
 \alias{plot_ws}
 \alias{plot_vs}
 \alias{plot_rs}
+\alias{plot_as}
 \alias{patch_plots}
 \alias{get_plot_opts}
+\alias{plot_common_scale}
 \title{Plotting functions for heidi models}
 \usage{
 make_plots(dat)
@@ -18,9 +20,13 @@ plot_vs(vals, bars = F)
 
 plot_rs(vals)
 
+plot_as(vals)
+
 patch_plots(plots, selection, options = get_plot_opts())
 
 get_plot_opts(common_scale = TRUE)
+
+plot_common_scale(plots)
 }
 \arguments{
 \item{dat}{A list containing data.frames with parsed weights, r values, and v values, as returned by parse_heidi_results.}
@@ -35,7 +41,7 @@ get_plot_opts(common_scale = TRUE)
 
 \item{options}{A list with options}
 
-\item{common_scalle}{A logical. Whether to plot the data in a common y-scale.}
+\item{common_scale}{A logical. Whether to plot the data in a common y-scale.}
 }
 \value{
 A list with ggplot objects

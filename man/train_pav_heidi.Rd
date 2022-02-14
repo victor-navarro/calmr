@@ -8,10 +8,11 @@ train_pav_heidi(
   sals,
   cons,
   w,
-  ts,
+  tps,
   trials,
   trial_names = NULL,
   phase = NULL,
+  block_size = NULL,
   targets = "US"
 )
 }
@@ -22,13 +23,15 @@ train_pav_heidi(
 
 \item{w}{A named array of dimensions S,S; where S is the number of stimuli.}
 
-\item{ts}{A vector of trial pointers for training, as a function of trials.}
+\item{tps}{A vector of trial pointers for training, as a function of trials.}
 
 \item{trials}{A list of length T, with character vectors specifying the stimuli involved in each trial. T is the number of unique trials in the experiment.}
 
 \item{trial_names}{(optional) A character vector of length T with the names of the trials}
 
 \item{phase}{(optional) A character vector of length T with the names of the phases}
+
+\item{block_size}{(optional) A integer vector of length T specifying the block size per trial}
 
 \item{targets}{A character vector specifying the target stimulus for each trial. Under development. For now, just the US.}
 }
@@ -37,7 +40,7 @@ A list with
 \itemize{
 \item{ws - An array of dimensions P,S,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment.}
 \item{rs,combvs, chainvs - Lists of length P with the r-values, combination vs, and chain vs.}
-\item{ts, trials, trial_names, phase -  Carryover for further processing. See Arguments.}
+\item{tps, trials, trial_names, phase, block_size -  Carryover for further processing. See Arguments.}
 }
 }
 \description{

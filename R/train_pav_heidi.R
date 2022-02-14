@@ -2,28 +2,31 @@
 #' @param sals A named vector with stimulus saliencies.
 #' @param cons A named vector with stimulus constants.
 #' @param w A named array of dimensions S,S; where S is the number of stimuli.
-#' @param ts A vector of trial pointers for training, as a function of trials.
+#' @param tps A vector of trial pointers for training, as a function of trials.
 #' @param trials A list of length T, with character vectors specifying the stimuli involved in each trial. T is the number of unique trials in the experiment.
 #' @param trial_names (optional) A character vector of length T with the names of the trials
 #' @param phase (optional) A character vector of length T with the names of the phases
+#' @param block_size (optional) A integer vector of length T specifying the block size per trial
 #' @param targets A character vector specifying the target stimulus for each trial. Under development. For now, just the US.
 #' @return A list with
 #' \itemize{
 #' \item{ws - An array of dimensions P,S,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment.}
 #' \item{rs,combvs, chainvs - Lists of length P with the r-values, combination vs, and chain vs.}
-#' \item{ts, trials, trial_names, phase -  Carryover for further processing. See Arguments.}
+#' \item{tps, trials, trial_names, phase, block_size -  Carryover for further processing. See Arguments.}
 #' }
 #' @note The array w contains the associations for all stimuli involved in the experiment. Entry i,j specifies the associative strength between stimulus i to stimulus j. Entry j,i specifies the opposite direction.
 #' @export
-train_pav_heidi <- function(sals, cons, w, ts, trials, trial_names = NULL, phase = NULL, targets = 'US'){
+train_pav_heidi <- function(sals, cons, w, tps, trials, trial_names = NULL, phase = NULL, block_size = NULL, targets = 'US'){
   maxstim = dim(w)[1]
-  ws = array(NA, dim = c(length(ts), dim(w)),
-             dimnames = list(NULL, rownames(w), colnames(w)))
-  rs = combvs = chainvs = vector('list', length(ts))
-  stimnames = array(NA, dim = c(length(ts), maxstim))
+  ws = array(NA, dim = c(length(tps), dim(w)),
+             dimnames = list(NULL, rownames(w), rownames(w)))
+  as = array(NA, dim = c(length(tps), nrow(w)),
+             dimnames = list(NULL, rownames(w)))
+  rs = combvs = chainvs = vector('list', length(tps))
+  stimnames = array(NA, dim = c(length(tps), maxstim))
   snames = rownames(w)
-  for (t in 1:length(ts)){
-    stims = trials[[ts[t]]]
+  for (t in 1:length(tps)){
+    stims = trials[[tps[t]]]
     oh_stims = .makeOH(stims, snames)
     teststim = setdiff(stims, targets)
 
@@ -55,11 +58,21 @@ train_pav_heidi <- function(sals, cons, w, ts, trials, trial_names = NULL, phase
 
     #save data
     ws[t, , ] = w
+    as[t, ] = tsals
     rs[[t]] = r
     combvs[[t]] = combV
     chainvs[[t]] = chainV
   }
-  dat = list(ws = ws, rs = rs, combvs = combvs, chainvs = chainvs, ts = ts, trials = trials, trial_names = trial_names, phase = phase)
+  dat = list(ws = ws,
+             rs = rs,
+             combvs = combvs,
+             chainvs = chainvs,
+             as = as,
+             tps = tps,
+             trials = trials,
+             trial_names = trial_names,
+             phase = phase,
+             block_size = block_size)
   return(dat)
 }
 

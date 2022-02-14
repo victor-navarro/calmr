@@ -12,7 +12,7 @@ NULL
 #' @param plots A named list with plots
 #' @param selection A character vector with the selected plots
 #' @param options A list with options
-#' @param common_scalle A logical. Whether to plot the data in a common y-scale.
+#' @param common_scale A logical. Whether to plot the data in a common y-scale.
 #' @note
 #' \itemize{
 #' \item{Plotting options are obtained via get_plot_opts(). For now, only plotting in a common y-axis is supported.
@@ -26,6 +26,7 @@ make_plots <- function(dat){
     plotlist[[paste0(g, ': Ws')]] = plot_ws(dat$ws %>% dplyr::filter(group == g)) + ggplot2::labs(title = g)
     plotlist[[paste0(g, ': Vs')]] = plot_vs(dat$vs %>% dplyr::filter(group == g)) + ggplot2::labs(title = g)
     plotlist[[paste0(g, ': Vs (bar)')]] = plot_vs(dat$vs %>% dplyr::filter(group == g), TRUE) + ggplot2::labs(title = g)
+    plotlist[[paste0(g, ': As')]] = plot_as(dat$as %>% dplyr::filter(group == g)) + ggplot2::labs(title = g)
   }
   return(plotlist)
 }
@@ -33,6 +34,7 @@ make_plots <- function(dat){
 #' @export
 plot_ws <- function(vals){
   vals %>%
+    dplyr::mutate(trial = ceiling(trial/block_size)) %>%
     dplyr::group_by(trial, phase, s1, s2) %>%
     dplyr::summarise(value = mean(value), .groups = "drop") %>%
     ggplot2::ggplot(ggplot2::aes(x = trial, y = value, colour = s2)) +
@@ -49,6 +51,7 @@ plot_ws <- function(vals){
 #' @export
 plot_vs <- function(vals, bars = F){
   summ = vals %>%
+    dplyr::mutate(trial = ceiling(trial/block_size)) %>%
     dplyr::group_by(trial, phase, trial_type, v_type, s1, s2) %>%
     dplyr::summarise(value = mean(value), .groups = "drop")
   if (!bars){
@@ -89,6 +92,7 @@ plot_vs <- function(vals, bars = F){
 #' @export
 plot_rs <- function(vals){
   vals %>%
+    dplyr::mutate(trial = ceiling(trial/block_size)) %>%
     dplyr::group_by(trial, phase, trial_type, s1, s2) %>%
     dplyr::summarise(value = mean(value), .groups = "drop") %>%
     ggplot2::ggplot(ggplot2::aes(x = trial, y = value, colour = s1)) +
@@ -101,6 +105,25 @@ plot_rs <- function(vals){
     ggplot2::labs(x = 'Trial', y = 'R value', colour = 'Stimulus') +
     ggplot2::theme_bw()
 }
+
+#' @rdname heidi_plots
+#' @export
+plot_as <- function(vals){
+  vals %>%
+    dplyr::mutate(trial = ceiling(trial/block_size)) %>%
+    dplyr::group_by(trial, phase, trial_type, s1) %>%
+    dplyr::summarise(value = mean(value), .groups = "drop") %>%
+    ggplot2::ggplot(ggplot2::aes(x = trial, y = value, colour = s1)) +
+    ggplot2::geom_line() +
+    ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
+    ggplot2::scale_colour_discrete(drop = FALSE) +
+    ggplot2::scale_x_continuous(breaks = NULL) +
+    ggplot2::facet_grid(.~phase+trial_type, scales = 'free_x') +
+    ggplot2::labs(x = 'Trial', y = 'Alpha Value', colour = 'Stimulus') +
+    ggplot2::theme_bw()
+}
+
+
 #' @rdname heidi_plots
 #' @export
 patch_plots <- function(plots, selection, options = get_plot_opts()){

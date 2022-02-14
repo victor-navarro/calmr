@@ -23,7 +23,7 @@ Make a tibble to fit a heidi model
 df <- data.frame(Group = c('Group 1', 'Group 2'), P1 = c('10AB(US)', '10A(US)'), R1 = c(TRUE, TRUE))
 des <- parse_design(df)
 ps <- get_params(des, 0.2)
-make_heidi_args(design = des, pars = ps, opts = list(iterations = 1))
+make_heidi_args(design = des, pars = ps, opts = get_heidi_opts(iterations = 1))
 
 }
 \seealso{

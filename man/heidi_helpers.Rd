@@ -6,6 +6,7 @@
 \alias{parse_ws}
 \alias{parse_vs}
 \alias{parse_rs}
+\alias{parse_as}
 \alias{parse_heidi_results}
 \alias{filter_heidi_results}
 \title{An assortment of functions to help heidi}
@@ -17,6 +18,8 @@ parse_ws(mod)
 parse_vs(mod)
 
 parse_rs(mod)
+
+parse_as(mod)
 
 parse_heidi_results(raw_results)
 

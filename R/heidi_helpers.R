@@ -21,7 +21,7 @@ gen_ss_weights <- function(stims, default_val = 0){
 #' @rdname heidi_helpers
 parse_ws <- function(mod){
   df = tibble::enframe(apply(mod$ws, 1, function(x) as.data.frame(as.table(x))), name = 'trial') %>%
-    dplyr::mutate(trial_type = mod$trial_names[mod$ts], phase = mod$phase) %>%
+    dplyr::mutate(trial_type = mod$trial_names[mod$tps], phase = mod$phase, block_size = mod$block_size) %>%
     tidyr::unnest(value) %>% dplyr::mutate(Var1 = as.character(Var1),
                                            Var2 = as.character(Var2)) %>%
     dplyr::filter(Var1 != Var2) %>% dplyr::rename(s1 = Var1, s2 = Var2, value = Freq)
@@ -30,12 +30,12 @@ parse_ws <- function(mod){
 #' @rdname heidi_helpers
 parse_vs <- function(mod){
   combvs = tibble::enframe(lapply(mod$combvs, function(x) as.data.frame(as.table(x))), name = 'trial') %>%
-    dplyr::mutate(trial_type = mod$trial_names[mod$ts], phase = mod$phase) %>%
+    dplyr::mutate(trial_type = mod$trial_names[mod$tps], phase = mod$phase, block_size = mod$block_size) %>%
     tidyr::unnest(value) %>% dplyr::mutate(Var1 = as.character(Var1),
                                            Var2 = as.character(Var2)) %>%
     dplyr::rename(s1 = Var1, s2 = Var2, value = Freq) %>% dplyr::mutate(v_type = 'comb_v')
   chainvs = tibble::enframe(lapply(mod$chainvs, function(x) as.data.frame(as.table(x))), name = 'trial') %>%
-    dplyr::mutate(trial_type = mod$trial_names[mod$ts], phase = mod$phase) %>%
+    dplyr::mutate(trial_type = mod$trial_names[mod$tps], phase = mod$phase, block_size = mod$block_size) %>%
     tidyr::unnest(value) %>% dplyr::mutate(Var1 = as.character(Var1),
                                            Var2 = as.character(Var2)) %>%
     dplyr::rename(s1 = Var1, s2 = Var2, value = Freq) %>% dplyr::mutate(v_type = 'chain_v')
@@ -45,11 +45,18 @@ parse_vs <- function(mod){
 #' @rdname heidi_helpers
 parse_rs <- function(mod){
   rs = tibble::enframe(lapply(mod$rs, function(x) as.data.frame(as.table(x))), name = 'trial') %>%
-    dplyr::mutate(trial_type = mod$trial_names[mod$ts], phase = mod$phase) %>%
+    dplyr::mutate(trial_type = mod$trial_names[mod$tps], phase = mod$phase, block_size = mod$block_size) %>%
     tidyr::unnest(value) %>% dplyr::mutate(Var1 = as.character(Var1),
                                            Var2 = as.character(Var2)) %>%
     dplyr::rename(s1 = Var1, s2 = Var2, value = Freq)
   return(rs)
+}
+#' @rdname heidi_helpers
+parse_as <- function(mod){
+  as = as.data.frame(mod$as) %>%
+    dplyr::mutate(trial = 1:dplyr::n()) %>%
+    dplyr::mutate(trial_type = mod$trial_names[mod$tps], phase = mod$phase, block_size = mod$block_size) %>%
+    tidyr::pivot_longer(cols = -c("trial", "trial_type", "phase", "block_size"), names_to = "s1")
 }
 #' @rdname heidi_helpers
 #' @export
@@ -57,20 +64,27 @@ parse_heidi_results <- function(raw_results){
   #expects a tibble with one row per group
   #returns a list with all the relevant data for exporting (and plotting)
   full_results = raw_results %>%
-    dplyr::mutate(ws = list(parse_ws(mod_data)), vs = list(parse_vs(mod_data)), rs = list(parse_rs(mod_data))) %>%
+    dplyr::mutate(ws = list(parse_ws(mod_data)), vs = list(parse_vs(mod_data)),
+                  rs = list(parse_rs(mod_data)), as = list(parse_as(mod_data))) %>%
     dplyr::ungroup()
   return(list(ws = full_results %>% dplyr::select(group, ws) %>% tidyr::unnest(ws) %>%
-                dplyr::group_by(group, trial, trial_type, phase, s1, s2) %>% #summarize
+                dplyr::group_by(group, trial, trial_type, phase, s1, s2, block_size) %>% #summarize
                 dplyr::summarise(value = mean(value), .groups = "drop") %>%
                 dplyr::mutate(group = as.factor(group), s1 = as.factor(s1), s2 = as.factor(s2), trial_type = as.factor(trial_type), phase = as.factor(phase)),
               vs = full_results %>% dplyr::select(group, vs) %>% tidyr::unnest(vs) %>%
-                dplyr::group_by(group, trial, phase, trial_type, v_type, s1, s2) %>%
+                dplyr::group_by(group, trial, phase, trial_type, v_type, s1, s2, block_size) %>%
                 dplyr::summarise(value = mean(value), .groups = "drop") %>%
                 dplyr::mutate(group = as.factor(group), trial_type = as.factor(trial_type), v_type = as.factor(v_type), s1 = as.factor(s1), s2 = as.factor(s2), phase = as.factor(phase)),
               rs = full_results %>% dplyr::select(group, rs) %>% tidyr::unnest(rs) %>%
-                dplyr::group_by(group, trial, phase, trial_type, s1, s2) %>% #summarize
+                dplyr::group_by(group, trial, phase, trial_type, s1, s2, block_size) %>% #summarize
                 dplyr::summarise(value = mean(value), .groups = "drop") %>%
-                dplyr::mutate(group = as.factor(group), trial_type = as.factor(trial_type), s1 = as.factor(s1), s2 = as.factor(s2), phase = as.factor(phase))))
+                dplyr::mutate(group = as.factor(group), trial_type = as.factor(trial_type), s1 = as.factor(s1), s2 = as.factor(s2), phase = as.factor(phase)),
+              as = full_results %>% dplyr::select(group, as) %>% tidyr::unnest(as) %>%
+                dplyr::group_by(group, trial, phase, trial_type, s1, block_size) %>% #summarize
+                dplyr::summarise(value = mean(value), .groups = "drop") %>%
+                dplyr::mutate(group = as.factor(group), trial_type = as.factor(trial_type), s1 = as.factor(s1), phase = as.factor(phase))
+              )
+         )
 }
 
 #' @rdname heidi_helpers

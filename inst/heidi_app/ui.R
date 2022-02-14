@@ -57,7 +57,8 @@ ui <- shinydashboard::dashboardPage(
                     shinydashboard::box(collapsible = TRUE,
                                         width = NULL,
                                         title = "Sim Preferences",
-                                        shiny::sliderInput(inputId = 'iterations', label = 'Sim Iterations', min = 1, max = 200, value = 1, ticks = FALSE)
+                                        shiny::sliderInput(inputId = 'iterations', label = 'Sim Iterations', min = 1, max = 200, value = 1, ticks = FALSE),
+                                        shiny::checkboxInput(inputId = "miniblocks", label = 'Randomize Trials in Miniblocks', value = T)
                     )
       ),
       shiny::column(width = 2,

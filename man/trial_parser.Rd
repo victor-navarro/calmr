@@ -15,6 +15,11 @@ A list with the number of trials, the trials, and the stimulus names
 \description{
 Parses a string stipulating trials
 }
+\note{
+Supports complex stimuli in parentheses (e.g., "5A(US)")
+Supports probe trials, followed by a hash (e.g., "3X#")
+}
 \examples{
 trial_parser("30XAU/30(YA)A")
+trial_parser("1X#/2X(US)#")
 }

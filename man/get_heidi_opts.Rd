@@ -4,10 +4,12 @@
 \alias{get_heidi_opts}
 \title{Get options for heidi model}
 \usage{
-get_heidi_opts(iterations = 1)
+get_heidi_opts(iterations = 1, miniblocks = TRUE)
 }
 \arguments{
-\item{iterations}{An integer denoting the number of iterations to run}
+\item{iterations}{An integer denoting the number of iterations to run. Default = 1.}
+
+\item{miniblocks}{A logical denoting whether to create trial miniblocks when possible. Default = TRUE.}
 }
 \description{
 Get options for heidi model

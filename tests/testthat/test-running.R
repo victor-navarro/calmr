@@ -12,9 +12,9 @@ test_that("package works", {
   #error for passing bad options
   expect_error(run_heidi(df, param_df = pars, options = list(mybadOption = T)))
   #model can run
-  expect_named(run_heidi(df, param_df = pars), c("ws", "vs", "rs"))
+  expect_named(run_heidi(df, param_df = pars), c("ws", "vs", "rs", "as"))
   #multiple plots can be obtained
-  expect_equal(length(make_plots(run_heidi(df, pars))), 8)
+  expect_equal(length(make_plots(run_heidi(df, pars))), 10)
   #### trial_parser tests ####
   expect_setequal(
     trial_parser("10AB(US)")$stimuli, c("A", "B", "US"))
@@ -31,7 +31,7 @@ test_that("package works", {
                          P2 = c("1A", "1A"),
                          R2 = c(TRUE, TRUE))
   simple_pars = data.frame(Stimulus = c("A", "B", "US"), Alpha = c(0.1, 0.2, 0.3))
-  expect_named(run_heidi(simple_df, param_df = simple_pars), c("ws", "vs", "rs"))
+  expect_named(run_heidi(simple_df, param_df = simple_pars), c("ws", "vs", "rs", "as"))
 
 
 

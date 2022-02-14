@@ -4,6 +4,10 @@
 #' @return A list with the number of trials, the trials, and the stimulus names
 #' @examples
 #' trial_parser("30XAU/30(YA)A")
+#' trial_parser("1X#/2X(US)#")
+#' @note
+#' Supports complex stimuli in parentheses (e.g., "5A(US)")
+#' Supports probe trials, followed by a hash (e.g., "3X#")
 #' @export
 trial_parser <- function(str){
   ts = unlist(stringr::str_split(str, '/'))

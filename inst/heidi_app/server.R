@@ -29,7 +29,7 @@ base_df <- data.frame(Group = c("Over", "Ctrl"),
 #                       R5 = c(FALSE, FALSE))
 
 base_plot_options <- list(common_scale = TRUE)
-base_sim_options <- list(iterations = 1)
+base_sim_options <- list(iterations = 1, miniblocks = TRUE)
 
 # Define server logic required to draw a histogram
 shiny::shinyServer(function(input, output) {
@@ -63,6 +63,7 @@ shiny::shinyServer(function(input, output) {
     #set some of the options/selections
     shiny::updateSelectInput(inputId = "plot_selection", selected = selected_plots(), choices = names(plots))
     shiny::updateSliderInput(inputId = 'iterations', value = sim_options()$iterations)
+    shiny::updateCheckboxInput(inputId = "miniblocks", value = sim_options()$miniblocks)
     plot_options(dsg$plot_options)
     shiny::updateCheckboxInput(inputId = "common_scale", value = plot_options()$common_scale)
     shiny::updateSelectInput(inputId = "phase_selection", selected = dsg$plot_filters$phase, choices = parsed_design()$phase)
@@ -128,7 +129,7 @@ shiny::shinyServer(function(input, output) {
       shiny::withProgress(message = "Simulating...", value = 0, {
         raw_results(heidi_df %>% dplyr::rowwise() %>% dplyr::mutate(mod_data = list({
           shiny::incProgress(1/iterations, detail = paste("iteration =", iteration))
-          heidi::train_pav_heidi(stim_alphas, stim_cons, heidi::gen_ss_weights(stim_names), tps, trials, trial_names, phase)
+          heidi::train_pav_heidi(stim_alphas, stim_cons, heidi::gen_ss_weights(stim_names), tps, trials, trial_names, phase, block_size)
         })))
       })
       #parse results
@@ -158,6 +159,12 @@ shiny::shinyServer(function(input, output) {
   shiny::observeEvent(input$iterations, {
     sopts = sim_options()
     sopts$iterations = input$iterations
+    sim_options(sopts)
+  })
+
+  shiny::observeEvent(input$miniblocks, {
+    sopts = sim_options()
+    sopts$miniblocks = input$miniblocks
     sim_options(sopts)
   })
 
