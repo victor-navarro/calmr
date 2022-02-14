@@ -72,13 +72,12 @@ plot_vs <- function(vals, bars = F){
     plt = summ %>%
       dplyr::group_by(phase, trial_type, v_type, s1, s2) %>%
       dplyr::summarise(value = mean(value), .groups = "drop") %>%
-      ggplot2::ggplot(ggplot2::aes(x = trial_type, y = value, fill = s1, pattern = v_type)) +
-      ggpattern::geom_bar_pattern(stat = "identity", colour = 'black',
-                                  pattern_colour = NA, pattern_fill = 'white',
-                                  pattern_spacing = 0.01) +
-      ggpattern::scale_pattern_manual(values = c('stripe', 'none')) +
+      ggplot2::ggplot(ggplot2::aes(x = trial_type, y = value, fill = s1, alpha = v_type)) +
+      ggplot2::geom_bar(stat = "identity") +
+      ggplot2::stat_summary(ggplot2::aes(group = 1), geom = "point", fun = "sum") +
+      ggplot2::scale_alpha_manual(values = c(.5, 1)) +
       ggplot2::labs(x = 'Trial', y = 'V value', fill = 'Source',
-                    pattern = 'V type', linetype = 'V type') +
+                    pattern = 'V type', alpha = 'V type') +
       ggplot2::theme_bw() +
       ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)) +
       ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +

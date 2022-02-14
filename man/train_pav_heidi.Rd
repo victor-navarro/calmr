@@ -13,6 +13,7 @@ train_pav_heidi(
   trial_names = NULL,
   phase = NULL,
   block_size = NULL,
+  train = rep(TRUE, length(tps)),
   targets = "US"
 )
 }
@@ -32,6 +33,8 @@ train_pav_heidi(
 \item{phase}{(optional) A character vector of length T with the names of the phases}
 
 \item{block_size}{(optional) A integer vector of length T specifying the block size per trial}
+
+\item{train}{(optional) A logical vector specifying whether the trial should result in learning (update w). Helpful with tests.}
 
 \item{targets}{A character vector specifying the target stimulus for each trial. Under development. For now, just the US.}
 }

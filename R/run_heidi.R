@@ -58,7 +58,17 @@ run_heidi <- function(design_df, param_df = NULL, options = NULL, parse = T){
   #make the tibble
   heidi_df = make_heidi_args(parsed_design, param_df, options)
   #run the model
-  results = heidi_df %>% dplyr::rowwise() %>% dplyr::mutate(mod_data = list(train_pav_heidi(stim_alphas, stim_cons, gen_ss_weights(stim_names), tps, trials, trial_names, phase, block_size)))
+  results = heidi_df %>%
+    dplyr::rowwise() %>%
+    dplyr::mutate(mod_data = list(train_pav_heidi(sals = stim_alphas,
+                                                  cons = stim_cons,
+                                                  w = gen_ss_weights(stim_names),
+                                                  tps = tps,
+                                                  trials = trials,
+                                                  trial_names = trial_names,
+                                                  phase = phase,
+                                                  block_size = block_size,
+                                                  train = train)))
   if (parse){
     results = parse_heidi_results(results)
   }

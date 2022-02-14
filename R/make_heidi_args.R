@@ -49,7 +49,6 @@ make_heidi_args <- function(design, pars, opts){
                   stim_cons = list(cons[unlist(stim_names)])) %>%
     dplyr::select(group, stim_names, stim_alphas, stim_cons) %>%
     dplyr::distinct()
-
   #we can sample now
   #Dom, if you are reading this, I apologize for this bit
   #It basically creates a tibble of iterations*groups*phases, with pointers for trials in the masterlist
@@ -58,13 +57,13 @@ make_heidi_args <- function(design, pars, opts){
     tidyr::expand_grid(iteration = 1:opts$iterations) %>%
     dplyr::rowwise() %>%
     #the pointers are returned by the function .sample_trial
-    dplyr::mutate(samp = list(.sample_trials(trial_names, trial_repeats, randomize, opts$miniblocks, trial_names_masterlist))) %>%
+    dplyr::mutate(samp = list(.sample_trials(trial_names, is_test, trial_repeats, randomize, opts$miniblocks, trial_names_masterlist))) %>%
     tidyr::unnest_wider(samp) %>%
     dplyr::rowwise() %>%
     dplyr::mutate(phaselab = list(rep(phase, length(tps))), blocks = list(rep(block_size, length(tps)))) %>%
     #one last manipulation to concatenate phases into single rows
     dplyr::group_by(iteration, group) %>%
-    dplyr::summarize(tps = list(unlist(tps)), phase = list(unlist(phaselab)), block_size = list(unlist(blocks)))
+    dplyr::summarize(tps = list(unlist(tps)), train = list(unlist(train)), phase = list(unlist(phaselab)), block_size = list(unlist(blocks)))
 
   #now put the trial and stimulus information back
   tb = tb %>% dplyr::rowwise() %>%
@@ -74,9 +73,10 @@ make_heidi_args <- function(design, pars, opts){
   tb
 }
 
-.sample_trials <- function(names, repeats, randomize, miniblocks, masterlist){
+.sample_trials <- function(names, test, repeats, randomize, miniblocks, masterlist){
   #samples trials as a function of a masterlist, and randomizes if necessary
   tps = unlist(sapply(seq_along(names), function(n) rep(which(masterlist %in% names[n]), repeats[n])))
+  tstps = unlist(sapply(seq_along(names), function(n) rep(test[n], repeats[n])))
   block_size = 1
   if (randomize){
     #create miniblocks, if requested
@@ -85,17 +85,23 @@ make_heidi_args <- function(design, pars, opts){
       per_block = repeats/gcd
       block_size = sum(per_block)
       tps = c() #note the redefining
+      tstps = c()
       for (b in 1:gcd){
-        temp = unlist(sapply(seq_along(names), function(n) rep(which(masterlist %in% names[n]), per_block[n])))
-        temp = temp[sample(length(temp))]
-        tps = c(tps, temp)
+        ts = unlist(sapply(seq_along(names), function(n) rep(which(masterlist %in% names[n]), per_block[n])))
+        tsts = unlist(sapply(seq_along(names), function(n) rep(test[n], per_block[n])))
+        #randomize
+        ri = sample(length(ts))
+        tps = c(tps, ts[ri])
+        tstps = c(tstps, tsts[ri])
       }
     }else{
       #randomize
-      tps = tps[sample(length(tps))]
+      ri = sample(length(tps))
+      tps = tps[ri]
+      tstps = tstps[ri]
     }
   }
-  return(list(tps = tps, block_size = block_size))
+  return(list(tps = tps, train = !tstps, block_size = block_size))
 }
 
 #function to return the smallest factor

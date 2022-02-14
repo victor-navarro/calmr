@@ -10,7 +10,6 @@ library(patchwork)
 library(rhandsontable)
 library(stringr)
 library(tibble)
-library(ggpattern)
 library(heidi)
 
 ui <- shinydashboard::dashboardPage(

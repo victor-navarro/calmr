@@ -7,6 +7,7 @@
 #' @param trial_names (optional) A character vector of length T with the names of the trials
 #' @param phase (optional) A character vector of length T with the names of the phases
 #' @param block_size (optional) A integer vector of length T specifying the block size per trial
+#' @param train (optional) A logical vector specifying whether the trial should result in learning (update w). Helpful with tests.
 #' @param targets A character vector specifying the target stimulus for each trial. Under development. For now, just the US.
 #' @return A list with
 #' \itemize{
@@ -16,7 +17,12 @@
 #' }
 #' @note The array w contains the associations for all stimuli involved in the experiment. Entry i,j specifies the associative strength between stimulus i to stimulus j. Entry j,i specifies the opposite direction.
 #' @export
-train_pav_heidi <- function(sals, cons, w, tps, trials, trial_names = NULL, phase = NULL, block_size = NULL, targets = 'US'){
+train_pav_heidi <- function(sals, cons, w, tps, trials,
+                            trial_names = NULL,
+                            phase = NULL,
+                            block_size = NULL,
+                            train = rep(TRUE, length(tps)),
+                            targets = 'US'){
   maxstim = dim(w)[1]
   ws = array(NA, dim = c(length(tps), dim(w)),
              dimnames = list(NULL, rownames(w), rownames(w)))
@@ -47,14 +53,16 @@ train_pav_heidi <- function(sals, cons, w, tps, trials, trial_names = NULL, phas
     #Distribute R
     r = .distR(tsals, combV, chainV, t)
 
-    #Now we update
-    v = oh_stims %*% w #expectation
-    e = oh_stims*cons*sals-v #error
-    d = oh_stims*sals%*%e #delta
-    diag(d) = 0
+    if (train[t]){
+      #Now we update
+      v = oh_stims %*% w #expectation
+      e = oh_stims*cons*sals-v #error
+      d = oh_stims*sals%*%e #delta
+      diag(d) = 0
 
-    #And learn
-    w = w+d
+      #And learn
+      w = w+d
+    }
 
     #save data
     ws[t, , ] = w

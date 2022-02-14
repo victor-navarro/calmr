@@ -16,6 +16,9 @@ trial_parser <- function(str){
   trial_repeats[is.na(trial_repeats)] = 1
   complex_stims = sapply(trial_names, function(x) unlist(stringr::str_extract_all(x, "(?<=\\().+?(?=\\))")), USE.NAMES = F, simplify = F)
   simple_stims = stringr::str_split(gsub("\\([^()]*\\)", "", trial_names), "")
+  #check if we have tests
+  is_test = lapply(simple_stims, function(x) any("#" %in% x))
+  simple_stims = lapply(simple_stims, function(x) x[x!="#"])
 
   #combine to make trials
   trial_list = sapply(1:length(trial_names), function(x) c(simple_stims[[x]], complex_stims[[x]]), simplify = F)
@@ -23,5 +26,6 @@ trial_parser <- function(str){
   return(list(trial_names = trial_names,
               trial_repeats = trial_repeats,
               trial_list = trial_list,
+              is_test = is_test,
               stimuli = unique(unlist(c(simple_stims, complex_stims)))))
 }
