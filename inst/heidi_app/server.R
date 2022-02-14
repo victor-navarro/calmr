@@ -129,15 +129,15 @@ shiny::shinyServer(function(input, output) {
       shiny::withProgress(message = "Simulating...", value = 0, {
         raw_results(heidi_df %>% dplyr::rowwise() %>% dplyr::mutate(mod_data = list({
           shiny::incProgress(1/iterations, detail = paste("iteration =", iteration))
-          heidi::train_pav_heidi(train_pav_heidi(sals = stim_alphas,
-                                                 cons = stim_cons,
-                                                 w = heidi::gen_ss_weights(stim_names),
-                                                 tps = tps,
-                                                 trials = trials,
-                                                 trial_names = trial_names,
-                                                 phase = phase,
-                                                 block_size = block_size,
-                                                 train = train)
+          heidi::train_pav_heidi(sals = stim_alphas,
+                                 cons = stim_cons,
+                                 w = heidi::gen_ss_weights(stim_names),
+                                 tps = tps,
+                                 trials = trials,
+                                 trial_names = trial_names,
+                                 phase = phase,
+                                 block_size = block_size,
+                                 train = train)
         })))
       })
       #parse results

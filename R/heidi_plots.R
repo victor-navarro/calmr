@@ -44,7 +44,7 @@ plot_ws <- function(vals){
     ggplot2::scale_colour_discrete(drop = FALSE) +
     ggplot2::scale_x_continuous(breaks = NULL) +
     ggplot2::facet_wrap(~s1) +
-    ggplot2::labs(x = 'Trial', y = 'Strength', colour = 'Predictee') +
+    ggplot2::labs(x = "Trial/Miniblock", y = 'Strength', colour = 'Predictee') +
     ggplot2::theme_bw()
 }
 #' @rdname heidi_plots
@@ -62,7 +62,7 @@ plot_vs <- function(vals, bars = F){
       ggplot2::scale_shape_manual(values = c(21, 16), drop = FALSE) +
       ggplot2::scale_colour_discrete(drop = FALSE) +
       ggplot2::scale_linetype_manual(values = c('dashed', 'solid'), drop = FALSE) +
-      ggplot2::labs(x = 'Trial', y = 'V value', colour = 'Source',
+      ggplot2::labs(x = "Trial/Miniblock", y = 'V value', colour = 'Source',
                     shape = 'V type', linetype = 'V type') +
       ggplot2::scale_x_continuous(breaks = NULL) +
       ggplot2::theme_bw() +
@@ -76,7 +76,7 @@ plot_vs <- function(vals, bars = F){
       ggplot2::geom_bar(stat = "identity") +
       ggplot2::stat_summary(ggplot2::aes(group = 1), geom = "point", fun = "sum") +
       ggplot2::scale_alpha_manual(values = c(.5, 1)) +
-      ggplot2::labs(x = 'Trial', y = 'V value', fill = 'Source',
+      ggplot2::labs(x = "Trial/Miniblock", y = 'V value', fill = 'Source',
                     pattern = 'V type', alpha = 'V type') +
       ggplot2::theme_bw() +
       ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)) +
@@ -101,7 +101,7 @@ plot_rs <- function(vals){
     ggplot2::scale_colour_discrete(drop = FALSE) +
     ggplot2::scale_x_continuous(breaks = NULL) +
     ggplot2::facet_grid(s2~phase+trial_type, scales = 'free_x') +
-    ggplot2::labs(x = 'Trial', y = 'R value', colour = 'Stimulus') +
+    ggplot2::labs(x = "Trial/Miniblock", y = 'R value', colour = 'Stimulus') +
     ggplot2::theme_bw()
 }
 
@@ -118,7 +118,7 @@ plot_as <- function(vals){
     ggplot2::scale_colour_discrete(drop = FALSE) +
     ggplot2::scale_x_continuous(breaks = NULL) +
     ggplot2::facet_grid(.~phase+trial_type, scales = 'free_x') +
-    ggplot2::labs(x = 'Trial', y = 'Alpha Value', colour = 'Stimulus') +
+    ggplot2::labs(x = "Trial/Miniblock", y = 'Alpha Value', colour = 'Stimulus') +
     ggplot2::theme_bw()
 }
 
