@@ -121,6 +121,7 @@ patch_plots(plots = my_plots, selection = plot_names[c(2, 7)])
 ```{r}
 patch_plots(plots = my_plots, selection = plot_names[c(3, 8)])
 ```
+
 ### Combined associative strenghts (bar)
 ```{r}
 patch_plots(plots = my_plots, selection = plot_names[c(4, 9)])
