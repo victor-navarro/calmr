@@ -5,7 +5,8 @@ Authors@R:
     person("Victor", "Navarro", , "navarrov@cardiff.ac.uk", role = c("aut", "cre"))
 Description: Tools to simulate using HeiDI.
 License: GPL (>= 3)
-URL: https://github.com/victor-navarro/heidi
+URL: https://github.com/victor-navarro/heidi,
+    http://victornavarro.org/heidi/
 BugReports: https://github.com/victor-navarro/heidi/issues
 Imports: 
     dplyr,
