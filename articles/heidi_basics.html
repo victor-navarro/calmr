@@ -7,12 +7,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="heidi">
 <title>heidi_basics • heidi</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="heidi_basics">
 <meta property="og:description" content="heidi">
+<meta property="og:image" content="http://victornavarro.org/heidi/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -68,7 +75,7 @@
 
 <script src="heidi_basics_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <main id="main"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>heidi_basics</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>heidi_basics</h1>
                         <h4 data-toc-skip class="author">Victor Navarro</h4>
             
       
@@ -84,16 +91,20 @@
 <h2 id="using-heidi-in-r">Using heidi in R<a class="anchor" aria-label="anchor" href="#using-heidi-in-r"></a>
 </h2>
 <div class="section level3">
-<h3 id="requirements">Requirements<a class="anchor" aria-label="anchor" href="#requirements"></a>
+<h3 id="ingredients">Ingredients<a class="anchor" aria-label="anchor" href="#ingredients"></a>
 </h3>
-<p>To successfully simulate using HeiDI, the only requirements are a data.frame specifying the groups, phases, and trials of the experiment, and (optionally, although recommended), a data.frame with saliency parameters for all the stimuli in the experiment.</p>
+<p>To successfully simulate you only need a data.frame specifying the groups, phases, and trials of the experiment, and (optionally) a data.frame with salience parameters for all the stimuli in the experiment.</p>
 </div>
 <div class="section level3">
 <h3 id="the-design-data-frame">The design data.frame<a class="anchor" aria-label="anchor" href="#the-design-data-frame"></a>
 </h3>
-<p>In the so-called design data.frame, the user specifies their experimental design. A few rules about the data.frame:</p>
-<p>0 - Each row represents a group. 1 - Its first column contains the group labels. 2 - The remaining columns are organized in pairs. The first column of each pair specifies the trials to give in the phase, whereas the second column of each pair specifies whether the trials within a phase are should be randomized.</p>
-<p>Let’s build our design matrix.</p>
+<p>In the so-called design data.frame the user specifies their experimental design. A few rules about the this data.frame:</p>
+<ol start="0" style="list-style-type: decimal">
+<li>Each row represents a group.</li>
+<li>Its first column contains the group labels.</li>
+<li>The remaining columns are organized in pairs. The first column in each pair specifies the trials to give in the phase, whereas the second column of each pair specifies whether the trials within that phase should be randomized.</li>
+</ol>
+<p>Let’s build a design matrix for a blocking experiment.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="va">my_blocking</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Exp"</span>, <span class="st">"Control"</span><span class="op">)</span>,
@@ -107,8 +118,8 @@
 <span class="co">#&gt;     Group  Phase1    R1   Phase2    R2  Test    R3</span>
 <span class="co">#&gt; 1     Exp 10A(US) FALSE 10AB(US) FALSE 1A/1B FALSE</span>
 <span class="co">#&gt; 2 Control 10C(US) FALSE 10AB(US) FALSE 1A/1B FALSE</span></code></pre></div>
-<p>Fairly simple! A few observations about the trial notation: 0 - Trials are preceded by a number. That number represents the number of times that trial will be given in each phase. “10A(US)” means that the “A(US)” trial will be given 10 times. 1 - The presence and absence of the unconditioned stimulus (US) is not denoted with the traditional “+” and “-” symbols. Instead, we use parenthesis to denote “named” stimuli. These can be thought as a single element with a complex name (i.e., with more than one character). As such, “(US)” denotes a single element representing the US. 2 - The “/” character is used as a trial separator (it does not imply randomization by itself). Thus, “1A/1B” specifies that a single “A” trial and a single “B” trial will be given during that phase. Randomization of trials is specified in the other columns.</p>
-<p>If you ever want to check if your trials string will work with the simulator, you can use <code>trial_parser</code>. That function returns a list with trial_names (the name of the trial), trial_repeats (the number of times each trial is given), a trial_list (a list with the components of each trial), and stimuli (the stimuli found in the trial string).</p>
+<p>A few observations about the trial notation: 0. Trials are preceded by a number. That number represents the number of times that trial will be given in each phase. “10A(US)” means that the “A(US)” trial will be given 10 times. 1. The presence and absence of the unconditioned stimulus is not denoted with the traditional “+” and “-” symbols. Instead, we use parenthesis to denote “complex” stimuli. These can be thought of as an element with a complex name (i.e., with more than one character). As such, “(US)” specifies a single element to represent the US. 2. The “/” character is used as a trial separator (it does not imply randomization by itself). Thus, “1A/1B” specifies that a single “A” trial and a single “B” trial will be given during that phase. Recall that randomization of trials within a phase is specified by the column after it (above, R1, R2, and R3).</p>
+<p>If you ever want to check if your trials string will work with the simulator, you can use <code>trial_parser</code>. The function returns a list with trial_names (the name of the trial), trial_repeats (the number of times each trial is given), trial_list (a list with the elements on each trial), is_test (a list specifying whether the trial does not result in learning), and a vector of stimuli (the stimuli found in the trial string).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/trial_parser.html">trial_parser</a></span><span class="op">(</span><span class="st">"AB/10AC"</span><span class="op">)</span>  <span class="co">#not specifying a number of AB trials. Bad practice!</span>
 <span class="co">#&gt; $trial_names</span>
@@ -156,29 +167,24 @@
 <span class="co">#&gt; [1] "A"  "B"  "AB" "US"</span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="the-parameters-table">The parameters table<a class="anchor" aria-label="anchor" href="#the-parameters-table"></a>
+<h3 id="the-parameters-data-frame">The parameters data.frame<a class="anchor" aria-label="anchor" href="#the-parameters-data-frame"></a>
 </h3>
-<p>You will be able to run a simulation with only an experiment data.frame, the simulation function will use default saliency values for each stimulus. Whenever you want specific saliency values for the stimuli in your experiment, you should pass a data.frame with parameters for all your stimuli. Let’s specify such a table for our experiment.</p>
+<p>You can run a simulation with only an design data.frame (the simulation function will use default salience values for the stimuli). However, if you want specific salience values for the stimuli in your experiment, you should pass a data.frame with parameters. Let’s specify those for our experiment.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Stimulus <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"US"</span><span class="op">)</span>, Alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">0.3</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">my_pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/heidi_helpers.html">get_params</a></span><span class="op">(</span><span class="va">my_blocking</span>, default_par <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span> <span class="co">#Note we can quickly get a table with parameters directly from the design data.frame; a good way to check we are going in the right direction</span>
+<span class="va">my_pars</span><span class="op">$</span><span class="va">Alpha</span><span class="op">[</span><span class="va">my_pars</span><span class="op">$</span><span class="va">Stimulus</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">.4</span>
 <span class="va">my_pars</span>
 <span class="co">#&gt;   Stimulus Alpha</span>
-<span class="co">#&gt; 1        A   0.3</span>
-<span class="co">#&gt; 2        B   0.3</span>
-<span class="co">#&gt; 3        C   0.3</span>
-<span class="co">#&gt; 4       US   0.5</span></code></pre></div>
+<span class="co">#&gt; 1        A   0.2</span>
+<span class="co">#&gt; 2       US   0.4</span>
+<span class="co">#&gt; 3        B   0.2</span>
+<span class="co">#&gt; 4        C   0.2</span></code></pre></div>
 <div class="section level4">
 <h4 id="additional-options">Additional options<a class="anchor" aria-label="anchor" href="#additional-options"></a>
 </h4>
 <p>The final ingredient is a list with simulation options. We can get a default one with <code>get_heidi_opts</code>, and modify them accordingly.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">my_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_heidi_opts.html">get_heidi_opts</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">my_opts</span>
-<span class="co">#&gt; $iterations</span>
-<span class="co">#&gt; [1] 1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $miniblocks</span>
-<span class="co">#&gt; [1] TRUE</span>
 <span class="va">my_opts</span><span class="op">$</span><span class="va">iterations</span> <span class="op">&lt;-</span> <span class="fl">10</span>
 <span class="va">my_opts</span>
 <span class="co">#&gt; $iterations</span>
@@ -193,26 +199,26 @@
 <p>And we can finally simulate the model with <code>run_heidi</code>. By default, the function returns a list with the relevant data. Let’s see.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">my_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_heidi.html">run_heidi</a></span><span class="op">(</span>design_df <span class="op">=</span> <span class="va">my_blocking</span>,
-                   param_df <span class="op">=</span> <span class="va">my_pars</span>,
-                   options <span class="op">=</span> <span class="va">my_opts</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">my_sim</span><span class="op">)</span> <span class="co">#contains information about weights (ws), v-values (vs), and r-values (rs)</span>
+                    param_df <span class="op">=</span> <span class="va">my_pars</span>,
+                    options <span class="op">=</span> <span class="va">my_opts</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">my_sim</span><span class="op">)</span> <span class="co">#contains information about weights (ws), v-values (vs), r-values (rs), and alphas (as)</span>
 <span class="co">#&gt; [1] "ws" "vs" "rs" "as"</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">my_sim</span><span class="op">$</span><span class="va">vs</span><span class="op">)</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 9</span></span>
-<span class="co">#&gt;   group   trial phase  trial_type v_type  s1    s2    block_size value</span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Control     1 Phase1 C(US)      chain_v C     US             1 0    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Control     1 Phase1 C(US)      comb_v  C     US             1 0    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Control     2 Phase1 C(US)      chain_v C     US             1 0    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Control     2 Phase1 C(US)      comb_v  C     US             1 0.172</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Control     3 Phase1 C(US)      chain_v C     US             1 0    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> Control     3 Phase1 C(US)      comb_v  C     US             1 0.312</span></code></pre></div>
+<span class="co">#&gt;   group   trial phase  trial_type v_type  s1    s2    block_size  value</span>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Control     1 Phase1 C(US)      chain_v C     US             1 0     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Control     1 Phase1 C(US)      comb_v  C     US             1 0     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Control     2 Phase1 C(US)      chain_v C     US             1 0     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Control     2 Phase1 C(US)      comb_v  C     US             1 0.086<span style="text-decoration: underline;">4</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Control     3 Phase1 C(US)      chain_v C     US             1 0     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> Control     3 Phase1 C(US)      comb_v  C     US             1 0.162</span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
 <h3 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a>
 </h3>
-<p>But, we rarely want the raw data. If you are like me, you will want to see some plots. Let’s use <code>make_plots</code> to do create some plots, and <code>patch_plots</code> to display them.</p>
+<p>But, we rarely want the raw data. If you are like me, you will want to see some plots. Let’s use <code>make_plots</code> to do create some plots, and <code>patch_plots</code> to display them. Here they are, paired side by side.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">my_plots</span> <span class="op">=</span> <span class="fu"><a href="../reference/heidi_plots.html">make_plots</a></span><span class="op">(</span><span class="va">my_sim</span><span class="op">)</span>
 <span class="va">plot_names</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">my_plots</span><span class="op">)</span>
@@ -220,17 +226,35 @@
 <span class="co">#&gt;  [1] "Control: Rs"       "Control: Ws"       "Control: Vs"      </span>
 <span class="co">#&gt;  [4] "Control: Vs (bar)" "Control: As"       "Exp: Rs"          </span>
 <span class="co">#&gt;  [7] "Exp: Ws"           "Exp: Vs"           "Exp: Vs (bar)"    </span>
-<span class="co">#&gt; [10] "Exp: As"</span>
-<span class="fu"><a href="../reference/heidi_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">6</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
-<span class="co">#&gt; geom_path: Each group consists of only one observation. Do you need to adjust</span>
-<span class="co">#&gt; the group aesthetic?</span>
-<span class="co">#&gt; geom_path: Each group consists of only one observation. Do you need to adjust</span>
-<span class="co">#&gt; the group aesthetic?</span>
-<span class="co">#&gt; geom_path: Each group consists of only one observation. Do you need to adjust</span>
-<span class="co">#&gt; the group aesthetic?</span>
-<span class="co">#&gt; geom_path: Each group consists of only one observation. Do you need to adjust</span>
-<span class="co">#&gt; the group aesthetic?</span></code></pre></div>
-<p><img src="heidi_basics_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
+<span class="co">#&gt; [10] "Exp: As"</span></code></pre></div>
+<div class="section level4">
+<h4 id="stimulus-specific-responding">Stimulus-specific responding<a class="anchor" aria-label="anchor" href="#stimulus-specific-responding"></a>
+</h4>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/heidi_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">6</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="co">#Responding</span></code></pre></div>
+<p><img src="heidi_basics_files/figure-html/unnamed-chunk-8-1.png" width="672"> ### Stimulus associations</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/heidi_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">7</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<p><img src="heidi_basics_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
+</div>
+<div class="section level4">
+<h4 id="combined-associative-strenghts">Combined associative strenghts<a class="anchor" aria-label="anchor" href="#combined-associative-strenghts"></a>
+</h4>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/heidi_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">8</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<p><img src="heidi_basics_files/figure-html/unnamed-chunk-10-1.png" width="672"> ### Combined associative strenghts (bar)</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/heidi_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">9</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<p><img src="heidi_basics_files/figure-html/unnamed-chunk-11-1.png" width="672"></p>
+</div>
+<div class="section level4">
+<h4 id="stimulus-salience-at-expression">Stimulus salience at expression<a class="anchor" aria-label="anchor" href="#stimulus-salience-at-expression"></a>
+</h4>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/heidi_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<p><img src="heidi_basics_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
+<p>The <code>heidi</code> package was designed to make simulating quick. Write your design and get a glance of what the model predicts. Make sure to check more advanced vignettes when you are ready.</p>
+</div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
