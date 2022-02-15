@@ -10,6 +10,8 @@
 \alias{patch_plots}
 \alias{get_plot_opts}
 \alias{plot_common_scale}
+\alias{graph_weights}
+\alias{get_graph_opts}
 \title{Plotting functions for heidi models}
 \usage{
 make_plots(dat)
@@ -27,6 +29,18 @@ patch_plots(plots, selection, options = get_plot_opts())
 get_plot_opts(common_scale = TRUE)
 
 plot_common_scale(plots)
+
+graph_weights(ws, t = max(ws$trial), opts = get_graph_opts())
+
+get_graph_opts(
+  arrow.gap = 0.16,
+  arrow.curvature = 0.2,
+  arrow.size = 4,
+  arrow.pt = 20,
+  node.size = 40,
+  node.stroke = 3,
+  node.text.size = 15
+)
 }
 \arguments{
 \item{dat}{A list containing data.frames with parsed weights, r values, and v values, as returned by parse_heidi_results.}
@@ -42,6 +56,10 @@ plot_common_scale(plots)
 \item{options}{A list with options}
 
 \item{common_scale}{A logical. Whether to plot the data in a common y-scale.}
+
+\item{ws}{A data.frame containing parsed weights, as returned by parse_heidi_results}
+
+\item{trial}{An integer denoting the trial of the weights to be graphed. Defaults to the last trial in the data.}
 }
 \value{
 A list with ggplot objects

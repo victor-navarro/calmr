@@ -1,14 +1,14 @@
 # heidi
 
-A R Package to Simulate the Acquisition and Expression of Reciprocal Associations
+An R-based package to Simulate the Acquisition and Expression of Reciprocal Associations
 
-## Instructions
+## Installation
 
-If you do not have devtools, install them.
+You will need devtools to install this package from github. If you do not have it, run:
 
 `install.packages("devtools")`
 
-Then, you can install directly from this repository via
+Afterwards, you can install directly from this repository via:
 
 `devtools::install_github("victor-navarro/heidi", build_vignettes = TRUE)`
 
@@ -16,7 +16,7 @@ If you managed to build the vignettes, there's a vignette showing the basics of 
 
 `vignette("heidi_basics", package = "heidi")`
 
-Or better yet, launch the visual interface via
+If you just want to do some quick simulating, launch the visual interface via:
 
 ```
 library(heidi)

@@ -12,7 +12,9 @@ vignette: >
 knitr::opts_chunk$set(
   fig.width = 7,
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  message = F,
+  warning = F
 )
 ```
 
@@ -22,17 +24,19 @@ library(heidi)
 
 # Using heidi in R
 
-## Requirements
-To successfully simulate using HeiDI, the only requirements are a data.frame specifying the groups, phases, and trials of the experiment, and (optionally, although recommended), a data.frame with saliency parameters for all the stimuli in the experiment.
+## Ingredients
+
+To successfully simulate you only need a data.frame specifying the groups, phases, and trials of the experiment, and (optionally) a data.frame with salience parameters for all the stimuli in the experiment.
 
 ## The design data.frame
-In the so-called design data.frame, the user specifies their experimental design. A few rules about the data.frame:
 
-0 - Each row represents a group.
-1 - Its first column contains the group labels.
-2 - The remaining columns are organized in pairs. The first column of each pair specifies the trials to give in the phase, whereas the second column of each pair specifies whether the trials within a phase are should be randomized.
+In the so-called design data.frame the user specifies their experimental design. A few rules about the this data.frame:
 
-Let's build our design matrix.
+0. Each row represents a group.
+1. Its first column contains the group labels.
+2. The remaining columns are organized in pairs. The first column in each pair specifies the trials to give in the phase, whereas the second column of each pair specifies whether the trials within that phase should be randomized.
+
+Let's build a design matrix for a blocking experiment.
 
 ```{r}
 
@@ -46,14 +50,12 @@ my_blocking <- data.frame(Group = c("Exp", "Control"),
 my_blocking
 ```
 
-Fairly simple!
 A few observations about the trial notation:
-0 - Trials are preceded by a number. That number represents the number of times that trial will be given in each phase. "10A(US)" means that the "A(US)" trial will be given 10 times.
-1 - The presence and absence of the unconditioned stimulus (US) is not denoted with the traditional "+" and "-" symbols. Instead, we use parenthesis to denote "named" stimuli. These can be thought as a single element with a complex name (i.e., with more than one character). As such, "(US)" denotes a single element representing the US.
-2 - The "/" character is used as a trial separator (it does not imply randomization by itself). Thus, "1A/1B" specifies that a single "A" trial and a single "B" trial will be given during that phase. Randomization of trials is specified in the other columns.
+0. Trials are preceded by a number. That number represents the number of times that trial will be given in each phase. "10A(US)" means that the "A(US)" trial will be given 10 times.
+1. The presence and absence of the unconditioned stimulus is not denoted with the traditional "+" and "-" symbols. Instead, we use parenthesis to denote "complex" stimuli. These can be thought of as an element with a complex name (i.e., with more than one character). As such, "(US)" specifies a single element to represent the US.
+2. The "/" character is used as a trial separator (it does not imply randomization by itself). Thus, "1A/1B" specifies that a single "A" trial and a single "B" trial will be given during that phase. Recall that randomization of trials within a phase is specified by the column after it (above, R1, R2, and R3).
 
-If you ever want to check if your trials string will work with the simulator, you can use `trial_parser`.
-That function returns a list with trial_names (the name of the trial), trial_repeats (the number of times each trial is given), a trial_list (a list with the components of each trial), and stimuli (the stimuli found in the trial string).
+If you ever want to check if your trials string will work with the simulator, you can use `trial_parser`. The function returns a list with trial_names (the name of the trial), trial_repeats (the number of times each trial is given), trial_list (a list with the elements on each trial), is_test (a list specifying whether the trial does not result in learning), and a vector of stimuli (the stimuli found in the trial string).
 
 ```{r}
 trial_parser("AB/10AC")  #not specifying a number of AB trials. Bad practice!
@@ -62,12 +64,13 @@ trial_parser("10AB(AB)(US)") #considering a configural cue for elements AB
 ```
 
 
-## The parameters table
+## The parameters data.frame
 
-You will be able to run a simulation with only an experiment data.frame, the simulation function will use default saliency values for each stimulus. Whenever you want specific saliency values for the stimuli in your experiment, you should pass a data.frame with parameters for all your stimuli. Let's specify such a table for our experiment.
+You can run a simulation with only an design data.frame (the simulation function will use default salience values for the stimuli). However, if you want specific salience values for the stimuli in your experiment, you should pass a data.frame with parameters. Let's specify those for our experiment.
 
 ```{r}
-my_pars <- data.frame(Stimulus = c("A", "B", "C", "US"), Alpha = c(0.3, 0.3, 0.3, 0.5))
+my_pars <- get_params(my_blocking, default_par = .2) #Note we can quickly get a table with parameters directly from the design data.frame; a good way to check we are going in the right direction
+my_pars$Alpha[my_pars$Stimulus == "US"] <- .4
 my_pars
 ```
 
@@ -77,7 +80,6 @@ The final ingredient is a list with simulation options. We can get a default one
 
 ```{r}
 my_opts <- get_heidi_opts()
-my_opts
 my_opts$iterations <- 10
 my_opts
 
@@ -89,21 +91,44 @@ And we can finally simulate the model with `run_heidi`. By default, the function
 
 ```{r}
 my_sim <- run_heidi(design_df = my_blocking,
-                   param_df = my_pars,
-                   options = my_opts)
-names(my_sim) #contains information about weights (ws), v-values (vs), and r-values (rs)
+                    param_df = my_pars,
+                    options = my_opts)
+names(my_sim) #contains information about weights (ws), v-values (vs), r-values (rs), and alphas (as)
 head(my_sim$vs)
 
 ```
 
 ## Plotting
 
-But, we rarely want the raw data. If you are like me, you will want to see some plots. Let's use `make_plots` to do create some plots, and `patch_plots` to display them.
+But, we rarely want the raw data. If you are like me, you will want to see some plots. Let's use `make_plots` to do create some plots, and `patch_plots` to display them. Here they are, paired side by side.
 
 ```{r}
 my_plots = make_plots(my_sim)
 plot_names = names(my_plots)
 plot_names
-patch_plots(plots = my_plots, selection = plot_names[c(3, 6)])
 ```
 
+### Stimulus-specific responding
+```{r}
+patch_plots(plots = my_plots, selection = plot_names[c(1, 6)]) #Responding
+```
+### Stimulus associations
+```{r}
+patch_plots(plots = my_plots, selection = plot_names[c(2, 7)])
+```
+
+### Combined associative strenghts
+```{r}
+patch_plots(plots = my_plots, selection = plot_names[c(3, 8)])
+```
+### Combined associative strenghts (bar)
+```{r}
+patch_plots(plots = my_plots, selection = plot_names[c(4, 9)])
+```
+
+### Stimulus salience at expression
+```{r}
+patch_plots(plots = my_plots, selection = plot_names[c(5, 10)])
+```
+
+The `heidi` package was designed to make simulating quick. Write your design and get a glance of what the model predicts. Make sure to check more advanced vignettes when you are ready.

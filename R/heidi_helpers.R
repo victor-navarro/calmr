@@ -1,15 +1,35 @@
 #' An assortment of functions to help heidi
-#' @description gen_ss_weights generates a named array with model weights. parse_ws, parse_vs, parse_rs and parse_heidi_results parse the raw outputs of trainPavHEIDI into a readable format.
-#' @param stims A character vector with stimuli.
-#' @param default_val Default alpha value.
-#' @param mod A model list, as returned by trainPavHEIDI.
+#' @description
+#' get_params generates a data.frame with stimulus salience parameters.
+#' gen_ss_weights generates a named array with model weights.
+#' parse_ws, parse_vs, parse_rs and parse_heidi_results parse the raw outputs of trainPavHEIDI into a readable format.
+#' filter_heidi_results is a convenience function to filter specific phase and trial_type data.
+#' @param design An experimental design. Either a data.frame or a tibble returned by parse_design
+#' @param default_par A float between 0 and 1
+#' @param stims A character vector with stimuli
+#' @param default_val Default alpha value
+#' @param mod A model list, as returned by trainPavHEIDI
 #' @param raw_results A tibble with model information, as returned by run_heidi
 #' @param parsed_results A list with parsed results, as returned by parse_heidi_results
-#' @param filters A named list containing "phase" and "trial_type" character vectors, for filtering data.
+#' @param filters A named list containing "phase" and "trial_type" character vectors, for filtering data
 #' @import magrittr
 #' @name heidi_helpers
 NULL
 #> NULL
+#' @rdname heidi_helpers
+#' @export
+get_params <- function(design, default_par){
+  if (!tibble::is_tibble(design)){
+    design = parse_design(design)
+  }
+  stims = design %>%
+    tidyr::unnest_wider(trial_info) %>%
+    dplyr::select(stimuli) %>%
+    unlist() %>%
+    unique()
+  data.frame(Stimulus = stims, Alpha = default_par)
+}
+
 #' @rdname heidi_helpers
 #' @export
 gen_ss_weights <- function(stims, default_val = 0){
@@ -92,4 +112,6 @@ parse_heidi_results <- function(raw_results){
 filter_heidi_results <- function(parsed_results, filters){
   lapply(parsed_results, function(x) x %>% dplyr::filter(phase %in% filters$phase & trial_type %in% filters$trial_type))
 }
+
+
 

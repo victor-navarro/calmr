@@ -11,6 +11,7 @@ BugReports: https://github.com/victor-navarro/heidi/issues
 Imports: 
     dplyr,
     ggbeeswarm,
+    ggnetwork,
     ggplot2,
     htmltools,
     magrittr,

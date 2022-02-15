@@ -13,6 +13,8 @@ NULL
 #' @param selection A character vector with the selected plots
 #' @param options A list with options
 #' @param common_scale A logical. Whether to plot the data in a common y-scale.
+#' @param ws A data.frame containing parsed weights, as returned by parse_heidi_results
+#' @param trial An integer denoting the trial of the weights to be graphed. Defaults to the last trial in the data.
 #' @note
 #' \itemize{
 #' \item{Plotting options are obtained via get_plot_opts(). For now, only plotting in a common y-axis is supported.
@@ -161,4 +163,49 @@ plot_common_scale <- function(plots){
     plots[[p]] = plots[[p]] + ggplot2::coord_cartesian(ylim = c(miny, maxy))
   }
   plots
+}
+
+#' @rdname heidi_plots
+#' @export
+graph_weights <- function(ws, t = max(ws$trial), opts = get_graph_opts()){
+  ws = ws %>% dplyr::filter(trial == t) %>%
+    dplyr::group_by(s1, s2) %>%
+    dplyr::summarise(value = mean(value)) %>%
+    dplyr::mutate(s1 = as.character(s1), s2 = as.character(s2)) %>%
+    dplyr::rename(from = s1, to = s2, weight = value) %>%
+    as.data.frame()
+  n = ggnetwork::ggnetwork(network::as.network(ws), arrow.gap = opts$arrow.gap, layout = "circle")
+  p = ggplot2::ggplot(n, ggplot2::aes(x = x, y = y,
+                                      xend = xend, yend = yend, label = vertex.names)) +
+    ggnetwork::geom_edges(aes(colour = weight, alpha = min(.1+abs(weight), 1)),
+                          curvature = opts$arrow.curvature, size = opts$arrow.size,
+                          arrow = arrow(length = unit(opts$arrow.pt, "pt"), type = "closed")) +
+    ggnetwork::geom_nodes(size = opts$node.size, pch = 21,
+                          fill = 'white', stroke = opts$node.stroke) +
+    ggnetwork::geom_nodetext(size = opts$node.text.size) +
+    ggplot2::scale_colour_gradient2(low = "blue", high = "red") +
+    ggnetwork::theme_blank() +
+    ggplot2::guides(colour = "none", alpha = "none") +
+    ggplot2::coord_cartesian(xlim = c(-0.2, 1.2), ylim = c(-0.2, 1.2))
+  return(p)
+
+}
+
+#' @rdname heidi_plots
+#' @export
+get_graph_opts <- function(arrow.gap = 0.16,
+                           arrow.curvature = 0.2,
+                           arrow.size = 4,
+                           arrow.pt = 20,
+                           node.size = 40,
+                           node.stroke = 3,
+                           node.text.size = 15){
+  return(list(arrow.gap = arrow.gap,
+              arrow.curvature = arrow.curvature,
+              arrow.size = arrow.size,
+              arrow.pt = arrow.pt,
+              node.size = node.size,
+              node.stroke = node.stroke,
+              node.text.size = node.text.size))
+
 }
