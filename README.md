@@ -22,6 +22,6 @@ Or better yet, launch the visual interface via
 library(heidi)
 heidi_app()
 ```
-![How to use](/assets/images/gui_demo.gif)
+![How to use](/vignettes/gui_demo.gif)
 
 
