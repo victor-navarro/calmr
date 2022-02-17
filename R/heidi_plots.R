@@ -43,9 +43,9 @@ plot_ws <- function(vals){
     ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
     ggplot2::geom_line() +
     ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
-    ggplot2::scale_colour_discrete(drop = FALSE) +
+    ggplot2::scale_colour_viridis_d(drop = FALSE) +
     ggplot2::scale_x_continuous(breaks = NULL) +
-    ggplot2::facet_wrap(~s1) +
+    ggplot2::facet_grid(s1~phase, scales = 'free_x') +
     ggplot2::labs(x = "Trial/Miniblock", y = 'Strength', colour = 'Predictee') +
     ggplot2::theme_bw()
 }
@@ -62,7 +62,7 @@ plot_vs <- function(vals, bars = F){
       ggplot2::geom_line() +
       ggbeeswarm::geom_beeswarm(groupOnX =FALSE, fill = "white") +
       ggplot2::scale_shape_manual(values = c(21, 16), drop = FALSE) +
-      ggplot2::scale_colour_discrete(drop = FALSE) +
+      ggplot2::scale_colour_viridis_d(drop = FALSE) +
       ggplot2::scale_linetype_manual(values = c('dashed', 'solid'), drop = FALSE) +
       ggplot2::labs(x = "Trial/Miniblock", y = 'V value', colour = 'Source',
                     shape = 'V type', linetype = 'V type') +
@@ -81,9 +81,10 @@ plot_vs <- function(vals, bars = F){
       ggplot2::labs(x = "Trial/Miniblock", y = 'V value', fill = 'Source',
                     pattern = 'V type', alpha = 'V type') +
       ggplot2::theme_bw() +
+      ggplot2::scale_fill_viridis_d(drop = FALSE) +
       ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)) +
       ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
-      ggplot2::facet_grid(s2~phase, scales = "free_x")
+      ggplot2::facet_grid(s2~phase, scales = "free_x", space = 'free_x')
   }
   plt
 }
@@ -100,7 +101,7 @@ plot_rs <- function(vals){
     ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
     ggplot2::geom_line() +
     ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
-    ggplot2::scale_colour_discrete(drop = FALSE) +
+    ggplot2::scale_colour_viridis_d(drop = FALSE) +
     ggplot2::scale_x_continuous(breaks = NULL) +
     ggplot2::facet_grid(s2~phase+trial_type, scales = 'free_x') +
     ggplot2::labs(x = "Trial/Miniblock", y = 'R value', colour = 'Stimulus') +
@@ -117,7 +118,7 @@ plot_as <- function(vals){
     ggplot2::ggplot(ggplot2::aes(x = trial, y = value, colour = s1)) +
     ggplot2::geom_line() +
     ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
-    ggplot2::scale_colour_discrete(drop = FALSE) +
+    ggplot2::scale_colour_viridis_d(drop = FALSE) +
     ggplot2::scale_x_continuous(breaks = NULL) +
     ggplot2::facet_grid(.~phase+trial_type, scales = 'free_x') +
     ggplot2::labs(x = "Trial/Miniblock", y = 'Alpha Value', colour = 'Stimulus') +
@@ -167,25 +168,32 @@ plot_common_scale <- function(plots){
 
 #' @rdname heidi_plots
 #' @export
-graph_weights <- function(ws, t = max(ws$trial), opts = get_graph_opts()){
-  ws = ws %>% dplyr::filter(trial == t) %>%
+graph_weights <- function(mod, t = max(mod$ws$trial), opts = get_graph_opts()){
+  ws = mod$ws %>% dplyr::filter(trial == t) %>%
     dplyr::group_by(s1, s2) %>%
     dplyr::summarise(value = mean(value)) %>%
     dplyr::mutate(s1 = as.character(s1), s2 = as.character(s2)) %>%
     dplyr::rename(from = s1, to = s2, weight = value) %>%
     as.data.frame()
-  n = ggnetwork::ggnetwork(network::as.network(ws), arrow.gap = opts$arrow.gap, layout = "circle")
+  as_range = c(-max(mod$as$value), max(mod$as$value))
+  n = ggnetwork::ggnetwork(network::as.network(ws),
+                           layout = "circle",
+                           arrow.gap = opts$arrow.gap)
   p = ggplot2::ggplot(n, ggplot2::aes(x = x, y = y,
-                                      xend = xend, yend = yend, label = vertex.names)) +
-    ggnetwork::geom_edges(aes(colour = weight, alpha = min(.1+abs(weight), 1)),
-                          curvature = opts$arrow.curvature, size = opts$arrow.size,
+                                      xend = xend, yend = yend,
+                                      colour = weight,
+                                      label = vertex.names)) +
+    ggnetwork::geom_edges(#ggplot2::aes(alpha = abs(weight)),
+                          curvature = opts$arrow.curvature,
+                          size = opts$edge.size,
                           arrow = arrow(length = unit(opts$arrow.pt, "pt"), type = "closed")) +
-    ggnetwork::geom_nodes(size = opts$node.size, pch = 21,
+    ggnetwork::geom_nodes(size = opts$node.size, pch = 21, colour = 'black',
                           fill = 'white', stroke = opts$node.stroke) +
-    ggnetwork::geom_nodetext(size = opts$node.text.size) +
-    ggplot2::scale_colour_gradient2(low = "blue", high = "red") +
-    ggnetwork::theme_blank() +
-    ggplot2::guides(colour = "none", alpha = "none") +
+    ggnetwork::geom_nodetext(size = opts$node.text.size, colour = "black") +
+    ggplot2::scale_colour_gradient2(high = "#fde725", low = "#440154", mid = "white",
+                                    limits = as_range) +
+    ggplot2::theme_void() +
+    ggplot2::guides(colour = "none") +
     ggplot2::coord_cartesian(xlim = c(-0.2, 1.2), ylim = c(-0.2, 1.2))
   return(p)
 
@@ -195,15 +203,15 @@ graph_weights <- function(ws, t = max(ws$trial), opts = get_graph_opts()){
 #' @export
 get_graph_opts <- function(arrow.gap = 0.16,
                            arrow.curvature = 0.2,
-                           arrow.size = 4,
                            arrow.pt = 20,
+                           edge.size = 3,
                            node.size = 40,
                            node.stroke = 3,
                            node.text.size = 15){
   return(list(arrow.gap = arrow.gap,
               arrow.curvature = arrow.curvature,
-              arrow.size = arrow.size,
               arrow.pt = arrow.pt,
+              edge.size = edge.size,
               node.size = node.size,
               node.stroke = node.stroke,
               node.text.size = node.text.size))
