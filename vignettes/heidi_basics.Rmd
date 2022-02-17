@@ -112,6 +112,7 @@ plot_names
 ```{r}
 patch_plots(plots = my_plots, selection = plot_names[c(1, 6)]) #Responding
 ```
+
 ### Stimulus associations
 ```{r}
 patch_plots(plots = my_plots, selection = plot_names[c(2, 7)])
