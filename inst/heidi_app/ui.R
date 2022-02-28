@@ -45,31 +45,32 @@ ui <- shinydashboard::dashboardPage(
                                              )
                          )
       ),
-      shiny::column(width = 2,
+      shiny::column(width = 3,
                     shinydashboard::box(collapsible = TRUE,
                                         width = NULL,
                                         title = "Parameters",
                                         shiny::sliderInput(inputId = 'defaultpar', label = 'Default Alpha', min = 0, max = 1, value = .1, ticks = FALSE),
                                         htmltools::br(),
-                                        shiny::conditionalPanel("output.parsed", rhandsontable::rHandsontableOutput("parameter_tbl", width = "100%"))
+                                        shiny::conditionalPanel("output.parsed", rhandsontable::rHandsontableOutput("parameter_tbl", width = "100%")),
+                                        #shiny::conditionalPanel("output.parsed", shiny::checkboxInput(inputId = "use_similarity", label = "Use similarity", value = F)),
+                                        #htmltools::br(),
+                                        #shiny::conditionalPanel("output.parsed & input.use_similarity", rhandsontable::rHandsontableOutput("similarity_matrix", width = "100%"))
                     ),
                     shinydashboard::box(collapsible = TRUE,
                                         width = NULL,
                                         title = "Sim Preferences",
                                         shiny::sliderInput(inputId = 'iterations', label = 'Sim Iterations', min = 1, max = 200, value = 1, ticks = FALSE),
                                         shiny::checkboxInput(inputId = "miniblocks", label = 'Randomize Trials in Miniblocks', value = T)
-                    )
-      ),
-      shiny::column(width = 2,
+                    ),
                     shinydashboard::box(collapsible = TRUE,
                                         width = NULL,
                                         title = "Plot Preferences",
                                         shiny::checkboxInput(inputId = "common_scale", label = 'Plot in Common Scale', value = T),
                                         shiny::selectInput(inputId = "phase_selection", label = 'Phase Selection', choices = NULL, multiple = TRUE),
                                         shiny::selectInput(inputId = "trial_type_selection", label = 'Trial Type Selection', choices = NULL, multiple = TRUE)
-                    ),
+                    )
       ),
-      shiny::column(width = 8,
+      shiny::column(width = 9,
                     shinydashboard::box(width = NULL,
                                         title = "Results",
                                         shiny::conditionalPanel("output.ran",

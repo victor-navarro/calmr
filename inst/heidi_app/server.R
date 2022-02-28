@@ -39,6 +39,7 @@ shiny::shinyServer(function(input, output) {
   design_df = shiny::reactiveVal(base_df)
   parsed_design = shiny::reactiveVal()
   param_df = shiny::reactiveVal()
+  similarity_mat = shiny::reactiveVal()
   plots = shiny::reactiveVal()
   selected_plots = shiny::reactiveVal()
   sim_options = shiny::reactiveVal(base_sim_options)
@@ -116,7 +117,23 @@ shiny::shinyServer(function(input, output) {
   shiny::observeEvent(input$parse_design, {
     design_df(rhandsontable::hot_to_r(input$design_tbl))
     parsed_design(parse_design(design_df()))
-    param_df(get_params(parsed_design(), input$defaultpar))
+    #get parameters
+    #but, keep parameters if there are compatible parameters already
+    new_params = get_params(parsed_design(), input$defaultpar)
+    old_params = param_df()
+    if (setequal(new_params$Stimulus, old_params$Stimulus)){
+      param_df(old_params)
+    }else{
+      param_df(new_params)
+    }
+    #get similarity matrix, also using memory
+    new_similarity_mat = get_similarity_mat(param_df())
+    old_similarity_mat = similarity_mat() #no need to check whether is null, it carries out nicely
+    if (setequal(rownames(new_similarity_mat), rownames(old_similarity_mat))){
+      similarity_mat(old_similarity_mat)
+    }else{
+      similarity_mat(new_similarity_mat)
+    }
     parsed(TRUE)
   })
 
@@ -267,7 +284,12 @@ shiny::shinyServer(function(input, output) {
 
   output$design_tbl <- rhandsontable::renderRHandsontable({
     if (!is.null(design_df())){
-      rhandsontable::rhandsontable(design_df(), rowHeaders = F)
+      rhandsontable::rhandsontable(design_df(), rowHeaders = F) %>%
+        rhandsontable::hot_col(col = seq(3, ncol(design_df()), 2), renderer = "
+           function (instance, td, row, col, prop, value, cellProperties) {
+             Handsontable.renderers.CheckboxRenderer.apply(this, arguments);
+              td.style.textAlign = 'center';
+           }")
     }
   })
 
@@ -275,6 +297,19 @@ shiny::shinyServer(function(input, output) {
     if (!is.null(param_df())){
       rhandsontable::rhandsontable(param_df(), rowHeaders = F) %>%
         rhandsontable::hot_col("Stimulus", readOnly = T)
+    }
+  })
+
+  output$similarity_matrix <- rhandsontable::renderRHandsontable({
+    if (input$use_similarity){
+      if (!is.null(similarity_mat())){
+        rhandsontable::rhandsontable(similarity_mat()) %>%
+          rhandsontable::hot_cols(renderer = "
+           function (instance, td, row, col, prop, value, cellProperties) {
+             Handsontable.renderers.CheckboxRenderer.apply(this, arguments);
+              td.style.textAlign = 'center';
+           }")
+      }
     }
   })
 

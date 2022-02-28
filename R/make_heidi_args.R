@@ -104,13 +104,6 @@ make_heidi_args <- function(design, pars, opts){
   return(list(tps = tps, train = !tstps, block_size = block_size))
 }
 
-#function to return the smallest factor
-.fact <- function(x) {
-  y = seq_len(x)
-  y = y[x %% y == 0]
-  return(y[2])
-}
-
 #function to return the gcd
 .gcd <-  function(x,y) {
   r <- x%%y;

@@ -29,7 +29,6 @@ get_params <- function(design, default_par){
     unique()
   data.frame(Stimulus = stims, Alpha = default_par)
 }
-
 #' @rdname heidi_helpers
 #' @export
 gen_ss_weights <- function(stims, default_val = 0){
@@ -103,14 +102,26 @@ parse_heidi_results <- function(raw_results){
                 dplyr::group_by(group, trial, phase, trial_type, s1, block_size) %>% #summarize
                 dplyr::summarise(value = mean(value), .groups = "drop") %>%
                 dplyr::mutate(group = as.factor(group), trial_type = as.factor(trial_type), s1 = as.factor(s1), phase = as.factor(phase))
-              )
-         )
+  )
+  )
 }
 
 #' @rdname heidi_helpers
 #' @export
 filter_heidi_results <- function(parsed_results, filters){
   lapply(parsed_results, function(x) x %>% dplyr::filter(phase %in% filters$phase & trial_type %in% filters$trial_type))
+}
+
+#' @rdname heidi_helpers
+#' @export
+get_similarity_mat <- function(param_df){
+  m = matrix(FALSE,
+             nrow = nrow(param_df),
+             ncol = nrow(param_df),
+             dimnames = list(param_df$Stimulus, param_df$Stimulus))
+  diag(m) = TRUE
+  #Could add a smart guess over here
+  m
 }
 
 

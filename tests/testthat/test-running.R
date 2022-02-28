@@ -22,6 +22,8 @@ test_that("package works", {
     trial_parser("10AB(AB)(US)")$stimuli, c("A", "B", "AB", "US"))
   expect_setequal(
     trial_parser("10A(US)")$stimuli, c("A", "US"))
+  expect_setequal(
+    trial_parser("10A(US_a)/10A(US_b)")$stimuli, c("A", "US_a", "US_b"))
 
   #thank you Dom
   #test for a case in which there is only one type of trial per cell
