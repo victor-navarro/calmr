@@ -55,7 +55,7 @@ A few observations about the trial notation:
 1. The presence and absence of the unconditioned stimulus is not denoted with the traditional "+" and "-" symbols. Instead, we use parenthesis to denote "complex" stimuli. These can be thought of as an element with a complex name (i.e., with more than one character). As such, "(US)" specifies a single element to represent the US.
 2. The "/" character is used as a trial separator (it does not imply randomization by itself). Thus, "1A/1B" specifies that a single "A" trial and a single "B" trial will be given during that phase. Recall that randomization of trials within a phase is specified by the column after it (above, R1, R2, and R3).
 
-If you ever want to check if your trials string will work with the simulator, you can use `trial_parser`. The function returns a list with trial_names (the name of the trial), trial_repeats (the number of times each trial is given), trial_list (a list with the elements on each trial), is_test (a list specifying whether the trial does not result in learning), and a vector of stimuli (the stimuli found in the trial string).
+If you ever want to check if your trials string will work with the simulator, you can use `trial_parser`. The function returns a list with trial_names (the name of the trial), trial_repeats (the number of times each trial is given), trial_stimuli (a list with the elements on each trial), is_test (a list specifying whether the trial does not result in learning), and a vector of stimuli (the stimuli found in the trial string).
 
 ```{r}
 trial_parser("AB/10AC")  #not specifying a number of AB trials. Bad practice!

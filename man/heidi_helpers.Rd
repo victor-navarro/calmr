@@ -12,7 +12,7 @@
 \alias{filter_heidi_results}
 \title{An assortment of functions to help heidi}
 \usage{
-get_params(design, default_par)
+get_params(design, default_par = 0.2)
 
 gen_ss_weights(stims, default_val = 0)
 

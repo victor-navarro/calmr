@@ -26,6 +26,7 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/heidi_basics.html">heidi_basics</a>
     <a class="dropdown-item" href="../articles/heidi_math.html">heidi_math</a>
+    <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -70,6 +71,7 @@
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>Supports complex stimuli in parentheses (e.g., "5A(US)")
+Supports multiple versions of stimuli (e.g., "3(A_a)(US_a)/3(A_b)(US_b)")
 Supports probe trials, followed by a hash (e.g., "3X#")</p>
     </div>
 
@@ -82,13 +84,34 @@ Supports probe trials, followed by a hash (e.g., "3X#")</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $trial_repeats</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 30 30</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_list</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_list[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_functional</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_functional[[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X" "A" "U"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_list[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_functional[[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A"  "YA"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_nominal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_nominal[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X" "A" "U"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_nominal[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A"  "YA"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $nomi_func_map</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   nomi func</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    X    X</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    A    A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    U    U</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   YA   YA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $unique_nominal_stimuli</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"  "A"  "U"  "YA"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $unique_functional_stimuli</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"  "A"  "U"  "YA"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $is_test</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $is_test[[1]]</span>
@@ -97,9 +120,6 @@ Supports probe trials, followed by a hash (e.g., "3X#")</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $is_test[[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $stimuli</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"  "A"  "U"  "YA"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span class="fu">trial_parser</span><span class="op">(</span><span class="st">"1X#/2X(US)#"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $trial_names</span>
@@ -108,13 +128,32 @@ Supports probe trials, followed by a hash (e.g., "3X#")</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $trial_repeats</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_list</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_list[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_functional</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_functional[[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_list[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_functional[[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"  "US"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_nominal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_nominal[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_nominal[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"  "US"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $nomi_func_map</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   nomi func</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    X    X</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   US   US</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $unique_nominal_stimuli</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"  "US"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $unique_functional_stimuli</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"  "US"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $is_test</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $is_test[[1]]</span>
@@ -124,8 +163,49 @@ Supports probe trials, followed by a hash (e.g., "3X#")</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $stimuli</span>
+<span class="r-in"><span class="fu">trial_parser</span><span class="op">(</span><span class="st">"1X(US_a)/1Y(US_b)"</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_names</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X(US_a)" "Y(US_b)"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_repeats</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_functional</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_functional[[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"  "US"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_functional[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Y"  "US"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_nominal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_nominal[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"    "US_a"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_nominal[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Y"    "US_b"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $nomi_func_map</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   nomi func</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    X    X</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 US_a   US</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    Y    Y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 US_b   US</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $unique_nominal_stimuli</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"    "Y"    "US_a" "US_b"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $unique_functional_stimuli</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"  "Y"  "US"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $is_test</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $is_test[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $is_test[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>

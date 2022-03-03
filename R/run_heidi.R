@@ -52,7 +52,7 @@ run_heidi <- function(design_df, param_df = NULL, options = NULL, parse = T){
   }else{
     #check if the user covered all the options requested
     if (any(!(names(auto_opts) %in% names(options)))){
-      stop("Error: Did not supply some of the options required to fit the model. Please see get_heidi_opts")
+      stop("Error: Did not supply some of the options required to fit the model. Please see ?get_heidi_opts")
     }
   }
   #make the tibble
@@ -61,14 +61,15 @@ run_heidi <- function(design_df, param_df = NULL, options = NULL, parse = T){
   results = heidi_df %>%
     dplyr::rowwise() %>%
     dplyr::mutate(mod_data = list(train_pav_heidi(sals = stim_alphas,
-                                                  cons = stim_cons,
-                                                  w = gen_ss_weights(stim_names),
+                                                  w = gen_ss_weights(unique_functional_stimuli),
                                                   tps = tps,
-                                                  trials = trials,
+                                                  trial_func_stim = trial_func_stim,
+                                                  trial_nomi_stim = trial_nomi_stim,
+                                                  nomi_func_map = nomi_func_map,
                                                   trial_names = trial_names,
                                                   phase = phase,
                                                   block_size = block_size,
-                                                  train = train)))
+                                                  is_test = is_test)))
   if (parse){
     results = parse_heidi_results(results)
   }

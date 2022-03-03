@@ -6,27 +6,30 @@
 \usage{
 train_pav_heidi(
   sals,
-  cons,
   w,
   tps,
-  trials,
+  trial_func_stim,
+  trial_nomi_stim,
+  nomi_func_map,
   trial_names = NULL,
   phase = NULL,
   block_size = NULL,
-  train = rep(TRUE, length(tps)),
+  is_test = rep(FALSE, length(tps)),
   targets = "US"
 )
 }
 \arguments{
 \item{sals}{A named vector with stimulus saliencies.}
 
-\item{cons}{A named vector with stimulus constants.}
-
 \item{w}{A named array of dimensions S,S; where S is the number of stimuli.}
 
 \item{tps}{A vector of trial pointers for training, as a function of trials.}
 
-\item{trials}{A list of length T, with character vectors specifying the stimuli involved in each trial. T is the number of unique trials in the experiment.}
+\item{trial_func_stim}{A list of length T, with character vectors specifying the functional stimuli involved in each trial. T is the number of unique trials in the experiment.}
+
+\item{trial_nomi_stim}{A list of length T, with character vectors specifying the nominal stimuli involved in each trial.}
+
+\item{nomi_func_map}{A data.frame with the mappings between nominal and functional stimuli}
 
 \item{trial_names}{(optional) A character vector of length T with the names of the trials}
 
@@ -34,7 +37,7 @@ train_pav_heidi(
 
 \item{block_size}{(optional) A integer vector of length T specifying the block size per trial}
 
-\item{train}{(optional) A logical vector specifying whether the trial should result in learning (update w). Helpful with tests.}
+\item{is_test}{(optional) A logical vector specifying whether the trial should result in learning (update w). If an element is TRUE, no update occurs.}
 
 \item{targets}{A character vector specifying the target stimulus for each trial. Under development. For now, just the US.}
 }
@@ -43,7 +46,7 @@ A list with
 \itemize{
 \item{ws - An array of dimensions P,S,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment.}
 \item{rs,combvs, chainvs - Lists of length P with the r-values, combination vs, and chain vs.}
-\item{tps, trials, trial_names, phase, block_size -  Carryover for further processing. See Arguments.}
+\item{tps, trial_func_stim, trial_names, phase, block_size -  Carryover for further processing. See Arguments.}
 }
 }
 \description{

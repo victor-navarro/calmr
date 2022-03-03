@@ -175,28 +175,23 @@ graph_weights <- function(mod, t = max(mod$ws$trial), opts = get_graph_opts()){
     dplyr::mutate(s1 = as.character(s1), s2 = as.character(s2)) %>%
     dplyr::rename(from = s1, to = s2, weight = value) %>%
     as.data.frame()
-  as_range = c(-max(mod$as$value), max(mod$as$value))
-  n = ggnetwork::ggnetwork(network::as.network(ws),
+  net = ggnetwork::ggnetwork(network::as.network(ws),
                            layout = "circle",
                            arrow.gap = opts$arrow.gap)
-  p = ggplot2::ggplot(n, ggplot2::aes(x = x, y = y,
+  ggplot2::ggplot(net, ggplot2::aes(x = x, y = y,
                                       xend = xend, yend = yend,
                                       colour = weight,
                                       label = vertex.names)) +
-    ggnetwork::geom_edges(#ggplot2::aes(alpha = abs(weight)),
-                          curvature = opts$arrow.curvature,
+    ggnetwork::geom_edges(curvature = opts$arrow.curvature,
                           size = opts$edge.size,
                           arrow = arrow(length = unit(opts$arrow.pt, "pt"), type = "closed")) +
     ggnetwork::geom_nodes(size = opts$node.size, pch = 21, colour = 'black',
                           fill = 'white', stroke = opts$node.stroke) +
     ggnetwork::geom_nodetext(size = opts$node.text.size, colour = "black") +
-    ggplot2::scale_colour_gradient2(high = "#fde725", low = "#440154", mid = "white",
-                                    limits = as_range) +
+    ggplot2::scale_colour_gradient2(high = "#fde725", low = "#440154", mid = "white", midpoint = 0) +
     ggplot2::theme_void() +
     ggplot2::guides(colour = "none") +
     ggplot2::coord_cartesian(xlim = c(-0.2, 1.2), ylim = c(-0.2, 1.2))
-  return(p)
-
 }
 
 #' @rdname heidi_plots

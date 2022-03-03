@@ -1,66 +1,90 @@
 #' Trains a Pavlovian HeiDI
 #' @param sals A named vector with stimulus saliencies.
-#' @param cons A named vector with stimulus constants.
 #' @param w A named array of dimensions S,S; where S is the number of stimuli.
 #' @param tps A vector of trial pointers for training, as a function of trials.
-#' @param trials A list of length T, with character vectors specifying the stimuli involved in each trial. T is the number of unique trials in the experiment.
+#' @param trial_func_stim A list of length T, with character vectors specifying the functional stimuli involved in each trial. T is the number of unique trials in the experiment.
+#' @param trial_nomi_stim A list of length T, with character vectors specifying the nominal stimuli involved in each trial.
+#' @param nomi_func_map A data.frame with the mappings between nominal and functional stimuli
 #' @param trial_names (optional) A character vector of length T with the names of the trials
 #' @param phase (optional) A character vector of length T with the names of the phases
 #' @param block_size (optional) A integer vector of length T specifying the block size per trial
-#' @param train (optional) A logical vector specifying whether the trial should result in learning (update w). Helpful with tests.
+#' @param is_test (optional) A logical vector specifying whether the trial should result in learning (update w). If an element is TRUE, no update occurs.
 #' @param targets A character vector specifying the target stimulus for each trial. Under development. For now, just the US.
 #' @return A list with
 #' \itemize{
 #' \item{ws - An array of dimensions P,S,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment.}
 #' \item{rs,combvs, chainvs - Lists of length P with the r-values, combination vs, and chain vs.}
-#' \item{tps, trials, trial_names, phase, block_size -  Carryover for further processing. See Arguments.}
+#' \item{tps, trial_func_stim, trial_names, phase, block_size -  Carryover for further processing. See Arguments.}
 #' }
 #' @note The array w contains the associations for all stimuli involved in the experiment. Entry i,j specifies the associative strength between stimulus i to stimulus j. Entry j,i specifies the opposite direction.
 #' @export
-train_pav_heidi <- function(sals, cons, w, tps, trials,
+train_pav_heidi <- function(sals, w, tps,
+                            trial_func_stim,
+                            trial_nomi_stim,
+                            nomi_func_map,
                             trial_names = NULL,
                             phase = NULL,
                             block_size = NULL,
-                            train = rep(TRUE, length(tps)),
+                            is_test = rep(FALSE, length(tps)),
                             targets = 'US'){
-  maxstim = dim(w)[1]
   ws = array(NA, dim = c(length(tps), dim(w)),
              dimnames = list(NULL, rownames(w), rownames(w)))
   as = array(NA, dim = c(length(tps), nrow(w)),
              dimnames = list(NULL, rownames(w)))
   rs = combvs = chainvs = vector('list', length(tps))
-  stimnames = array(NA, dim = c(length(tps), maxstim))
-  snames = rownames(w)
+
+  fsnames = rownames(w) #get functional stimuli names
+  sals_avg = with(data.frame(nomi_func_map, sals = sals), tapply(sals, func, mean))
+
   for (t in 1:length(tps)){
-    stims = trials[[tps[t]]]
-    oh_stims = .makeOH(stims, snames)
-    teststim = setdiff(stims, targets)
+    #get functional and nominal stimuli
+    fstims = trial_func_stim[[tps[t]]]
+    nstims = trial_nomi_stim[[tps[t]]]
+    #make one-hot vector of functional stimuli
+    oh_fstims = .makeOH(fstims, fsnames)
+
+    #get functional stimuli used to generate the expectation
+    teststim_func = setdiff(fstims, targets)
+    teststim_nomi = nstims[which(teststim_func %in% fstims)]
 
     #functional class activations (comb)
-    combV = .combV(w, teststim, targets, cons, t)
+    combV = .combV(w = w, pre_func = teststim_func, post_func = targets, db_trial = t)
 
     #chain activations (chain)
-    chainV = .chainV(w, teststim, targets, cons, t)
+    #chainV = .chainV(w = w, pre_func = teststim_func, post_func = targets, db_trial = t)
+    chainV = .chainVSim(as_nomi = sals,
+                        as_avg = sals_avg,
+                        w = w,
+                        pre_nomi = teststim_nomi,
+                        pre_func = teststim_func,
+                        post_func = targets,
+                        db_trial = t)
 
     #Now we calculate rs for all the stimuli involved in the design (snames)
-    #First, we need to identify absent stimuli and calculate their [activated] saliency
-    tsals = sals
-    absent = snames[!(snames %in% stims)]
-    if (length(absent)){
-      tsals[absent] = .absentAlpha(w, teststim, absent, cons, t)
-    }
+    #First, we need to identify absent stimuli and calculate their "retrieved" saliency
+    #get saliences for test stimuli
+    tsals = .getSals(w = w,
+                     sals_nomi = sals,
+                     test_nomi = teststim_nomi,
+                     test_func = teststim_func,
+                     fsnames = fsnames,
+                     nfmap = nomi_func_map,
+                     db_trial = t)
+
 
     #Distribute R
     r = .distR(tsals, combV, chainV, t)
 
-    if (train[t]){
-      #Now we update
-      v = oh_stims %*% w #expectation
-      e = oh_stims*cons*sals-v #error
-      d = oh_stims*sals%*%e #delta
+    #learn if we need to
+    if (!is_test[t]){
+      #get saliences for learning
+      lsals = setNames(rep(0, length(fsnames)), fsnames)
+      lsals[nomi_func_map$func[nomi_func_map$nomi %in% nstims]] = sals[nstims]
+      #Learn
+      v = oh_fstims %*% w #expectation
+      e = oh_fstims*lsals-v #error
+      d = oh_fstims*lsals%*%e #delta
       diag(d) = 0
-
-      #And learn
       w = w+d
     }
 
@@ -77,7 +101,7 @@ train_pav_heidi <- function(sals, cons, w, tps, trials,
              chainvs = chainvs,
              as = as,
              tps = tps,
-             trials = trials,
+             trial_func_stim = trial_func_stim,
              trial_names = trial_names,
              phase = phase,
              block_size = block_size)
@@ -86,48 +110,90 @@ train_pav_heidi <- function(sals, cons, w, tps, trials,
 
 #### Internal functions ####
 #Calculation of combined V
-.combV <- function(w, pre, post, cs, db_trial = NA){
+.combV <- function(w, pre_func, post_func, db_trial = NA){
   #w is a weight matrix,
-  #pre is a character vector of the stimuli being presented
-  #post is a character vector of the stimuli being predicted
-  #cs are the constants for all the stimuli
+  #pre_func is a character vector of the stimuli being presented
+  #post_func is a character vector of the stimuli being predicted
   #
-  #returns a matrix of dimensions pre x post, with the combV values
+  #returns a matrix of dimensions pre_func x post_func, with the combV values
 
   #intial implementation used invidual terms that were later summed
   #late implementation just returns
 
   #if (db_trial == 1) browser()
-  #if (length(pre) > 1)
-  mat = array(0, dim = c(1, length(post)), dimnames = list(paste0(pre, collapse = ''), post))
-  for (po in post){
-      mat[1, po] = sum(w[pre, po])+(sum(w[pre, po])*(sum(w[po, pre]))/cs[po])
+  #if (length(pre_func) > 1)
+  mat = array(0, dim = c(1, length(post_func)), dimnames = list(paste0(pre_func, collapse = ''), post_func))
+  for (po in post_func){
+    mat[1, po] = sum(w[pre_func, po])+(sum(w[pre_func, po])*(sum(w[po, pre_func])))
   }
   return(mat)
 }
 
 #Calculation of chain V
-.chainV <- function(w, pre, post, cs, db_trial = NA){
+.chainV <- function(w, pre_func, post_func, db_trial = NA){
   #w is a weight matrix,
-  #pre is a character vector of the stimuli being presented
-  #post is a character vector of the stimuli being predicted
-  #cs are the constants for all the stimuli
+  #pre_func is a character vector of the stimuli being presented
+  #post_func is a character vector of the stimuli being predicted
   #
-  #The trick here is to obtain the chainV from every pre stimulus to every post stimulus,
-  #while hitting every intermediate stimulus along the way
+  #The trick here is to obtain the chainV from every pre_func stimulus to every post_func stimulus,
+  #while hitting every absent stimulus along the way
   #
-  #Returns a matrix of dimensions pre post with chainV values
+  #Returns a matrix of dimensions pre_func post_func with chainV values
+
+  #Preallocate zeros
+  mat = array(0, dim = c(length(pre_func), length(post_func)), dimnames = list(pre_func, post_func))
+
+  #find the absent stimuli
   allstims = rownames(w)
-  #Due to specific rules, here we must preallocate zeros
-  mat = array(0, dim = c(length(pre), length(post)), dimnames = list(pre, post))
-  for (po in post){
-    for (pr in pre){
-      int = setdiff(allstims, c(pre, po)) #find the intermediate stimuli that are absent
-      if (length(int)){
-        mat[pr, po] = sum(sapply(int, function(i) sum(w[pr, i]*.combV(w, i, po, cs, db_trial)[, po]/cs[po])))
+  absent = setdiff(allstims, pre_func)
+
+  if (length(absent)){
+    #a for loop for readability
+    for (po in post_func){
+      for (pr in pre_func){
+        total_sum = 0
+        for (a in absent){
+          total_sum = total_sum + w[pr, a]*.combV(w, a, po, db_trial)[, po]
+        }
+        mat[pr, po] = total_sum
       }
     }
   }
+  return(mat)
+}
+
+#Calculation of chain V with Similarity
+.chainVSim <- function(w, as_nomi, as_avg, pre_nomi, pre_func, post_func, db_trial = NA){
+  #Same as above, but with similarity of retrieved and nominal alphas modulating the the chain
+  #as: a vector of nominal saliencies
+
+  #Preallocate zeros
+  mat = array(0, dim = c(length(pre_func), length(post_func)), dimnames = list(pre_func, post_func))
+
+  #get absent stimuli
+  allstims = rownames(w)
+  absent = setdiff(allstims, pre_func)
+
+  if (length(absent)){
+    #get retrieved alphas
+    retrieved_as = .absentAlpha(w = w, pre_func = pre_func, db_trial = NA)
+    #get the average of their nominal alphas (TEMPORARY)
+    nomi_avg_as = as_avg[absent]
+    for (po in post_func){
+      for (pr in pre_func){
+        total_sum = 0
+        for (a in absent){
+          total_sum = total_sum +
+            .alphaSim(retrieved_as[a], nomi_avg_as[a])*w[pr, a]*.combV(w, a, po, db_trial)[, po]
+        }
+        mat[pr, po] = total_sum
+      }
+    }
+  }
+
+
+  #a for loop for readability
+
   return(mat)
 }
 
@@ -141,31 +207,51 @@ train_pav_heidi <- function(sals, cons, w, tps, trials,
   return(mat)
 }
 
-#Function to calculate the alpha of absent stimuli
-.absentAlpha <- function(w, pre, absent, cs, db_trial = NA){
-  #w is a weight matrix,
-  #pre is a character vector of the stimuli being presented
-  #post is a character vector of the absent stimuli
-  #cs are the constants for all the stimuli
-  #
-  #The trick here is to obtain the chainV from every pre stimulus to every post stimulus,
-  #while hitting every intermediate stimulus along the way
-  #
-  #Returns a vector of length absent
-  allstims = rownames(w)
-  return(
-    sapply(absent, function(ab){
-      abs(sum(sapply(pre, function(pr){
-        ch = 0
-        int = setdiff(setdiff(allstims, ab), pr)
-        if (length(int)){
-          ch = sum(sapply(int, function(i) w[pr, i]*w[i, ab]/cs[ab], USE.NAMES = F))
-        }
-        return(w[pr, ab] + ch)
-      })))
-    })
-  )
+.getSals <- function(sals_nomi, w, test_nomi, test_func, fsnames, nfmap, db_trial = NA){
+  #gets the saliencies for a given trial
+  #it performs two actions:
+  #1. populates a vector of saliencies for functional stimuli
+  #[this based on the saliency (sals) of the nominal stimuli on the trial (nstims)]
+  #2. calculates the saliency for absent stimuli, via the .absentAlpha function
+  as = setNames(rep(0, length(fsnames)), fsnames)
+  as[nfmap$func[nfmap$nomi %in% test_nomi]] = sals_nomi[test_nomi]
+  #now do absent stimuli
+  absent = names(as[as==0])
+  if (length(absent)){
+    as[absent] = .absentAlpha(w = w, pre_func = test_func, db_trial = t)
+  }
+  as
 }
+
+#Function to calculate the alpha of absent stimuli
+.absentAlpha <- function(w, pre_func, db_trial = NA){
+  #w is a weight matrix,
+  #pre_func is a character vector of the stimuli being presented
+  #
+  #Returns a vector of alphas equal to the number of absent of stimuli
+  allstims = rownames(w)
+  absent = setdiff(allstims, pre_func)
+  as = setNames(rep(0, length(absent)), absent)
+  for (ab in absent){
+    total_sum = 0
+    for (pr in pre_func){
+      total_sum = total_sum + w[pr, ab] #the direct association
+      #now do the indirect associations via other absent stimuli
+      int = setdiff(setdiff(absent, ab), pr) #the other absent stimuli
+      if (length(int)){
+        total_sum = total_sum + sum(sapply(int, function(i) w[pr, i]*w[i, ab], USE.NAMES = F))
+      }
+    }
+    as[ab] = abs(total_sum) #Note the absolute function; important to study it
+  }
+  as
+}
+
+#Returns the similarity between two (salience) values
+.alphaSim <- function(i, j){
+  (i/(i + abs(i-j))) * (j/(j+ abs(i-j)))
+}
+
 
 #Makes a onehot representation of the stimulus vector, given all stimuli
 .makeOH <- function(s, stimnames){
