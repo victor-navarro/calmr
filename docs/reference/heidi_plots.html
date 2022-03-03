@@ -26,6 +26,7 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/heidi_basics.html">heidi_basics</a>
     <a class="dropdown-item" href="../articles/heidi_math.html">heidi_math</a>
+    <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -71,13 +72,13 @@
 
 <span class="fu">plot_common_scale</span><span class="op">(</span><span class="va">plots</span><span class="op">)</span>
 
-<span class="fu">graph_weights</span><span class="op">(</span><span class="va">ws</span>, t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">ws</span><span class="op">$</span><span class="va">trial</span><span class="op">)</span>, opts <span class="op">=</span> <span class="fu">get_graph_opts</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<span class="fu">graph_weights</span><span class="op">(</span><span class="va">mod</span>, t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">ws</span><span class="op">$</span><span class="va">trial</span><span class="op">)</span>, opts <span class="op">=</span> <span class="fu">get_graph_opts</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu">get_graph_opts</span><span class="op">(</span>
   arrow.gap <span class="op">=</span> <span class="fl">0.16</span>,
   arrow.curvature <span class="op">=</span> <span class="fl">0.2</span>,
-  arrow.size <span class="op">=</span> <span class="fl">4</span>,
   arrow.pt <span class="op">=</span> <span class="fl">20</span>,
+  edge.size <span class="op">=</span> <span class="fl">3</span>,
   node.size <span class="op">=</span> <span class="fl">40</span>,
   node.stroke <span class="op">=</span> <span class="fl">3</span>,
   node.text.size <span class="op">=</span> <span class="fl">15</span>

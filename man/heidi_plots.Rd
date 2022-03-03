@@ -30,13 +30,13 @@ get_plot_opts(common_scale = TRUE)
 
 plot_common_scale(plots)
 
-graph_weights(ws, t = max(ws$trial), opts = get_graph_opts())
+graph_weights(mod, t = max(mod$ws$trial), opts = get_graph_opts())
 
 get_graph_opts(
   arrow.gap = 0.16,
   arrow.curvature = 0.2,
-  arrow.size = 4,
   arrow.pt = 20,
+  edge.size = 3,
   node.size = 40,
   node.stroke = 3,
   node.text.size = 15

@@ -12,8 +12,19 @@ library(stringr)
 library(tibble)
 library(heidi)
 
-ui <- shinydashboard::dashboardPage(
-  shinydashboard::dashboardHeader(title = "HeiDI Simulator"),
+header <- shinydashboard::dashboardHeader(tags$li(class = "dropdown",
+                                                  tags$style(".main-header {max-height: 60px}"),
+                                                  tags$style(".main-header .logo {height: 60px;}"),
+                                                  tags$style(".sidebar-toggle {height: 20px; padding-top: 1px !important;}"),
+                                                  tags$style(".navbar {min-height:60px !important}")))
+
+anchor <- tags$a(href="http://victornavarro.org/heidi", target="_blank", style = 'color: white;',
+                 tags$img(src="heidi_logo.png", height='54', width='46'),
+                 'HeiDI Simulator')
+header$children[[2]]$children <- tags$div(anchor, class = 'name')
+
+ui <- shinydashboard::dashboardPage(title = "HeiDI Simulator",
+  header,
   shinydashboard::dashboardSidebar(disable = T),
   shinydashboard::dashboardBody(
     # Boxes need to be put in a row (or column)
@@ -71,13 +82,23 @@ ui <- shinydashboard::dashboardPage(
                     )
       ),
       shiny::column(width = 9,
-                    shinydashboard::box(width = NULL,
+                    shinydashboard::box(collapsible = TRUE,
+                                        width = NULL,
                                         title = "Results",
                                         shiny::conditionalPanel("output.ran",
                                                                 shiny::selectInput(inputId = 'plot_selection', label = NULL, choices = NA, multiple = T),
                                                                 shiny::plotOutput("plot")
                                         )
+                    ),
+                    shinydashboard::box(collapsible = TRUE,
+                                        width = NULL,
+                                        title = "Associations Graph",
+                                        shiny::conditionalPanel("output.ran",
+                                                                shiny::sliderInput(inputId = 'graph_trial', label = 'Trial', min = 1, max = 1, value = 1, step = 1, ticks = FALSE),
+                                                                shiny::plotOutput("graph")
+                                        )
                     )
+
       )
     )
   )

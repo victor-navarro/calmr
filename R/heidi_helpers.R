@@ -18,13 +18,13 @@ NULL
 #> NULL
 #' @rdname heidi_helpers
 #' @export
-get_params <- function(design, default_par){
+get_params <- function(design, default_par = .2){
   if (!tibble::is_tibble(design)){
     design = parse_design(design)
   }
   stims = design %>%
     tidyr::unnest_wider(trial_info) %>%
-    dplyr::select(stimuli) %>%
+    dplyr::select(unique_nominal_stimuli) %>%
     unlist() %>%
     unique()
   data.frame(Stimulus = stims, Alpha = default_par)
@@ -111,18 +111,5 @@ parse_heidi_results <- function(raw_results){
 filter_heidi_results <- function(parsed_results, filters){
   lapply(parsed_results, function(x) x %>% dplyr::filter(phase %in% filters$phase & trial_type %in% filters$trial_type))
 }
-
-#' @rdname heidi_helpers
-#' @export
-get_similarity_mat <- function(param_df){
-  m = matrix(FALSE,
-             nrow = nrow(param_df),
-             ncol = nrow(param_df),
-             dimnames = list(param_df$Stimulus, param_df$Stimulus))
-  diag(m) = TRUE
-  #Could add a smart guess over here
-  m
-}
-
 
 

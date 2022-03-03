@@ -17,13 +17,22 @@ test_that("package works", {
   expect_equal(length(make_plots(run_heidi(df, pars))), 10)
   #### trial_parser tests ####
   expect_setequal(
-    trial_parser("10AB(US)")$stimuli, c("A", "B", "US"))
+    trial_parser("10AB(US)")$unique_nominal_stimuli, c("A", "B", "US"))
   expect_setequal(
-    trial_parser("10AB(AB)(US)")$stimuli, c("A", "B", "AB", "US"))
+    trial_parser("10AB(AB)(US)")$unique_nominal_stimuli, c("A", "B", "AB", "US"))
   expect_setequal(
-    trial_parser("10A(US)")$stimuli, c("A", "US"))
+    trial_parser("10A(US)")$unique_nominal_stimuli, c("A", "US"))
   expect_setequal(
-    trial_parser("10A(US_a)/10A(US_b)")$stimuli, c("A", "US_a", "US_b"))
+    trial_parser("10A(US_a)/10A(US_b)")$unique_nominal_stimuli, c("A", "US_a", "US_b"))
+  expect_setequal(
+    trial_parser("10A(US_a)/10A(US_b)")$unique_functional_stimuli, c("A", "US"))
+  expect_setequal(
+    trial_parser("10(A_a)(US_a)/10(A_b)(US_b)")$unique_functional_stimuli, c("A", "US"))
+  expect_setequal(
+    trial_parser("10(A_a)(US_a)/10(B)(US_b)")$unique_functional_stimuli, c("A", "B", "US"))
+
+  expect_false(trial_parser("1X")$is_test[[1]])
+  expect_true(trial_parser("1X#")$is_test[[1]])
 
   #thank you Dom
   #test for a case in which there is only one type of trial per cell

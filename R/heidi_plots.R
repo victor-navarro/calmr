@@ -175,7 +175,6 @@ graph_weights <- function(mod, t = max(mod$ws$trial), opts = get_graph_opts()){
     dplyr::mutate(s1 = as.character(s1), s2 = as.character(s2)) %>%
     dplyr::rename(from = s1, to = s2, weight = value) %>%
     as.data.frame()
-  as_range = c(-max(mod$as$value), max(mod$as$value))
   n = ggnetwork::ggnetwork(network::as.network(ws),
                            layout = "circle",
                            arrow.gap = opts$arrow.gap)
@@ -190,8 +189,7 @@ graph_weights <- function(mod, t = max(mod$ws$trial), opts = get_graph_opts()){
     ggnetwork::geom_nodes(size = opts$node.size, pch = 21, colour = 'black',
                           fill = 'white', stroke = opts$node.stroke) +
     ggnetwork::geom_nodetext(size = opts$node.text.size, colour = "black") +
-    ggplot2::scale_colour_gradient2(high = "#fde725", low = "#440154", mid = "white",
-                                    limits = as_range) +
+    ggplot2::scale_colour_gradient2(high = "#fde725", low = "#440154", mid = "white") +
     ggplot2::theme_void() +
     ggplot2::guides(colour = "none") +
     ggplot2::coord_cartesian(xlim = c(-0.2, 1.2), ylim = c(-0.2, 1.2))

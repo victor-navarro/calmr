@@ -17,9 +17,11 @@ Parses a string stipulating trials
 }
 \note{
 Supports complex stimuli in parentheses (e.g., "5A(US)")
+Supports multiple versions of stimuli (e.g., "3(A_a)(US_a)/3(A_b)(US_b)")
 Supports probe trials, followed by a hash (e.g., "3X#")
 }
 \examples{
 trial_parser("30XAU/30(YA)A")
 trial_parser("1X#/2X(US)#")
+trial_parser("1X(US_a)/1Y(US_b)")
 }

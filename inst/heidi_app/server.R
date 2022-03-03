@@ -39,7 +39,6 @@ shiny::shinyServer(function(input, output) {
   design_df = shiny::reactiveVal(base_df)
   parsed_design = shiny::reactiveVal()
   param_df = shiny::reactiveVal()
-  similarity_mat = shiny::reactiveVal()
   plots = shiny::reactiveVal()
   selected_plots = shiny::reactiveVal()
   sim_options = shiny::reactiveVal(base_sim_options)
@@ -126,14 +125,6 @@ shiny::shinyServer(function(input, output) {
     }else{
       param_df(new_params)
     }
-    #get similarity matrix, also using memory
-    new_similarity_mat = get_similarity_mat(param_df())
-    old_similarity_mat = similarity_mat() #no need to check whether is null, it carries out nicely
-    if (setequal(rownames(new_similarity_mat), rownames(old_similarity_mat))){
-      similarity_mat(old_similarity_mat)
-    }else{
-      similarity_mat(new_similarity_mat)
-    }
     parsed(TRUE)
   })
 
@@ -147,14 +138,15 @@ shiny::shinyServer(function(input, output) {
         raw_results(heidi_df %>% dplyr::rowwise() %>% dplyr::mutate(mod_data = list({
           shiny::incProgress(1/iterations, detail = paste("iteration =", iteration))
           heidi::train_pav_heidi(sals = stim_alphas,
-                                 cons = stim_cons,
-                                 w = heidi::gen_ss_weights(stim_names),
+                                 w = gen_ss_weights(unique_functional_stimuli),
                                  tps = tps,
-                                 trials = trials,
+                                 trial_func_stim = trial_func_stim,
+                                 trial_nomi_stim = trial_nomi_stim,
+                                 nomi_func_map = nomi_func_map,
                                  trial_names = trial_names,
                                  phase = phase,
                                  block_size = block_size,
-                                 train = train)
+                                 is_test = is_test)
         })))
       })
       #parse results
@@ -229,7 +221,14 @@ shiny::shinyServer(function(input, output) {
         unique()
       shiny::updateSelectInput(inputId = "trial_type_selection", choices = t_choices, selected = t_choices)
     }
+  })
 
+  #populating the slider for graph_trial selection
+  shiny::observeEvent(parsed_results(), {
+    last_trial = max(parsed_results()$ws$trial)
+    shiny::updateSliderInput(inputId = "graph_trial",
+                             value = last_trial,
+                             max = last_trial)
   })
 
   #### Other reactives
@@ -300,19 +299,6 @@ shiny::shinyServer(function(input, output) {
     }
   })
 
-  output$similarity_matrix <- rhandsontable::renderRHandsontable({
-    if (input$use_similarity){
-      if (!is.null(similarity_mat())){
-        rhandsontable::rhandsontable(similarity_mat()) %>%
-          rhandsontable::hot_cols(renderer = "
-           function (instance, td, row, col, prop, value, cellProperties) {
-             Handsontable.renderers.CheckboxRenderer.apply(this, arguments);
-              td.style.textAlign = 'center';
-           }")
-      }
-    }
-  })
-
   #To export the state of the design and hide/show run button
   output$parsed <- shiny::reactive({
     return(parsed())
@@ -325,6 +311,12 @@ shiny::shinyServer(function(input, output) {
   output$plot <- shiny::renderPlot({
     if (!is.null(plots())){
       heidi::patch_plots(plots(), selected_plots(), plot_options())
+    }
+  })
+
+  output$graph <- shiny::renderPlot({
+    if (!is.null(parsed_results())){
+      heidi::graph_weights(parsed_results(), t = input$graph_trial)
     }
   })
 
