@@ -4,7 +4,8 @@ pkgdown_sha: ~
 articles:
   heidi_basics: heidi_basics.html
   heidi_math: heidi_math.html
-last_built: 2022-02-28T11:01Z
+  heidi_similarity: heidi_similarity.html
+last_built: 2022-03-03T11:32Z
 urls:
   reference: http://victornavarro.org/heidi/reference
   article: http://victornavarro.org/heidi/articles
