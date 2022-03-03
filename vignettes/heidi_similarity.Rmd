@@ -55,7 +55,7 @@ This plot is not currently supported in the simulator, but it can be easily gene
 ```{r}
 
 model$ws %>% filter(s1 == "A" & s2 == "X" & phase == "P1") %>% #using only the first phase
-  mutate(nominal_alpha = ifelse(group == 'Reduced', .36, .40)) %>%
+  mutate(nominal_alpha = ifelse(group == 'Reduced', mean(.36, .40), .40)) %>%
   mutate(similarity = heidi:::.alphaSim(value, nominal_alpha)) %>%
   ggplot(aes(x = trial, y = similarity, linetype = group)) + 
   geom_line() + theme_bw() + 
