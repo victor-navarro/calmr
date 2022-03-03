@@ -72,7 +72,12 @@
 
 <span class="fu">plot_common_scale</span><span class="op">(</span><span class="va">plots</span><span class="op">)</span>
 
-<span class="fu">graph_weights</span><span class="op">(</span><span class="va">mod</span>, t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">ws</span><span class="op">$</span><span class="va">trial</span><span class="op">)</span>, opts <span class="op">=</span> <span class="fu">get_graph_opts</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<span class="fu">graph_weights</span><span class="op">(</span>
+  <span class="va">ws</span>,
+  limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">ws</span><span class="op">$</span><span class="va">value</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,
+  t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">ws</span><span class="op">$</span><span class="va">trial</span><span class="op">)</span>,
+  opts <span class="op">=</span> <span class="fu">get_graph_opts</span><span class="op">(</span><span class="op">)</span>
+<span class="op">)</span>
 
 <span class="fu">get_graph_opts</span><span class="op">(</span>
   arrow.gap <span class="op">=</span> <span class="fl">0.16</span>,
@@ -82,7 +87,15 @@
   node.size <span class="op">=</span> <span class="fl">40</span>,
   node.stroke <span class="op">=</span> <span class="fl">3</span>,
   node.text.size <span class="op">=</span> <span class="fl">15</span>
-<span class="op">)</span></code></pre></div>
+<span class="op">)</span>
+
+<span class="fu">make_graphs</span><span class="op">(</span>
+  <span class="va">mod</span>,
+  limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">ws</span><span class="op">$</span><span class="va">value</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,
+  trial <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">ws</span><span class="op">$</span><span class="va">trial</span><span class="op">)</span>
+<span class="op">)</span>
+
+<span class="fu">patch_graphs</span><span class="op">(</span><span class="va">graphs</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -103,8 +116,32 @@
 <dd><p>A logical. Whether to plot the data in a common y-scale.</p></dd>
 <dt>ws</dt>
 <dd><p>A data.frame containing parsed weights, as returned by parse_heidi_results</p></dd>
+<dt>limits</dt>
+<dd><p>A vector of length 2 specifying the range of weights. Defaults to the negative and positive maximum of absolute weights.</p></dd>
+<dt>t</dt>
+<dd><p>An integer specifying a trial</p></dd>
+<dt>opts</dt>
+<dd><p>A list of options for graphing weights. See ?get_graph_opts.</p></dd>
+<dt>arrow.gap</dt>
+<dd><p>Distance between nodes and arrows</p></dd>
+<dt>arrow.curvature</dt>
+<dd><p>Curvature of the arrows</p></dd>
+<dt>arrow.pt</dt>
+<dd><p>Size of the arrows (see grid::arrow)</p></dd>
+<dt>edge.size</dt>
+<dd><p>Thickness of the arrows</p></dd>
+<dt>node.size</dt>
+<dd><p>Size of the nodes</p></dd>
+<dt>node.stroke</dt>
+<dd><p>Thickness of the node lines</p></dd>
+<dt>node.text.size</dt>
+<dd><p>Thickness of the text within the node</p></dd>
+<dt>mod</dt>
+<dd><p>Parsed model results, as returned by parse_heidi_results.</p></dd>
 <dt>trial</dt>
 <dd><p>An integer denoting the trial of the weights to be graphed. Defaults to the last trial in the data.</p></dd>
+<dt>graphs</dt>
+<dd><p>A list of graphs, as returned by make_graphs</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>

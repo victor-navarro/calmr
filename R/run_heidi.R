@@ -60,16 +60,16 @@ run_heidi <- function(design_df, param_df = NULL, options = NULL, parse = T){
   #run the model
   results = heidi_df %>%
     dplyr::rowwise() %>%
-    dplyr::mutate(mod_data = list(train_pav_heidi(sals = stim_alphas,
-                                                  w = gen_ss_weights(unique_functional_stimuli),
-                                                  tps = tps,
-                                                  trial_func_stim = trial_func_stim,
-                                                  trial_nomi_stim = trial_nomi_stim,
-                                                  nomi_func_map = nomi_func_map,
-                                                  trial_names = trial_names,
-                                                  phase = phase,
-                                                  block_size = block_size,
-                                                  is_test = is_test)))
+    dplyr::mutate(mod_data = list(train_pav_heidi(sals = .data$stim_alphas,
+                                                  w = gen_ss_weights(.data$unique_functional_stimuli),
+                                                  tps = .data$tps,
+                                                  trial_func_stim = .data$trial_func_stim,
+                                                  trial_nomi_stim = .data$trial_nomi_stim,
+                                                  nomi_func_map = .data$nomi_func_map,
+                                                  trial_names = .data$trial_names,
+                                                  phase = .data$phase,
+                                                  block_size = .data$block_size,
+                                                  is_test = .data$is_test)))
   if (parse){
     results = parse_heidi_results(results)
   }

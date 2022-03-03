@@ -12,6 +12,8 @@
 \alias{plot_common_scale}
 \alias{graph_weights}
 \alias{get_graph_opts}
+\alias{make_graphs}
+\alias{patch_graphs}
 \title{Plotting functions for heidi models}
 \usage{
 make_plots(dat)
@@ -30,7 +32,12 @@ get_plot_opts(common_scale = TRUE)
 
 plot_common_scale(plots)
 
-graph_weights(mod, t = max(mod$ws$trial), opts = get_graph_opts())
+graph_weights(
+  ws,
+  limits = max(abs(range(ws$value))) * c(-1, 1),
+  t = max(ws$trial),
+  opts = get_graph_opts()
+)
 
 get_graph_opts(
   arrow.gap = 0.16,
@@ -41,6 +48,14 @@ get_graph_opts(
   node.stroke = 3,
   node.text.size = 15
 )
+
+make_graphs(
+  mod,
+  limits = max(abs(range(mod$ws$value))) * c(-1, 1),
+  trial = max(mod$ws$trial)
+)
+
+patch_graphs(graphs)
 }
 \arguments{
 \item{dat}{A list containing data.frames with parsed weights, r values, and v values, as returned by parse_heidi_results.}
@@ -59,7 +74,31 @@ get_graph_opts(
 
 \item{ws}{A data.frame containing parsed weights, as returned by parse_heidi_results}
 
+\item{limits}{A vector of length 2 specifying the range of weights. Defaults to the negative and positive maximum of absolute weights.}
+
+\item{t}{An integer specifying a trial}
+
+\item{opts}{A list of options for graphing weights. See ?get_graph_opts.}
+
+\item{arrow.gap}{Distance between nodes and arrows}
+
+\item{arrow.curvature}{Curvature of the arrows}
+
+\item{arrow.pt}{Size of the arrows (see grid::arrow)}
+
+\item{edge.size}{Thickness of the arrows}
+
+\item{node.size}{Size of the nodes}
+
+\item{node.stroke}{Thickness of the node lines}
+
+\item{node.text.size}{Thickness of the text within the node}
+
+\item{mod}{Parsed model results, as returned by parse_heidi_results.}
+
 \item{trial}{An integer denoting the trial of the weights to be graphed. Defaults to the last trial in the data.}
+
+\item{graphs}{A list of graphs, as returned by make_graphs}
 }
 \value{
 A list with ggplot objects

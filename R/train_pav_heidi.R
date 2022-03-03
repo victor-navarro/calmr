@@ -78,7 +78,7 @@ train_pav_heidi <- function(sals, w, tps,
     #learn if we need to
     if (!is_test[t]){
       #get saliences for learning
-      lsals = setNames(rep(0, length(fsnames)), fsnames)
+      lsals = stats::setNames(rep(0, length(fsnames)), fsnames)
       lsals[nomi_func_map$func[nomi_func_map$nomi %in% nstims]] = sals[nstims]
       #Learn
       v = oh_fstims %*% w #expectation
@@ -213,7 +213,7 @@ train_pav_heidi <- function(sals, w, tps,
   #1. populates a vector of saliencies for functional stimuli
   #[this based on the saliency (sals) of the nominal stimuli on the trial (nstims)]
   #2. calculates the saliency for absent stimuli, via the .absentAlpha function
-  as = setNames(rep(0, length(fsnames)), fsnames)
+  as = stats::setNames(rep(0, length(fsnames)), fsnames)
   as[nfmap$func[nfmap$nomi %in% test_nomi]] = sals_nomi[test_nomi]
   #now do absent stimuli
   absent = names(as[as==0])
@@ -231,7 +231,7 @@ train_pav_heidi <- function(sals, w, tps,
   #Returns a vector of alphas equal to the number of absent of stimuli
   allstims = rownames(w)
   absent = setdiff(allstims, pre_func)
-  as = setNames(rep(0, length(absent)), absent)
+  as = stats::setNames(rep(0, length(absent)), absent)
   for (ab in absent){
     total_sum = 0
     for (pr in pre_func){

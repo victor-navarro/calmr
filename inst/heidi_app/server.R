@@ -1,32 +1,10 @@
-#base_df <- data.frame(Group = "Group 1", P1 = "", R1 = TRUE)
-# base_df <- data.frame(Group = c("True", "Pseudo"),
-#                       P1 = c("10AB(US)/10AC", "5AB(US)/5AB/5AC(US)/5AC"),
-#                       R1 = c(TRUE, TRUE),
-#                       P2 = c("1A", "1A"),
-#                       R2 = c(TRUE, TRUE))
-base_df <- data.frame(Group = c("Group 1", "Group 2"),
-                      P1 = c("10AB(US)/10A/10B#", "10A(US)/10AB/10B#"),
-                      R1 = c(TRUE, TRUE),
-                      P2 = c("1A", "1A"),
-                      R2 = c(TRUE, TRUE))
-# base_df <- data.frame(Group = c("R+"),
-#                       P1 = c("8A(US)/8X(US)/8C(US)/8BX/8DX"),
-#                       R1 = c(TRUE),
-#                       P2 = c("10AB(US)"),
-#                       R2 = c(TRUE),
-#                       P3 = c("1AD/1BC"),
-#                       R3 = c(TRUE))
-# base_df <- data.frame(Group = c("Ext", "Ctrl"),
-#                       P1 = c("10AX", "10AX"),
-#                       R1 = c(FALSE, FALSE),
-#                       P2 = c("5X(US)", "5X(US)"),
-#                       R2 = c(FALSE, FALSE),
-#                       P3 = c("1A", "1A"),
-#                       R3 = c(FALSE, FALSE),
-#                       P4 = c("10X", "10Y"),
-#                       R4 = c(FALSE, FALSE),
-#                       P5 = c("1A", "1A"),
-#                       R5 = c(FALSE, FALSE))
+base_df = data.frame(Group = c("X+", "A+", "A"),
+                     P1 = c("10AX/10BX", "10AX/10BX", "10AX/10BX"),
+                     R1 = c(TRUE),
+                     P2 = c("1X(US)", "1A(US)", "1A"),
+                     R2 = c(TRUE),
+                     P3 = c("10B(US)", "10B(US)", "10B(US)"),
+                     R3 = c(TRUE))
 
 base_plot_options <- list(common_scale = TRUE)
 base_sim_options <- list(iterations = 1, miniblocks = TRUE)
@@ -40,6 +18,7 @@ shiny::shinyServer(function(input, output) {
   parsed_design = shiny::reactiveVal()
   param_df = shiny::reactiveVal()
   plots = shiny::reactiveVal()
+  graphs = shiny::reactiveVal()
   selected_plots = shiny::reactiveVal()
   sim_options = shiny::reactiveVal(base_sim_options)
   plot_options = shiny::reactiveVal(base_plot_options)
@@ -87,6 +66,8 @@ shiny::shinyServer(function(input, output) {
     df[nrow(df)+1, ] = df[nrow(df), ]
     df[nrow(df), 1] = paste('Group', nrow(df))
     design_df(df)
+    parsed(FALSE)
+    ran(FALSE)
   })
 
   shiny::observeEvent(input$grouprm, {
@@ -94,6 +75,8 @@ shiny::shinyServer(function(input, output) {
     if (nrow(df) > 1){
       df = df[1:(nrow(df)-1), ]
       design_df(df)
+      parsed(FALSE)
+      ran(FALSE)
     }
   })
 
@@ -103,6 +86,8 @@ shiny::shinyServer(function(input, output) {
     df[, paste0('P', cols/2+1)] = ""
     df[, paste0('R', cols/2+1)] = T
     design_df(df)
+    parsed(FALSE)
+    ran(FALSE)
   })
 
   shiny::observeEvent(input$phaserm, {
@@ -110,6 +95,8 @@ shiny::shinyServer(function(input, output) {
     if (ncol(df) > 3){
       df = df[, 1:(ncol(df)-2)]
       design_df(df)
+      parsed(FALSE)
+      ran(FALSE)
     }
   })
 
@@ -156,6 +143,7 @@ shiny::shinyServer(function(input, output) {
       })
       shiny::withProgress(message = "Making plots...", value = 0, {
         plots(heidi::make_plots(heidi::filter_heidi_results(parsed_results(), plot_filters())))
+        graphs(heidi::make_graphs(parsed_results()))
         shiny::setProgress(1)
       })
       ran(TRUE)
@@ -229,6 +217,13 @@ shiny::shinyServer(function(input, output) {
     shiny::updateSliderInput(inputId = "graph_trial",
                              value = last_trial,
                              max = last_trial)
+  })
+
+  #remaking the graphs on graph_trial change
+  shiny::observeEvent(input$graph_trial, {
+    if (!is.null(parsed_results())){
+      graphs(heidi::make_graphs(parsed_results(), trial = input$graph_trial))
+    }
   })
 
   #### Other reactives
@@ -315,8 +310,8 @@ shiny::shinyServer(function(input, output) {
   })
 
   output$graph <- shiny::renderPlot({
-    if (!is.null(parsed_results())){
-      heidi::graph_weights(parsed_results(), t = input$graph_trial)
+    if (!is.null(graphs())){
+      heidi::patch_graphs(graphs())
     }
   })
 
