@@ -119,7 +119,7 @@ plot_rs <- function(vals, simple = F){
   if (simple){
     plt = summ %>%
       dplyr::group_by(.data$trial, .data$phase, .data$trial_type, .data$s2) %>%
-      dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
+      dplyr::summarise(value = sum(.data$value), .groups = "drop") %>%
       ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s2)) +
       ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
       ggplot2::geom_line() +
