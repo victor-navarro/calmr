@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">heidi</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,6 +28,9 @@
     <a class="dropdown-item" href="../articles/heidi_math.html">heidi_math</a>
     <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
   </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -56,98 +59,177 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">trial_parser</span><span class="op">(</span><span class="va">str</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">trial_parser</span><span class="op">(</span><span class="va">trial_string</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>str</dt>
+    <dl><dt>trial_string</dt>
 <dd><p>A string</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list with the number of trials, the trials, and the stimulus names</p>
-    </div>
+    <p>A list with</p><ul><li><p>trial_names: A character vector specifying the names of the trials contained in the string</p></li>
+<li><p>trial_repeats: A numeric vector specifying the number of times each trial is given</p></li>
+<li><p>trial_pre_functional: A list of character vectors specifying the unique functional stimuli on the expectation part of each trial</p></li>
+<li><p>trial_post_functional: A list of character vectors specifying the unique functional stimuli on the correction part of each trial</p></li>
+<li><p>trial_pre_nominal: A list of character vectors specifying the nominal stimuli on the expectation part of each trial</p></li>
+<li><p>trial_post_nominal: A list of character vectors specifying the nominal stimuli on the expectation part of each trial</p></li>
+<li><p>nomi_func_map: A data.frame specifying the mapping between functional and nominal stimuli</p></li>
+<li><p>unique_nominal stimuli: A character vector with the unique nominal stimuli</p></li>
+<li><p>unique_functional_stimuli: A character vector with the unique functional stimuli</p></li>
+<li><p>is_test: A logical vector specifying whether each trial should not result in learning</p></li>
+<li><p></p></li>
+</ul></div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p>Supports complex stimuli in parentheses (e.g., "5A(US)")
-Supports multiple versions of stimuli (e.g., "3(A_a)(US_a)/3(A_b)(US_b)")
-Supports probe trials, followed by a hash (e.g., "3X#")</p>
+    <p>Supports complex stimuli in parentheses (e.g., "5A&gt;(US)")
+Supports multiple versions of stimuli (e.g., "3(A_a)&gt;(US_a)/3(A_b)&gt;(US_b)")
+Supports probe trials, followed by a hash (e.g., "3X#")
+On trials that do not have the "&gt;" character, it is assumed that all the specified stimuli are to be used in the generation of the expectation/responding. If so, the "post" entries in the list will contain NAs, as necessary.
+On those trials, the "post" stimuli will be none (a character(0) vector).</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">trial_parser</span><span class="op">(</span><span class="st">"30XAU/30(YA)A"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">trial_parser</span><span class="op">(</span><span class="st">"30A"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $trial_names</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "XAU"   "(YA)A"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_repeats</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_pre_functional</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_pre_functional[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_post_functional</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_post_functional[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> character(0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_pre_nominal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_pre_nominal[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_post_nominal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_post_nominal[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> character(0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $nomi_func_map</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   nomi func</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    A    A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $unique_nominal_stimuli</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $unique_functional_stimuli</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $is_test</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span class="fu">trial_parser</span><span class="op">(</span><span class="st">"30XA&gt;U/30(YA)&gt;A"</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_names</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "XA&gt;U"   "(YA)&gt;A"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $trial_repeats</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 30 30</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_functional</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_functional[[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X" "A" "U"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_pre_functional</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_pre_functional[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X" "A"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_functional[[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A"  "YA"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_pre_functional[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "YA"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_nominal</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_nominal[[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X" "A" "U"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_post_functional</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_post_functional[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "U"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_nominal[[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A"  "YA"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_post_functional[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_pre_nominal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_pre_nominal[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X" "A"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_pre_nominal[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "YA"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_post_nominal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_post_nominal[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "U"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_post_nominal[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $nomi_func_map</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   nomi func</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1    X    X</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2    A    A</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3    U    U</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   YA   YA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   YA   YA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    U    U</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $unique_nominal_stimuli</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"  "A"  "U"  "YA"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $unique_functional_stimuli</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"  "A"  "U"  "YA"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"  "A"  "YA" "U" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $is_test</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $is_test[[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $is_test[[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="fu">trial_parser</span><span class="op">(</span><span class="st">"1X#/2X(US)#"</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">trial_parser</span><span class="op">(</span><span class="st">"1X#/2X&gt;(US)#"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $trial_names</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X#"     "X(US)#"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X#"      "X&gt;(US)#"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $trial_repeats</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_functional</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_functional[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_pre_functional</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_pre_functional[[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_functional[[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"  "US"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_nominal</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_nominal[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_pre_functional[[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_nominal[[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"  "US"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_post_functional</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_post_functional[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> character(0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_post_functional[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "US"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_pre_nominal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_pre_nominal[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_pre_nominal[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_post_nominal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_post_nominal[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> character(0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_post_nominal[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "US"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $nomi_func_map</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   nomi func</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1    X    X</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   US   US</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   US   US</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $unique_nominal_stimuli</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"  "US"</span>
@@ -156,42 +238,53 @@ Supports probe trials, followed by a hash (e.g., "3X#")</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"  "US"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $is_test</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $is_test[[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $is_test[[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="fu">trial_parser</span><span class="op">(</span><span class="st">"1X(US_a)/1Y(US_b)"</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">trial_parser</span><span class="op">(</span><span class="st">"1X&gt;(US_a)/1Y&gt;(US_b)"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $trial_names</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X(US_a)" "Y(US_b)"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X&gt;(US_a)" "Y&gt;(US_b)"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $trial_repeats</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_functional</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_functional[[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"  "US"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_pre_functional</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_pre_functional[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_functional[[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Y"  "US"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_pre_functional[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Y"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_nominal</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_nominal[[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"    "US_a"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_post_functional</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_post_functional[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "US"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_stimuli_nominal[[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Y"    "US_b"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_post_functional[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "US"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_pre_nominal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_pre_nominal[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_pre_nominal[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Y"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_post_nominal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_post_nominal[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "US_a"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_post_nominal[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "US_b"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $nomi_func_map</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   nomi func</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1    X    X</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 US_a   US</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3    Y    Y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 US_b   US</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    Y    Y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 US_a   US</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 US_b   US</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $unique_nominal_stimuli</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"    "Y"    "US_a" "US_b"</span>
@@ -200,12 +293,7 @@ Supports probe trials, followed by a hash (e.g., "3X#")</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "X"  "Y"  "US"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $is_test</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $is_test[[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $is_test[[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>

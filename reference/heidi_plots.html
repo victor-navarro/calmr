@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">heidi</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,6 +28,9 @@
     <a class="dropdown-item" href="../articles/heidi_math.html">heidi_math</a>
     <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
   </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -62,7 +65,7 @@
 
 <span class="fu">plot_vs</span><span class="op">(</span><span class="va">vals</span>, bars <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>
 
-<span class="fu">plot_rs</span><span class="op">(</span><span class="va">vals</span><span class="op">)</span>
+<span class="fu">plot_rs</span><span class="op">(</span><span class="va">vals</span>, simple <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>
 
 <span class="fu">plot_as</span><span class="op">(</span><span class="va">vals</span><span class="op">)</span>
 
@@ -106,6 +109,8 @@
 <dd><p>A data.frame containing parsed values</p></dd>
 <dt>bars</dt>
 <dd><p>A logical stipulating whether to summarize and use stacked bars, instead of points and lines.</p></dd>
+<dt>simple</dt>
+<dd><p>A logical stipulating whether to simplify the plot by collapsing across sources.</p></dd>
 <dt>plots</dt>
 <dd><p>A named list with plots</p></dd>
 <dt>selection</dt>
