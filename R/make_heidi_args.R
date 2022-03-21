@@ -26,19 +26,29 @@ make_heidi_args <- function(design, pars, opts){
   #and sample the training for each group (tps)
   #create master lists of trials and trial_names
   tinfo = design %>% tidyr::unnest_wider(.data$trial_info) %>%
-    dplyr::select(.data$trial_stimuli_functional,
-                  .data$trial_stimuli_nominal, .data$trial_names)
+    dplyr::select(.data$trial_pre_functional,
+                  .data$trial_post_functional,
+                  .data$trial_pre_nominal,
+                  .data$trial_post_nominal,
+                  .data$trial_names)
 
   if (class(tinfo$trial_names) == "list"){
     master_trial_names = do.call('c', tinfo$trial_names)
   }else{
     master_trial_names = tinfo$trial_names
   }
-  trial_functional_list = do.call('c', tinfo$trial_stimuli_functional)
-  trial_nominal_list = do.call('c', tinfo$trial_stimuli_nominal)
+  trial_pre_functional_list = do.call('c', tinfo$trial_pre_functional)
+  trial_post_functional_list = do.call('c', tinfo$trial_post_functional)
+  trial_pre_nominal_list = do.call('c', tinfo$trial_pre_nominal)
+  trial_post_nominal_list = do.call('c', tinfo$trial_post_nominal)
+
   #reduce
-  trial_functional_list = trial_functional_list[!duplicated(master_trial_names)]
-  trial_nominal_list = trial_nominal_list[!duplicated(master_trial_names)]
+  trial_pre_functional_list = trial_pre_functional_list[!duplicated(master_trial_names)]
+  trial_post_functional_list = trial_post_functional_list[!duplicated(master_trial_names)]
+
+  trial_pre_nominal_list = trial_pre_nominal_list[!duplicated(master_trial_names)]
+  trial_post_nominal_list = trial_post_nominal_list[!duplicated(master_trial_names)]
+
   master_trial_names = master_trial_names[!duplicated(master_trial_names)]
 
   #get some stimulus data and parameters
@@ -80,8 +90,10 @@ make_heidi_args <- function(design, pars, opts){
 
   #now put the trial and stimulus information back
   tb = tb %>% dplyr::rowwise() %>%
-    dplyr::mutate(trial_func_stim = list(trial_functional_list),
-                  trial_nomi_stim = list(trial_nominal_list),
+    dplyr::mutate(trial_pre_func = list(trial_pre_functional_list),
+                  trial_post_func = list(trial_post_functional_list),
+                  trial_pre_nomi = list(trial_pre_nominal_list),
+                  trial_post_nomi = list(trial_post_nominal_list),
                   trial_names = list(master_trial_names),
                   sdata[sdata$group == .data$group, ])
   tb

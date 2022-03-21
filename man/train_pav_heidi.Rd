@@ -8,14 +8,15 @@ train_pav_heidi(
   sals,
   w,
   tps,
-  trial_func_stim,
-  trial_nomi_stim,
+  trial_pre_func,
+  trial_post_func,
+  trial_pre_nomi,
+  trial_post_nomi,
   nomi_func_map,
   trial_names = NULL,
   phase = NULL,
   block_size = NULL,
-  is_test = rep(FALSE, length(tps)),
-  targets = "US"
+  is_test = rep(FALSE, length(tps))
 )
 }
 \arguments{
@@ -25,9 +26,13 @@ train_pav_heidi(
 
 \item{tps}{A vector of trial pointers for training, as a function of trials.}
 
-\item{trial_func_stim}{A list of length T, with character vectors specifying the functional stimuli involved in each trial. T is the number of unique trials in the experiment.}
+\item{trial_pre_func}{A list of length T, with character vectors specifying the functional stimuli involved in the expectation part of each trial. T is the number of unique trials in the experiment.}
 
-\item{trial_nomi_stim}{A list of length T, with character vectors specifying the nominal stimuli involved in each trial.}
+\item{trial_post_func}{As above, but for the correction part of the trial.}
+
+\item{trial_pre_nomi}{A list of length T, with character vectors specifying the nominal stimuli involved in the expectation part of each trial.}
+
+\item{trial_post_nomi}{As above, but for the correctino part of the trial.}
 
 \item{nomi_func_map}{A data.frame with the mappings between nominal and functional stimuli}
 
@@ -38,8 +43,6 @@ train_pav_heidi(
 \item{block_size}{(optional) A integer vector of length T specifying the block size per trial}
 
 \item{is_test}{(optional) A logical vector specifying whether the trial should result in learning (update w). If an element is TRUE, no update occurs.}
-
-\item{targets}{A character vector specifying the target stimulus for each trial. Under development. For now, just the US.}
 }
 \value{
 A list with

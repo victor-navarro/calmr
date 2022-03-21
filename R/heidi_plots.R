@@ -8,6 +8,7 @@ NULL
 #' @rdname heidi_plots
 #' @param dat A list containing data.frames with parsed weights, r values, and v values, as returned by parse_heidi_results.
 #' @param vals A data.frame containing parsed values
+#' @param simple A logical stipulating whether to simplify the plot by collapsing across sources.
 #' @param bars A logical stipulating whether to summarize and use stacked bars, instead of points and lines.
 #' @param plots A named list with plots
 #' @param selection A character vector with the selected plots
@@ -36,10 +37,11 @@ NULL
 make_plots <- function(dat){
   plotlist = list()
   for (g in unique(dat$ws$group)){
-    plotlist[[paste0(g, ': Rs')]] = plot_rs(dat$rs %>% dplyr::filter(.data$group == g)) + ggplot2::labs(title = g)
+    plotlist[[paste0(g, ': Rs (simple)')]] = plot_rs(dat$rs %>% dplyr::filter(.data$group == g), simple = TRUE) + ggplot2::labs(title = g)
+    plotlist[[paste0(g, ': Rs (complex)')]] = plot_rs(dat$rs %>% dplyr::filter(.data$group == g), simple = FALSE) + ggplot2::labs(title = g)
+    plotlist[[paste0(g, ': Vs (bar)')]] = plot_vs(dat$vs %>% dplyr::filter(.data$group == g), bars = TRUE) + ggplot2::labs(title = g)
+    plotlist[[paste0(g, ': Vs (learning)')]] = plot_vs(dat$vs %>% dplyr::filter(.data$group == g)) + ggplot2::labs(title = g)
     plotlist[[paste0(g, ': Ws')]] = plot_ws(dat$ws %>% dplyr::filter(.data$group == g)) + ggplot2::labs(title = g)
-    plotlist[[paste0(g, ': Vs')]] = plot_vs(dat$vs %>% dplyr::filter(.data$group == g)) + ggplot2::labs(title = g)
-    plotlist[[paste0(g, ': Vs (bar)')]] = plot_vs(dat$vs %>% dplyr::filter(.data$group == g), TRUE) + ggplot2::labs(title = g)
     plotlist[[paste0(g, ': As')]] = plot_as(dat$as %>% dplyr::filter(.data$group == g)) + ggplot2::labs(title = g)
   }
   return(plotlist)
@@ -109,20 +111,37 @@ plot_vs <- function(vals, bars = F){
 
 #' @rdname heidi_plots
 #' @export
-plot_rs <- function(vals){
-  vals %>%
+plot_rs <- function(vals, simple = F){
+  summ = vals %>%
     dplyr::mutate(trial = ceiling(.data$trial/.data$block_size)) %>%
     dplyr::group_by(.data$trial, .data$phase, .data$trial_type, .data$s1, .data$s2) %>%
-    dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
-    ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s1)) +
-    ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
-    ggplot2::geom_line() +
-    ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
-    ggplot2::scale_colour_viridis_d(drop = FALSE) +
-    ggplot2::scale_x_continuous(breaks = NULL) +
-    ggplot2::facet_grid(.data$s2~.data$phase+.data$trial_type, scales = 'free_x') +
-    ggplot2::labs(x = "Trial/Miniblock", y = 'R value', colour = 'Stimulus') +
-    ggplot2::theme_bw()
+    dplyr::summarise(value = mean(.data$value), .groups = "drop")
+  if (simple){
+    plt = summ %>%
+      dplyr::group_by(.data$trial, .data$phase, .data$trial_type, .data$s2) %>%
+      dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
+      ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s2)) +
+      ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
+      ggplot2::geom_line() +
+      ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
+      ggplot2::scale_colour_viridis_d(drop = FALSE) +
+      ggplot2::scale_x_continuous(breaks = NULL) +
+      ggplot2::facet_grid(~.data$phase+.data$trial_type, scales = 'free_x') +
+      ggplot2::labs(x = "Trial/Miniblock", y = 'R value', colour = 'Target') +
+      ggplot2::theme_bw()
+
+  }else{
+    plt = summ %>% ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s2)) +
+      ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
+      ggplot2::geom_line() +
+      ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
+      ggplot2::scale_colour_viridis_d(drop = FALSE) +
+      ggplot2::scale_x_continuous(breaks = NULL) +
+      ggplot2::facet_grid(.data$s1~.data$phase+.data$trial_type, scales = 'free_x') +
+      ggplot2::labs(x = "Trial/Miniblock", y = 'R value', colour = 'Target') +
+      ggplot2::theme_bw()
+  }
+  plt
 }
 
 #' @rdname heidi_plots

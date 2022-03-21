@@ -22,7 +22,7 @@ plot_ws(vals)
 
 plot_vs(vals, bars = F)
 
-plot_rs(vals)
+plot_rs(vals, simple = F)
 
 plot_as(vals)
 
@@ -63,6 +63,8 @@ patch_graphs(graphs)
 \item{vals}{A data.frame containing parsed values}
 
 \item{bars}{A logical stipulating whether to summarize and use stacked bars, instead of points and lines.}
+
+\item{simple}{A logical stipulating whether to simplify the plot by collapsing across sources.}
 
 \item{plots}{A named list with plots}
 

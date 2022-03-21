@@ -1,9 +1,9 @@
 base_df = data.frame(Group = c("X+", "A+", "A"),
                      P1 = c("10AX/10BX", "10AX/10BX", "10AX/10BX"),
                      R1 = c(TRUE),
-                     P2 = c("1X(US)", "1A(US)", "1A"),
+                     P2 = c("1X>(US)", "1A>(US)", "1A"),
                      R2 = c(TRUE),
-                     P3 = c("10B(US)", "10B(US)", "10B(US)"),
+                     P3 = c("10B>(US)", "10B>(US)", "10B>(US)"),
                      R3 = c(TRUE))
 
 base_plot_options <- list(common_scale = TRUE)
@@ -124,16 +124,18 @@ shiny::shinyServer(function(input, output) {
       shiny::withProgress(message = "Simulating...", value = 0, {
         raw_results(heidi_df %>% dplyr::rowwise() %>% dplyr::mutate(mod_data = list({
           shiny::incProgress(1/iterations, detail = paste("iteration =", iteration))
-          heidi::train_pav_heidi(sals = stim_alphas,
-                                 w = gen_ss_weights(unique_functional_stimuli),
-                                 tps = tps,
-                                 trial_func_stim = trial_func_stim,
-                                 trial_nomi_stim = trial_nomi_stim,
-                                 nomi_func_map = nomi_func_map,
-                                 trial_names = trial_names,
-                                 phase = phase,
-                                 block_size = block_size,
-                                 is_test = is_test)
+          heidi::train_pav_heidi(sals = .data$stim_alphas,
+                                 w = gen_ss_weights(.data$unique_functional_stimuli),
+                                 tps = .data$tps,
+                                 trial_pre_func = .data$trial_pre_func,
+                                 trial_post_func = .data$trial_post_func,
+                                 trial_pre_nomi = .data$trial_pre_nomi,
+                                 trial_post_nomi = .data$trial_post_nomi,
+                                 nomi_func_map = .data$nomi_func_map,
+                                 trial_names = .data$trial_names,
+                                 phase = .data$phase,
+                                 block_size = .data$block_size,
+                                 is_test = .data$is_test)
         })))
       })
       #parse results

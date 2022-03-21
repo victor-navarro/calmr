@@ -2,14 +2,15 @@
 #' @param sals A named vector with stimulus saliencies.
 #' @param w A named array of dimensions S,S; where S is the number of stimuli.
 #' @param tps A vector of trial pointers for training, as a function of trials.
-#' @param trial_func_stim A list of length T, with character vectors specifying the functional stimuli involved in each trial. T is the number of unique trials in the experiment.
-#' @param trial_nomi_stim A list of length T, with character vectors specifying the nominal stimuli involved in each trial.
+#' @param trial_pre_func A list of length T, with character vectors specifying the functional stimuli involved in the expectation part of each trial. T is the number of unique trials in the experiment.
+#' @param trial_post_func As above, but for the correction part of the trial.
+#' @param trial_pre_nomi A list of length T, with character vectors specifying the nominal stimuli involved in the expectation part of each trial.
+#' @param trial_post_nomi As above, but for the correctino part of the trial.
 #' @param nomi_func_map A data.frame with the mappings between nominal and functional stimuli
 #' @param trial_names (optional) A character vector of length T with the names of the trials
 #' @param phase (optional) A character vector of length T with the names of the phases
 #' @param block_size (optional) A integer vector of length T specifying the block size per trial
 #' @param is_test (optional) A logical vector specifying whether the trial should result in learning (update w). If an element is TRUE, no update occurs.
-#' @param targets A character vector specifying the target stimulus for each trial. Under development. For now, just the US.
 #' @return A list with
 #' \itemize{
 #' \item{ws - An array of dimensions P,S,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment.}
@@ -19,67 +20,71 @@
 #' @note The array w contains the associations for all stimuli involved in the experiment. Entry i,j specifies the associative strength between stimulus i to stimulus j. Entry j,i specifies the opposite direction.
 #' @export
 train_pav_heidi <- function(sals, w, tps,
-                            trial_func_stim,
-                            trial_nomi_stim,
+                            trial_pre_func,
+                            trial_post_func,
+                            trial_pre_nomi,
+                            trial_post_nomi,
                             nomi_func_map,
                             trial_names = NULL,
                             phase = NULL,
                             block_size = NULL,
-                            is_test = rep(FALSE, length(tps)),
-                            targets = 'US'){
+                            is_test = rep(FALSE, length(tps))){
   ws = array(NA, dim = c(length(tps), dim(w)),
              dimnames = list(NULL, rownames(w), rownames(w)))
+  rs = ws
   as = array(NA, dim = c(length(tps), nrow(w)),
              dimnames = list(NULL, rownames(w)))
-  rs = combvs = chainvs = vector('list', length(tps))
-
+  combvs = chainvs = vector('list', length(tps))
   fsnames = rownames(w) #get functional stimuli names
+  nsnames = names(sals) #get nominal stimuli names
   sals_avg = with(data.frame(nomi_func_map, sals = sals), tapply(sals, func, mean))
 
   for (t in 1:length(tps)){
-    #get functional and nominal stimuli
-    fstims = trial_func_stim[[tps[t]]]
-    nstims = trial_nomi_stim[[tps[t]]]
-    #make one-hot vector of functional stimuli
-    oh_fstims = .makeOH(fstims, fsnames)
+    #get pre functional and nominal stimuli
+    fprestims = trial_pre_func[[tps[t]]]
+    nprestims = trial_pre_nomi[[tps[t]]]
+    #get post nominal stimuli
+    fpoststims = trial_post_func[[tps[t]]]
+    npoststims = trial_post_nomi[[tps[t]]]
 
-    #get functional stimuli used to generate the expectation
-    teststim_func = setdiff(fstims, targets)
-    teststim_nomi = nstims[which(teststim_func %in% fstims)]
+    #compute combV for all stimuli
+    combV = .combV(w = w, pre_func = fprestims, post_func = fsnames, db_trial = t)
 
-    #functional class activations (comb)
-    combV = .combV(w = w, pre_func = teststim_func, post_func = targets, db_trial = t)
-
-    #chain activations (chain)
-    #chainV = .chainV(w = w, pre_func = teststim_func, post_func = targets, db_trial = t)
+    #compute chainV for all stimuli
+    #without similarity
+    #chainV = .chainV(w = w, pre_func = teststim_func, post_func = fsnames, db_trial = t)
+    #with similarity
     chainV = .chainVSim(as_nomi = sals,
                         as_avg = sals_avg,
                         w = w,
-                        pre_nomi = teststim_nomi,
-                        pre_func = teststim_func,
-                        post_func = targets,
+                        pre_nomi = nprestims,
+                        pre_func = fprestims,
+                        post_func = fsnames,
                         db_trial = t)
 
     #Now we calculate rs for all the stimuli involved in the design (snames)
+
     #First, we need to identify absent stimuli and calculate their "retrieved" saliency
-    #get saliences for test stimuli
-    tsals = .getSals(w = w,
+    rsals = .getSals(w = w,
                      sals_nomi = sals,
-                     test_nomi = teststim_nomi,
-                     test_func = teststim_func,
+                     pre_nomi = nprestims,
+                     pre_func = fprestims,
                      fsnames = fsnames,
                      nfmap = nomi_func_map,
                      db_trial = t)
 
-
     #Distribute R
-    r = .distR(tsals, combV, chainV, t)
+    r = .distR(rsals, combV, chainV, t)
 
     #learn if we need to
     if (!is_test[t]){
-      #get saliences for learning
+      #make one-hot vector of pre functional stimuli (for learning)
+      oh_fstims = .makeOH(c(fprestims, fpoststims), fsnames)
+      #get saliencies for learning
       lsals = stats::setNames(rep(0, length(fsnames)), fsnames)
-      lsals[nomi_func_map$func[nomi_func_map$nomi %in% nstims]] = sals[nstims]
+      #this bit is really annoying, as the mapping and the trial stimuli can sometimes be in different order
+      lsals[sapply(c(nprestims, npoststims), function(x) nomi_func_map$func[nomi_func_map$nomi == x])] = sals[c(nprestims, npoststims)]
+
       #Learn
       v = oh_fstims %*% w #expectation
       e = oh_fstims*lsals-v #error
@@ -90,8 +95,8 @@ train_pav_heidi <- function(sals, w, tps,
 
     #save data
     ws[t, , ] = w
-    as[t, ] = tsals
-    rs[[t]] = r
+    as[t, ] = rsals
+    rs[t, , ] = r
     combvs[[t]] = combV
     chainvs[[t]] = chainV
   }
@@ -101,7 +106,10 @@ train_pav_heidi <- function(sals, w, tps,
              chainvs = chainvs,
              as = as,
              tps = tps,
-             trial_func_stim = trial_func_stim,
+             trial_pre_func = trial_pre_func,
+             trial_post_func = trial_post_func,
+             trial_pre_nomi = trial_pre_nomi,
+             trial_post_nomi = trial_post_nomi,
              trial_names = trial_names,
              phase = phase,
              block_size = block_size)
@@ -207,18 +215,19 @@ train_pav_heidi <- function(sals, w, tps,
   return(mat)
 }
 
-.getSals <- function(sals_nomi, w, test_nomi, test_func, fsnames, nfmap, db_trial = NA){
+.getSals <- function(sals_nomi, w, pre_nomi, pre_func, fsnames, nfmap, db_trial = NA){
   #gets the saliencies for a given trial
   #it performs two actions:
   #1. populates a vector of saliencies for functional stimuli
-  #[this based on the saliency (sals) of the nominal stimuli on the trial (nstims)]
+  #[this based on the saliency (sals) of the nominal stimuli on the trial (pre_nomi)]
   #2. calculates the saliency for absent stimuli, via the .absentAlpha function
   as = stats::setNames(rep(0, length(fsnames)), fsnames)
-  as[nfmap$func[nfmap$nomi %in% test_nomi]] = sals_nomi[test_nomi]
+  #Annoying bit again, see main function
+  as[sapply(pre_nomi, function(x) nfmap$func[nfmap$nomi == x])] = sals_nomi[pre_nomi]
   #now do absent stimuli
   absent = names(as[as==0])
   if (length(absent)){
-    as[absent] = .absentAlpha(w = w, pre_func = test_func, db_trial = t)
+    as[absent] = .absentAlpha(w = w, pre_func = pre_func, db_trial = t)
   }
   as
 }

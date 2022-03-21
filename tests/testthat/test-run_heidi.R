@@ -1,4 +1,4 @@
-test_that("package works", {
+test_that("run_heidi works", {
   df = data.frame(Group = c("True", "Pseudo"),
                   P1 = c("10AB(US)/10AC", "5AB(US)/5AB/5AC(US)/5AC"),
                   R1 = c(TRUE, TRUE),
@@ -14,28 +14,9 @@ test_that("package works", {
   #model can run
   expect_named(run_heidi(df, param_df = pars), c("ws", "vs", "rs", "as"))
   #multiple plots can be obtained
-  expect_equal(length(make_plots(run_heidi(df, pars))), 10)
-  #### trial_parser tests ####
-  expect_setequal(
-    trial_parser("10AB(US)")$unique_nominal_stimuli, c("A", "B", "US"))
-  expect_setequal(
-    trial_parser("10AB(AB)(US)")$unique_nominal_stimuli, c("A", "B", "AB", "US"))
-  expect_setequal(
-    trial_parser("10A(US)")$unique_nominal_stimuli, c("A", "US"))
-  expect_setequal(
-    trial_parser("10A(US_a)/10A(US_b)")$unique_nominal_stimuli, c("A", "US_a", "US_b"))
-  expect_setequal(
-    trial_parser("10A(US_a)/10A(US_b)")$unique_functional_stimuli, c("A", "US"))
-  expect_setequal(
-    trial_parser("10(A_a)(US_a)/10(A_b)(US_b)")$unique_functional_stimuli, c("A", "US"))
-  expect_setequal(
-    trial_parser("10(A_a)(US_a)/10(B)(US_b)")$unique_functional_stimuli, c("A", "B", "US"))
+  expect_equal(length(make_plots(run_heidi(df, pars))), 12)
 
-  expect_false(trial_parser("1X")$is_test[[1]])
-  expect_true(trial_parser("1X#")$is_test[[1]])
-
-  #thank you Dom
-  #test for a case in which there is only one type of trial per cell
+  #test for a case in which there is only one type of trial per cell (thanks Dom)
   simple_df = data.frame(Group = c("Over", "Ctrl"),
                          P1 = c("10AB(US)", "10A(US)"),
                          R1 = c(TRUE, TRUE),
