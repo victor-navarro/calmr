@@ -13,9 +13,9 @@
 #' @param is_test (optional) A logical vector specifying whether the trial should result in learning (update w). If an element is TRUE, no update occurs.
 #' @return A list with
 #' \itemize{
-#' \item{ws - An array of dimensions P,S,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment.}
-#' \item{rs,combvs, chainvs - Lists of length P with the r-values, combination vs, and chain vs.}
-#' \item{tps, trial_func_stim, trial_names, phase, block_size -  Carryover for further processing. See Arguments.}
+#' \item{ws, rs - Arrays of dimensions P,S,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment. Respectively, ws and rs contain the stimulus weights and the stimulus-specific responses.}
+#' \item{combvs, chainvs - Lists of length P with the r-values, combination vs, and chain vs.}
+#' \item{tps, trial_pre_func, trial_post_func, trial_pre_nomi, trial_post_nomi, nomi_func_map, trial_names, phase, block_size, is_test -  Carryover for further processing. See Arguments.}
 #' }
 #' @note The array w contains the associations for all stimuli involved in the experiment. Entry i,j specifies the associative strength between stimulus i to stimulus j. Entry j,i specifies the opposite direction.
 #' @export
@@ -38,6 +38,7 @@ train_pav_heidi <- function(sals, w, tps,
   fsnames = rownames(w) #get functional stimuli names
   nsnames = names(sals) #get nominal stimuli names
   sals_avg = with(data.frame(nomi_func_map, sals = sals), tapply(sals, func, mean))
+  test_stims = fsnames
 
   for (t in 1:length(tps)){
     #get pre functional and nominal stimuli
@@ -48,18 +49,18 @@ train_pav_heidi <- function(sals, w, tps,
     npoststims = trial_post_nomi[[tps[t]]]
 
     #compute combV for all stimuli
-    combV = .combV(w = w, pre_func = fprestims, post_func = fsnames, db_trial = t)
+    combV = .combV(w = w, pre_func = fprestims, post_func = test_stims, db_trial = t)
 
     #compute chainV for all stimuli
     #without similarity
-    #chainV = .chainV(w = w, pre_func = teststim_func, post_func = fsnames, db_trial = t)
+    #chainV = .chainV(w = w, pre_func = teststim_func, post_func = test_stims, db_trial = t)
     #with similarity
     chainV = .chainVSim(as_nomi = sals,
                         as_avg = sals_avg,
                         w = w,
                         pre_nomi = nprestims,
                         pre_func = fprestims,
-                        post_func = fsnames,
+                        post_func = test_stims,
                         db_trial = t)
 
     #Now we calculate rs for all the stimuli involved in the design (snames)
@@ -111,6 +112,8 @@ train_pav_heidi <- function(sals, w, tps,
              trial_pre_nomi = trial_pre_nomi,
              trial_post_nomi = trial_post_nomi,
              trial_names = trial_names,
+             is_test = is_test,
+             nomi_func_map = nomi_func_map,
              phase = phase,
              block_size = block_size)
   return(dat)
@@ -182,6 +185,7 @@ train_pav_heidi <- function(sals, w, tps,
   allstims = rownames(w)
   absent = setdiff(allstims, pre_func)
 
+  #a for loop for readability
   if (length(absent)){
     #get retrieved alphas
     retrieved_as = .absentAlpha(w = w, pre_func = pre_func, db_trial = NA)
@@ -198,18 +202,16 @@ train_pav_heidi <- function(sals, w, tps,
       }
     }
   }
-
-
-  #a for loop for readability
-
+  #if (db_trial == 10) browser()
   return(mat)
 }
 
 #Distribution of R among stimuli
 .distR <- function(sals, combv, chainv, db_trial = NA){
   #Distributes the associative strength among all stimuli (sals)
-  #returns a matrix of dimensions length(sals) x length(V)
+  #returns a matrix of dimensions length(sals) x ncols(combv)
   #if (nrow(chainv) > 1) browser()
+  #if (db_trial > 10) browser()
   mat = (sals/sum(sals))%*%(combv+colSums(chainv))
   rownames(mat) = names(sals)
   return(mat)

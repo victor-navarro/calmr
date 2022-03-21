@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">heidi</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,6 +28,9 @@
     <a class="dropdown-item" href="../articles/heidi_math.html">heidi_math</a>
     <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
   </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -83,15 +86,15 @@
 <span class="r-in"><span class="va">des</span> <span class="op">&lt;-</span> <span class="fu"><a href="parse_design.html">parse_design</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">ps</span> <span class="op">&lt;-</span> <span class="fu"><a href="heidi_helpers.html">get_params</a></span><span class="op">(</span><span class="va">des</span>, <span class="fl">0.2</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">make_heidi_args</span><span class="op">(</span>design <span class="op">=</span> <span class="va">des</span>, pars <span class="op">=</span> <span class="va">ps</span>, opts <span class="op">=</span> <span class="fu"><a href="get_heidi_opts.html">get_heidi_opts</a></span><span class="op">(</span>iterations <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 13</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 15</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Rowwise:  iteration</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   iteration group tps   is_test phase block_size trial_func_stim trial_nomi_stim</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lis&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;lis&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>         1 Grou… <span style="color: #949494;">&lt;int</span>… <span style="color: #949494;">&lt;lgl [</span>… <span style="color: #949494;">&lt;chr</span>… <span style="color: #949494;">&lt;dbl [10]&gt;</span> <span style="color: #949494;">&lt;list [2]&gt;</span>      <span style="color: #949494;">&lt;list [2]&gt;</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>         1 Grou… <span style="color: #949494;">&lt;int</span>… <span style="color: #949494;">&lt;lgl [</span>… <span style="color: #949494;">&lt;chr</span>… <span style="color: #949494;">&lt;dbl [10]&gt;</span> <span style="color: #949494;">&lt;list [2]&gt;</span>      <span style="color: #949494;">&lt;list [2]&gt;</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 5 more variables: trial_names &lt;list&gt;, stim_alphas &lt;list&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   unique_functional_stimuli &lt;list&gt;, unique_nominal_stimuli &lt;list&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   nomi_func_map &lt;list&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   iteration group  tps   is_test phase block_size trial_pre_func trial_post_func</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;lis&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;lis&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>         1 Group… <span style="color: #949494;">&lt;int</span>… <span style="color: #949494;">&lt;lgl [</span>… <span style="color: #949494;">&lt;chr</span>… <span style="color: #949494;">&lt;dbl [10]&gt;</span> <span style="color: #949494;">&lt;list [2]&gt;</span>     <span style="color: #949494;">&lt;list [2]&gt;</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>         1 Group… <span style="color: #949494;">&lt;int</span>… <span style="color: #949494;">&lt;lgl [</span>… <span style="color: #949494;">&lt;chr</span>… <span style="color: #949494;">&lt;dbl [10]&gt;</span> <span style="color: #949494;">&lt;list [2]&gt;</span>     <span style="color: #949494;">&lt;list [2]&gt;</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 7 more variables: trial_pre_nomi &lt;list&gt;, trial_post_nomi &lt;list&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   trial_names &lt;list&gt;, stim_alphas &lt;list&gt;, unique_functional_stimuli &lt;list&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   unique_nominal_stimuli &lt;list&gt;, nomi_func_map &lt;list&gt;</span></span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>

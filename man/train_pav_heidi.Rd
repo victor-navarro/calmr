@@ -47,9 +47,9 @@ train_pav_heidi(
 \value{
 A list with
 \itemize{
-\item{ws - An array of dimensions P,S,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment.}
-\item{rs,combvs, chainvs - Lists of length P with the r-values, combination vs, and chain vs.}
-\item{tps, trial_func_stim, trial_names, phase, block_size -  Carryover for further processing. See Arguments.}
+\item{ws, rs - Arrays of dimensions P,S,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment. Respectively, ws and rs contain the stimulus weights and the stimulus-specific responses.}
+\item{combvs, chainvs - Lists of length P with the r-values, combination vs, and chain vs.}
+\item{tps, trial_pre_func, trial_post_func, trial_pre_nomi, trial_post_nomi, nomi_func_map, trial_names, phase, block_size, is_test -  Carryover for further processing. See Arguments.}
 }
 }
 \description{

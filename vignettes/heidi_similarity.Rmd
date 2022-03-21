@@ -75,7 +75,7 @@ ntrials <- 1:10
 df <- data.frame(Group = c(paste0("S", ntrials), paste0("R", ntrials)),
                  P1 = rep(paste0(ntrials, "A(X_a)"), 2),
                  R1 = FALSE,
-                 P2 = rep(c("10(X_a)(US)", "10(X_b)(US)"), each = 10),
+                 P2 = rep(c("10(X_a)>(US)", "10(X_b)>(US)"), each = 10),
                  R2 = FALSE,
                  P3 = "A#",
                  R3 = FALSE)
@@ -96,13 +96,14 @@ And now we can manually plot the distribution of responding among stimuli `model
 
 ```{r}
 model$rs %>% 
-  filter(phase == 'P3') %>%
+  filter(phase == 'P3' & s2 == "US") %>%
   mutate(trial = trial-11, 
          group_lab = ifelse(substr(group, 1, 1) == "R", "Reduced", "Same")) %>%
   ggplot(aes(x = trial, y = value, colour = s1, linetype = group_lab)) + 
   geom_line() + 
   theme_bw() + 
-  labs(x = "Trial", y = "R-value", colour = "Stimulus", linetype = "Group")
+  labs(x = "Trial", y = "R-value", colour = "Stimulus", linetype = "Group") + 
+  facet_wrap(~s2)
 
 
 ```

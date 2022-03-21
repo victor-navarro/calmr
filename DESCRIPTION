@@ -1,6 +1,6 @@
 Package: heidi
 Title: An R-based HeiDI simulator
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: 
     person("Victor", "Navarro", , "navarrov@cardiff.ac.uk", role = c("aut", "cre"))
 Description: Tools to simulate using HeiDI.

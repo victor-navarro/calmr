@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">heidi</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,6 +28,9 @@
     <a class="dropdown-item" href="../articles/heidi_math.html">heidi_math</a>
     <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
   </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -60,14 +63,15 @@
   <span class="va">sals</span>,
   <span class="va">w</span>,
   <span class="va">tps</span>,
-  <span class="va">trial_func_stim</span>,
-  <span class="va">trial_nomi_stim</span>,
+  <span class="va">trial_pre_func</span>,
+  <span class="va">trial_post_func</span>,
+  <span class="va">trial_pre_nomi</span>,
+  <span class="va">trial_post_nomi</span>,
   <span class="va">nomi_func_map</span>,
   trial_names <span class="op">=</span> <span class="cn">NULL</span>,
   phase <span class="op">=</span> <span class="cn">NULL</span>,
   block_size <span class="op">=</span> <span class="cn">NULL</span>,
-  is_test <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">tps</span><span class="op">)</span><span class="op">)</span>,
-  targets <span class="op">=</span> <span class="st">"US"</span>
+  is_test <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">tps</span><span class="op">)</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -79,10 +83,14 @@
 <dd><p>A named array of dimensions S,S; where S is the number of stimuli.</p></dd>
 <dt>tps</dt>
 <dd><p>A vector of trial pointers for training, as a function of trials.</p></dd>
-<dt>trial_func_stim</dt>
-<dd><p>A list of length T, with character vectors specifying the functional stimuli involved in each trial. T is the number of unique trials in the experiment.</p></dd>
-<dt>trial_nomi_stim</dt>
-<dd><p>A list of length T, with character vectors specifying the nominal stimuli involved in each trial.</p></dd>
+<dt>trial_pre_func</dt>
+<dd><p>A list of length T, with character vectors specifying the functional stimuli involved in the expectation part of each trial. T is the number of unique trials in the experiment.</p></dd>
+<dt>trial_post_func</dt>
+<dd><p>As above, but for the correction part of the trial.</p></dd>
+<dt>trial_pre_nomi</dt>
+<dd><p>A list of length T, with character vectors specifying the nominal stimuli involved in the expectation part of each trial.</p></dd>
+<dt>trial_post_nomi</dt>
+<dd><p>As above, but for the correctino part of the trial.</p></dd>
 <dt>nomi_func_map</dt>
 <dd><p>A data.frame with the mappings between nominal and functional stimuli</p></dd>
 <dt>trial_names</dt>
@@ -93,14 +101,12 @@
 <dd><p>(optional) A integer vector of length T specifying the block size per trial</p></dd>
 <dt>is_test</dt>
 <dd><p>(optional) A logical vector specifying whether the trial should result in learning (update w). If an element is TRUE, no update occurs.</p></dd>
-<dt>targets</dt>
-<dd><p>A character vector specifying the target stimulus for each trial. Under development. For now, just the US.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list with</p><ul><li><p>ws - An array of dimensions P,S,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment.</p></li>
-<li><p>rs,combvs, chainvs - Lists of length P with the r-values, combination vs, and chain vs.</p></li>
-<li><p>tps, trial_func_stim, trial_names, phase, block_size -  Carryover for further processing. See Arguments.</p></li>
+    <p>A list with</p><ul><li><p>ws, rs - Arrays of dimensions P,S,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment. Respectively, ws and rs contain the stimulus weights and the stimulus-specific responses.</p></li>
+<li><p>combvs, chainvs - Lists of length P with the r-values, combination vs, and chain vs.</p></li>
+<li><p>tps, trial_pre_func, trial_post_func, trial_pre_nomi, trial_post_nomi, nomi_func_map, trial_names, phase, block_size, is_test -  Carryover for further processing. See Arguments.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>

@@ -65,7 +65,7 @@ parse_vs <- function(mod){
 
 #' @rdname heidi_helpers
 parse_rs <- function(mod){
-  rs = tibble::enframe(apply(mod$ws, 1, function(x) as.data.frame(as.table(x))), name = "trial") %>%
+  rs = tibble::enframe(apply(mod$rs, 1, function(x) as.data.frame(as.table(x))), name = "trial") %>%
     dplyr::mutate(trial_type = mod$trial_names[mod$tps], phase = mod$phase, block_size = mod$block_size) %>%
     tidyr::unnest(.data$value) %>% dplyr::mutate(Var1 = as.character(.data$Var1),
                                            Var2 = as.character(.data$Var2)) %>%

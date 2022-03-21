@@ -34,7 +34,7 @@ In the so-called design data.frame the user specifies their experimental design.
 
 0. Each row represents a group.
 1. Its first column contains the group labels.
-2. The remaining columns are organized in pairs. The first column in each pair specifies the trials to give in the phase, whereas the second column of each pair specifies whether the trials within that phase should be randomized.
+2. The remaining columns are organized in pairs. The first column in each pair specifies the trials to give in the phase, whereas the second column in each pair specifies whether the trials within that phase should be randomized.
 
 Let's build a design matrix for a blocking experiment.
 
@@ -55,7 +55,7 @@ A few observations about the trial notation:
 1. The presence and absence of the unconditioned stimulus is not denoted with the traditional "+" and "-" symbols. Instead, we use parenthesis to denote "complex" stimuli. These can be thought of as an element with a complex name (i.e., with more than one character). As such, "(US)" specifies a single element to represent the US.
 2. The "/" character is used as a trial separator (it does not imply randomization by itself). Thus, "1A/1B" specifies that a single "A" trial and a single "B" trial will be given during that phase. Recall that randomization of trials within a phase is specified by the column after it (above, R1, R2, and R3).
 
-If you ever want to check if your trials string will work with the simulator, you can use `trial_parser`. The function returns a list with trial_names (the name of the trial), trial_repeats (the number of times each trial is given), trial_stimuli (a list with the elements on each trial), is_test (a list specifying whether the trial does not result in learning), and a vector of stimuli (the stimuli found in the trial string).
+If you ever want to check if your trials string will work with the simulator, you can use `heidi::trial_parser`. The function returns a list with a lot of information. Check `??trial_parser` for more information. Let's have a go.
 
 ```{r}
 trial_parser("AB/10AC")  #not specifying a number of AB trials. Bad practice!
@@ -66,7 +66,7 @@ trial_parser("10AB(AB)(US)") #considering a configural cue for elements AB
 
 ## The parameters data.frame
 
-You can run a simulation with only an design data.frame (the simulation function will use default salience values for the stimuli). However, if you want specific salience values for the stimuli in your experiment, you should pass a data.frame with parameters. Let's specify those for our experiment.
+You can run a simulation with a design data.frame only (the simulation function will use default salience values for the stimuli). However, if you want specific salience values for the stimuli in your experiment, you should pass a data.frame with parameters. Let's specify those for our experiment.
 
 ```{r}
 my_pars <- get_params(my_blocking, default_par = .2) #Note we can quickly get a table with parameters directly from the design data.frame; a good way to check we are going in the right direction
@@ -87,7 +87,7 @@ my_opts
 
 ### Simulating
 
-And we can finally simulate the model with `run_heidi`. By default, the function returns a list with the relevant data. Let's see.
+And we can finally simulate the model with `run_heidi`. By default, the function returns a list with aggregated data. Let's see.
 
 ```{r}
 my_sim <- run_heidi(design_df = my_blocking,
@@ -100,7 +100,7 @@ head(my_sim$vs)
 
 ## Plotting
 
-But, we rarely want the raw data. If you are like me, you will want to see some plots. Let's use `make_plots` to do create some plots, and `patch_plots` to display them. Here they are, paired side by side.
+But, we rarely want the raw data. If you are like me, you will want to see some plots. Let's use `make_plots` to create some plots, and `patch_plots` to display them. Here they are, paired side by side.
 
 ```{r}
 my_plots = make_plots(my_sim)
@@ -108,29 +108,36 @@ plot_names = names(my_plots)
 plot_names
 ```
 
-### Stimulus-specific responding
+
+### Stimulus-specific responding (simple)
 ```{r}
-patch_plots(plots = my_plots, selection = plot_names[c(1, 6)]) #Responding
+patch_plots(plots = my_plots, selection = plot_names[c(1, 7)]) #Responding
 ```
+
+### Stimulus-specific responding (complex)
+```{r}
+patch_plots(plots = my_plots, selection = plot_names[c(2, 8)]) #Responding
+```
+
 
 ### Stimulus associations
 ```{r}
-patch_plots(plots = my_plots, selection = plot_names[c(2, 7)])
+patch_plots(plots = my_plots, selection = plot_names[c(3, 9)])
 ```
 
 ### Combined associative strenghts
 ```{r}
-patch_plots(plots = my_plots, selection = plot_names[c(3, 8)])
+patch_plots(plots = my_plots, selection = plot_names[c(4, 10)])
 ```
 
 ### Combined associative strenghts (bar)
 ```{r}
-patch_plots(plots = my_plots, selection = plot_names[c(4, 9)])
+patch_plots(plots = my_plots, selection = plot_names[c(5, 11)])
 ```
 
 ### Stimulus salience at expression
 ```{r}
-patch_plots(plots = my_plots, selection = plot_names[c(5, 10)])
+patch_plots(plots = my_plots, selection = plot_names[c(6, 12)])
 ```
 
-The `heidi` package was designed to make simulating quick. Write your design and get a glance of what the model predicts. Make sure to check more advanced vignettes when you are ready.
+The `heidi` package was designed to simulate quickly; write your design and get a glance of the model predictions. However, the package also has some features for more advanced users, so make sure to check more advanced vignettes when you are ready.
