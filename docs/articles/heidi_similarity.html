@@ -82,7 +82,8 @@
 <div class="row">
   <main id="main"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>heidi_similarity</h1>
-                        <h4 data-toc-skip class="author">Victor Navarro</h4>
+                        <h4 data-toc-skip class="author">Victor
+Navarro</h4>
             
       
       <small class="dont-index">Source: <a href="https://github.com/victor-navarro/heidi/blob/HEAD/vignettes/heidi_similarity.Rmd" class="external-link"><code>vignettes/heidi_similarity.Rmd</code></a></small>
@@ -99,13 +100,38 @@
 <div class="section level2">
 <h2 id="simulating-similarity-effects">Simulating similarity effects<a class="anchor" aria-label="anchor" href="#simulating-similarity-effects"></a>
 </h2>
-<p>In Honey and Dwyer (2022), the authors propose that the similarity between the retrieved and nominal saliencies of stimulus representations modulates some quantities in combination rules. Retrieved saliencies are exclusively for absent stimuli, and are the result of the existing associations between stimuli (see in Eq. 8 in math vignette). In contrast, nominal saliencies denote the intensity of stimulus representations when stimuli are actually presented on a trial (i.e., the one set up by the experimenter, <span class="math inline">\(\alpha\)</span>).</p>
-<p>A perhaps intuitive example of the effect that saliency similarity has over responding refers to the effect that weakly retrieved representations have over behavior. The low similarity between a weakly retrieved representation and its nominal representation should result in a reduced effect of the former over behavior. For example, in a typical Pavlovian inhibition paradigm [A(US)/AX], an inhibitor (e.g., X) that has a strong effect over behavior when actually presented will only have a weak effect over behavior if weakly retrieved by a stimulus that has a strong association with it (e.g., A).</p>
-<p>Yet, the inspiration for proposing such a general rule was fairly specific. It was an attempt to explain why the introduction of a delay between CS and US stimuli in higher-order conditioning experiments could sometimes enhance responding to the stimulus that was never paired with the US (e.g., A after AX/X(US) or X(US)/AX).</p>
+<p>In Honey and Dwyer (2022), the authors propose that the similarity
+between the retrieved and nominal saliencies of stimulus representations
+modulates some quantities in combination rules. Retrieved saliencies are
+exclusively for absent stimuli, and are the result of the existing
+associations between stimuli (see in Eq. 8 in math vignette). In
+contrast, nominal saliencies denote the intensity of stimulus
+representations when stimuli are actually presented on a trial (i.e.,
+the one set up by the experimenter, <span class="math inline">\(\alpha\)</span>).</p>
+<p>A perhaps intuitive example of the effect that saliency similarity
+has over responding refers to the effect that weakly retrieved
+representations have over behavior. The low similarity between a weakly
+retrieved representation and its nominal representation should result in
+a reduced effect of the former over behavior. For example, in a typical
+Pavlovian inhibition paradigm [A(US)/AX], an inhibitor (e.g., X) that
+has a strong effect over behavior when actually presented will only have
+a weak effect over behavior if weakly retrieved by a stimulus that has a
+strong association with it (e.g., A).</p>
+<p>Yet, the inspiration for proposing such a general rule was fairly
+specific. It was an attempt to explain why the introduction of a delay
+between CS and US stimuli in higher-order conditioning experiments could
+sometimes enhance responding to the stimulus that was never paired with
+the US (e.g., A after AX/X(US) or X(US)/AX).</p>
 <div class="section level3">
 <h3 id="reproducing-the-simulation-presented-in-the-paper">Reproducing the simulation presented in the paper<a class="anchor" aria-label="anchor" href="#reproducing-the-simulation-presented-in-the-paper"></a>
 </h3>
-<p>In the paper, the authors plot the similarity between the retrieved saliencies and the nominal saliencies for stimulus X during a sensory preconditioning experiment in which a short delay between X and the US was used (group Reduced) or not (group Same). The effect of introducing a delay was simulated as X having a saliency of .36; otherwise, its saliency was .40. The saliencies of A and the US were fixed to .30 and .50, respectively, for both conditions.</p>
+<p>In the paper, the authors plot the similarity between the retrieved
+saliencies and the nominal saliencies for stimulus X during a sensory
+preconditioning experiment in which a short delay between X and the US
+was used (group Reduced) or not (group Same). The effect of introducing
+a delay was simulated as X having a saliency of .36; otherwise, its
+saliency was .40. The saliencies of A and the US were fixed to .30 and
+.50, respectively, for both conditions.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Same"</span>, <span class="st">"Reduced"</span><span class="op">)</span>,
                  P1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"10A(X_a)"</span>, <span class="st">"10A(X_a)"</span><span class="op">)</span>,
@@ -118,7 +144,11 @@
 <div class="section level4">
 <h4 id="plotting-the-similarity-between-saliencies">Plotting the similarity between saliencies<a class="anchor" aria-label="anchor" href="#plotting-the-similarity-between-saliencies"></a>
 </h4>
-<p>This plot is not currently supported in the simulator, but it can be easily generated by passing the <span class="math inline">\(A \rightarrow X\)</span> association as one of the alphas for the internal function used to calculate the similarity <code>heidi:::.alphaSim</code>.</p>
+<p>This plot is not currently supported in the simulator, but it can be
+easily generated by passing the <span class="math inline">\(A
+\rightarrow X\)</span> association as one of the alphas for the internal
+function used to calculate the similarity
+<code>heidi:::.alphaSim</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="va">model</span><span class="op">$</span><span class="va">ws</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">s1</span> <span class="op">==</span> <span class="st">"A"</span> <span class="op">&amp;</span> <span class="va">s2</span> <span class="op">==</span> <span class="st">"X"</span> <span class="op">&amp;</span> <span class="va">phase</span> <span class="op">==</span> <span class="st">"P1"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="co">#using only the first phase</span>
@@ -128,12 +158,18 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Trial"</span>, y <span class="op">=</span> <span class="st">"Similarity"</span>, linetype <span class="op">=</span> <span class="st">"Group"</span><span class="op">)</span></code></pre></div>
 <p><img src="heidi_similarity_files/figure-html/unnamed-chunk-3-1.png" width="576"></p>
-<p>Note that the simulator does not save the state of the weights before trial 1. That’s why the plot does not start with a similarity of 0, as it is shown in the paper.</p>
+<p>Note that the simulator does not save the state of the weights before
+trial 1. That’s why the plot does not start with a similarity of 0, as
+it is shown in the paper.</p>
 </div>
 <div class="section level4">
 <h4 id="plotting-the-distribution-of-responding">Plotting the distribution of responding<a class="anchor" aria-label="anchor" href="#plotting-the-distribution-of-responding"></a>
 </h4>
-<p>This one is a little bit trickier, because the figure in the manuscript effectively contains many experiments varying the number of XA trials before starting the first-order conditioning phase. To address this, we run multiple simulations with different experimental designs.</p>
+<p>This one is a little bit trickier, because the figure in the
+manuscript effectively contains many experiments varying the number of
+XA trials before starting the first-order conditioning phase. To address
+this, we run multiple simulations with different experimental
+designs.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ntrials</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>
 <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"S"</span>, <span class="va">ntrials</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"R"</span>, <span class="va">ntrials</span><span class="op">)</span><span class="op">)</span>,
@@ -156,7 +192,8 @@
 <p>Run the model.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/quick_heidi.html">quick_heidi</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">params</span><span class="op">)</span></code></pre></div>
-<p>And now we can manually plot the distribution of responding among stimuli <code>model$rs</code>.</p>
+<p>And now we can manually plot the distribution of responding among
+stimuli <code>model$rs</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span><span class="op">$</span><span class="va">rs</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">phase</span> <span class="op">==</span> <span class="st">'P3'</span> <span class="op">&amp;</span> <span class="va">s2</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
@@ -172,7 +209,23 @@
 <div class="section level4">
 <h4 id="some-final-notes">Some final notes<a class="anchor" aria-label="anchor" href="#some-final-notes"></a>
 </h4>
-<p>In their paper, Honey and Dwyer do not completely specify the rules for choosing a reference value for the similarity calculation, whenever more than one nominal stimulus has been experienced. For example, in the above simulation we use two nominal versions of the X stimulus (X_a and X_b), and so, whenever the model has to compute the similarity between retrieved (i.e., <span class="math inline">\(A \rightarrow X\)</span>) and conditioned saliency values, we encounter the problem of having to choose (or not) among at least two conditioned values (X_a or X_b). Although the authors of the paper chose the saliency for the nominal X that was conditioned with the US (i.e., X_b), they do not specify how this choice should be made in other, less intuitive situations. As a way to avoid solving this issue (for now), the current implementation of the similarity rule uses the average of the nominal stimuli as a reference value for the similarity calculation. For this specific simulation case, this implementation actually reduces the effect of similarity over the distribution of responding. The full implementation of this idea can be found in <code>heidi:::.chainVSim</code>.</p>
+<p>In their paper, Honey and Dwyer do not completely specify the rules
+for choosing a reference value for the similarity calculation, whenever
+more than one nominal stimulus has been experienced. For example, in the
+above simulation we use two nominal versions of the X stimulus (X_a and
+X_b), and so, whenever the model has to compute the similarity between
+retrieved (i.e., <span class="math inline">\(A \rightarrow X\)</span>)
+and conditioned saliency values, we encounter the problem of having to
+choose (or not) among at least two conditioned values (X_a or X_b).
+Although the authors of the paper chose the saliency for the nominal X
+that was conditioned with the US (i.e., X_b), they do not specify how
+this choice should be made in other, less intuitive situations. As a way
+to avoid solving this issue (for now), the current implementation of the
+similarity rule uses the average of the nominal stimuli as a reference
+value for the similarity calculation. For this specific simulation case,
+this implementation actually reduces the effect of similarity over the
+distribution of responding. The full implementation of this idea can be
+found in <code>heidi:::.chainVSim</code>.</p>
 </div>
 </div>
 </div>
@@ -189,7 +242,8 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
     </footer>

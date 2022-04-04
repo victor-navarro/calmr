@@ -60,7 +60,6 @@ model$ws %>% filter(s1 == "A" & s2 == "X" & phase == "P1") %>% #using only the f
   ggplot(aes(x = trial, y = similarity, linetype = group)) + 
   geom_line() + theme_bw() + 
   labs(x = "Trial", y = "Similarity", linetype = "Group")
-
 ```
 
 
@@ -104,8 +103,6 @@ model$rs %>%
   theme_bw() + 
   labs(x = "Trial", y = "R-value", colour = "Stimulus", linetype = "Group") + 
   facet_wrap(~s2)
-
-
 ```
 
 

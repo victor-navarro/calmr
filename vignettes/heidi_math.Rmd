@@ -68,7 +68,7 @@ $$
 o_{j,M} = \sum_{m \neq j}^{M}v_{m,j} + \left(\frac{\sum_{m \neq j}^{M}v_{m,j} \sum_{m \neq j}^{M}v_{j,m}}{c}\right)
 $$
 
-where each of the sums above run over all stimuli $M$ presented in the trial, that are also different from stimulus $j$.^[An alternative formulation of this equation could be $\sum_{m \neq j}^{M} v_{m,j} + (v_{m,j} v_{j,m})$ but, although the this alternative formulation is positively related to Eq. 5, we have not compared their behavior exhaustively.] The left hand term describes how the forward associations from stimuli $M$ to $j$ affect the representation of $j$, whereas the right hand term describes how the backward associations that $j$ has with  stimuli $M$ affect its own representation (although these are modulated by the forward associations themselves).
+where each of the sums above run over all stimuli $M$ presented in the trial, that are also different from stimulus $j$.^[An alternative formulation of this equation could be $\sum_{m \neq j}^{M} v_{m,j} + (v_{m,j} v_{j,m})$ but, although this alternative formulation is positively related to Eq. 5, we have not compared their behavior exhaustively.] The left hand term describes how the forward associations from stimuli $M$ to $j$ affect the representation of $j$, whereas the right hand term describes how the backward associations that $j$ has with  stimuli $M$ affect its own representation (although these are modulated by the forward associations themselves).
 
 ### 2.2 - Chained associative strength
 
@@ -76,40 +76,56 @@ The quantity $h_{j,M}$ captures the indirect associative strength that the stimu
 
 
 $$
-\tag{Eq. 6}
+\tag{Eq. 6a}
 h_{j,M} = \sum_{m \neq j}^{M} \sum_{n}^{N}\frac{v_{m,n}o_{j,n}}{c}
 $$
 
 where N are the stimuli not presented on the trial (i.e., K-M). Note the re-use of $o$, the quantity defined in Eq. 5. This equation allows absent stimuli $N$ to influence the representation of stimulus $j$, as long as they have an association with present stimuli $M$.
+
+In Honey and Dwyer (2022), the authors specify a similarity-based mechanism that modulates the effect of associative chains according to the similarity of the salience of nominal and retrieved stimuli. As such, Eq. 6a is expanded as:
+
+$$
+\tag{Eq. 6b}
+h_{j,M} = \sum_{m \neq j}^{M} \sum_{n}^{N}S(\alpha_{n}, \alpha'_n)\frac{v_{m,n}o_{j,n}}{c}
+$$
+
+where $S$ is a similarity function that takes the nominal salience of stimulus n, $\alpha_n$ (as perceived when $n$ is actually presented on a trial) and its retrieved salience, $\alpha'_n$ (as perceived when $n$ is retrieved via other stimuli M, see ahead). This function is defined as:
+
+$$
+\tag{Eq. 7}
+S(\alpha_n, \alpha'_n) = \frac{\alpha_n}{\alpha_n + |\alpha_n-\alpha'_n|} \times \frac{\alpha'_n}{\alpha'_n+ |\alpha_n-\alpha'_n|}
+$$
+
+Notably, whenever there is more than one nominal salience for a given stimulus, then $\alpha_n$ is the arithmetic mean among all nominal values (see "heidi_similarity" vignette).
 
 ## 3 - Distributing strength into stimulus-specific response units
 
 HeiDI then distributes the pooled stimulus-specific strength among all $K$ stimuli, according to their relative salience. The activation of response unit $j$, $R_j$ is expressed as
 
 $$
-\tag{Eq. 7}
+\tag{Eq. 8}
 R_j = \frac{\theta(j)}{\sum_{k}^{K}\theta(k)}a_{j,M}
 $$
 
-As $K$ can include both present and absent stimuli, the $\theta$ function returns the salience of stimulus $k$ depending on whether it is absent (i.e., $k \in N$) or not (i.e., $k \in M$), as
+As $K$ can include both present and absent stimuli, the $\theta$ function above depends on whether the stimulus $k$ is absent (i.e., $k \in N$) or not (i.e., $k \in M$), as:
 
 $$
-\tag{Eq. 8}
+\tag{Eq. 9}
 \theta(k) = 
 \begin{cases}
-    \left| \sum_{m}^{M}\left( v_{m,k}+\sum_{n \neq k}^{N}\frac{v_{m,n}v_{n,k}}{c}\right) \right|,& \text{if } k \in N\\
+    \left |\sum_{m}^{M}\left( v_{m,k}+\sum_{n \neq k}^{N}\frac{v_{m,n}v_{n,k}}{c}\right) \right|,& \text{if } k \in N\\
     \alpha_k, & \text{otherwise}
 \end{cases}
 $$
 
-Note that the quantity for absent stimuli is absolute, in order to prevent negative $\theta$ values due to inhibitory associations^[An alternative, and perhaps more naturalistic parametrization of this rule would be to use $min[0,\theta(n)]$, where $min$ is the minimum function and $n$ is an absent stimulus. ReLUs are extensively used in neural networks] ^[Another alternative that avoids both the use of absolute values or a rectifying mechanism would be to use quantities of $e^{\theta(k)}$ instead of $\theta(k)$ as they naturally deal with negative quantities.]. Also note a summation term is used on the left-hand side of the expression for an absent stimulus. It implies that all the present stimuli $M$ contribute to the salience of stimulus $k$. Finally, note on the right side of the same expression that the present stimuli contribute not only via the direct association each of them have with $k$, $v_{m,k}$, but also through associative chains with other absent stimuli (c.f., Eq. 6).
+Note that the quantity for absent stimuli is absolute, in order to prevent negative $\theta$ values due to inhibitory associations^[An alternative, and perhaps more naturalistic parametrization of this rule would be to use $min[0,\theta(n)]$, where $min$ is the minimum function and $n$ is an absent stimulus; ReLUs are extensively used in neural networks. Another alternative that avoids both the use of absolute values or a rectifying mechanism would be to use quantities of $e^{\theta(k)}$ instead of $\theta(k)$.]. Also note a summation term is used on the left-hand side of the expression for an absent stimulus. It implies that all the present stimuli $M$ contribute to the salience of stimulus $k$. Finally, note on the right side of the same expression that the present stimuli contribute not only via the direct association each of them have with $k$, $v_{m,k}$, but also through associative chains with other absent stimuli (c.f., Eq. 6a).
 
 ## 4 - Generating responses
 
 Finally, HeiDI responds. The response-generating mechanisms in HeiDI are currently underspecified. In its current version, HeiDI's responses are the product of the activation of stimulus-specific response units and the connection that those units have with specific motor units. As such, the activation of motor unit $q$, $r_q$, is given by
 
 $$
-\tag{Eq. 9}
+\tag{Eq. 10}
 r_q = R_jw_{j,q}
 $$
 

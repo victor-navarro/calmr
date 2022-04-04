@@ -37,20 +37,13 @@ graph_weights(
   opts = get_graph_opts()
 )
 
-get_graph_opts(
-  arrow.gap = 0.16,
-  arrow.curvature = 0.2,
-  arrow.pt = 20,
-  edge.size = 3,
-  node.size = 40,
-  node.stroke = 3,
-  node.text.size = 15
-)
+get_graph_opts(graph_size = "small")
 
 make_graphs(
   mod,
   limits = max(abs(range(mod$ws$value))) * c(-1, 1),
-  trial = max(mod$ws$trial)
+  trial = max(mod$ws$trial),
+  opts = get_graph_opts()
 )
 
 patch_graphs(graphs, selection = names(graphs))
@@ -78,19 +71,7 @@ patch_plots(plots, selection, options = get_plot_opts())
 
 \item{opts}{A list of options for graphing weights. See ?get_graph_opts.}
 
-\item{arrow.gap}{Distance between nodes and arrows}
-
-\item{arrow.curvature}{Curvature of the arrows}
-
-\item{arrow.pt}{Size of the arrows (see grid::arrow)}
-
-\item{edge.size}{Thickness of the arrows}
-
-\item{node.size}{Size of the nodes}
-
-\item{node.stroke}{Thickness of the node lines}
-
-\item{node.text.size}{Thickness of the text within the node}
+\item{graph_size}{A string specifying the desired graph size, from c("large", "small"). Default is "large"}
 
 \item{mod}{Parsed model results, as returned by parse_heidi_results.}
 

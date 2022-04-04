@@ -81,20 +81,13 @@
   opts <span class="op">=</span> <span class="fu">get_graph_opts</span><span class="op">(</span><span class="op">)</span>
 <span class="op">)</span>
 
-<span class="fu">get_graph_opts</span><span class="op">(</span>
-  arrow.gap <span class="op">=</span> <span class="fl">0.16</span>,
-  arrow.curvature <span class="op">=</span> <span class="fl">0.2</span>,
-  arrow.pt <span class="op">=</span> <span class="fl">20</span>,
-  edge.size <span class="op">=</span> <span class="fl">3</span>,
-  node.size <span class="op">=</span> <span class="fl">40</span>,
-  node.stroke <span class="op">=</span> <span class="fl">3</span>,
-  node.text.size <span class="op">=</span> <span class="fl">15</span>
-<span class="op">)</span>
+<span class="fu">get_graph_opts</span><span class="op">(</span>graph_size <span class="op">=</span> <span class="st">"small"</span><span class="op">)</span>
 
 <span class="fu">make_graphs</span><span class="op">(</span>
   <span class="va">mod</span>,
   limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">ws</span><span class="op">$</span><span class="va">value</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,
-  trial <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">ws</span><span class="op">$</span><span class="va">trial</span><span class="op">)</span>
+  trial <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">ws</span><span class="op">$</span><span class="va">trial</span><span class="op">)</span>,
+  opts <span class="op">=</span> <span class="fu">get_graph_opts</span><span class="op">(</span><span class="op">)</span>
 <span class="op">)</span>
 
 <span class="fu">patch_graphs</span><span class="op">(</span><span class="va">graphs</span>, selection <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">graphs</span><span class="op">)</span><span class="op">)</span>
@@ -124,20 +117,8 @@
 <dd><p>An integer specifying a trial</p></dd>
 <dt>opts</dt>
 <dd><p>A list of options for graphing weights. See ?get_graph_opts.</p></dd>
-<dt>arrow.gap</dt>
-<dd><p>Distance between nodes and arrows</p></dd>
-<dt>arrow.curvature</dt>
-<dd><p>Curvature of the arrows</p></dd>
-<dt>arrow.pt</dt>
-<dd><p>Size of the arrows (see grid::arrow)</p></dd>
-<dt>edge.size</dt>
-<dd><p>Thickness of the arrows</p></dd>
-<dt>node.size</dt>
-<dd><p>Size of the nodes</p></dd>
-<dt>node.stroke</dt>
-<dd><p>Thickness of the node lines</p></dd>
-<dt>node.text.size</dt>
-<dd><p>Thickness of the text within the node</p></dd>
+<dt>graph_size</dt>
+<dd><p>A string specifying the desired graph size, from c("large", "small"). Default is "large"</p></dd>
 <dt>mod</dt>
 <dd><p>Parsed model results, as returned by parse_heidi_results.</p></dd>
 <dt>trial</dt>
@@ -172,7 +153,8 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
     </footer></div>

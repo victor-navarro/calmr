@@ -82,7 +82,8 @@
 <div class="row">
   <main id="main"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>heidi_math</h1>
-                        <h4 data-toc-skip class="author">Victor Navarro</h4>
+                        <h4 data-toc-skip class="author">Victor
+Navarro</h4>
             
       
       <small class="dont-index">Source: <a href="https://github.com/victor-navarro/heidi/blob/HEAD/vignettes/heidi_math.Rmd" class="external-link"><code>vignettes/heidi_math.Rmd</code></a></small>
@@ -94,98 +95,208 @@
 <div class="section level2">
 <h2 id="the-mathematics-behind-heidi">The mathematics behind HeiDI<a class="anchor" aria-label="anchor" href="#the-mathematics-behind-heidi"></a>
 </h2>
-<p>The HeiDI model has four major components: 1) the acquisition of reciprocal associations between stimuli, 2) the pooling of those associations to activate stimulus representations, 3) the distribution of those activations into stimulus-specific response units, and 4) the generation of responses.</p>
+<p>The HeiDI model has four major components: 1) the acquisition of
+reciprocal associations between stimuli, 2) the pooling of those
+associations to activate stimulus representations, 3) the distribution
+of those activations into stimulus-specific response units, and 4) the
+generation of responses.</p>
 <div class="section level3">
 <h3 id="acquiring-reciprocal-associations">1 - Acquiring reciprocal associations<a class="anchor" aria-label="anchor" href="#acquiring-reciprocal-associations"></a>
 </h3>
-<p>Whenever a trial is given, HeiDI learns associations among stimuli. The association between two stimuli, <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> is denoted via <span class="math inline">\(v_{i,j}\)</span>. The association <span class="math inline">\(v_{i,j}\)</span> represents a directional expectation: the expectation of <span class="math inline">\(j\)</span> after being presented with <span class="math inline">\(i\)</span>. Furthermore, its value represents the nature of the effect that <span class="math inline">\(i\)</span> has over the representation of <span class="math inline">\(j\)</span>. If positive, the presentation of <span class="math inline">\(i\)</span> “excites” the representation of <span class="math inline">\(j\)</span>. If negative, the presentation of <span class="math inline">\(i\)</span> “inhibits” the representation of <span class="math inline">\(j\)</span>.</p>
-<p>HeiDI not only learns “forward” associations between stimuli, but also their reciprocal, or “backward” associations. Thus, if organisms are presented with <span class="math inline">\(i \rightarrow j\)</span>, organisms not only learn about <span class="math inline">\(v_{i,j}\)</span>, but also about <span class="math inline">\(v_{j, i}\)</span>, or the expectation of receiving <span class="math inline">\(i\)</span> after being presented with <span class="math inline">\(j\)</span>. Note that, for the sake of brevity, the learning equations below are only specified for forward associations.</p>
+<p>Whenever a trial is given, HeiDI learns associations among stimuli.
+The association between two stimuli, <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> is denoted via <span class="math inline">\(v_{i,j}\)</span>. The association <span class="math inline">\(v_{i,j}\)</span> represents a directional
+expectation: the expectation of <span class="math inline">\(j\)</span>
+after being presented with <span class="math inline">\(i\)</span>.
+Furthermore, its value represents the nature of the effect that <span class="math inline">\(i\)</span> has over the representation of <span class="math inline">\(j\)</span>. If positive, the presentation of <span class="math inline">\(i\)</span> “excites” the representation of <span class="math inline">\(j\)</span>. If negative, the presentation of <span class="math inline">\(i\)</span> “inhibits” the representation of <span class="math inline">\(j\)</span>.</p>
+<p>HeiDI not only learns “forward” associations between stimuli, but
+also their reciprocal, or “backward” associations. Thus, if organisms
+are presented with <span class="math inline">\(i \rightarrow j\)</span>,
+organisms not only learn about <span class="math inline">\(v_{i,j}\)</span>, but also about <span class="math inline">\(v_{j, i}\)</span>, or the expectation of receiving
+<span class="math inline">\(i\)</span> after being presented with <span class="math inline">\(j\)</span>. Note that, for the sake of brevity,
+the learning equations below are only specified for forward
+associations.</p>
 <div class="section level4">
 <h4 id="the-stimulus-expectation-rule">1.1 - The stimulus expectation rule<a class="anchor" aria-label="anchor" href="#the-stimulus-expectation-rule"></a>
 </h4>
-<p>HeiDI generates expectations about stimuli. The expectation of stimulus <span class="math inline">\(j\)</span> (<span class="math inline">\(e_j\)</span>) is expressed as</p>
+<p>HeiDI generates expectations about stimuli. The expectation of
+stimulus <span class="math inline">\(j\)</span> (<span class="math inline">\(e_j\)</span>) is expressed as</p>
 <p><span class="math display">\[
 \tag{Eq. 1}
 e_j  = \sum_{k}^{K}x_kv_{k,j}
 \]</span></p>
-<p>where <span class="math inline">\(K\)</span> is the set containing all stimuli in the experiment, and <span class="math inline">\(x_k\)</span> is a quantity denoting the presence or absence of stimulus <span class="math inline">\(k\)</span> (1 or 0, respectively)<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt; We go the extra length of specifying &lt;span class=&quot;math inline&quot;&gt;\(x\)&lt;/span&gt; quantities because the stimulus expectation and learning rules can be vectorized, as &lt;span class=&quot;math inline&quot;&gt;\(\textbf{e} = \textbf{x}V\)&lt;/span&gt; and &lt;span class=&quot;math inline&quot;&gt;\(\Delta V = (\textbf{x}\odot\textbf{a})' (c(\textbf{x}\odot\textbf{a})-\textbf{e})\)&lt;/span&gt;, respectively. Here, the matrix &lt;span class=&quot;math inline&quot;&gt;\(V\)&lt;/span&gt; contains all associations between each pair of stimuli, the row vectors &lt;span class=&quot;math inline&quot;&gt;\(\textbf x\)&lt;/span&gt; and &lt;span class=&quot;math inline&quot;&gt;\(\textbf a\)&lt;/span&gt; denote the presence and salience of all stimuli &lt;span class=&quot;math inline&quot;&gt;\(K\)&lt;/span&gt;, the &lt;span class=&quot;math inline&quot;&gt;\(\odot\)&lt;/span&gt; symbol specifies element-wise multiplication, and the &lt;span class=&quot;math inline&quot;&gt;\('\)&lt;/span&gt; symbol denotes transposition. Note further that the &lt;span class=&quot;math inline&quot;&gt;\(\Delta V\)&lt;/span&gt; matrix must be made hollow before summing it to &lt;span class=&quot;math inline&quot;&gt;\(V\)&lt;/span&gt;.&lt;/p&gt;"><sup>1</sup></a>.</p>
+<p>where <span class="math inline">\(K\)</span> is the set containing
+all stimuli in the experiment, and <span class="math inline">\(x_k\)</span> is a quantity denoting the presence
+or absence of stimulus <span class="math inline">\(k\)</span> (1 or 0,
+respectively)<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
 </div>
 <div class="section level4">
 <h4 id="learning-rule">1.2 - Learning rule<a class="anchor" aria-label="anchor" href="#learning-rule"></a>
 </h4>
-<p>HeiDI learns the appropriate expectations via error-correction mechanisms. After trial <span class="math inline">\(t\)</span>, the association between stimuli <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> is expressed as</p>
+<p>HeiDI learns the appropriate expectations via error-correction
+mechanisms. After trial <span class="math inline">\(t\)</span>, the
+association between stimuli <span class="math inline">\(i\)</span> and
+<span class="math inline">\(j\)</span> is expressed as</p>
 <p><span class="math display">\[
 \tag{Eq. 2}
 v_{i,j, t} = v_{i,j, t-1} + \Delta v_{i,j, t}
 \]</span></p>
-<p>where <span class="math inline">\(v_{j,i, t-1}\)</span> is the forward association between <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> on trial <span class="math inline">\(t-1\)</span>, and <span class="math inline">\(\Delta v_{i,j, t}\)</span> is the change in that association as a result of trial <span class="math inline">\(t\)</span>. That delta term uses a pooled error term and is expressed as</p>
+<p>where <span class="math inline">\(v_{j,i, t-1}\)</span> is the
+forward association between <span class="math inline">\(i\)</span> and
+<span class="math inline">\(j\)</span> on trial <span class="math inline">\(t-1\)</span>, and <span class="math inline">\(\Delta v_{i,j, t}\)</span> is the change in that
+association as a result of trial <span class="math inline">\(t\)</span>.
+That delta term uses a pooled error term and is expressed as</p>
 <p><span class="math display">\[
 \tag{Eq. 3}
 \Delta v_{i,j} = x_i\alpha_i(x_jc\alpha_j - e_j)
-\]</span> where <span class="math inline">\(\alpha_i\)</span> and <span class="math inline">\(\alpha_j\)</span> are parameters representing the salience of stimuli <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>, respectively (<span class="math inline">\(0 \le \alpha \le 1\)</span>), <span class="math inline">\(c\)</span> is a scaling constant (<span class="math inline">\(c = 1\)</span>). Note that the term denoting the trial, <span class="math inline">\(t\)</span> has been omitted here for simplicity.</p>
+\]</span> where <span class="math inline">\(\alpha_i\)</span> and <span class="math inline">\(\alpha_j\)</span> are parameters representing the
+salience of stimuli <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>, respectively (<span class="math inline">\(0 \le \alpha \le 1\)</span>), <span class="math inline">\(c\)</span> is a scaling constant (<span class="math inline">\(c = 1\)</span>). Note that the term denoting the
+trial, <span class="math inline">\(t\)</span> has been omitted here for
+simplicity.</p>
 </div>
 </div>
 <div class="section level3">
 <h3 id="pooling-the-strength-of-associations">2 - Pooling the strength of associations<a class="anchor" aria-label="anchor" href="#pooling-the-strength-of-associations"></a>
 </h3>
-<p>HeiDI pools its stimulus associations to activate stimulus-specific representations. The activation of the representation for stimulus <span class="math inline">\(j\)</span>, <span class="math inline">\(a_j\)</span>, is defined as:</p>
+<p>HeiDI pools its stimulus associations to activate stimulus-specific
+representations. The activation of the representation for stimulus <span class="math inline">\(j\)</span>, <span class="math inline">\(a_j\)</span>, is defined as:</p>
 <p><span class="math display">\[
 \tag{Eq. 4}
 a_{j,M} = o_{j,M} + h_{j,M}
 \]</span></p>
-<p>where <span class="math inline">\(o_{j,M}\)</span> denotes the c<strong>o</strong>mbined associative strength towards stimulus <span class="math inline">\(j\)</span> in presence of stimuli <span class="math inline">\(M\)</span>, and <span class="math inline">\(h_{j,M}\)</span> denotes the c<strong>h</strong>ained associative strength towards stimulus <span class="math inline">\(j\)</span> in presence of stimuli <span class="math inline">\(M\)</span>.</p>
+<p>where <span class="math inline">\(o_{j,M}\)</span> denotes the
+c<strong>o</strong>mbined associative strength towards stimulus <span class="math inline">\(j\)</span> in presence of stimuli <span class="math inline">\(M\)</span>, and <span class="math inline">\(h_{j,M}\)</span> denotes the
+c<strong>h</strong>ained associative strength towards stimulus <span class="math inline">\(j\)</span> in presence of stimuli <span class="math inline">\(M\)</span>.</p>
 <div class="section level4">
 <h4 id="combined-associative-strength">2.1 - Combined associative strength<a class="anchor" aria-label="anchor" href="#combined-associative-strength"></a>
 </h4>
-<p>The quantity <span class="math inline">\(o_{j,M}\)</span> is the result of combining the associative strength of forwards and backwards associations to and from stimulus <span class="math inline">\(j\)</span> as</p>
+<p>The quantity <span class="math inline">\(o_{j,M}\)</span> is the
+result of combining the associative strength of forwards and backwards
+associations to and from stimulus <span class="math inline">\(j\)</span>
+as</p>
 <p><span class="math display">\[
 \tag{Eq. 5}
-o_{j,M} = \sum_{m \neq j}^{M}v_{m,j} + \left(\frac{\sum_{m \neq j}^{M}v_{m,j} \sum_{m \neq j}^{M}v_{j,m}}{c}\right)
+o_{j,M} = \sum_{m \neq j}^{M}v_{m,j} + \left(\frac{\sum_{m \neq
+j}^{M}v_{m,j} \sum_{m \neq j}^{M}v_{j,m}}{c}\right)
 \]</span></p>
-<p>where each of the sums above run over all stimuli <span class="math inline">\(M\)</span> presented in the trial, that are also different from stimulus <span class="math inline">\(j\)</span>.<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;An alternative formulation of this equation could be &lt;span class="math inline"&gt;\(\sum_{m \neq j}^{M} v_{m,j} + (v_{m,j} v_{j,m})\)&lt;/span&gt; but, although the this alternative formulation is positively related to Eq. 5, we have not compared their behavior exhaustively.&lt;/p&gt;'><sup>2</sup></a> The left hand term describes how the forward associations from stimuli <span class="math inline">\(M\)</span> to <span class="math inline">\(j\)</span> affect the representation of <span class="math inline">\(j\)</span>, whereas the right hand term describes how the backward associations that <span class="math inline">\(j\)</span> has with stimuli <span class="math inline">\(M\)</span> affect its own representation (although these are modulated by the forward associations themselves).</p>
+<p>where each of the sums above run over all stimuli <span class="math inline">\(M\)</span> presented in the trial, that are also
+different from stimulus <span class="math inline">\(j\)</span>.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> The left
+hand term describes how the forward associations from stimuli <span class="math inline">\(M\)</span> to <span class="math inline">\(j\)</span> affect the representation of <span class="math inline">\(j\)</span>, whereas the right hand term describes
+how the backward associations that <span class="math inline">\(j\)</span> has with stimuli <span class="math inline">\(M\)</span> affect its own representation (although
+these are modulated by the forward associations themselves).</p>
 </div>
 <div class="section level4">
 <h4 id="chained-associative-strength">2.2 - Chained associative strength<a class="anchor" aria-label="anchor" href="#chained-associative-strength"></a>
 </h4>
-<p>The quantity <span class="math inline">\(h_{j,M}\)</span> captures the indirect associative strength that the stimuli <span class="math inline">\(M\)</span> have with <span class="math inline">\(j\)</span>, via absent stimuli. As such, <span class="math inline">\(h_{j,M}\)</span> is defined as</p>
+<p>The quantity <span class="math inline">\(h_{j,M}\)</span> captures
+the indirect associative strength that the stimuli <span class="math inline">\(M\)</span> have with <span class="math inline">\(j\)</span>, via absent stimuli. As such, <span class="math inline">\(h_{j,M}\)</span> is defined as</p>
 <p><span class="math display">\[
-\tag{Eq. 6}
+\tag{Eq. 6a}
 h_{j,M} = \sum_{m \neq j}^{M} \sum_{n}^{N}\frac{v_{m,n}o_{j,n}}{c}
 \]</span></p>
-<p>where N are the stimuli not presented on the trial (i.e., K-M). Note the re-use of <span class="math inline">\(o\)</span>, the quantity defined in Eq. 5. This equation allows absent stimuli <span class="math inline">\(N\)</span> to influence the representation of stimulus <span class="math inline">\(j\)</span>, as long as they have an association with present stimuli <span class="math inline">\(M\)</span>.</p>
+<p>where N are the stimuli not presented on the trial (i.e., K-M). Note
+the re-use of <span class="math inline">\(o\)</span>, the quantity
+defined in Eq. 5. This equation allows absent stimuli <span class="math inline">\(N\)</span> to influence the representation of
+stimulus <span class="math inline">\(j\)</span>, as long as they have an
+association with present stimuli <span class="math inline">\(M\)</span>.</p>
+<p>In Honey and Dwyer (2022), the authors specify a similarity-based
+mechanism that modulates the effect of associative chains according to
+the similarity of the salience of nominal and retrieved stimuli. As
+such, Eq. 6a is expanded as:</p>
+<p><span class="math display">\[
+\tag{Eq. 6b}
+h_{j,M} = \sum_{m \neq j}^{M} \sum_{n}^{N}S(\alpha_{n},
+\alpha'_n)\frac{v_{m,n}o_{j,n}}{c}
+\]</span></p>
+<p>where <span class="math inline">\(S\)</span> is a similarity function
+that takes the nominal salience of stimulus n, <span class="math inline">\(\alpha_n\)</span> (as perceived when <span class="math inline">\(n\)</span> is actually presented on a trial) and
+its retrieved salience, <span class="math inline">\(\alpha'_n\)</span> (as perceived when <span class="math inline">\(n\)</span> is retrieved via other stimuli M, see
+ahead). This function is defined as:</p>
+<p><span class="math display">\[
+\tag{Eq. 7}
+S(\alpha_n, \alpha'_n) = \frac{\alpha_n}{\alpha_n +
+|\alpha_n-\alpha'_n|} \times \frac{\alpha'_n}{\alpha'_n+
+|\alpha_n-\alpha'_n|}
+\]</span></p>
+<p>Notably, whenever there is more than one nominal salience for a given
+stimulus, then <span class="math inline">\(\alpha_n\)</span> is the
+arithmetic mean among all nominal values (see “heidi_similarity”
+vignette).</p>
 </div>
 </div>
 <div class="section level3">
 <h3 id="distributing-strength-into-stimulus-specific-response-units">3 - Distributing strength into stimulus-specific response units<a class="anchor" aria-label="anchor" href="#distributing-strength-into-stimulus-specific-response-units"></a>
 </h3>
-<p>HeiDI then distributes the pooled stimulus-specific strength among all <span class="math inline">\(K\)</span> stimuli, according to their relative salience. The activation of response unit <span class="math inline">\(j\)</span>, <span class="math inline">\(R_j\)</span> is expressed as</p>
-<p><span class="math display">\[
-\tag{Eq. 7}
-R_j = \frac{\theta(j)}{\sum_{k}^{K}\theta(k)}a_{j,M}
-\]</span></p>
-<p>As <span class="math inline">\(K\)</span> can include both present and absent stimuli, the <span class="math inline">\(\theta\)</span> function returns the salience of stimulus <span class="math inline">\(k\)</span> depending on whether it is absent (i.e., <span class="math inline">\(k \in N\)</span>) or not (i.e., <span class="math inline">\(k \in M\)</span>), as</p>
+<p>HeiDI then distributes the pooled stimulus-specific strength among
+all <span class="math inline">\(K\)</span> stimuli, according to their
+relative salience. The activation of response unit <span class="math inline">\(j\)</span>, <span class="math inline">\(R_j\)</span> is expressed as</p>
 <p><span class="math display">\[
 \tag{Eq. 8}
-\theta(k) = 
+R_j = \frac{\theta(j)}{\sum_{k}^{K}\theta(k)}a_{j,M}
+\]</span></p>
+<p>As <span class="math inline">\(K\)</span> can include both present
+and absent stimuli, the <span class="math inline">\(\theta\)</span>
+function above depends on whether the stimulus <span class="math inline">\(k\)</span> is absent (i.e., <span class="math inline">\(k \in N\)</span>) or not (i.e., <span class="math inline">\(k \in M\)</span>), as:</p>
+<p><span class="math display">\[
+\tag{Eq. 9}
+\theta(k) =
 \begin{cases}
-    \left| \sum_{m}^{M}\left( v_{m,k}+\sum_{n \neq k}^{N}\frac{v_{m,n}v_{n,k}}{c}\right) \right|,&amp; \text{if } k \in N\\
+    \left |\sum_{m}^{M}\left( v_{m,k}+\sum_{n \neq
+k}^{N}\frac{v_{m,n}v_{n,k}}{c}\right) \right|,&amp; \text{if } k \in N\\
     \alpha_k, &amp; \text{otherwise}
 \end{cases}
 \]</span></p>
-<p>Note that the quantity for absent stimuli is absolute, in order to prevent negative <span class="math inline">\(\theta\)</span> values due to inhibitory associations<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;An alternative, and perhaps more naturalistic parametrization of this rule would be to use &lt;span class="math inline"&gt;\(min[0,\theta(n)]\)&lt;/span&gt;, where &lt;span class="math inline"&gt;\(min\)&lt;/span&gt; is the minimum function and &lt;span class="math inline"&gt;\(n\)&lt;/span&gt; is an absent stimulus. ReLUs are extensively used in neural networks&lt;/p&gt;'><sup>3</sup></a> <a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;Another alternative that avoids both the use of absolute values or a rectifying mechanism would be to use quantities of &lt;span class="math inline"&gt;\(e^{\theta(k)}\)&lt;/span&gt; instead of &lt;span class="math inline"&gt;\(\theta(k)\)&lt;/span&gt; as they naturally deal with negative quantities.&lt;/p&gt;'><sup>4</sup></a>. Also note a summation term is used on the left-hand side of the expression for an absent stimulus. It implies that all the present stimuli <span class="math inline">\(M\)</span> contribute to the salience of stimulus <span class="math inline">\(k\)</span>. Finally, note on the right side of the same expression that the present stimuli contribute not only via the direct association each of them have with <span class="math inline">\(k\)</span>, <span class="math inline">\(v_{m,k}\)</span>, but also through associative chains with other absent stimuli (c.f., Eq. 6).</p>
+<p>Note that the quantity for absent stimuli is absolute, in order to
+prevent negative <span class="math inline">\(\theta\)</span> values due
+to inhibitory associations<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>. Also note a summation term is used on the
+left-hand side of the expression for an absent stimulus. It implies that
+all the present stimuli <span class="math inline">\(M\)</span>
+contribute to the salience of stimulus <span class="math inline">\(k\)</span>. Finally, note on the right side of the
+same expression that the present stimuli contribute not only via the
+direct association each of them have with <span class="math inline">\(k\)</span>, <span class="math inline">\(v_{m,k}\)</span>, but also through associative
+chains with other absent stimuli (c.f., Eq. 6a).</p>
 </div>
 <div class="section level3">
 <h3 id="generating-responses">4 - Generating responses<a class="anchor" aria-label="anchor" href="#generating-responses"></a>
 </h3>
-<p>Finally, HeiDI responds. The response-generating mechanisms in HeiDI are currently underspecified. In its current version, HeiDI’s responses are the product of the activation of stimulus-specific response units and the connection that those units have with specific motor units. As such, the activation of motor unit <span class="math inline">\(q\)</span>, <span class="math inline">\(r_q\)</span>, is given by</p>
+<p>Finally, HeiDI responds. The response-generating mechanisms in HeiDI
+are currently underspecified. In its current version, HeiDI’s responses
+are the product of the activation of stimulus-specific response units
+and the connection that those units have with specific motor units. As
+such, the activation of motor unit <span class="math inline">\(q\)</span>, <span class="math inline">\(r_q\)</span>, is given by</p>
 <p><span class="math display">\[
-\tag{Eq. 9}
+\tag{Eq. 10}
 r_q = R_jw_{j,q}
 \]</span></p>
-<p>where <span class="math inline">\(w_{j,q}\)</span> is a weight representing the association between stimulus-specific unit <span class="math inline">\(j\)</span> and motor unit <span class="math inline">\(q\)</span>.</p>
+<p>where <span class="math inline">\(w_{j,q}\)</span> is a weight
+representing the association between stimulus-specific unit <span class="math inline">\(j\)</span> and motor unit <span class="math inline">\(q\)</span>.</p>
 </div>
 </div>
-
+<div class="footnotes footnotes-end-of-document">
+<hr>
+<ol>
+<li id="fn1"><p> We go the extra length of specifying <span class="math inline">\(x\)</span> quantities because the stimulus
+expectation and learning rules can be vectorized, as <span class="math inline">\(\textbf{e} = \textbf{x}V\)</span> and <span class="math inline">\(\Delta V = (\textbf{x}\odot\textbf{a})'
+(c(\textbf{x}\odot\textbf{a})-\textbf{e})\)</span>, respectively. Here,
+the matrix <span class="math inline">\(V\)</span> contains all
+associations between each pair of stimuli, the row vectors <span class="math inline">\(\textbf x\)</span> and <span class="math inline">\(\textbf a\)</span> denote the presence and
+salience of all stimuli <span class="math inline">\(K\)</span>, the
+<span class="math inline">\(\odot\)</span> symbol specifies element-wise
+multiplication, and the <span class="math inline">\('\)</span>
+symbol denotes transposition. Note further that the <span class="math inline">\(\Delta V\)</span> matrix must be made hollow
+before summing it to <span class="math inline">\(V\)</span>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>An alternative formulation of this equation could be
+<span class="math inline">\(\sum_{m \neq j}^{M} v_{m,j} + (v_{m,j}
+v_{j,m})\)</span> but, although this alternative formulation is
+positively related to Eq. 5, we have not compared their behavior
+exhaustively.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>An alternative, and perhaps more naturalistic
+parametrization of this rule would be to use <span class="math inline">\(min[0,\theta(n)]\)</span>, where <span class="math inline">\(min\)</span> is the minimum function and <span class="math inline">\(n\)</span> is an absent stimulus; ReLUs are
+extensively used in neural networks. Another alternative that avoids
+both the use of absolute values or a rectifying mechanism would be to
+use quantities of <span class="math inline">\(e^{\theta(k)}\)</span>
+instead of <span class="math inline">\(\theta(k)\)</span>.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
 </div>
@@ -199,7 +310,8 @@ r_q = R_jw_{j,q}
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
     </footer>

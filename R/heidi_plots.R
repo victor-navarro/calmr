@@ -19,13 +19,7 @@ NULL
 #' @param limits A vector of length 2 specifying the range of weights. Defaults to the negative and positive maximum of absolute weights.
 #' @param t An integer specifying a trial
 #' @param opts A list of options for graphing weights. See ?get_graph_opts.
-#' @param arrow.gap Distance between nodes and arrows
-#' @param arrow.curvature Curvature of the arrows
-#' @param arrow.pt Size of the arrows (see grid::arrow)
-#' @param edge.size Thickness of the arrows
-#' @param node.size Size of the nodes
-#' @param node.stroke Thickness of the node lines
-#' @param node.text.size Thickness of the text within the node
+#' @param graph_size A string specifying the desired graph size, from c("large", "small"). Default is "large"
 #' @param mod Parsed model results, as returned by parse_heidi_results.
 #' @param graphs A list of graphs, as returned by make_graphs
 #' @note
@@ -216,13 +210,26 @@ graph_weights <- function(ws, limits = max(abs(range(ws$value)))*c(-1, 1),
 
 #' @rdname heidi_plots
 #' @export
-get_graph_opts <- function(arrow.gap = 0.16,
-                           arrow.curvature = 0.2,
-                           arrow.pt = 20,
-                           edge.size = 3,
-                           node.size = 40,
-                           node.stroke = 3,
-                           node.text.size = 15){
+get_graph_opts <- function(graph_size = "small"){
+  if (graph_size == "large"){
+    arrow.gap = 0.16
+    arrow.curvature = 0.2
+    arrow.pt = 20
+    edge.size = 3
+    node.size = 40
+    node.stroke = 3
+    node.text.size = 15
+  }
+  if (graph_size == "small"){
+    arrow.gap = 0.10
+    arrow.curvature = 0.2
+    arrow.pt = 10
+    edge.size = 1.5
+    node.size = 20
+    node.stroke = 1.5
+    node.text.size = 7.5
+
+  }
   return(list(arrow.gap = arrow.gap,
               arrow.curvature = arrow.curvature,
               arrow.pt = arrow.pt,
@@ -235,10 +242,16 @@ get_graph_opts <- function(arrow.gap = 0.16,
 
 #' @rdname heidi_plots
 #' @export
-make_graphs <- function(mod, limits = max(abs(range(mod$ws$value)))*c(-1, 1), trial = max(mod$ws$trial)){
+make_graphs <- function(mod,
+                        limits = max(abs(range(mod$ws$value)))*c(-1, 1),
+                        trial = max(mod$ws$trial),
+                        opts = get_graph_opts()){
   plotlist = list()
   for (g in unique(mod$ws$group)){
-    plotlist[[sprintf('Group %s: (Trial %d)', g, trial)]] = graph_weights(mod$ws %>% dplyr::filter(.data$group == g), t = trial, limits = limits) +
+    plotlist[[sprintf('Group %s: (Trial %d)', g, trial)]] = graph_weights(mod$ws %>% dplyr::filter(.data$group == g),
+                                                                          t = trial,
+                                                                          limits = limits,
+                                                                          opts = opts) +
       ggplot2::labs(title = sprintf('%s (Trial %d)', g, trial))
   }
   return(plotlist)

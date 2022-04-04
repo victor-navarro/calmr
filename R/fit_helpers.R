@@ -1,9 +1,13 @@
 #' An assortment of functions to help fit HeiDI
 #' @param optimizer A string specifying the optimizer to use. One from `c("optim")`
 #' @param stim_names A string specifying the name of stimuli in the experiment
-#' @param family A string specifying the family function to generate responses (and calculate MLE with). Currently supports `c("identity", "linear", "poisson")`
+#' @param family A string specifying the family function to generate responses (and calculate the likelihood function with). Currently supports `c("identity", "linear", "poisson")`
 #' @param adj The adjustment factor for upper and lower bounds. Default is 1e-6
+#' @param fit A fit, as returned by `fit_heidi`.
+#' @param new_args A tibble with arguments for the model, as returned by `make_heidi_args`.
+#' @param type The type of prediction. One from `c("response")`. If `response`, the link function used to fit the model is applied to the model function before return.
 #' @note Whenever a family function other than the identity is used, the family-specific parameters will always be appended to the end of the relevant list entries.
+
 #' @rdname fit_helpers
 #' @export
 get_optimizer_opts <- function(optimizer, stim_names, family, adj = 1e-6){
@@ -44,18 +48,6 @@ fit_predict <- function(fit, new_args = NULL, type = "response"){
     prediction$value = fit$link_function(prediction$value, fit$link_pars)
   }
   prediction
-}
-
-plot_fit <- function(fit){
-  prediction = fit_predict(fit)
-  prediction$data = fit$data
-  prediction %>% rename("prediction" = "value") %>%
-    tidyr::pivot_longer(cols = c("prediction", "data"),
-                        names_to = "type",
-                        values_to = "value") %>%
-    ggplot2::ggplot(ggplot2::aes(x = trial, y = value, linetype = type)) +
-    ggplot2::geom_line() +
-    ggplot2::theme_bw()
 }
 
 .get_heidi_link <- function(family){

@@ -20,4 +20,191 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(heidi)
+library(ggplot2)
+library(magrittr)
+library(dplyr)
+library(tidyr)
+theme_set(theme_bw())
+data(pati)
+set.seed(2022)
 ```
+
+# Fitting the model to empirical data
+
+We now fit the model to some empirical data (Patitucci et al., 2016, Experiment 1). This will involve writing a function that produces model responses organized like the empirical data, and using that function for MLE. We begin with a short overview of the data, then move to the model function, and finally, we fit the model.
+
+## The data
+
+The data, `pati`, contains the responses (lever presses or lp, and nose pokes or np) for 32 subjects (rats) across 6 blocks of training (2 blocks per session). The animals were trained to associate each of two levers (L or R) to one of two unconditioned stimuli (pellets or sucrose). Let's take a look at it.
+
+```{r}
+glimpse(pati)
+pati  %>% ggplot(aes(x = block, y = rpert, colour = lever)) +
+  geom_line(aes(group = interaction(lever, subject)), alpha = .3) +
+  stat_summary(geom = 'line', fun = 'mean', size = 1) +
+  labs(x = "Block", y = "Responses per trial", colour = "Lever") +
+  facet_grid(response~.)
+```
+
+The thicker lines are group averages; the rest are individual subjects.
+
+## Writing the model function
+
+The biggest hurdle in fitting the model to empirical data is to write a function that, given a vector of parameters and a training routine, generates responses that are organized as the empirical data. Let's begin by summarizing the group data first.
+
+```{r}
+
+pati_summ <- pati %>% 
+  group_by(lever, response, block) %>%
+  summarise(rpert = mean(rpert), .groups = "drop")
+head(pati_summ)
+
+```
+
+We then proceed by setting up the ingredients for the model function. First, we obtain the model arguments (as you would pass to `run_heidi`). This entails obtaining a tibble with model arguments, as returned by `make_heidi_args`, which in turn necessitates three other bits: 1) a design data.frame, 2) a table with parameters, and 3) a list with simulation options.
+
+The experiment was very simple, and it can be reduced to two stimuli being associated with two appetitive outcomes. Here, we will assume that these two outcomes are somewhat similar to each other, such that we specify them as two distinct nominal stimuli, but they share a functional representation. We will also take some liberties with the number of trials we specify in order to reduce computing time.
+
+
+```{r}
+#The design data.frame
+des_df <- data.frame(group = "None",
+                     training = "6L>(US_a)/6R>(US_b)",
+                     rand_train = T)
+#The parameters
+pars <- get_params(des_df) #the actual parameter values don't matter, as our function will re-write them inside the optimizer call
+#The options
+opts <- get_heidi_opts(iterations = 10)
+#The arguments
+my_mod_args <- make_heidi_args(design = parse_design(des_df), pars = pars, opts = opts)
+
+```
+
+We can now begin to write the model function. First, it would be a good idea to see what `run_heidi` returns if ran with the arguments above.
+
+```{r}
+mod_res <- run_heidi(args = my_mod_args)
+str(mod_res)
+```
+
+Although the `run_heidi` function returns a list with 4 tibbles, we only care about one of them: `rs`; those are the model responses. Let's take a quick glance (or glimpse) at it.
+
+```{r}
+glimpse(mod_res$rs)
+```
+
+Note that although we specified two nominal US stimuli (US_a and US_b), the target response unit (column s2 above) only contains one functional node (US). If this is news to you, I would advice you to check the *heidi_intermediate* vignette. In any case, with that in hand, we can write our model function.
+
+```{r}
+my_model_function <- function(pars, model_args){
+  #manipulating pars
+  names(pars) = names(model_args$stim_alphas[[1]])
+  model_args$stim_alphas = list(pars)
+  #running the model and selecting rs
+  mod_res = run_heidi(args = model_args)$rs
+  #summarizing the model
+  mod_res = mod_res %>%
+    filter(s2 == "US") %>%
+    mutate(response = ifelse(s1 == "US", "np", "lp"),
+           block = ceiling(trial/2)) %>%
+    group_by(block, trial_type, response) %>%
+    summarise(value = mean(value), .groups = "drop")
+  mod_res
+}
+
+```
+
+Let's dissect the function in its three parts. First, we do some manipulation on the vector of parameters: we name them according to the stimulus names identified in the arguments (`names(model_args$stim_alphas[[1]])`). We do this because the function we use to simulate (i.e., the one called by `run_heidi`) requires a named vector to work, and some optimizers (looking at you optim) strip the names from the numerical vectors they are trying to optimize. We next run the model and immediately select the relevant information (rs). Finally, we summarise the model responses. Within this step, we filter all output nodes that are not related to expecting the US (because the latest public version of the model is lagging behind the latest theoretical developments), we classify responses as being nosepokes (produced by the US) or lever presses (produced by the levers), and calculate the mean across blocks of trials.
+
+Let's see the function in action.
+
+```{r}
+my_model_function(c(.1, .2, .4, .3), model_args = my_mod_args)
+```
+
+And just as a refresher, here's the summarised empirical data.
+
+```{r}
+pati_summ
+```
+
+Do you notice anything odd about the ordering? The empirical data is sorted in a different way but I said before we should have both empirical data and model responses match. I cannot emphasize this point enough: there is nothing within the fit function that checks or reorders the data for you. You are the sole responsible for making sure both of these pieces of data are in the same order.
+
+Here, we will reorder the empirical data so it follows the order of our model function, instead of the other way around (as we want to minimize the amount of computation within our model function).
+
+```{r}
+
+pati_summ <- pati_summ %>% arrange(block, lever, response)
+pati_summ
+
+```
+
+Much better (save for the column ordering, which doesn't actually matter). We are now ready to begin fitting the model.
+
+## Fitting the model
+
+We fit models in `heidi` using the `fit_heidi` function. This function at least requires 4 arguments: 1) the (empirical) data, 2) a model function, 3) the arguments with which to run that model function, and the optimizer options. We have done a great job taking care of the first three, so let's tackle the last.
+
+```{r}
+my_optimizer_opts <- get_optimizer_opts(optimizer = "optim",
+                                        stim_names = pars$Stimulus,
+                                        family = "linear")
+my_optimizer_opts
+```
+
+The `get_optimizer_opts` returns many things:
+
+1. stim_names: The name of the stimuli for which to find salience parameters.
+2. lower and upper: The lower and upper bounds that these parameters can take. Consider shrinking these to speed up the process.
+3. optimizer: The numerical optimization technique we wish to use during MLE estimation.
+4. sample_pars: A function that samples parameters from set distributions.
+5. family: The family distribution/link function we assume for our model. In practice, what you request here will be used to determine the link function to transform model responses, and the likelihood function used in the objective function.
+6. family_pars: The family-specific parameter being estimated alongside salience parameters.
+7. verbose: Whether to print parameters and objective function values as we optimize.
+8. optim_options: The optimizer-specific options that are used in the optimization call.
+
+You are free to modify these; just make sure the structure of the list returned by `get_optimizer_opts` remains the same. Here, I overwrite the trace argument passed to the optimizer.
+
+```{r}
+my_optimizer_opts$optim_options$control$trace = 0
+```
+
+And with that, we can fit the model!
+
+```{r, eval=F, include=T}
+the_fit <- fit_heidi(pati_summ$rpert,
+                     model_function = my_model_function, model_args = my_mod_args,
+                     optimizer_options = my_optimizer_opts)
+```
+
+```{r, include = F, echo = F}
+load(file = "fitting_heidi_fit.rda")
+```
+
+
+
+The `fit_heidi` function returns a lot of information to track what we put in and what we got out. Regarding the latter, we can see the MLE parameters we obtained this time, and their negative log likelihood, given the data:
+
+```{r}
+the_fit[c("best_pars", "nloglik")]
+```
+
+That's good and all, but how well does a model ran with those parameters "visually" fit the data? We can obtain the predictions from the model via the `fit_predict` function.
+
+```{r}
+prediction = fit_predict(the_fit)
+prediction$data = the_fit$data
+prediction %>% rename("prediction" = "value") %>%
+    pivot_longer(cols = c("prediction", "data"),
+                        names_to = "type",
+                        values_to = "value") %>%
+    ggplot(ggplot2::aes(x = block, y = value, linetype = type)) +
+    geom_line() +
+    theme_bw() + 
+    facet_grid(trial_type~response)
+```
+
+This looks pretty good! Save from some blatant misfits, of course. Now you know everything you need to fit heidi to your empirical data. Go forth!
+
+### A final note
+This vignette was pre-generated, as I don't want the user to fit the model at the time of installation. I will try to keep up with it as the package develops, but if you spot any inconsistencies, please drop me a line.
