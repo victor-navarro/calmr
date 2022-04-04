@@ -37,9 +37,9 @@ filter_heidi_results(parsed_results, filters)
 
 \item{default_val}{Default alpha value}
 
-\item{mod}{A model list, as returned by trainPavHEIDI}
+\item{mod}{A model list, as returned by train_pav_heidi}
 
-\item{raw_results}{A tibble with model information, as returned by run_heidi}
+\item{raw_results}{A tibble with model information, as returned by quick_heidi}
 
 \item{parsed_results}{A list with parsed results, as returned by parse_heidi_results}
 
@@ -48,6 +48,6 @@ filter_heidi_results(parsed_results, filters)
 \description{
 get_params generates a data.frame with stimulus salience parameters.
 gen_ss_weights generates a named array with model weights.
-parse_ws, parse_vs, parse_rs and parse_heidi_results parse the raw outputs of trainPavHEIDI into a readable format.
+parse_ws, parse_vs, parse_rs and parse_heidi_results parse the raw outputs of train_pav_heidi into a readable format.
 filter_heidi_results is a convenience function to filter specific phase and trial_type data.
 }

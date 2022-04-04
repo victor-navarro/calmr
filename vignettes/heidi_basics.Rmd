@@ -87,10 +87,10 @@ my_opts
 
 ### Simulating
 
-And we can finally simulate the model with `run_heidi`. By default, the function returns a list with aggregated data. Let's see.
+And we can finally simulate the model with `quick_heidi`. By default, the function returns a list with aggregated data. Let's see.
 
 ```{r}
-my_sim <- run_heidi(design_df = my_blocking,
+my_sim <- quick_heidi(design_df = my_blocking,
                     param_df = my_pars,
                     options = my_opts)
 names(my_sim) #contains information about weights (ws), v-values (vs), r-values (rs), and alphas (as)

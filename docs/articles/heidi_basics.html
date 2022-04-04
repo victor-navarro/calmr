@@ -48,6 +48,7 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/fitting_heidi.html">fitting_heidi</a>
     <a class="dropdown-item" href="../articles/heidi_basics.html">heidi_basics</a>
     <a class="dropdown-item" href="../articles/heidi_math.html">heidi_math</a>
     <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
@@ -252,9 +253,9 @@
 <div class="section level4">
 <h4 id="simulating">Simulating<a class="anchor" aria-label="anchor" href="#simulating"></a>
 </h4>
-<p>And we can finally simulate the model with <code>run_heidi</code>. By default, the function returns a list with aggregated data. Let’s see.</p>
+<p>And we can finally simulate the model with <code>quick_heidi</code>. By default, the function returns a list with aggregated data. Let’s see.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_heidi.html">run_heidi</a></span><span class="op">(</span>design_df <span class="op">=</span> <span class="va">my_blocking</span>,
+<code class="sourceCode R"><span class="va">my_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/quick_heidi.html">quick_heidi</a></span><span class="op">(</span>design_df <span class="op">=</span> <span class="va">my_blocking</span>,
                     param_df <span class="op">=</span> <span class="va">my_pars</span>,
                     options <span class="op">=</span> <span class="va">my_opts</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">my_sim</span><span class="op">)</span> <span class="co">#contains information about weights (ws), v-values (vs), r-values (rs), and alphas (as)</span>

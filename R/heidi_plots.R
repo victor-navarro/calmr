@@ -32,17 +32,22 @@ NULL
 #' \itemize{
 #' \item{Plotting options are obtained via get_plot_opts(). For now, only plotting in a common y-axis is supported.
 #' }}
-#' @import patchwork
 #' @export
 make_plots <- function(dat){
   plotlist = list()
   for (g in unique(dat$ws$group)){
-    plotlist[[paste0(g, ': Rs (simple)')]] = plot_rs(dat$rs %>% dplyr::filter(.data$group == g), simple = TRUE) + ggplot2::labs(title = g)
-    plotlist[[paste0(g, ': Rs (complex)')]] = plot_rs(dat$rs %>% dplyr::filter(.data$group == g), simple = FALSE) + ggplot2::labs(title = g)
-    plotlist[[paste0(g, ': Vs (bar)')]] = plot_vs(dat$vs %>% dplyr::filter(.data$group == g), bars = TRUE) + ggplot2::labs(title = g)
-    plotlist[[paste0(g, ': Vs (learning)')]] = plot_vs(dat$vs %>% dplyr::filter(.data$group == g)) + ggplot2::labs(title = g)
-    plotlist[[paste0(g, ': Ws')]] = plot_ws(dat$ws %>% dplyr::filter(.data$group == g)) + ggplot2::labs(title = g)
-    plotlist[[paste0(g, ': As')]] = plot_as(dat$as %>% dplyr::filter(.data$group == g)) + ggplot2::labs(title = g)
+    plotlist[[paste0(g, ': Rs (simple)')]] = plot_rs(dat$rs %>% dplyr::filter(.data$group == g), simple = TRUE) +
+      ggplot2::labs(title = paste0(g, ': Rs (simple)'))
+    plotlist[[paste0(g, ': Rs (complex)')]] = plot_rs(dat$rs %>% dplyr::filter(.data$group == g), simple = FALSE) +
+      ggplot2::labs(title = paste0(g, ': Rs (complex)'))
+    plotlist[[paste0(g, ': Vs (bar)')]] = plot_vs(dat$vs %>% dplyr::filter(.data$group == g), bars = TRUE) +
+      ggplot2::labs(title = paste0(g, ': Vs (bar)'))
+    plotlist[[paste0(g, ': Vs (learning)')]] = plot_vs(dat$vs %>% dplyr::filter(.data$group == g)) +
+      ggplot2::labs(title = paste0(g, ': Vs (learning)'))
+    plotlist[[paste0(g, ': Ws')]] = plot_ws(dat$ws %>% dplyr::filter(.data$group == g)) +
+      ggplot2::labs(title = paste0(g, ': Ws'))
+    plotlist[[paste0(g, ': As')]] = plot_as(dat$as %>% dplyr::filter(.data$group == g)) +
+      ggplot2::labs(title = paste0(g, ': As'))
   }
   return(plotlist)
 }
@@ -118,26 +123,26 @@ plot_rs <- function(vals, simple = F){
     dplyr::summarise(value = mean(.data$value), .groups = "drop")
   if (simple){
     plt = summ %>%
-      dplyr::group_by(.data$trial, .data$phase, .data$trial_type, .data$s2) %>%
+      dplyr::group_by(.data$trial, .data$phase, .data$trial_type, .data$s1) %>%
       dplyr::summarise(value = sum(.data$value), .groups = "drop") %>%
-      ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s2)) +
+      ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s1)) +
       ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
       ggplot2::geom_line() +
       ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
       ggplot2::scale_colour_viridis_d(drop = FALSE) +
       ggplot2::scale_x_continuous(breaks = NULL) +
       ggplot2::facet_grid(~.data$phase+.data$trial_type, scales = 'free_x') +
-      ggplot2::labs(x = "Trial/Miniblock", y = 'R value', colour = 'Target') +
+      ggplot2::labs(x = "Trial/Miniblock", y = 'R value', colour = 'Stimulus') +
       ggplot2::theme_bw()
 
   }else{
-    plt = summ %>% ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s2)) +
+    plt = summ %>% ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s1)) +
       ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
       ggplot2::geom_line() +
       ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
       ggplot2::scale_colour_viridis_d(drop = FALSE) +
       ggplot2::scale_x_continuous(breaks = NULL) +
-      ggplot2::facet_grid(.data$s1~.data$phase+.data$trial_type, scales = 'free_x') +
+      ggplot2::facet_grid(.data$s2~.data$phase+.data$trial_type, scales = 'free_x') +
       ggplot2::labs(x = "Trial/Miniblock", y = 'R value', colour = 'Target') +
       ggplot2::theme_bw()
   }
@@ -159,28 +164,6 @@ plot_as <- function(vals){
     ggplot2::facet_grid(.~.data$phase+.data$trial_type, scales = 'free_x') +
     ggplot2::labs(x = "Trial/Miniblock", y = 'Alpha Value', colour = 'Stimulus') +
     ggplot2::theme_bw()
-}
-
-
-#' @rdname heidi_plots
-#' @export
-patch_plots <- function(plots, selection, options = get_plot_opts()){
-  patch = ggplot2::ggplot()
-  selected = length(selection)
-  if (selected){
-    plots = plots[selection]
-    #if we want common scales
-    if (options$common_scale & selected > 1){
-      plots = plot_common_scale(plots)
-    }
-    patch = plots[[1]]
-    if (selected > 1){
-      for (p in 2:selected){
-        patch = patch + plots[p]
-      }
-    }
-  }
-  return(patch + patchwork::plot_layout(guides = 'collect'))
 }
 
 #' @rdname heidi_plots
@@ -263,13 +246,25 @@ make_graphs <- function(mod, limits = max(abs(range(mod$ws$value)))*c(-1, 1), tr
 
 #' @rdname heidi_plots
 #' @export
-patch_graphs <- function(graphs){
+patch_graphs <- function(graphs, selection = names(graphs)){
   #expects a list of graphs via make_graphs/graph_weights
-  patch = graphs[[1]]
-  if (length(graphs) > 1){
-    for (g in 2:length(graphs)){
-      patch = patch + graphs[g]
+  graphs = graphs[selection]
+  cow = cowplot::plot_grid(plotlist = graphs)
+  cow
+}
+
+#' @rdname heidi_plots
+#' @export
+patch_plots <- function(plots, selection, options = get_plot_opts()){
+  cow = NULL
+  selected = length(selection)
+  if (selected){
+    plots = plots[selection]
+    #if we want common scales
+    if (options$common_scale & selected > 1){
+      plots = plot_common_scale(plots)
     }
+    cow = cowplot::plot_grid(plotlist = plots)
   }
-  patch
+  cow
 }

@@ -2,14 +2,14 @@
 #' @description
 #' get_params generates a data.frame with stimulus salience parameters.
 #' gen_ss_weights generates a named array with model weights.
-#' parse_ws, parse_vs, parse_rs and parse_heidi_results parse the raw outputs of trainPavHEIDI into a readable format.
+#' parse_ws, parse_vs, parse_rs and parse_heidi_results parse the raw outputs of train_pav_heidi into a readable format.
 #' filter_heidi_results is a convenience function to filter specific phase and trial_type data.
 #' @param design An experimental design. Either a data.frame or a tibble returned by parse_design
 #' @param default_par A float between 0 and 1
 #' @param stims A character vector with stimuli
 #' @param default_val Default alpha value
-#' @param mod A model list, as returned by trainPavHEIDI
-#' @param raw_results A tibble with model information, as returned by run_heidi
+#' @param mod A model list, as returned by train_pav_heidi
+#' @param raw_results A tibble with model information, as returned by quick_heidi
 #' @param parsed_results A list with parsed results, as returned by parse_heidi_results
 #' @param filters A named list containing "phase" and "trial_type" character vectors, for filtering data
 #' @import magrittr
@@ -85,7 +85,7 @@ parse_as <- function(mod){
 parse_heidi_results <- function(raw_results){
   #expects a tibble with one row per group
   #returns a list with all the relevant data for exporting (and plotting)
-  full_results = raw_results %>%
+  full_results = raw_results %>% dplyr::rowwise() %>%
     dplyr::mutate(ws = list(parse_ws(.data$mod_data)), vs = list(parse_vs(.data$mod_data)),
                   rs = list(parse_rs(.data$mod_data)), as = list(parse_as(.data$mod_data))) %>%
     dplyr::ungroup()

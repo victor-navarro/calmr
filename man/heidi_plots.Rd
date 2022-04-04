@@ -7,13 +7,13 @@
 \alias{plot_vs}
 \alias{plot_rs}
 \alias{plot_as}
-\alias{patch_plots}
 \alias{get_plot_opts}
 \alias{plot_common_scale}
 \alias{graph_weights}
 \alias{get_graph_opts}
 \alias{make_graphs}
 \alias{patch_graphs}
+\alias{patch_plots}
 \title{Plotting functions for heidi models}
 \usage{
 make_plots(dat)
@@ -25,8 +25,6 @@ plot_vs(vals, bars = F)
 plot_rs(vals, simple = F)
 
 plot_as(vals)
-
-patch_plots(plots, selection, options = get_plot_opts())
 
 get_plot_opts(common_scale = TRUE)
 
@@ -55,7 +53,9 @@ make_graphs(
   trial = max(mod$ws$trial)
 )
 
-patch_graphs(graphs)
+patch_graphs(graphs, selection = names(graphs))
+
+patch_plots(plots, selection, options = get_plot_opts())
 }
 \arguments{
 \item{dat}{A list containing data.frames with parsed weights, r values, and v values, as returned by parse_heidi_results.}
@@ -66,13 +66,9 @@ patch_graphs(graphs)
 
 \item{simple}{A logical stipulating whether to simplify the plot by collapsing across sources.}
 
-\item{plots}{A named list with plots}
-
-\item{selection}{A character vector with the selected plots}
-
-\item{options}{A list with options}
-
 \item{common_scale}{A logical. Whether to plot the data in a common y-scale.}
+
+\item{plots}{A named list with plots}
 
 \item{ws}{A data.frame containing parsed weights, as returned by parse_heidi_results}
 
@@ -101,6 +97,10 @@ patch_graphs(graphs)
 \item{trial}{An integer denoting the trial of the weights to be graphed. Defaults to the last trial in the data.}
 
 \item{graphs}{A list of graphs, as returned by make_graphs}
+
+\item{selection}{A character vector with the selected plots}
+
+\item{options}{A list with options}
 }
 \value{
 A list with ggplot objects

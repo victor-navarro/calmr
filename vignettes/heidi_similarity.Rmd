@@ -45,7 +45,7 @@ df <- data.frame(Group = c("Same", "Reduced"),
                  R2 = c(FALSE, FALSE))
 params <- data.frame(Stimulus = c("A", "X_a", "X_b", "US"),
                      Alpha = c(.30, .40, .36, .50))
-model <- run_heidi(df, params)
+model <- quick_heidi(df, params)
 ```
 
 ### Plotting the similarity between saliencies
@@ -88,7 +88,7 @@ head(df)
 Run the model.
 
 ```{r}
-model <- run_heidi(df, params)
+model <- quick_heidi(df, params)
 ```
 
 
