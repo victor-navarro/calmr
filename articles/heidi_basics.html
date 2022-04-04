@@ -126,101 +126,17 @@
 <p>A few observations about the trial notation: 0. Trials are preceded by a number. That number represents the number of times that trial will be given in each phase. “10A(US)” means that the “A(US)” trial will be given 10 times. 1. The presence and absence of the unconditioned stimulus is not denoted with the traditional “+” and “-” symbols. Instead, we use parenthesis to denote “complex” stimuli. These can be thought of as an element with a complex name (i.e., with more than one character). As such, “(US)” specifies a single element to represent the US. 2. The “/” character is used as a trial separator (it does not imply randomization by itself). Thus, “1A/1B” specifies that a single “A” trial and a single “B” trial will be given during that phase. Recall that randomization of trials within a phase is specified by the column after it (above, R1, R2, and R3).</p>
 <p>If you ever want to check if your trials string will work with the simulator, you can use <code><a href="../reference/trial_parser.html">heidi::trial_parser</a></code>. The function returns a list with a lot of information. Check <code>??trial_parser</code> for more information. Let’s have a go.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/trial_parser.html">trial_parser</a></span><span class="op">(</span><span class="st">"AB/10AC"</span><span class="op">)</span>  <span class="co">#not specifying a number of AB trials. Bad practice!</span>
+<code class="sourceCode R"><span class="va">trial</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trial_parser.html">trial_parser</a></span><span class="op">(</span><span class="st">"AB/10AC"</span><span class="op">)</span>  <span class="co">#not specifying a number of AB trials. Bad practice!</span>
+<span class="va">trial</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"trial_names"</span>, <span class="st">"trial_repeats"</span><span class="op">)</span><span class="op">]</span>
 <span class="co">#&gt; $trial_names</span>
 <span class="co">#&gt; [1] "AB" "AC"</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $trial_repeats</span>
 <span class="co">#&gt; [1]  1 10</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $trial_pre_functional</span>
-<span class="co">#&gt; $trial_pre_functional[[1]]</span>
-<span class="co">#&gt; [1] "A" "B"</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $trial_pre_functional[[2]]</span>
-<span class="co">#&gt; [1] "A" "C"</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $trial_post_functional</span>
-<span class="co">#&gt; $trial_post_functional[[1]]</span>
-<span class="co">#&gt; character(0)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $trial_post_functional[[2]]</span>
-<span class="co">#&gt; character(0)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $trial_pre_nominal</span>
-<span class="co">#&gt; $trial_pre_nominal[[1]]</span>
-<span class="co">#&gt; [1] "A" "B"</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $trial_pre_nominal[[2]]</span>
-<span class="co">#&gt; [1] "A" "C"</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $trial_post_nominal</span>
-<span class="co">#&gt; $trial_post_nominal[[1]]</span>
-<span class="co">#&gt; character(0)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $trial_post_nominal[[2]]</span>
-<span class="co">#&gt; character(0)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $nomi_func_map</span>
-<span class="co">#&gt;   nomi func</span>
-<span class="co">#&gt; 1    A    A</span>
-<span class="co">#&gt; 2    B    B</span>
-<span class="co">#&gt; 4    C    C</span>
-<span class="co">#&gt; </span>
+<span class="va">trial</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trial_parser.html">trial_parser</a></span><span class="op">(</span><span class="st">"10AB(AB)(US)"</span><span class="op">)</span> <span class="co">#considering a configural cue for elements AB</span>
+<span class="va">trial</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"unique_nominal_stimuli"</span><span class="op">)</span><span class="op">]</span>
 <span class="co">#&gt; $unique_nominal_stimuli</span>
-<span class="co">#&gt; [1] "A" "B" "C"</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $unique_functional_stimuli</span>
-<span class="co">#&gt; [1] "A" "B" "C"</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $is_test</span>
-<span class="co">#&gt; [1] FALSE FALSE</span>
-<span class="fu"><a href="../reference/trial_parser.html">trial_parser</a></span><span class="op">(</span><span class="st">"10AB(AB)(US)"</span><span class="op">)</span> <span class="co">#considering a configural cue for elements AB</span>
-<span class="co">#&gt; $trial_names</span>
-<span class="co">#&gt; [1] "AB(AB)(US)"</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $trial_repeats</span>
-<span class="co">#&gt; [1] 10</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $trial_pre_functional</span>
-<span class="co">#&gt; $trial_pre_functional[[1]]</span>
-<span class="co">#&gt; [1] "A"  "B"  "AB" "US"</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $trial_post_functional</span>
-<span class="co">#&gt; $trial_post_functional[[1]]</span>
-<span class="co">#&gt; character(0)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $trial_pre_nominal</span>
-<span class="co">#&gt; $trial_pre_nominal[[1]]</span>
-<span class="co">#&gt; [1] "A"  "B"  "AB" "US"</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $trial_post_nominal</span>
-<span class="co">#&gt; $trial_post_nominal[[1]]</span>
-<span class="co">#&gt; character(0)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $nomi_func_map</span>
-<span class="co">#&gt;   nomi func</span>
-<span class="co">#&gt; 1    A    A</span>
-<span class="co">#&gt; 2    B    B</span>
-<span class="co">#&gt; 3   AB   AB</span>
-<span class="co">#&gt; 4   US   US</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $unique_nominal_stimuli</span>
-<span class="co">#&gt; [1] "A"  "B"  "AB" "US"</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $unique_functional_stimuli</span>
-<span class="co">#&gt; [1] "A"  "B"  "AB" "US"</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $is_test</span>
-<span class="co">#&gt; [1] FALSE</span></code></pre></div>
+<span class="co">#&gt; [1] "A"  "B"  "AB" "US"</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="the-parameters-data-frame">The parameters data.frame<a class="anchor" aria-label="anchor" href="#the-parameters-data-frame"></a>
@@ -274,7 +190,7 @@
 <div class="section level3">
 <h3 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a>
 </h3>
-<p>But, we rarely want the raw data. If you are like me, you will want to see some plots. Let’s use <code>make_plots</code> to create some plots, and <code>patch_plots</code> to display them. Here they are, paired side by side.</p>
+<p>But, we rarely want the raw data. If you are like me, you will want to see some plots. Let’s use <code>make_plots</code> to create some plots, and <code>patch_plots</code> to display them.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">my_plots</span> <span class="op">=</span> <span class="fu"><a href="../reference/heidi_plots.html">make_plots</a></span><span class="op">(</span><span class="va">my_sim</span><span class="op">)</span>
 <span class="va">plot_names</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">my_plots</span><span class="op">)</span>
@@ -283,6 +199,7 @@
 <span class="co">#&gt;  [4] "Control: Vs (learning)" "Control: Ws"            "Control: As"           </span>
 <span class="co">#&gt;  [7] "Exp: Rs (simple)"       "Exp: Rs (complex)"      "Exp: Vs (bar)"         </span>
 <span class="co">#&gt; [10] "Exp: Vs (learning)"     "Exp: Ws"                "Exp: As"</span></code></pre></div>
+<p>Here they are, paired side by side:</p>
 <div class="section level4">
 <h4 id="stimulus-specific-responding-simple">Stimulus-specific responding (simple)<a class="anchor" aria-label="anchor" href="#stimulus-specific-responding-simple"></a>
 </h4>
@@ -324,8 +241,32 @@
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/heidi_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">12</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <p><img src="heidi_basics_files/figure-html/unnamed-chunk-13-1.png" width="672"></p>
-<p>The <code>heidi</code> package was designed to simulate quickly; write your design and get a glance of the model predictions. However, the package also has some features for more advanced users, so make sure to check more advanced vignettes when you are ready.</p>
 </div>
+</div>
+<div class="section level3">
+<h3 id="graphing">Graphing<a class="anchor" aria-label="anchor" href="#graphing"></a>
+</h3>
+<p>You can also take a look at the state of the model’s associations at any point during training, using the function <code>make_graphs</code>.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">my_graph_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/heidi_plots.html">get_graph_opts</a></span><span class="op">(</span><span class="st">"small"</span><span class="op">)</span>
+<span class="fu"><a href="../reference/heidi_plots.html">make_graphs</a></span><span class="op">(</span><span class="va">my_sim</span>, trial <span class="op">=</span> <span class="fl">10</span>, opts <span class="op">=</span> <span class="va">my_graph_opts</span><span class="op">)</span>
+<span class="co">#&gt; $`Group Control: (Trial 10)`</span></code></pre></div>
+<p><img src="heidi_basics_files/figure-html/unnamed-chunk-14-1.png" width="672"></p>
+<pre><code><span class="co">#&gt; </span>
+<span class="co">#&gt; $`Group Exp: (Trial 10)`</span></code></pre>
+<p><img src="heidi_basics_files/figure-html/unnamed-chunk-14-2.png" width="672"></p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/heidi_plots.html">make_graphs</a></span><span class="op">(</span><span class="va">my_sim</span>, trial <span class="op">=</span> <span class="fl">20</span>, opts <span class="op">=</span> <span class="va">my_graph_opts</span><span class="op">)</span>
+<span class="co">#&gt; $`Group Control: (Trial 20)`</span></code></pre></div>
+<p><img src="heidi_basics_files/figure-html/unnamed-chunk-14-3.png" width="672"></p>
+<pre><code><span class="co">#&gt; </span>
+<span class="co">#&gt; $`Group Exp: (Trial 20)`</span></code></pre>
+<p><img src="heidi_basics_files/figure-html/unnamed-chunk-14-4.png" width="672"></p>
+</div>
+<div class="section level3">
+<h3 id="final-thoughts">Final thoughts<a class="anchor" aria-label="anchor" href="#final-thoughts"></a>
+</h3>
+<p>The <code>heidi</code> package was designed to simulate quickly; write your design and get a glance of the model predictions. However, the package also has some features for more advanced users, so make sure to check more advanced vignettes when you are ready.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

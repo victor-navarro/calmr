@@ -141,17 +141,28 @@ a_{j,M} = o_{j,M} + h_{j,M}
 \tag{Eq. 5}
 o_{j,M} = \sum_{m \neq j}^{M}v_{m,j} + \left(\frac{\sum_{m \neq j}^{M}v_{m,j} \sum_{m \neq j}^{M}v_{j,m}}{c}\right)
 \]</span></p>
-<p>where each of the sums above run over all stimuli <span class="math inline">\(M\)</span> presented in the trial, that are also different from stimulus <span class="math inline">\(j\)</span>.<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;An alternative formulation of this equation could be &lt;span class="math inline"&gt;\(\sum_{m \neq j}^{M} v_{m,j} + (v_{m,j} v_{j,m})\)&lt;/span&gt; but, although the this alternative formulation is positively related to Eq. 5, we have not compared their behavior exhaustively.&lt;/p&gt;'><sup>2</sup></a> The left hand term describes how the forward associations from stimuli <span class="math inline">\(M\)</span> to <span class="math inline">\(j\)</span> affect the representation of <span class="math inline">\(j\)</span>, whereas the right hand term describes how the backward associations that <span class="math inline">\(j\)</span> has with stimuli <span class="math inline">\(M\)</span> affect its own representation (although these are modulated by the forward associations themselves).</p>
+<p>where each of the sums above run over all stimuli <span class="math inline">\(M\)</span> presented in the trial, that are also different from stimulus <span class="math inline">\(j\)</span>.<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;An alternative formulation of this equation could be &lt;span class="math inline"&gt;\(\sum_{m \neq j}^{M} v_{m,j} + (v_{m,j} v_{j,m})\)&lt;/span&gt; but, although this alternative formulation is positively related to Eq. 5, we have not compared their behavior exhaustively.&lt;/p&gt;'><sup>2</sup></a> The left hand term describes how the forward associations from stimuli <span class="math inline">\(M\)</span> to <span class="math inline">\(j\)</span> affect the representation of <span class="math inline">\(j\)</span>, whereas the right hand term describes how the backward associations that <span class="math inline">\(j\)</span> has with stimuli <span class="math inline">\(M\)</span> affect its own representation (although these are modulated by the forward associations themselves).</p>
 </div>
 <div class="section level4">
 <h4 id="chained-associative-strength">2.2 - Chained associative strength<a class="anchor" aria-label="anchor" href="#chained-associative-strength"></a>
 </h4>
 <p>The quantity <span class="math inline">\(h_{j,M}\)</span> captures the indirect associative strength that the stimuli <span class="math inline">\(M\)</span> have with <span class="math inline">\(j\)</span>, via absent stimuli. As such, <span class="math inline">\(h_{j,M}\)</span> is defined as</p>
 <p><span class="math display">\[
-\tag{Eq. 6}
+\tag{Eq. 6a}
 h_{j,M} = \sum_{m \neq j}^{M} \sum_{n}^{N}\frac{v_{m,n}o_{j,n}}{c}
 \]</span></p>
 <p>where N are the stimuli not presented on the trial (i.e., K-M). Note the re-use of <span class="math inline">\(o\)</span>, the quantity defined in Eq. 5. This equation allows absent stimuli <span class="math inline">\(N\)</span> to influence the representation of stimulus <span class="math inline">\(j\)</span>, as long as they have an association with present stimuli <span class="math inline">\(M\)</span>.</p>
+<p>In Honey and Dwyer (2022), the authors specify a similarity-based mechanism that modulates the effect of associative chains according to the similarity of the salience of nominal and retrieved stimuli. As such, Eq. 6a is expanded as:</p>
+<p><span class="math display">\[
+\tag{Eq. 6b}
+h_{j,M} = \sum_{m \neq j}^{M} \sum_{n}^{N}S(\alpha_{n}, \alpha'_n)\frac{v_{m,n}o_{j,n}}{c}
+\]</span></p>
+<p>where <span class="math inline">\(S\)</span> is a similarity function that takes the nominal salience of stimulus n, <span class="math inline">\(\alpha_n\)</span> (as perceived when <span class="math inline">\(n\)</span> is actually presented on a trial) and its retrieved salience, <span class="math inline">\(\alpha'_n\)</span> (as perceived when <span class="math inline">\(n\)</span> is retrieved via other stimuli M, see ahead). This function is defined as:</p>
+<p><span class="math display">\[
+\tag{Eq. 7}
+S(\alpha_n, \alpha'_n) = \frac{\alpha_n}{\alpha_n + |\alpha_n-\alpha'_n|} \times \frac{\alpha'_n}{\alpha'_n+ |\alpha_n-\alpha'_n|}
+\]</span></p>
+<p>Notably, whenever there is more than one nominal salience for a given stimulus, then <span class="math inline">\(\alpha_n\)</span> is the arithmetic mean among all nominal values (see “heidi_similarity” vignette).</p>
 </div>
 </div>
 <div class="section level3">
@@ -159,26 +170,26 @@ h_{j,M} = \sum_{m \neq j}^{M} \sum_{n}^{N}\frac{v_{m,n}o_{j,n}}{c}
 </h3>
 <p>HeiDI then distributes the pooled stimulus-specific strength among all <span class="math inline">\(K\)</span> stimuli, according to their relative salience. The activation of response unit <span class="math inline">\(j\)</span>, <span class="math inline">\(R_j\)</span> is expressed as</p>
 <p><span class="math display">\[
-\tag{Eq. 7}
+\tag{Eq. 8}
 R_j = \frac{\theta(j)}{\sum_{k}^{K}\theta(k)}a_{j,M}
 \]</span></p>
-<p>As <span class="math inline">\(K\)</span> can include both present and absent stimuli, the <span class="math inline">\(\theta\)</span> function returns the salience of stimulus <span class="math inline">\(k\)</span> depending on whether it is absent (i.e., <span class="math inline">\(k \in N\)</span>) or not (i.e., <span class="math inline">\(k \in M\)</span>), as</p>
+<p>As <span class="math inline">\(K\)</span> can include both present and absent stimuli, the <span class="math inline">\(\theta\)</span> function above depends on whether the stimulus <span class="math inline">\(k\)</span> is absent (i.e., <span class="math inline">\(k \in N\)</span>) or not (i.e., <span class="math inline">\(k \in M\)</span>), as:</p>
 <p><span class="math display">\[
-\tag{Eq. 8}
+\tag{Eq. 9}
 \theta(k) = 
 \begin{cases}
-    \left| \sum_{m}^{M}\left( v_{m,k}+\sum_{n \neq k}^{N}\frac{v_{m,n}v_{n,k}}{c}\right) \right|,&amp; \text{if } k \in N\\
+    \left |\sum_{m}^{M}\left( v_{m,k}+\sum_{n \neq k}^{N}\frac{v_{m,n}v_{n,k}}{c}\right) \right|,&amp; \text{if } k \in N\\
     \alpha_k, &amp; \text{otherwise}
 \end{cases}
 \]</span></p>
-<p>Note that the quantity for absent stimuli is absolute, in order to prevent negative <span class="math inline">\(\theta\)</span> values due to inhibitory associations<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;An alternative, and perhaps more naturalistic parametrization of this rule would be to use &lt;span class="math inline"&gt;\(min[0,\theta(n)]\)&lt;/span&gt;, where &lt;span class="math inline"&gt;\(min\)&lt;/span&gt; is the minimum function and &lt;span class="math inline"&gt;\(n\)&lt;/span&gt; is an absent stimulus. ReLUs are extensively used in neural networks&lt;/p&gt;'><sup>3</sup></a> <a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;Another alternative that avoids both the use of absolute values or a rectifying mechanism would be to use quantities of &lt;span class="math inline"&gt;\(e^{\theta(k)}\)&lt;/span&gt; instead of &lt;span class="math inline"&gt;\(\theta(k)\)&lt;/span&gt; as they naturally deal with negative quantities.&lt;/p&gt;'><sup>4</sup></a>. Also note a summation term is used on the left-hand side of the expression for an absent stimulus. It implies that all the present stimuli <span class="math inline">\(M\)</span> contribute to the salience of stimulus <span class="math inline">\(k\)</span>. Finally, note on the right side of the same expression that the present stimuli contribute not only via the direct association each of them have with <span class="math inline">\(k\)</span>, <span class="math inline">\(v_{m,k}\)</span>, but also through associative chains with other absent stimuli (c.f., Eq. 6).</p>
+<p>Note that the quantity for absent stimuli is absolute, in order to prevent negative <span class="math inline">\(\theta\)</span> values due to inhibitory associations<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;An alternative, and perhaps more naturalistic parametrization of this rule would be to use &lt;span class="math inline"&gt;\(min[0,\theta(n)]\)&lt;/span&gt;, where &lt;span class="math inline"&gt;\(min\)&lt;/span&gt; is the minimum function and &lt;span class="math inline"&gt;\(n\)&lt;/span&gt; is an absent stimulus; ReLUs are extensively used in neural networks. Another alternative that avoids both the use of absolute values or a rectifying mechanism would be to use quantities of &lt;span class="math inline"&gt;\(e^{\theta(k)}\)&lt;/span&gt; instead of &lt;span class="math inline"&gt;\(\theta(k)\)&lt;/span&gt;.&lt;/p&gt;'><sup>3</sup></a>. Also note a summation term is used on the left-hand side of the expression for an absent stimulus. It implies that all the present stimuli <span class="math inline">\(M\)</span> contribute to the salience of stimulus <span class="math inline">\(k\)</span>. Finally, note on the right side of the same expression that the present stimuli contribute not only via the direct association each of them have with <span class="math inline">\(k\)</span>, <span class="math inline">\(v_{m,k}\)</span>, but also through associative chains with other absent stimuli (c.f., Eq. 6a).</p>
 </div>
 <div class="section level3">
 <h3 id="generating-responses">4 - Generating responses<a class="anchor" aria-label="anchor" href="#generating-responses"></a>
 </h3>
 <p>Finally, HeiDI responds. The response-generating mechanisms in HeiDI are currently underspecified. In its current version, HeiDI’s responses are the product of the activation of stimulus-specific response units and the connection that those units have with specific motor units. As such, the activation of motor unit <span class="math inline">\(q\)</span>, <span class="math inline">\(r_q\)</span>, is given by</p>
 <p><span class="math display">\[
-\tag{Eq. 9}
+\tag{Eq. 10}
 r_q = R_jw_{j,q}
 \]</span></p>
 <p>where <span class="math inline">\(w_{j,q}\)</span> is a weight representing the association between stimulus-specific unit <span class="math inline">\(j\)</span> and motor unit <span class="math inline">\(q\)</span>.</p>
