@@ -24,6 +24,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/fitting_heidi.html">fitting_heidi</a>
     <a class="dropdown-item" href="../articles/heidi_basics.html">heidi_basics</a>
     <a class="dropdown-item" href="../articles/heidi_math.html">heidi_math</a>
     <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
@@ -69,8 +70,6 @@
 
 <span class="fu">plot_as</span><span class="op">(</span><span class="va">vals</span><span class="op">)</span>
 
-<span class="fu">patch_plots</span><span class="op">(</span><span class="va">plots</span>, <span class="va">selection</span>, options <span class="op">=</span> <span class="fu">get_plot_opts</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-
 <span class="fu">get_plot_opts</span><span class="op">(</span>common_scale <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="fu">plot_common_scale</span><span class="op">(</span><span class="va">plots</span><span class="op">)</span>
@@ -98,7 +97,9 @@
   trial <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">ws</span><span class="op">$</span><span class="va">trial</span><span class="op">)</span>
 <span class="op">)</span>
 
-<span class="fu">patch_graphs</span><span class="op">(</span><span class="va">graphs</span><span class="op">)</span></code></pre></div>
+<span class="fu">patch_graphs</span><span class="op">(</span><span class="va">graphs</span>, selection <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">graphs</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu">patch_plots</span><span class="op">(</span><span class="va">plots</span>, <span class="va">selection</span>, options <span class="op">=</span> <span class="fu">get_plot_opts</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -111,14 +112,10 @@
 <dd><p>A logical stipulating whether to summarize and use stacked bars, instead of points and lines.</p></dd>
 <dt>simple</dt>
 <dd><p>A logical stipulating whether to simplify the plot by collapsing across sources.</p></dd>
-<dt>plots</dt>
-<dd><p>A named list with plots</p></dd>
-<dt>selection</dt>
-<dd><p>A character vector with the selected plots</p></dd>
-<dt>options</dt>
-<dd><p>A list with options</p></dd>
 <dt>common_scale</dt>
 <dd><p>A logical. Whether to plot the data in a common y-scale.</p></dd>
+<dt>plots</dt>
+<dd><p>A named list with plots</p></dd>
 <dt>ws</dt>
 <dd><p>A data.frame containing parsed weights, as returned by parse_heidi_results</p></dd>
 <dt>limits</dt>
@@ -147,6 +144,10 @@
 <dd><p>An integer denoting the trial of the weights to be graphed. Defaults to the last trial in the data.</p></dd>
 <dt>graphs</dt>
 <dd><p>A list of graphs, as returned by make_graphs</p></dd>
+<dt>selection</dt>
+<dd><p>A character vector with the selected plots</p></dd>
+<dt>options</dt>
+<dd><p>A list with options</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>

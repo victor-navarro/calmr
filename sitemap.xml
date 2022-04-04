@@ -7,6 +7,9 @@
     <loc>http://victornavarro.org/heidi/LICENSE.html</loc>
   </url>
   <url>
+    <loc>http://victornavarro.org/heidi/articles/fitting_heidi.html</loc>
+  </url>
+  <url>
     <loc>http://victornavarro.org/heidi/articles/heidi_basics.html</loc>
   </url>
   <url>
@@ -26,6 +29,12 @@
   </url>
   <url>
     <loc>http://victornavarro.org/heidi/news/index.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/heidi/reference/fit_heidi.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/heidi/reference/fit_helpers.html</loc>
   </url>
   <url>
     <loc>http://victornavarro.org/heidi/reference/get_heidi_opts.html</loc>
@@ -50,6 +59,9 @@
   </url>
   <url>
     <loc>http://victornavarro.org/heidi/reference/pipe.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/heidi/reference/quick_heidi.html</loc>
   </url>
   <url>
     <loc>http://victornavarro.org/heidi/reference/run_heidi.html</loc>

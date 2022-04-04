@@ -48,6 +48,7 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/fitting_heidi.html">fitting_heidi</a>
     <a class="dropdown-item" href="../articles/heidi_basics.html">heidi_basics</a>
     <a class="dropdown-item" href="../articles/heidi_math.html">heidi_math</a>
     <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
@@ -112,7 +113,7 @@
                  R2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span>
 <span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Stimulus <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"X_a"</span>, <span class="st">"X_b"</span>, <span class="st">"US"</span><span class="op">)</span>,
                      Alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.30</span>, <span class="fl">.40</span>, <span class="fl">.36</span>, <span class="fl">.50</span><span class="op">)</span><span class="op">)</span>
-<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_heidi.html">run_heidi</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">params</span><span class="op">)</span></code></pre></div>
+<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/quick_heidi.html">quick_heidi</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">params</span><span class="op">)</span></code></pre></div>
 <div class="section level4">
 <h4 id="plotting-the-similarity-between-saliencies">Plotting the similarity between saliencies<a class="anchor" aria-label="anchor" href="#plotting-the-similarity-between-saliencies"></a>
 </h4>
@@ -153,7 +154,7 @@
 <span class="co">#&gt; 6    S6 6A(X_a) FALSE 10(X_a)&gt;(US) FALSE A# FALSE</span></code></pre></div>
 <p>Run the model.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_heidi.html">run_heidi</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">params</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/quick_heidi.html">quick_heidi</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">params</span><span class="op">)</span></code></pre></div>
 <p>And now we can manually plot the distribution of responding among stimuli <code>model$rs</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span><span class="op">$</span><span class="va">rs</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
