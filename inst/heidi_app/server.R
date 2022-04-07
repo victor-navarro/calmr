@@ -39,6 +39,7 @@ shiny::shinyServer(function(input, output) {
     parsed_design(dsg$parsed_design)
     param_df(dsg$param_df)
     plots(dsg$plots)
+    graphs(dsg$graphs)
     selected_plots(dsg$selected_plots)
     sim_options(dsg$sim_options)
     plot_filters(dsg$plot_filters)
@@ -319,6 +320,7 @@ shiny::shinyServer(function(input, output) {
                    parsed_design = parsed_design(),
                    param_df = param_df(),
                    plots = plots(),
+                   graphs = graphs(),
                    selected_plots = selected_plots(),
                    sim_options = sim_options(),
                    plot_options = plot_options(),

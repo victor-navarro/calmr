@@ -118,15 +118,15 @@ training (2 sessions per block). The animals were trained to associate
 each of two levers to one of two unconditioned stimuli (pellets or
 sucrose). Let’s take a look at it.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">pati</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">pati</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 768</span>
 <span class="co">#&gt; Columns: 6</span>
-<span class="co">#&gt; $ subject  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span>
-<span class="co">#&gt; $ block    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3…</span>
-<span class="co">#&gt; $ lever    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> L, L, L, L, L, L, R, R, R, R, R, R, L, L, L, L, L, L, R, R, R…</span>
-<span class="co">#&gt; $ us       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "P", "P", "P", "P", "P", "P", "S", "S", "S", "S", "S", "S", "…</span>
-<span class="co">#&gt; $ response <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> lp, lp, lp, lp, lp, lp, lp, lp, lp, lp, lp, lp, np, np, np, n…</span>
-<span class="co">#&gt; $ rpert    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.9000, 1.5500, 3.3500, 4.1500, 4.6500, 4.3250, 0.4000, 0.162…</span>
+<span class="co">#&gt; $ subject  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1~</span>
+<span class="co">#&gt; $ block    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3~</span>
+<span class="co">#&gt; $ lever    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> L, L, L, L, L, L, R, R, R, R, R, R, L, L, L, L, L, L, R, R, R~</span>
+<span class="co">#&gt; $ us       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "P", "P", "P", "P", "P", "P", "S", "S", "S", "S", "S", "S", "~</span>
+<span class="co">#&gt; $ response <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> lp, lp, lp, lp, lp, lp, lp, lp, lp, lp, lp, lp, np, np, np, n~</span>
+<span class="co">#&gt; $ rpert    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.9000, 1.5500, 3.3500, 4.1500, 4.6500, 4.3250, 0.4000, 0.162~</span>
 <span class="va">pati</span>  <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">block</span>, y <span class="op">=</span> <span class="va">rpert</span>, colour <span class="op">=</span> <span class="va">us</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interaction.html" class="external-link">interaction</a></span><span class="op">(</span><span class="va">us</span>, <span class="va">subject</span><span class="op">)</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/stat_summary.html" class="external-link">stat_summary</a></span><span class="op">(</span>geom <span class="op">=</span> <span class="st">'line'</span>, fun <span class="op">=</span> <span class="st">'mean'</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
@@ -152,7 +152,7 @@ for.</p>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">block</span>, <span class="va">us</span>, <span class="va">response</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>rpert <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">rpert</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pati_summ</span><span class="op">)</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 4</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 x 4</span></span>
 <span class="co">#&gt;   block us    response rpert</span>
 <span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1 P     lp       0.820</span>
@@ -205,7 +205,7 @@ arguments above.</p>
 <code class="sourceCode R"><span class="va">mod_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_heidi.html">run_heidi</a></span><span class="op">(</span>args <span class="op">=</span> <span class="va">my_mod_args</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mod_res</span><span class="op">)</span>
 <span class="co">#&gt; List of 4</span>
-<span class="co">#&gt;  $ ws: tibble [1,152 × 8] (S3: tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;  $ ws: tibble [1,152 x 8] (S3: tbl_df/tbl/data.frame)</span>
 <span class="co">#&gt;   ..$ group     : Factor w/ 2 levels "CB1","CB2": 1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class="co">#&gt;   ..$ trial     : int [1:1152] 1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class="co">#&gt;   ..$ trial_type: Factor w/ 4 levels "L&gt;(Pellet)","L&gt;(Sucrose)",..: 1 1 1 1 1 1 1 1 1 1 ...</span>
@@ -214,7 +214,7 @@ arguments above.</p>
 <span class="co">#&gt;   ..$ s2        : Factor w/ 4 levels "L","Pellet","R",..: 2 3 4 1 3 4 1 2 4 1 ...</span>
 <span class="co">#&gt;   ..$ block_size: num [1:1152] 2 2 2 2 2 2 2 2 2 2 ...</span>
 <span class="co">#&gt;   ..$ value     : num [1:1152] 0.04 0 0 0.04 0 0 0 0 0 0 ...</span>
-<span class="co">#&gt;  $ vs: tibble [768 × 9] (S3: tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;  $ vs: tibble [768 x 9] (S3: tbl_df/tbl/data.frame)</span>
 <span class="co">#&gt;   ..$ group     : Factor w/ 2 levels "CB1","CB2": 1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class="co">#&gt;   ..$ trial     : int [1:768] 1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class="co">#&gt;   ..$ phase     : Factor w/ 1 level "training": 1 1 1 1 1 1 1 1 1 1 ...</span>
@@ -224,7 +224,7 @@ arguments above.</p>
 <span class="co">#&gt;   ..$ s2        : Factor w/ 4 levels "L","Pellet","R",..: 1 2 3 4 1 2 3 4 1 2 ...</span>
 <span class="co">#&gt;   ..$ block_size: num [1:768] 2 2 2 2 2 2 2 2 2 2 ...</span>
 <span class="co">#&gt;   ..$ value     : num [1:768] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="co">#&gt;  $ rs: tibble [1,536 × 8] (S3: tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;  $ rs: tibble [1,536 x 8] (S3: tbl_df/tbl/data.frame)</span>
 <span class="co">#&gt;   ..$ group     : Factor w/ 2 levels "CB1","CB2": 1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class="co">#&gt;   ..$ trial     : int [1:1536] 1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class="co">#&gt;   ..$ phase     : Factor w/ 1 level "training": 1 1 1 1 1 1 1 1 1 1 ...</span>
@@ -233,7 +233,7 @@ arguments above.</p>
 <span class="co">#&gt;   ..$ s2        : Factor w/ 4 levels "L","Pellet","R",..: 1 2 3 4 1 2 3 4 1 2 ...</span>
 <span class="co">#&gt;   ..$ block_size: num [1:1536] 2 2 2 2 2 2 2 2 2 2 ...</span>
 <span class="co">#&gt;   ..$ value     : num [1:1536] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="co">#&gt;  $ as: tibble [384 × 7] (S3: tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;  $ as: tibble [384 x 7] (S3: tbl_df/tbl/data.frame)</span>
 <span class="co">#&gt;   ..$ group     : Factor w/ 2 levels "CB1","CB2": 1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class="co">#&gt;   ..$ trial     : int [1:384] 1 1 1 1 1 1 1 1 2 2 ...</span>
 <span class="co">#&gt;   ..$ phase     : Factor w/ 1 level "training": 1 1 1 1 1 1 1 1 1 1 ...</span>
@@ -245,17 +245,17 @@ arguments above.</p>
 tibbles, we only care about one of them: <code>rs</code> (the model
 responses). Let’s take a quick glance (or glimpse) at it.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">mod_res</span><span class="op">$</span><span class="va">rs</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">mod_res</span><span class="op">$</span><span class="va">rs</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 1,536</span>
 <span class="co">#&gt; Columns: 8</span>
-<span class="co">#&gt; $ group      <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> CB1, CB1, CB1, CB1, CB1, CB1, CB1, CB1, CB1, CB1, CB1, CB1,…</span>
-<span class="co">#&gt; $ trial      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…</span>
-<span class="co">#&gt; $ phase      <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> training, training, training, training, training, training,…</span>
-<span class="co">#&gt; $ trial_type <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> L&gt;(Pellet), L&gt;(Pellet), L&gt;(Pellet), L&gt;(Pellet), L&gt;(Pellet),…</span>
-<span class="co">#&gt; $ s1         <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> L, L, L, L, Pellet, Pellet, Pellet, Pellet, R, R, R, R, Suc…</span>
-<span class="co">#&gt; $ s2         <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> L, Pellet, R, Sucrose, L, Pellet, R, Sucrose, L, Pellet, R,…</span>
-<span class="co">#&gt; $ block_size <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,…</span>
-<span class="co">#&gt; $ value      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…</span></code></pre></div>
+<span class="co">#&gt; $ group      <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> CB1, CB1, CB1, CB1, CB1, CB1, CB1, CB1, CB1, CB1, CB1, CB1,~</span>
+<span class="co">#&gt; $ trial      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,~</span>
+<span class="co">#&gt; $ phase      <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> training, training, training, training, training, training,~</span>
+<span class="co">#&gt; $ trial_type <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> L&gt;(Pellet), L&gt;(Pellet), L&gt;(Pellet), L&gt;(Pellet), L&gt;(Pellet),~</span>
+<span class="co">#&gt; $ s1         <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> L, L, L, L, Pellet, Pellet, Pellet, Pellet, R, R, R, R, Suc~</span>
+<span class="co">#&gt; $ s2         <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> L, Pellet, R, Sucrose, L, Pellet, R, Sucrose, L, Pellet, R,~</span>
+<span class="co">#&gt; $ block_size <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,~</span>
+<span class="co">#&gt; $ value      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~</span></code></pre></div>
 <p>In any case, with that in hand, we can write our model function.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">my_model_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">model_args</span><span class="op">)</span><span class="op">{</span>
@@ -296,7 +296,7 @@ across blocks of trials.</p>
 <p>Let’s see the function in action.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">my_model_function</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.2</span>, <span class="fl">.4</span>, <span class="fl">.3</span><span class="op">)</span>, model_args <span class="op">=</span> <span class="va">my_mod_args</span><span class="op">)</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 24 × 4</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 24 x 4</span></span>
 <span class="co">#&gt;    us    block response   value</span>
 <span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> P         1 lp       0.011<span style="text-decoration: underline;">4</span> </span>
@@ -309,11 +309,11 @@ across blocks of trials.</p>
 <span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> P         4 np       0.045<span style="text-decoration: underline;">6</span> </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> P         5 lp       0.057<span style="text-decoration: underline;">0</span> </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">10</span> P         5 np       0.054<span style="text-decoration: underline;">8</span> </span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 14 more rows</span></span></code></pre></div>
+<span class="co">#&gt; <span style="color: #949494;"># ... with 14 more rows</span></span></code></pre></div>
 <p>And just as a refresher, here’s the summarised empirical data.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pati_summ</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 24 × 4</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 24 x 4</span></span>
 <span class="co">#&gt;    block us    response rpert</span>
 <span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>     1 P     lp       0.820</span>
@@ -326,7 +326,7 @@ across blocks of trials.</p>
 <span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>     2 S     np       3.07 </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>     3 P     lp       2.29 </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">10</span>     3 P     np       3.07 </span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 14 more rows</span></span></code></pre></div>
+<span class="co">#&gt; <span style="color: #949494;"># ... with 14 more rows</span></span></code></pre></div>
 <p>Do you notice anything odd about the ordering? The empirical data is
 sorted in a different way, but I said before that the order of the
 empirical data and model responses must match. I cannot emphasize this
@@ -357,20 +357,20 @@ ordering of the empirical data. Notice the different order in the
   <span class="va">mod_res</span>
 <span class="op">}</span>
 
-<span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="fu">my_model_function</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.2</span>, <span class="fl">.4</span>, <span class="fl">.3</span><span class="op">)</span>, model_args <span class="op">=</span> <span class="va">my_mod_args</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://dplyr.tidyverse.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="fu">my_model_function</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.2</span>, <span class="fl">.4</span>, <span class="fl">.3</span><span class="op">)</span>, model_args <span class="op">=</span> <span class="va">my_mod_args</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 24</span>
 <span class="co">#&gt; Columns: 4</span>
-<span class="co">#&gt; $ block    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6…</span>
-<span class="co">#&gt; $ us       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "P", "P", "S", "S", "P", "P", "S", "S", "P", "P", "S", "S", "…</span>
-<span class="co">#&gt; $ response <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "lp", "np", "lp", "np", "lp", "np", "lp", "np", "lp", "np", "…</span>
-<span class="co">#&gt; $ value    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.011428571, 0.002285714, 0.009086538, 0.001362981, 0.0388438…</span>
-<span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">pati_summ</span><span class="op">)</span>
+<span class="co">#&gt; $ block    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6~</span>
+<span class="co">#&gt; $ us       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "P", "P", "S", "S", "P", "P", "S", "S", "P", "P", "S", "S", "~</span>
+<span class="co">#&gt; $ response <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "lp", "np", "lp", "np", "lp", "np", "lp", "np", "lp", "np", "~</span>
+<span class="co">#&gt; $ value    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.011428571, 0.002285714, 0.009086538, 0.001362981, 0.0388438~</span>
+<span class="fu"><a href="https://dplyr.tidyverse.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">pati_summ</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 24</span>
 <span class="co">#&gt; Columns: 4</span>
-<span class="co">#&gt; $ block    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6…</span>
-<span class="co">#&gt; $ us       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "P", "P", "S", "S", "P", "P", "S", "S", "P", "P", "S", "S", "…</span>
-<span class="co">#&gt; $ response <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> lp, np, lp, np, lp, np, lp, np, lp, np, lp, np, lp, np, lp, n…</span>
-<span class="co">#&gt; $ rpert    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.8195312, 3.4109375, 0.5609375, 3.2796875, 1.5738281, 3.5070…</span></code></pre></div>
+<span class="co">#&gt; $ block    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6~</span>
+<span class="co">#&gt; $ us       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "P", "P", "S", "S", "P", "P", "S", "S", "P", "P", "S", "S", "~</span>
+<span class="co">#&gt; $ response <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> lp, np, lp, np, lp, np, lp, np, lp, np, lp, np, lp, np, lp, n~</span>
+<span class="co">#&gt; $ rpert    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.8195313, 3.4109375, 0.5609375, 3.2796875, 1.5738281, 3.5070~</span></code></pre></div>
 <p>Much better! We are now ready to begin fitting the model.</p>
 </div>
 <div class="section level3">
@@ -401,8 +401,8 @@ job taking care of the first three, so let’s tackle the last.</p>
 <span class="co">#&gt; $sample_pars</span>
 <span class="co">#&gt; function () </span>
 <span class="co">#&gt; c(stats::rbeta(npars, 10, 20), stats::rgamma(1, 2))</span>
-<span class="co">#&gt; &lt;bytecode: 0x11c1793c8&gt;</span>
-<span class="co">#&gt; &lt;environment: 0x11c178788&gt;</span>
+<span class="co">#&gt; &lt;bytecode: 0x00000000257f06c8&gt;</span>
+<span class="co">#&gt; &lt;environment: 0x00000000257ef9e0&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $family</span>
 <span class="co">#&gt; [1] "linear"</span>
