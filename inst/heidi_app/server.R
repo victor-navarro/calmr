@@ -211,7 +211,7 @@ shiny::shinyServer(function(input, output) {
 
   #populating the slider for graph_trial selection
   shiny::observeEvent(parsed_results(), {
-    last_trial = max(parsed_results()$ws$trial)
+    last_trial = max(parsed_results()$vs$trial)
     shiny::updateSliderInput(inputId = "graph_trial",
                              value = last_trial,
                              max = last_trial)

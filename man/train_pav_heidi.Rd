@@ -6,7 +6,7 @@
 \usage{
 train_pav_heidi(
   sals,
-  w,
+  V,
   tps,
   trial_pre_func,
   trial_post_func,
@@ -22,7 +22,7 @@ train_pav_heidi(
 \arguments{
 \item{sals}{A named vector with stimulus saliencies.}
 
-\item{w}{A named array of dimensions S,S; where S is the number of stimuli.}
+\item{V}{A named array of dimensions S,S; where S is the number of stimuli.}
 
 \item{tps}{A vector of trial pointers for training, as a function of trials.}
 
@@ -42,13 +42,13 @@ train_pav_heidi(
 
 \item{block_size}{(optional) A integer vector of length T specifying the block size per trial}
 
-\item{is_test}{(optional) A logical vector specifying whether the trial should result in learning (update w). If an element is TRUE, no update occurs.}
+\item{is_test}{(optional) A logical vector specifying whether the trial should result in learning (update V). If an element is TRUE, no update occurs.}
 }
 \value{
 A list with
 \itemize{
-\item{ws, rs - Arrays of dimensions P,S,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment. Respectively, ws and rs contain the stimulus weights and the stimulus-specific responses.}
-\item{combvs, chainvs - Lists of length P with the r-values, combination vs, and chain vs.}
+\item{vs, rs - Arrays of dimensions P,S,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment. Respectively, vs and rs contain the stimulus weights and the stimulus-specific responses.}
+\item{combs, chains - Lists of length P with the activation values.}
 \item{tps, trial_pre_func, trial_post_func, trial_pre_nomi, trial_post_nomi, nomi_func_map, trial_names, phase, block_size, is_test -  Carryover for further processing. See Arguments.}
 }
 }
@@ -56,5 +56,5 @@ A list with
 Trains a Pavlovian HeiDI
 }
 \note{
-The array w contains the associations for all stimuli involved in the experiment. Entry i,j specifies the associative strength between stimulus i to stimulus j. Entry j,i specifies the opposite direction.
+The array V contains the associations for all stimuli involved in the experiment. Entry i,j specifies the associative strength between stimulus i to stimulus j. Entry j,i specifies the opposite direction.
 }

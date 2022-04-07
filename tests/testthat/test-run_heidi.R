@@ -12,7 +12,7 @@ test_that("quick_heidi works", {
   #error for passing bad options
   expect_error(quick_heidi(df, param_df = pars, options = list(mybadOption = T)))
   #model can run
-  expect_named(quick_heidi(df, param_df = pars), c("ws", "vs", "rs", "as"))
+  expect_named(quick_heidi(df, param_df = pars), c("vs", "acts", "rs", "as"))
   #multiple plots can be obtained
   expect_equal(length(make_plots(quick_heidi(df, pars))), 12)
 
@@ -23,6 +23,6 @@ test_that("quick_heidi works", {
                          P2 = c("1A", "1A"),
                          R2 = c(TRUE, TRUE))
   simple_pars = data.frame(Stimulus = c("A", "B", "US"), Alpha = c(0.1, 0.2, 0.3))
-  expect_named(quick_heidi(simple_df, param_df = simple_pars), c("ws", "vs", "rs", "as"))
+  expect_named(quick_heidi(simple_df, param_df = simple_pars), c("vs", "acts", "rs", "as"))
 
 })

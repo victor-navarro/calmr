@@ -9,7 +9,7 @@ run_heidi <- function(args, parse = TRUE){
   results = args %>%
     dplyr::rowwise() %>%
     dplyr::mutate(mod_data = list(train_pav_heidi(sals = .data$stim_alphas,
-                                                  w = gen_ss_weights(.data$unique_functional_stimuli),
+                                                  V = gen_ss_weights(.data$unique_functional_stimuli),
                                                   tps = .data$tps,
                                                   trial_pre_func = .data$trial_pre_func,
                                                   trial_post_func = .data$trial_post_func,

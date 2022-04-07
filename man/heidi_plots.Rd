@@ -3,8 +3,8 @@
 \name{heidi_plots}
 \alias{heidi_plots}
 \alias{make_plots}
-\alias{plot_ws}
 \alias{plot_vs}
+\alias{plot_acts}
 \alias{plot_rs}
 \alias{plot_as}
 \alias{get_plot_opts}
@@ -18,9 +18,9 @@
 \usage{
 make_plots(dat)
 
-plot_ws(vals)
+plot_vs(vals)
 
-plot_vs(vals, bars = F)
+plot_acts(vals, bars = F)
 
 plot_rs(vals, simple = F)
 
@@ -31,9 +31,9 @@ get_plot_opts(common_scale = TRUE)
 plot_common_scale(plots)
 
 graph_weights(
-  ws,
-  limits = max(abs(range(ws$value))) * c(-1, 1),
-  t = max(ws$trial),
+  vs,
+  limits = max(abs(range(vs$value))) * c(-1, 1),
+  t = max(vs$trial),
   opts = get_graph_opts()
 )
 
@@ -41,8 +41,8 @@ get_graph_opts(graph_size = "small")
 
 make_graphs(
   mod,
-  limits = max(abs(range(mod$ws$value))) * c(-1, 1),
-  trial = max(mod$ws$trial),
+  limits = max(abs(range(mod$vs$value))) * c(-1, 1),
+  trial = max(mod$vs$trial),
   opts = get_graph_opts()
 )
 
@@ -51,7 +51,7 @@ patch_graphs(graphs, selection = names(graphs))
 patch_plots(plots, selection, options = get_plot_opts())
 }
 \arguments{
-\item{dat}{A list containing data.frames with parsed weights, r values, and v values, as returned by parse_heidi_results.}
+\item{dat}{A list containing data.frames with parsed weights, r values, and activation values, as returned by parse_heidi_results.}
 
 \item{vals}{A data.frame containing parsed values}
 
@@ -63,7 +63,7 @@ patch_plots(plots, selection, options = get_plot_opts())
 
 \item{plots}{A named list with plots}
 
-\item{ws}{A data.frame containing parsed weights, as returned by parse_heidi_results}
+\item{vs}{A data.frame containing parsed weights, as returned by parse_heidi_results}
 
 \item{limits}{A vector of length 2 specifying the range of weights. Defaults to the negative and positive maximum of absolute weights.}
 

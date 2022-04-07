@@ -4,8 +4,8 @@
 \alias{heidi_helpers}
 \alias{get_params}
 \alias{gen_ss_weights}
-\alias{parse_ws}
 \alias{parse_vs}
+\alias{parse_acts}
 \alias{parse_rs}
 \alias{parse_as}
 \alias{parse_heidi_results}
@@ -16,9 +16,9 @@ get_params(design, default_par = 0.2)
 
 gen_ss_weights(stims, default_val = 0)
 
-parse_ws(mod)
-
 parse_vs(mod)
+
+parse_acts(mod)
 
 parse_rs(mod)
 
@@ -48,6 +48,6 @@ filter_heidi_results(parsed_results, filters)
 \description{
 get_params generates a data.frame with stimulus salience parameters.
 gen_ss_weights generates a named array with model weights.
-parse_ws, parse_vs, parse_rs and parse_heidi_results parse the raw outputs of train_pav_heidi into a readable format.
+parse_vs, parse_acts, parse_rs and parse_heidi_results parse the raw outputs of train_pav_heidi into a readable format.
 filter_heidi_results is a convenience function to filter specific phase and trial_type data.
 }

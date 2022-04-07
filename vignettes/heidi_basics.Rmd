@@ -95,7 +95,7 @@ And we can finally simulate the model with `quick_heidi`. By default, the functi
 my_sim <- quick_heidi(design_df = my_blocking,
                     param_df = my_pars,
                     options = my_opts)
-names(my_sim) #contains information about weights (ws), v-values (vs), r-values (rs), and alphas (as)
+names(my_sim) #contains information about weights (vs), activation values (acts), r-values (rs), and alphas (as)
 head(my_sim$vs)
 
 ```
@@ -123,17 +123,17 @@ patch_plots(plots = my_plots, selection = plot_names[c(2, 8)]) #Responding
 ```
 
 
-### Stimulus associations
+### Stimulus activations (bar)
 ```{r}
 patch_plots(plots = my_plots, selection = plot_names[c(3, 9)])
 ```
 
-### Combined associative strenghts
+### Stimulus activations (bar)
 ```{r}
 patch_plots(plots = my_plots, selection = plot_names[c(4, 10)])
 ```
 
-### Combined associative strenghts (bar)
+### Stimulus associations
 ```{r}
 patch_plots(plots = my_plots, selection = plot_names[c(5, 11)])
 ```

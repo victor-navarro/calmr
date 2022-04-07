@@ -6,7 +6,7 @@
 NULL
 #> NULL
 #' @rdname heidi_plots
-#' @param dat A list containing data.frames with parsed weights, r values, and v values, as returned by parse_heidi_results.
+#' @param dat A list containing data.frames with parsed weights, r values, and activation values, as returned by parse_heidi_results.
 #' @param vals A data.frame containing parsed values
 #' @param simple A logical stipulating whether to simplify the plot by collapsing across sources.
 #' @param bars A logical stipulating whether to summarize and use stacked bars, instead of points and lines.
@@ -14,7 +14,7 @@ NULL
 #' @param selection A character vector with the selected plots
 #' @param options A list with options
 #' @param common_scale A logical. Whether to plot the data in a common y-scale.
-#' @param ws A data.frame containing parsed weights, as returned by parse_heidi_results
+#' @param vs A data.frame containing parsed weights, as returned by parse_heidi_results
 #' @param trial An integer denoting the trial of the weights to be graphed. Defaults to the last trial in the data.
 #' @param limits A vector of length 2 specifying the range of weights. Defaults to the negative and positive maximum of absolute weights.
 #' @param t An integer specifying a trial
@@ -29,17 +29,17 @@ NULL
 #' @export
 make_plots <- function(dat){
   plotlist = list()
-  for (g in unique(dat$ws$group)){
+  for (g in unique(dat$vs$group)){
     plotlist[[paste0(g, ': Rs (simple)')]] = plot_rs(dat$rs %>% dplyr::filter(.data$group == g), simple = TRUE) +
       ggplot2::labs(title = paste0(g, ': Rs (simple)'))
     plotlist[[paste0(g, ': Rs (complex)')]] = plot_rs(dat$rs %>% dplyr::filter(.data$group == g), simple = FALSE) +
       ggplot2::labs(title = paste0(g, ': Rs (complex)'))
-    plotlist[[paste0(g, ': Vs (bar)')]] = plot_vs(dat$vs %>% dplyr::filter(.data$group == g), bars = TRUE) +
-      ggplot2::labs(title = paste0(g, ': Vs (bar)'))
-    plotlist[[paste0(g, ': Vs (learning)')]] = plot_vs(dat$vs %>% dplyr::filter(.data$group == g)) +
-      ggplot2::labs(title = paste0(g, ': Vs (learning)'))
-    plotlist[[paste0(g, ': Ws')]] = plot_ws(dat$ws %>% dplyr::filter(.data$group == g)) +
-      ggplot2::labs(title = paste0(g, ': Ws'))
+    plotlist[[paste0(g, ': Acts (bar)')]] = plot_acts(dat$acts %>% dplyr::filter(.data$group == g), bars = TRUE) +
+      ggplot2::labs(title = paste0(g, ': Acts (bar)'))
+    plotlist[[paste0(g, ': Acts (learning)')]] = plot_acts(dat$acts %>% dplyr::filter(.data$group == g)) +
+      ggplot2::labs(title = paste0(g, ': Acts (learning)'))
+    plotlist[[paste0(g, ': Vs')]] = plot_vs(dat$vs %>% dplyr::filter(.data$group == g)) +
+      ggplot2::labs(title = paste0(g, ': Vs'))
     plotlist[[paste0(g, ': As')]] = plot_as(dat$as %>% dplyr::filter(.data$group == g)) +
       ggplot2::labs(title = paste0(g, ': As'))
   }
@@ -47,7 +47,7 @@ make_plots <- function(dat){
 }
 #' @rdname heidi_plots
 #' @export
-plot_ws <- function(vals){
+plot_vs <- function(vals){
   vals %>%
     dplyr::mutate(trial = ceiling(.data$trial/.data$block_size)) %>%
     dplyr::group_by(.data$trial, .data$phase, .data$s1, .data$s2) %>%
@@ -64,17 +64,17 @@ plot_ws <- function(vals){
 }
 #' @rdname heidi_plots
 #' @export
-plot_vs <- function(vals, bars = F){
+plot_acts <- function(vals, bars = F){
   summ = vals %>%
     dplyr::mutate(trial = ceiling(.data$trial/.data$block_size)) %>%
     dplyr::group_by(.data$trial, .data$phase,
-                    .data$trial_type, .data$v_type, .data$s1, .data$s2) %>%
+                    .data$trial_type, .data$act_type, .data$s1, .data$s2) %>%
     dplyr::summarise(value = mean(.data$value), .groups = "drop")
   if (!bars){
     plt = summ %>%
       ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value,
-                                   colour = .data$s1, linetype = .data$v_type,
-                                   shape = .data$v_type)) +
+                                   colour = .data$s1, linetype = .data$act_type,
+                                   shape = .data$act_type)) +
       ggplot2::geom_line() +
       ggbeeswarm::geom_beeswarm(groupOnX =FALSE, fill = "white") +
       ggplot2::scale_shape_manual(values = c(21, 16), drop = FALSE) +
@@ -88,11 +88,11 @@ plot_vs <- function(vals, bars = F){
       ggplot2::facet_grid(.data$s2~.data$phase+.data$trial_type, scales = 'free_x')
   }else{
     plt = summ %>%
-      dplyr::group_by(.data$phase, .data$trial_type, .data$v_type,
+      dplyr::group_by(.data$phase, .data$trial_type, .data$act_type,
                       .data$s1, .data$s2) %>%
       dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
       ggplot2::ggplot(ggplot2::aes(x = .data$trial_type, y = .data$value,
-                                   fill = .data$s1, alpha = .data$v_type)) +
+                                   fill = .data$s1, alpha = .data$act_type)) +
       ggplot2::geom_bar(stat = "identity") +
       ggplot2::stat_summary(ggplot2::aes(group = 1), geom = "point", fun = "sum") +
       ggplot2::scale_alpha_manual(values = c(.5, 1)) +
@@ -181,15 +181,15 @@ plot_common_scale <- function(plots){
 
 #' @rdname heidi_plots
 #' @export
-graph_weights <- function(ws, limits = max(abs(range(ws$value)))*c(-1, 1),
-                          t = max(ws$trial), opts = get_graph_opts()){
-  ws = ws %>% dplyr::filter(.data$trial == t) %>%
+graph_weights <- function(vs, limits = max(abs(range(vs$value)))*c(-1, 1),
+                          t = max(vs$trial), opts = get_graph_opts()){
+  vs = vs %>% dplyr::filter(.data$trial == t) %>%
     dplyr::group_by(.data$s1, .data$s2) %>%
     dplyr::summarise(value = mean(.data$value)) %>%
     dplyr::mutate(s1 = as.character(.data$s1), s2 = as.character(.data$s2)) %>%
     dplyr::rename(from = .data$s1, to = .data$s2, weight = .data$value) %>%
     as.data.frame()
-  net = ggnetwork::ggnetwork(network::as.network(ws),
+  net = ggnetwork::ggnetwork(network::as.network(vs),
                              layout = "circle",
                              arrow.gap = opts$arrow.gap)
   ggplot2::ggplot(net, ggplot2::aes(x = .data$x, y = .data$y,
@@ -243,12 +243,12 @@ get_graph_opts <- function(graph_size = "small"){
 #' @rdname heidi_plots
 #' @export
 make_graphs <- function(mod,
-                        limits = max(abs(range(mod$ws$value)))*c(-1, 1),
-                        trial = max(mod$ws$trial),
+                        limits = max(abs(range(mod$vs$value)))*c(-1, 1),
+                        trial = max(mod$vs$trial),
                         opts = get_graph_opts()){
   plotlist = list()
-  for (g in unique(mod$ws$group)){
-    plotlist[[sprintf('Group %s: (Trial %d)', g, trial)]] = graph_weights(mod$ws %>% dplyr::filter(.data$group == g),
+  for (g in unique(mod$vs$group)){
+    plotlist[[sprintf('Group %s: (Trial %d)', g, trial)]] = graph_weights(mod$vs %>% dplyr::filter(.data$group == g),
                                                                           t = trial,
                                                                           limits = limits,
                                                                           opts = opts) +
