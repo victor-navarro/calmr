@@ -23,6 +23,7 @@ anchor <- tags$a(href="http://victornavarro.org/heidi", target="_blank", style =
 header$children[[2]]$children <- tags$div(anchor, class = 'name')
 
 ui <- shinydashboard::dashboardPage(title = "HeiDI Simulator",
+                                    skin = "red",
                                     header,
                                     shinydashboard::dashboardSidebar(disable = T),
                                     shinydashboard::dashboardBody(
