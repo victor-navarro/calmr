@@ -22,12 +22,26 @@
 #' trial_parser("1X>(US_a)/1Y>(US_b)")
 #' @note
 #' Supports complex stimuli in parentheses (e.g., "5A>(US)")
-#' Supports multiple versions of stimuli (e.g., "3(A_a)>(US_a)/3(A_b)>(US_b)")
-#' Supports probe trials, followed by a hash (e.g., "3X#")
-#' On trials that do not have the ">" character, it is assumed that all the specified stimuli are to be used in the generation of the expectation/responding. If so, the "post" entries in the list will contain NAs, as necessary.
+#' Supports multiple nominal versions of stimuli (e.g., "3(A_a)>(US_a)/3(A_b)>(US_b)")
+#' Supports probe trials followed by a hash (e.g., "3X#")
+#' On trials that do not have the ">" character, it is assumed that all the specified stimuli are to be used in the expectation step. If so, the "post" entries in the list will contain NAs, as necessary.
 #' On those trials, the "post" stimuli will be none (a character(0) vector).
 #' @export
 trial_parser <- function(trial_string){
+  #return list with nulls if trial_string is empty
+  if (!nchar(trial_string)){
+  return(list(trial_names = NULL,
+       trial_repeats = 0,
+       trial_pre_functional = NULL,
+       trial_post_functional = NULL,
+       trial_pre_nominal = NULL,
+       trial_post_nominal = NULL,
+       nomi_func_map = NULL,
+       unique_nominal_stimuli = NULL,
+       unique_functional_stimuli = NULL,
+       is_test = NULL))
+  }
+
   ts = unlist(stringr::str_split(trial_string, '/'))
   trial_names = sapply(ts, function(x) gsub("(\\d)+", "", x), USE.NAMES = F)
   trial_repeats = sapply(ts, function(x) as.numeric(stringr::str_extract(x, "(\\d)+")), USE.NAMES = F)

@@ -31,11 +31,11 @@ set.seed(2022)
 
 # Fitting the model to empirical data
 
-We now fit the model to some empirical data (Patitucci et al., 2016, Experiment 1). This will involve writing a function that produces model responses organized like the empirical data, and using that function for MLE. We begin with a short overview of the data, then move to the model function, and finally fit the model.
+We now fit the model to some empirical data (Patitucci et al., 2016, Experiment 1). This will involve writing a function that produces model responses organized as the empirical data, and using that function for maximum likelihood estimation (MLE). We begin with a short overview of the data, then move to the model function, and finally fit the model.
 
 ## The data
 
-The data, `pati`, contains the responses (lever presses or lp, and nose pokes or np) for 32 subjects (rats) across 6 blocks of training (2 sessions per block). The animals were trained to associate each of two levers to one of two unconditioned stimuli (pellets or sucrose). Let's take a look at it.
+The data (`pati`) contains the responses (lever presses or lp, and nose pokes or np) for 32 subjects (rats) across 6 blocks of training (2 sessions per block). The animals were trained to associate each of two levers to one of two unconditioned stimuli (pellets or sucrose). Let's take a look at it.
 
 ```{r}
 glimpse(pati)
@@ -50,22 +50,20 @@ The thicker lines are group averages; the rest are individual subjects. We ignor
 
 ## Writing the model function
 
-The biggest hurdle in fitting the model to empirical data is to write a function that, given a vector of parameters and a model arguments, generates responses that are organized as the empirical data. Let's begin by summarizing the group data first, so we know what to aim for.
+The biggest hurdle in fitting the model to empirical data is to write a function that, given a vector of parameters and model arguments, generates responses that are organized as the empirical data. Let's begin by summarizing the group data first, so we know what to aim for.
 
 ```{r}
-
 pati_summ <- pati %>% 
   group_by(block, us, response) %>%
   summarise(rpert = mean(rpert), .groups = "drop")
 head(pati_summ)
-
 ```
 
-We now prepare the arguments for the model function (as you would pass to `run_heidi`). To achieve this, we will use `make_heidi_args`, a function that in turn necessitates three other bits: 1) a design data.frame, 2) a table with parameters, and 3) a list with simulation options. Note that these arguments are fixed during the optimization process, which means that the training routine for each simulation run is the same every time. 
+We now prepare the arguments for the model function (as you would pass to `run_heidi`). To achieve this, we will use `make_heidi_args`, a function that requires three other bits: 1) a design data.frame, 2) a table with parameters, and 3) a list with simulation options. Note that these arguments are fixed during the optimization process, which means that the training routine within each iteration of the numerical optimization is always the same.
 
-This is no minor issue, because the model is sensitive to order effects. Hence, it is important that the arguments we prepare here reflect the overall behavior of the model. Here, we simply address this issue by running several iterations of the model (with different training routines) and average all models before evaluating the likelihood of the parameters.
+This is no minor issue, because the HeiDI is sensitive to order effects. Hence, it is important that the arguments we prepare here reflect the behavior of the model after an "general" experimental procedure, and not the quirks of an unfortunate run of tials. Here, we simply address this issue by running several iterations of the model (with random trial orders) and average all models before evaluating the likelihood of the parameters.
 
-The experiment presented in Patittuci et al. (2016) was fairly simple, and it can be reduced to two levers each followed by a different appetitive outcome. Here, we will assume that the two outcomes are independent from each other. We will also take some liberties with the number of trials we specify in order to reduce computing time.
+So what do we have to design? The experiment presented in Patittuci et al. (2016) was fairly simple, and it can be reduced to the presentations of two levers, each followed by a different appetitive outcome. Here, we will assume that the two outcomes are independent from each other. We will also take some liberties with the number of trials we specify in order to reduce computing time.
 
 
 ```{r}
@@ -82,7 +80,7 @@ my_mod_args <- make_heidi_args(design = parse_design(des_df), pars = pars, opts 
 
 ```
 
-Note we specified two counterbalancings as groups. It is very important that we reproduce the counterbalancings in the data we are trying to fit as close as possible. Otherwise, the optimization process will latch onto experimentally-irrelevant variables. For example, it can be seen in `pati` that there was more lever pressing whenever a lever was paired with pellets. If we didn't counterbalance the identities of the levers and USs, the model might think that one of the levers is less salient than the other.
+Note we specified two counterbalancings as groups. It is very important that we reproduce the counterbalancings in the data we are trying to fit as close as possible. Otherwise, the optimization process might latch onto experimentally-irrelevant variables. For example, it can be seen in `pati` that there was more lever pressing whenever a lever was paired with pellets. If we didn't counterbalance the identities of the levers and USs, the optimization might result into one of the levers being less salient than the other.
 
 We can now begin to write the model function. First, it would be a good idea to see what `run_heidi` returns if run with the arguments above.
 
@@ -91,13 +89,7 @@ mod_res <- run_heidi(args = my_mod_args)
 str(mod_res)
 ```
 
-Although the `run_heidi` function returns a list with 4 tibbles, we only care about one of them: `rs` (the model responses). Let's take a quick glance (or glimpse) at it.
-
-```{r}
-glimpse(mod_res$rs)
-```
-
-In any case, with that in hand, we can write our model function.
+Although the `run_heidi` function returns a list with 4 tibbles, we only care about one of them: `rs` (the model responses). With that in hand, we can write our model function.
 
 ```{r}
 my_model_function <- function(pars, model_args){
@@ -122,7 +114,13 @@ my_model_function <- function(pars, model_args){
 
 ```
 
-Let's dissect the function in its three parts. First, we do some manipulation on the vector of parameters: we name them according to the stimulus names identified in the arguments (`names(model_args$stim_alphas[[1]])`). We do this because the function we use to simulate (i.e., the one called by `run_heidi`) requires a named vector to work, and some optimizers (looking at you optim) strip the names from the numerical vectors they are trying to optimize. We next run the model and immediately select the relevant information (rs). Finally, we summarise the model responses, taking care of the different counterbalancings in the process. Within this step, we also filter all output nodes that are not related to expecting one of the USs (because the latest public version of the model is lagging behind the latest theoretical developments), we classify responses as being nosepokes (produced by the US) or lever presses (produced by the levers), and calculate the mean across blocks of trials.
+Let's dissect the function above in its three parts. 
+
+1. We do some manipulation on the vector of parameters, naming them according to the stimulus names identified in the arguments (`names(model_args$stim_alphas[[1]])`). We do this because the function we use to simulate (i.e., the one called by `run_heidi`) requires a named vector to work, and some optimizers (looking at you optim) strip the names from the numerical vectors they are trying to optimize. 
+
+2. We run the model and immediately select the relevant information (rs).
+
+3. Finally, we summarise the model responses, taking care of the different counterbalancings in the process. Within this step, we also filter all output nodes that are not related to expecting one of the USs (because the latest public version of the model is lagging behind the latest theoretical developments), we classify responses as being nosepokes (produced by the US) or lever presses (produced by the levers), and calculate the mean across blocks of trials.
 
 Let's see the function in action.
 
@@ -170,7 +168,14 @@ Much better! We are now ready to begin fitting the model.
 
 ## Fitting the model
 
-We fit models in `heidi` using the `fit_heidi` function. This function at least requires 4 arguments: 1) the (empirical) data, 2) a model function, 3) the arguments with which to run that model function, and the optimizer options. We have done a great job taking care of the first three, so let's tackle the last.
+We fit models using the `fit_heidi` function. This function requires 4 arguments: 
+
+1. The (empirical) data
+2. A model function
+3. The arguments with which to run the model function.
+4. The optimizer options.
+
+We have done a great job taking care of the first three, so let's tackle the last.
 
 ```{r}
 my_optimizer_opts <- get_optimizer_opts(optimizer = "optim",
@@ -179,13 +184,13 @@ my_optimizer_opts <- get_optimizer_opts(optimizer = "optim",
 my_optimizer_opts
 ```
 
-The `get_optimizer_opts` returns many things:
+The `get_optimizer_opts` function returns many things:
 
 1. stim_names: The name of the stimuli for which to find salience parameters.
-2. lower and upper: The lower and upper bounds that these parameters can take. Consider shrinking these to speed up the process.
+2. lower and upper: The lower and upper bounds for the parameter search. Consider shrinking these to speed up the process.
 3. optimizer: The numerical optimization technique we wish to use during MLE estimation.
 4. sample_pars: A function that samples parameters from set distributions.
-5. family: The family distribution/link function we assume for our model. In practice, what you request here will be used to determine the link function to transform model responses, and the likelihood function used in the objective function. The linear family here will estimate an extra parameter, scale, which scales the model responses into (roughly) the scale of the empirical data.
+5. family: The family distribution we assume for our model. In practice, what you request here will be used to determine the link function to transform model responses, and the likelihood function used in the objective function. The linear family here does nothing fancy to the model responses, and will estimate an extra parameter, scale, which scales the model responses into (roughly) the scale of the empirical data. When it comes to likelihood functions, this family will use the normal density of the data and model differences.
 6. family_pars: The family-specific parameter being estimated alongside salience parameters.
 7. verbose: Whether to print parameters and objective function values as we optimize.
 8. optim_options: The optimizer-specific options that are used in the optimization call.
@@ -208,7 +213,6 @@ the_fit <- fit_heidi(pati_summ$rpert,
 #save("the_fit", file = "fitting_heidi_fit.rda")
 load(file = "fitting_heidi_fit.rda")
 ```
-
 
 
 The `fit_heidi` function returns a lot of information to track what we put in and what we got out. Regarding the latter, we can see the MLE parameters we obtained this time, and their negative log likelihood, given the data:

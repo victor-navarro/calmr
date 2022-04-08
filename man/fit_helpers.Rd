@@ -12,11 +12,11 @@ fit_predict(fit, new_args = NULL, type = "response")
 \arguments{
 \item{optimizer}{A string specifying the optimizer to use. One from \code{c("optim")}}
 
-\item{stim_names}{A string specifying the name of stimuli in the experiment}
+\item{stim_names}{A character vector with the names of the stimuli in the experiment.}
 
-\item{family}{A string specifying the family function to generate responses (and calculate the likelihood function with). Currently supports \code{c("identity", "linear", "poisson")}}
+\item{family}{A string specifying the family function to generate responses (and calculate the likelihood function with). One from \code{c("identity", "linear", "poisson")}.}
 
-\item{adj}{The adjustment factor for upper and lower bounds. Default is 1e-6}
+\item{adj}{The adjustment factor for upper and lower bounds of the salience parameters. Default is 1e-6}
 
 \item{fit}{A fit, as returned by \code{fit_heidi}.}
 
@@ -25,8 +25,12 @@ fit_predict(fit, new_args = NULL, type = "response")
 \item{type}{The type of prediction. One from \code{c("response")}. If \code{response}, the link function used to fit the model is applied to the model function before return.}
 }
 \description{
-An assortment of functions to help fit HeiDI
+get_optimizer_opts returns a list with options for optimization
+fit_predict returns a model prediction given a fit
 }
 \note{
-Whenever a family function other than the identity is used, the family-specific parameters will always be appended to the end of the relevant list entries.
+Whenever a family function other than the identity is used, the family-specific parameters will always be appended to the end of the relevant lists.
+}
+\seealso{
+\code{\link{fit_heidi}}, \code{\link{make_heidi_args}}
 }

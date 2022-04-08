@@ -1,4 +1,4 @@
-#' Parse each string in a data.frame
+#' Parse each string in a design data.frame
 #' @param df A data.frame of dimensions Groups, 2*Phases+1
 #'
 #' @return A tibble containing the parsed design in long format.
@@ -11,7 +11,7 @@
 #' @examples
 #' df <- data.frame(Group = c('Group 1', 'Group 2'), P1 = c('10AB(US)', '10A(US)'), R1 = c(TRUE, TRUE))
 #' parse_design(df)
-#' @seealso trial_parser
+#' @seealso \code{\link{trial_parser}}
 #' @export
 parse_design <- function(df){
   design_list = vector('list', nrow(df))

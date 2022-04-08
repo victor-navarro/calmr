@@ -23,6 +23,6 @@ A tibble with the following variables:
 pati
 }
 \description{
-A dataset containing the rat nose pokes and lever presses when they presented with lever presses associated with different appetitive stimuli.
+A dataset containing rat nose pokes and lever presses when levers were associated with different appetitive stimuli.
 }
 \keyword{datasets}

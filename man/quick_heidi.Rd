@@ -11,9 +11,9 @@ quick_heidi(design_df, param_df = NULL, options = NULL, parse = TRUE)
 
 \item{param_df}{A data.frame of dimensions N,2; where N is the number of stimuli in the experimental design.}
 
-\item{options}{A list of options, as returned by get_heidi_opts.}
+\item{options}{A list of options, as returned by \code{get_heidi_opts}.}
 
-\item{parse}{A logical specifying whether the results should be parsed. Default = TRUE.}
+\item{parse}{A logical specifying whether the results should be parsed via \code{parse_heidi_results}. Default = TRUE.}
 }
 \value{
 A list with parsed results or a tibble with raw results
@@ -21,31 +21,6 @@ A list with parsed results or a tibble with raw results
 \description{
 Runs the model with minimal parameters.
 }
-\note{
-The specification of design_df should adhere to the following rules:
-\itemize{
-\item{
-The first column should specify the Group names
-}
-\item{
-The remaining columns should be paired, each pair denoting a single experimental phase.
-The first containing trial strings (see below) and logicals denoting whether the trials should be randomized or not.
-}
-\item{
-Trial strings use a specific syntax. Take the string "30AX(US)/10A", for example.
-\itemize{
-\item{
-The "/" character is used to denote different trials. Above, the string specifies two trial types.
-}
-\item{
-Parentheses are used to denote complex stimuli (or stimuli that need to be specifically named). Above, US is a named stimulus.
-}
-\item{
-The numbers at the beginning of each trial type denote the number of trials given within a phase.
-}}
-}
-}
-}
 \seealso{
-get_heidi_opts, parse_design, train_pav_heidi, parse_heidi_results
+\code{\link{get_heidi_opts}}, \code{\link{parse_heidi_results}}
 }

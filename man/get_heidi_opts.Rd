@@ -11,9 +11,18 @@ get_heidi_opts(iterations = 1, miniblocks = TRUE)
 
 \item{miniblocks}{A logical denoting whether to create trial miniblocks when possible. Default = TRUE.}
 }
+\value{
+A list with default or user-given options.
+}
 \description{
 Get options for heidi model
 }
+\note{
+The miniblocks option will direct the sampling function (make_heidi_args) to create equally-sized miniblocks with random trials within a phase. For example, the phase string "2A/2B" will create two miniblocks with one of each trial. The phase string "2A/4B" will create two miniblocks with one A trial, and 2 B trials. However, the phase string "2A/1B" will not result in lead to miniblocks, even if miniblocks here is set to TRUE.
+}
 \examples{
 get_heidi_opts(iterations = 10)
+}
+\seealso{
+\code{\link{make_heidi_args}}
 }

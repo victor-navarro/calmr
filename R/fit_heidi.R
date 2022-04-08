@@ -1,8 +1,8 @@
 #' Fit HeiDI to data
-#' @description A function to to obtain MLE estimates for HeiDI, given data
-#' @param data A numeric vector containing data to fit HeiDI against
-#' @param model_function A function that runs heidi, given a vector of stimulus saliencies, and returns data.frame of r-values, with identical organization to data.
-#' @param model_args The arguments to train the model function. As returned by make_heidi_args.
+#' @description Obtain MLE estimates for HeiDI, given data
+#' @param data A numeric vector containing data to fit HeiDI against.
+#' @param model_function A function that runs the model and returns data.frame of r-values, organized as data.
+#' @param model_args The arguments to train the model function. Usually as returned by make_heidi_args.
 #' @param optimizer_options A list with options for the optimizer, as returned by get_optimizer_opts.
 #' @param ... Extra parameters passed to the optimizer call
 #' @return A list with
@@ -14,14 +14,14 @@
 #' \item {data: the data used to fit the model}
 #' \item {model_function: the model function supplied by the user}
 #' \item {link_function: the link function used during the process}
-#' \item {ll_function: the log-likelihood function used during the process}
+#' \item {ll_function: the log-likelihood function used during the search process}
 #' \item {model_args: the model function arguments supplied by the user}
 #' \item {optimizer_options: the optimizer options supplied by the user}
-#' \item {extra_pars: any extra parameters passed to the main function}
+#' \item {extra_pars: any extra parameters passed to the optimizer call via ...}
 #' }
 #' @note See the fitting_heidi vignette for examples
 #' @export
-#' @seealso `get_optimizer_opts`
+#' @seealso \code{\link{get_optimizer_opts}}, \code{\link{make_heidi_args}}
 fit_heidi <- function(data, model_function, model_args, optimizer_options, ...){
   npars = length(optimizer_options$lower)
   #determine where to the model-specific parameters end

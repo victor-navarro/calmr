@@ -1,12 +1,12 @@
 #' Make a tibble to fit a heidi model
 #'
-#' @param design A design list, as returned by parse_design
-#' @param pars A parameter data.frame as returned by get_params
-#' @param opts A list with options
+#' @param design A design tibble, as returned by `parse_design`
+#' @param pars A data.frame containing parameters as returned by `get_params`
+#' @param opts A list with options as returned by `get_heidi_opts`
 #'
 #' @return A tibble with the arguments required to run the model. Each row represents a group in the experimental design.
 #'
-#' @seealso parse_design, get_params
+#' @seealso \code{\link{parse_design}}, \code{\link{get_params}}, \code{\link{get_heidi_opts}}
 #' @examples
 #' df <- data.frame(Group = c('Group 1', 'Group 2'), P1 = c('10AB(US)', '10A(US)'), R1 = c(TRUE, TRUE))
 #' des <- parse_design(df)
@@ -15,7 +15,7 @@
 #'
 #' @export
 
-make_heidi_args <- function(design, pars, opts){
+make_heidi_args <- function(design, pars, opts = get_heidi_opts()){
   #Returns a tibble to run design in a rowwise manner (each row is a group)
   #Some early info
   snames = pars$Stimulus

@@ -1,21 +1,21 @@
 #' Trains a Pavlovian HeiDI
-#' @param sals A named vector with stimulus saliencies.
-#' @param V A named array of dimensions S,S; where S is the number of stimuli.
+#' @param sals A named vector with stimulus saliences.
+#' @param V A named matrix of dimensions S,S; where S is the number of stimuli.
 #' @param tps A vector of trial pointers for training, as a function of trials.
 #' @param trial_pre_func A list of length T, with character vectors specifying the functional stimuli involved in the expectation part of each trial. T is the number of unique trials in the experiment.
 #' @param trial_post_func As above, but for the correction part of the trial.
 #' @param trial_pre_nomi A list of length T, with character vectors specifying the nominal stimuli involved in the expectation part of each trial.
-#' @param trial_post_nomi As above, but for the correctino part of the trial.
+#' @param trial_post_nomi As above, but for the correction part of the trial.
 #' @param nomi_func_map A data.frame with the mappings between nominal and functional stimuli
-#' @param trial_names (optional) A character vector of length T with the names of the trials
-#' @param phase (optional) A character vector of length T with the names of the phases
-#' @param block_size (optional) A integer vector of length T specifying the block size per trial
-#' @param is_test (optional) A logical vector specifying whether the trial should result in learning (update V). If an element is TRUE, no update occurs.
+#' @param trial_names A character vector of length T with the names of the trials
+#' @param phase A character vector of length T with the names of the phases
+#' @param block_size A integer vector of length T specifying the block size per trial
+#' @param is_test A logical vector specifying whether the trial should result in learning (update V). If an element is TRUE, no update occurs.
 #' @return A list with
 #' \itemize{
 #' \item{vs, rs - Arrays of dimensions P,S,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment. Respectively, vs and rs contain the stimulus weights and the stimulus-specific responses.}
-#' \item{combs, chains - Lists of length P with the activation values.}
-#' \item{tps, trial_pre_func, trial_post_func, trial_pre_nomi, trial_post_nomi, nomi_func_map, trial_names, phase, block_size, is_test -  Carryover for further processing. See Arguments.}
+#' \item{combs, chains - Lists of length P with combined and chained activation values.}
+#' \item{tps, trial_pre_func, trial_post_func, trial_pre_nomi, trial_post_nomi, nomi_func_map, trial_names, phase, block_size, is_test - Carryover arguments further processing.}
 #' }
 #' @note The array V contains the associations for all stimuli involved in the experiment. Entry i,j specifies the associative strength between stimulus i to stimulus j. Entry j,i specifies the opposite direction.
 #' @export
@@ -25,10 +25,10 @@ train_pav_heidi <- function(sals, V, tps,
                             trial_pre_nomi,
                             trial_post_nomi,
                             nomi_func_map,
-                            trial_names = NULL,
-                            phase = NULL,
-                            block_size = NULL,
-                            is_test = rep(FALSE, length(tps))){
+                            trial_names,
+                            phase,
+                            block_size,
+                            is_test){
   vs = array(NA, dim = c(length(tps), dim(V)),
              dimnames = list(NULL, rownames(V), rownames(V)))
   rs = vs

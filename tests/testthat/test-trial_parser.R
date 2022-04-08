@@ -1,5 +1,8 @@
 test_that("trial_parser works", {
   #### trial_parser tests ####
+  #parsing of an empty string
+  expect_setequal(
+    trial_parser("")$trial_repeats, 0)
   #simple parsing of nominal stimuli
   expect_setequal(
     trial_parser("10AB(AB)>(US)")$unique_nominal_stimuli, c("A", "B", "AB", "US"))

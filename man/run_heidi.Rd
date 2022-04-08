@@ -7,7 +7,7 @@
 run_heidi(args, parse = TRUE)
 }
 \arguments{
-\item{args}{A tibble as returned by make_heidi_args.}
+\item{args}{A tibble as returned by \code{make_heidi_args}.}
 
 \item{parse}{A logical specifying whether the results should be parsed. Default = TRUE.}
 }
@@ -15,8 +15,8 @@ run_heidi(args, parse = TRUE)
 A list with parsed results or a tibble with raw results
 }
 \description{
-Runs the model under especific arguments.
+Runs the model under specific arguments.
 }
 \seealso{
-get_heidi_opts, parse_design, train_pav_heidi, quick_heidi, parse_heidi_results
+\code{\link{make_heidi_args}}
 }

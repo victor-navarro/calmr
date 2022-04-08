@@ -1,19 +1,19 @@
 #' An assortment of functions to help heidi
 #' @description
 #' get_params generates a data.frame with stimulus salience parameters.
-#' gen_ss_weights generates a named array with model weights.
-#' parse_vs, parse_acts, parse_rs and parse_heidi_results parse the raw outputs of train_pav_heidi into a readable format.
+#' gen_ss_weights generates a named matrix with model weights.
+#' parse_vs, parse_acts, parse_rs, parse_as and parse_heidi_results parse the raw outputs of train_pav_heidi into tibbles.
 #' filter_heidi_results is a convenience function to filter specific phase and trial_type data.
-#' @param design An experimental design. Either a data.frame or a tibble returned by parse_design
-#' @param default_par A float between 0 and 1
+#' @param design An data.frame containing the experimental design.
+#' @param default_par A float between 0 and 1.
 #' @param stims A character vector with stimuli
 #' @param default_val Default alpha value
 #' @param mod A model list, as returned by train_pav_heidi
 #' @param raw_results A tibble with model information, as returned by quick_heidi
 #' @param parsed_results A list with parsed results, as returned by parse_heidi_results
 #' @param filters A named list containing "phase" and "trial_type" character vectors, for filtering data
-#' @import magrittr
 #' @importFrom rlang .data
+#' @seealso \code{\link{parse_design}}, \code{\link{train_pav_heidi}}, \code{\link{quick_heidi}}
 #' @name heidi_helpers
 NULL
 #> NULL

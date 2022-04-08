@@ -4,14 +4,14 @@
 \alias{make_heidi_args}
 \title{Make a tibble to fit a heidi model}
 \usage{
-make_heidi_args(design, pars, opts)
+make_heidi_args(design, pars, opts = get_heidi_opts())
 }
 \arguments{
-\item{design}{A design list, as returned by parse_design}
+\item{design}{A design tibble, as returned by \code{parse_design}}
 
-\item{pars}{A parameter data.frame as returned by get_params}
+\item{pars}{A data.frame containing parameters as returned by \code{get_params}}
 
-\item{opts}{A list with options}
+\item{opts}{A list with options as returned by \code{get_heidi_opts}}
 }
 \value{
 A tibble with the arguments required to run the model. Each row represents a group in the experimental design.
@@ -27,5 +27,5 @@ make_heidi_args(design = des, pars = ps, opts = get_heidi_opts(iterations = 1))
 
 }
 \seealso{
-parse_design, get_params
+\code{\link{parse_design}}, \code{\link{get_params}}, \code{\link{get_heidi_opts}}
 }

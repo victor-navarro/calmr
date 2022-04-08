@@ -29,9 +29,9 @@ parse_heidi_results(raw_results)
 filter_heidi_results(parsed_results, filters)
 }
 \arguments{
-\item{design}{An experimental design. Either a data.frame or a tibble returned by parse_design}
+\item{design}{An data.frame containing the experimental design.}
 
-\item{default_par}{A float between 0 and 1}
+\item{default_par}{A float between 0 and 1.}
 
 \item{stims}{A character vector with stimuli}
 
@@ -47,7 +47,10 @@ filter_heidi_results(parsed_results, filters)
 }
 \description{
 get_params generates a data.frame with stimulus salience parameters.
-gen_ss_weights generates a named array with model weights.
-parse_vs, parse_acts, parse_rs and parse_heidi_results parse the raw outputs of train_pav_heidi into a readable format.
+gen_ss_weights generates a named matrix with model weights.
+parse_vs, parse_acts, parse_rs, parse_as and parse_heidi_results parse the raw outputs of train_pav_heidi into tibbles.
 filter_heidi_results is a convenience function to filter specific phase and trial_type data.
+}
+\seealso{
+\code{\link{parse_design}}, \code{\link{train_pav_heidi}}, \code{\link{quick_heidi}}
 }

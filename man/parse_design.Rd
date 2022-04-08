@@ -2,7 +2,7 @@
 % Please edit documentation in R/parse_design.R
 \name{parse_design}
 \alias{parse_design}
-\title{Parse each string in a data.frame}
+\title{Parse each string in a design data.frame}
 \usage{
 parse_design(df)
 }
@@ -13,7 +13,7 @@ parse_design(df)
 A tibble containing the parsed design in long format.
 }
 \description{
-Parse each string in a data.frame
+Parse each string in a design data.frame
 }
 \note{
 \itemize{
@@ -27,5 +27,5 @@ df <- data.frame(Group = c('Group 1', 'Group 2'), P1 = c('10AB(US)', '10A(US)'),
 parse_design(df)
 }
 \seealso{
-trial_parser
+\code{\link{trial_parser}}
 }

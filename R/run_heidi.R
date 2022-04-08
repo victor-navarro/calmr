@@ -1,9 +1,9 @@
 #' @title Run the HeiDI model
-#' @description Runs the model under especific arguments.
-#' @param args A tibble as returned by make_heidi_args.
+#' @description Runs the model under specific arguments.
+#' @param args A tibble as returned by `make_heidi_args`.
 #' @param parse A logical specifying whether the results should be parsed. Default = TRUE.
 #' @return A list with parsed results or a tibble with raw results
-#' @seealso get_heidi_opts, parse_design, train_pav_heidi, quick_heidi, parse_heidi_results
+#' @seealso \code{\link{make_heidi_args}}
 #' @export
 run_heidi <- function(args, parse = TRUE){
   results = args %>%

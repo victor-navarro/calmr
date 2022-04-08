@@ -30,9 +30,9 @@ Parses a string stipulating trials
 }
 \note{
 Supports complex stimuli in parentheses (e.g., "5A>(US)")
-Supports multiple versions of stimuli (e.g., "3(A_a)>(US_a)/3(A_b)>(US_b)")
-Supports probe trials, followed by a hash (e.g., "3X#")
-On trials that do not have the ">" character, it is assumed that all the specified stimuli are to be used in the generation of the expectation/responding. If so, the "post" entries in the list will contain NAs, as necessary.
+Supports multiple nominal versions of stimuli (e.g., "3(A_a)>(US_a)/3(A_b)>(US_b)")
+Supports probe trials followed by a hash (e.g., "3X#")
+On trials that do not have the ">" character, it is assumed that all the specified stimuli are to be used in the expectation step. If so, the "post" entries in the list will contain NAs, as necessary.
 On those trials, the "post" stimuli will be none (a character(0) vector).
 }
 \examples{

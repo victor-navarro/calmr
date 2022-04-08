@@ -149,8 +149,8 @@ You can also take a look at the state of the model's associations at any point d
 
 ```{r}
 my_graph_opts <- get_graph_opts("small")
-make_graphs(my_sim, trial = 10, opts = my_graph_opts)
-make_graphs(my_sim, trial = 20, opts = my_graph_opts)
+make_graphs(my_sim, t = 10, graph_opts = my_graph_opts)
+make_graphs(my_sim, t = 20, graph_opts = my_graph_opts)
 ```
 
 ## Final thoughts

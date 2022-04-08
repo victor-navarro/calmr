@@ -69,19 +69,19 @@
   <span class="va">trial_pre_nomi</span>,
   <span class="va">trial_post_nomi</span>,
   <span class="va">nomi_func_map</span>,
-  trial_names <span class="op">=</span> <span class="cn">NULL</span>,
-  phase <span class="op">=</span> <span class="cn">NULL</span>,
-  block_size <span class="op">=</span> <span class="cn">NULL</span>,
-  is_test <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">tps</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">trial_names</span>,
+  <span class="va">phase</span>,
+  <span class="va">block_size</span>,
+  <span class="va">is_test</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>sals</dt>
-<dd><p>A named vector with stimulus saliencies.</p></dd>
+<dd><p>A named vector with stimulus saliences.</p></dd>
 <dt>V</dt>
-<dd><p>A named array of dimensions S,S; where S is the number of stimuli.</p></dd>
+<dd><p>A named matrix of dimensions S,S; where S is the number of stimuli.</p></dd>
 <dt>tps</dt>
 <dd><p>A vector of trial pointers for training, as a function of trials.</p></dd>
 <dt>trial_pre_func</dt>
@@ -91,23 +91,23 @@
 <dt>trial_pre_nomi</dt>
 <dd><p>A list of length T, with character vectors specifying the nominal stimuli involved in the expectation part of each trial.</p></dd>
 <dt>trial_post_nomi</dt>
-<dd><p>As above, but for the correctino part of the trial.</p></dd>
+<dd><p>As above, but for the correction part of the trial.</p></dd>
 <dt>nomi_func_map</dt>
 <dd><p>A data.frame with the mappings between nominal and functional stimuli</p></dd>
 <dt>trial_names</dt>
-<dd><p>(optional) A character vector of length T with the names of the trials</p></dd>
+<dd><p>A character vector of length T with the names of the trials</p></dd>
 <dt>phase</dt>
-<dd><p>(optional) A character vector of length T with the names of the phases</p></dd>
+<dd><p>A character vector of length T with the names of the phases</p></dd>
 <dt>block_size</dt>
-<dd><p>(optional) A integer vector of length T specifying the block size per trial</p></dd>
+<dd><p>A integer vector of length T specifying the block size per trial</p></dd>
 <dt>is_test</dt>
-<dd><p>(optional) A logical vector specifying whether the trial should result in learning (update V). If an element is TRUE, no update occurs.</p></dd>
+<dd><p>A logical vector specifying whether the trial should result in learning (update V). If an element is TRUE, no update occurs.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A list with</p><ul><li><p>vs, rs - Arrays of dimensions P,S,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment. Respectively, vs and rs contain the stimulus weights and the stimulus-specific responses.</p></li>
-<li><p>combs, chains - Lists of length P with the activation values.</p></li>
-<li><p>tps, trial_pre_func, trial_post_func, trial_pre_nomi, trial_post_nomi, nomi_func_map, trial_names, phase, block_size, is_test -  Carryover for further processing. See Arguments.</p></li>
+<li><p>combs, chains - Lists of length P with combined and chained activation values.</p></li>
+<li><p>tps, trial_pre_func, trial_post_func, trial_pre_nomi, trial_post_nomi, nomi_func_map, trial_names, phase, block_size, is_test - Carryover arguments further processing.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
