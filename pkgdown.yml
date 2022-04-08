@@ -2,11 +2,11 @@ pandoc: 2.7.3
 pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
-  fitting_heidi: fitting_heidi.html
   heidi_basics: heidi_basics.html
+  heidi_fits: heidi_fits.html
   heidi_math: heidi_math.html
   heidi_similarity: heidi_similarity.html
-last_built: 2022-04-08T15:02Z
+last_built: 2022-04-08T15:16Z
 urls:
   reference: http://victornavarro.org/heidi/reference
   article: http://victornavarro.org/heidi/articles
