@@ -102,11 +102,11 @@
 <div class="section level2">
 <h2 id="fitting-the-model-to-empirical-data">Fitting the model to empirical data<a class="anchor" aria-label="anchor" href="#fitting-the-model-to-empirical-data"></a>
 </h2>
-<p>We now fit the model to some empirical data (Patitucci et al., 2016, Experiment 1). This will involve writing a function that produces model responses organized like the empirical data, and using that function for MLE. We begin with a short overview of the data, then move to the model function, and finally fit the model.</p>
+<p>We now fit the model to some empirical data (Patitucci et al., 2016, Experiment 1). This will involve writing a function that produces model responses organized as the empirical data, and using that function for maximum likelihood estimation (MLE). We begin with a short overview of the data, then move to the model function, and finally fit the model.</p>
 <div class="section level3">
 <h3 id="the-data">The data<a class="anchor" aria-label="anchor" href="#the-data"></a>
 </h3>
-<p>The data, <code>pati</code>, contains the responses (lever presses or lp, and nose pokes or np) for 32 subjects (rats) across 6 blocks of training (2 sessions per block). The animals were trained to associate each of two levers to one of two unconditioned stimuli (pellets or sucrose). Let’s take a look at it.</p>
+<p>The data (<code>pati</code>) contains the responses (lever presses or lp, and nose pokes or np) for 32 subjects (rats) across 6 blocks of training (2 sessions per block). The animals were trained to associate each of two levers to one of two unconditioned stimuli (pellets or sucrose). Let’s take a look at it.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">pati</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 768</span>
@@ -128,10 +128,9 @@
 <div class="section level3">
 <h3 id="writing-the-model-function">Writing the model function<a class="anchor" aria-label="anchor" href="#writing-the-model-function"></a>
 </h3>
-<p>The biggest hurdle in fitting the model to empirical data is to write a function that, given a vector of parameters and a model arguments, generates responses that are organized as the empirical data. Let’s begin by summarizing the group data first, so we know what to aim for.</p>
+<p>The biggest hurdle in fitting the model to empirical data is to write a function that, given a vector of parameters and model arguments, generates responses that are organized as the empirical data. Let’s begin by summarizing the group data first, so we know what to aim for.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">pati_summ</span> <span class="op">&lt;-</span> <span class="va">pati</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+<code class="sourceCode R"><span class="va">pati_summ</span> <span class="op">&lt;-</span> <span class="va">pati</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">block</span>, <span class="va">us</span>, <span class="va">response</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>rpert <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">rpert</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pati_summ</span><span class="op">)</span>
@@ -144,9 +143,9 @@
 <span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     1 S     np       3.28 </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">5</span>     2 P     lp       1.57 </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">6</span>     2 P     np       3.51</span></code></pre></div>
-<p>We now prepare the arguments for the model function (as you would pass to <code>run_heidi</code>). To achieve this, we will use <code>make_heidi_args</code>, a function that in turn necessitates three other bits: 1) a design data.frame, 2) a table with parameters, and 3) a list with simulation options. Note that these arguments are fixed during the optimization process, which means that the training routine for each simulation run is the same every time.</p>
-<p>This is no minor issue, because the model is sensitive to order effects. Hence, it is important that the arguments we prepare here reflect the overall behavior of the model. Here, we simply address this issue by running several iterations of the model (with different training routines) and average all models before evaluating the likelihood of the parameters.</p>
-<p>The experiment presented in Patittuci et al. (2016) was fairly simple, and it can be reduced to two levers each followed by a different appetitive outcome. Here, we will assume that the two outcomes are independent from each other. We will also take some liberties with the number of trials we specify in order to reduce computing time.</p>
+<p>We now prepare the arguments for the model function (as you would pass to <code>run_heidi</code>). To achieve this, we will use <code>make_heidi_args</code>, a function that requires three other bits: 1) a design data.frame, 2) a table with parameters, and 3) a list with simulation options. Note that these arguments are fixed during the optimization process, which means that the training routine within each iteration of the numerical optimization is always the same.</p>
+<p>This is no minor issue, because the HeiDI is sensitive to order effects. Hence, it is important that the arguments we prepare here reflect the behavior of the model after an “general” experimental procedure, and not the quirks of an unfortunate run of tials. Here, we simply address this issue by running several iterations of the model (with random trial orders) and average all models before evaluating the likelihood of the parameters.</p>
+<p>So what do we have to design? The experiment presented in Patittuci et al. (2016) was fairly simple, and it can be reduced to the presentations of two levers, each followed by a different appetitive outcome. Here, we will assume that the two outcomes are independent from each other. We will also take some liberties with the number of trials we specify in order to reduce computing time.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#The design data.frame</span>
 <span class="va">des_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CB1"</span>, <span class="st">"CB2"</span><span class="op">)</span>,
@@ -158,7 +157,7 @@
 <span class="va">opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_heidi_opts.html">get_heidi_opts</a></span><span class="op">(</span>iterations <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
 <span class="co">#The arguments</span>
 <span class="va">my_mod_args</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_heidi_args.html">make_heidi_args</a></span><span class="op">(</span>design <span class="op">=</span> <span class="fu"><a href="../reference/parse_design.html">parse_design</a></span><span class="op">(</span><span class="va">des_df</span><span class="op">)</span>, pars <span class="op">=</span> <span class="va">pars</span>, opts <span class="op">=</span> <span class="va">opts</span><span class="op">)</span></code></pre></div>
-<p>Note we specified two counterbalancings as groups. It is very important that we reproduce the counterbalancings in the data we are trying to fit as close as possible. Otherwise, the optimization process will latch onto experimentally-irrelevant variables. For example, it can be seen in <code>pati</code> that there was more lever pressing whenever a lever was paired with pellets. If we didn’t counterbalance the identities of the levers and USs, the model might think that one of the levers is less salient than the other.</p>
+<p>Note we specified two counterbalancings as groups. It is very important that we reproduce the counterbalancings in the data we are trying to fit as close as possible. Otherwise, the optimization process might latch onto experimentally-irrelevant variables. For example, it can be seen in <code>pati</code> that there was more lever pressing whenever a lever was paired with pellets. If we didn’t counterbalance the identities of the levers and USs, the optimization might result into one of the levers being less salient than the other.</p>
 <p>We can now begin to write the model function. First, it would be a good idea to see what <code>run_heidi</code> returns if run with the arguments above.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mod_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_heidi.html">run_heidi</a></span><span class="op">(</span>args <span class="op">=</span> <span class="va">my_mod_args</span><span class="op">)</span>
@@ -200,21 +199,8 @@
 <span class="co">#&gt;   ..$ s1        : Factor w/ 4 levels "L","Pellet","R",..: 1 2 3 4 1 2 3 4 1 2 ...</span>
 <span class="co">#&gt;   ..$ block_size: num [1:384] 2 2 2 2 2 2 2 2 2 2 ...</span>
 <span class="co">#&gt;   ..$ value     : num [1:384] 0.2 0 0 0 0 0 0.2 0 0.2 0 ...</span></code></pre></div>
-<p>Although the <code>run_heidi</code> function returns a list with 4 tibbles, we only care about one of them: <code>rs</code> (the model responses). Let’s take a quick glance (or glimpse) at it.</p>
+<p>Although the <code>run_heidi</code> function returns a list with 4 tibbles, we only care about one of them: <code>rs</code> (the model responses). With that in hand, we can write our model function.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">mod_res</span><span class="op">$</span><span class="va">rs</span><span class="op">)</span>
-<span class="co">#&gt; Rows: 1,536</span>
-<span class="co">#&gt; Columns: 8</span>
-<span class="co">#&gt; $ group      <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> CB1, CB1, CB1, CB1, CB1, CB1, CB1, CB1, CB1, CB1, CB1, CB1,…</span>
-<span class="co">#&gt; $ trial      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…</span>
-<span class="co">#&gt; $ phase      <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> training, training, training, training, training, training,…</span>
-<span class="co">#&gt; $ trial_type <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> L&gt;(Pellet), L&gt;(Pellet), L&gt;(Pellet), L&gt;(Pellet), L&gt;(Pellet),…</span>
-<span class="co">#&gt; $ s1         <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> L, L, L, L, Pellet, Pellet, Pellet, Pellet, R, R, R, R, Suc…</span>
-<span class="co">#&gt; $ s2         <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> L, Pellet, R, Sucrose, L, Pellet, R, Sucrose, L, Pellet, R,…</span>
-<span class="co">#&gt; $ block_size <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,…</span>
-<span class="co">#&gt; $ value      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…</span></code></pre></div>
-<p>In any case, with that in hand, we can write our model function.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">my_model_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">model_args</span><span class="op">)</span><span class="op">{</span>
   <span class="co">#manipulating pars</span>
   <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">model_args</span><span class="op">$</span><span class="va">stim_alphas</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
@@ -234,9 +220,14 @@
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span>
   <span class="va">mod_res</span>
 <span class="op">}</span></code></pre></div>
-<p>Let’s dissect the function in its three parts. First, we do some manipulation on the vector of parameters: we name them according to the stimulus names identified in the arguments (<code>names(model_args$stim_alphas[[1]])</code>). We do this because the function we use to simulate (i.e., the one called by <code>run_heidi</code>) requires a named vector to work, and some optimizers (looking at you optim) strip the names from the numerical vectors they are trying to optimize. We next run the model and immediately select the relevant information (rs). Finally, we summarise the model responses, taking care of the different counterbalancings in the process. Within this step, we also filter all output nodes that are not related to expecting one of the USs (because the latest public version of the model is lagging behind the latest theoretical developments), we classify responses as being nosepokes (produced by the US) or lever presses (produced by the levers), and calculate the mean across blocks of trials.</p>
+<p>Let’s dissect the function above in its three parts.</p>
+<ol style="list-style-type: decimal">
+<li><p>We do some manipulation on the vector of parameters, naming them according to the stimulus names identified in the arguments (<code>names(model_args$stim_alphas[[1]])</code>). We do this because the function we use to simulate (i.e., the one called by <code>run_heidi</code>) requires a named vector to work, and some optimizers (looking at you optim) strip the names from the numerical vectors they are trying to optimize.</p></li>
+<li><p>We run the model and immediately select the relevant information (rs).</p></li>
+<li><p>Finally, we summarise the model responses, taking care of the different counterbalancings in the process. Within this step, we also filter all output nodes that are not related to expecting one of the USs (because the latest public version of the model is lagging behind the latest theoretical developments), we classify responses as being nosepokes (produced by the US) or lever presses (produced by the levers), and calculate the mean across blocks of trials.</p></li>
+</ol>
 <p>Let’s see the function in action.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">my_model_function</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.2</span>, <span class="fl">.4</span>, <span class="fl">.3</span><span class="op">)</span>, model_args <span class="op">=</span> <span class="va">my_mod_args</span><span class="op">)</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 24 × 4</span></span>
 <span class="co">#&gt;    us    block response   value</span>
@@ -253,7 +244,7 @@
 <span class="co">#&gt; <span style="color: #BCBCBC;">10</span> P         5 np       0.054<span style="text-decoration: underline;">8</span> </span>
 <span class="co">#&gt; <span style="color: #949494;"># … with 14 more rows</span></span></code></pre></div>
 <p>And just as a refresher, here’s the summarised empirical data.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pati_summ</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 24 × 4</span></span>
 <span class="co">#&gt;    block us    response rpert</span>
@@ -271,7 +262,7 @@
 <span class="co">#&gt; <span style="color: #949494;"># … with 14 more rows</span></span></code></pre></div>
 <p>Do you notice anything odd about the ordering? The empirical data is sorted in a different way, but I said before that the order of the empirical data and model responses must match. I cannot emphasize this point enough: there is nothing within the fit function that checks or reorders the data for you. You are the sole responsible for making sure both of these pieces of data are in the same order.</p>
 <p>Here, we will simply rewrite the model function so it matches the ordering of the empirical data. Notice the different order in the <code>group_by</code> line below.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">my_model_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">model_args</span><span class="op">)</span><span class="op">{</span>
   <span class="co">#manipulating pars</span>
   <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">model_args</span><span class="op">$</span><span class="va">stim_alphas</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
@@ -311,8 +302,15 @@
 <div class="section level3">
 <h3 id="fitting-the-model">Fitting the model<a class="anchor" aria-label="anchor" href="#fitting-the-model"></a>
 </h3>
-<p>We fit models in <code>heidi</code> using the <code>fit_heidi</code> function. This function at least requires 4 arguments: 1) the (empirical) data, 2) a model function, 3) the arguments with which to run that model function, and the optimizer options. We have done a great job taking care of the first three, so let’s tackle the last.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<p>We fit models using the <code>fit_heidi</code> function. This function requires 4 arguments:</p>
+<ol style="list-style-type: decimal">
+<li>The (empirical) data</li>
+<li>A model function</li>
+<li>The arguments with which to run the model function.</li>
+<li>The optimizer options.</li>
+</ol>
+<p>We have done a great job taking care of the first three, so let’s tackle the last.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">my_optimizer_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_helpers.html">get_optimizer_opts</a></span><span class="op">(</span>optimizer <span class="op">=</span> <span class="st">"optim"</span>,
                                         stim_names <span class="op">=</span> <span class="va">pars</span><span class="op">$</span><span class="va">Stimulus</span>,
                                         family <span class="op">=</span> <span class="st">"linear"</span><span class="op">)</span>
@@ -332,8 +330,8 @@
 <span class="co">#&gt; $sample_pars</span>
 <span class="co">#&gt; function () </span>
 <span class="co">#&gt; c(stats::rbeta(npars, 10, 20), stats::rgamma(1, 2))</span>
-<span class="co">#&gt; &lt;bytecode: 0x563279fad408&gt;</span>
-<span class="co">#&gt; &lt;environment: 0x563279fb05f8&gt;</span>
+<span class="co">#&gt; &lt;bytecode: 0x565140db8178&gt;</span>
+<span class="co">#&gt; &lt;environment: 0x565140db3df8&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $family</span>
 <span class="co">#&gt; [1] "linear"</span>
@@ -351,27 +349,27 @@
 <span class="co">#&gt; $optim_options$control</span>
 <span class="co">#&gt; $optim_options$control$trace</span>
 <span class="co">#&gt; [1] 3</span></code></pre></div>
-<p>The <code>get_optimizer_opts</code> returns many things:</p>
+<p>The <code>get_optimizer_opts</code> function returns many things:</p>
 <ol style="list-style-type: decimal">
 <li>stim_names: The name of the stimuli for which to find salience parameters.</li>
-<li>lower and upper: The lower and upper bounds that these parameters can take. Consider shrinking these to speed up the process.</li>
+<li>lower and upper: The lower and upper bounds for the parameter search. Consider shrinking these to speed up the process.</li>
 <li>optimizer: The numerical optimization technique we wish to use during MLE estimation.</li>
 <li>sample_pars: A function that samples parameters from set distributions.</li>
-<li>family: The family distribution/link function we assume for our model. In practice, what you request here will be used to determine the link function to transform model responses, and the likelihood function used in the objective function. The linear family here will estimate an extra parameter, scale, which scales the model responses into (roughly) the scale of the empirical data.</li>
+<li>family: The family distribution we assume for our model. In practice, what you request here will be used to determine the link function to transform model responses, and the likelihood function used in the objective function. The linear family here does nothing fancy to the model responses, and will estimate an extra parameter, scale, which scales the model responses into (roughly) the scale of the empirical data. When it comes to likelihood functions, this family will use the normal density of the data and model differences.</li>
 <li>family_pars: The family-specific parameter being estimated alongside salience parameters.</li>
 <li>verbose: Whether to print parameters and objective function values as we optimize.</li>
 <li>optim_options: The optimizer-specific options that are used in the optimization call.</li>
 </ol>
 <p>You are free to modify these; just make sure the structure of the list returned by <code>get_optimizer_opts</code> remains the same. Here, I overwrite the trace argument passed to the optimizer.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">my_optimizer_opts</span><span class="op">$</span><span class="va">optim_options</span><span class="op">$</span><span class="va">control</span><span class="op">$</span><span class="va">trace</span> <span class="op">=</span> <span class="fl">0</span></code></pre></div>
 <p>And with that, we can fit the model!</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">the_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_heidi.html">fit_heidi</a></span><span class="op">(</span><span class="va">pati_summ</span><span class="op">$</span><span class="va">rpert</span>,
                      model_function <span class="op">=</span> <span class="va">my_model_function</span>, model_args <span class="op">=</span> <span class="va">my_mod_args</span>,
                      optimizer_options <span class="op">=</span> <span class="va">my_optimizer_opts</span><span class="op">)</span></code></pre></div>
 <p>The <code>fit_heidi</code> function returns a lot of information to track what we put in and what we got out. Regarding the latter, we can see the MLE parameters we obtained this time, and their negative log likelihood, given the data:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">the_fit</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"best_pars"</span>, <span class="st">"nloglik"</span><span class="op">)</span><span class="op">]</span>
 <span class="co">#&gt; $best_pars</span>
 <span class="co">#&gt;          L          R     Pellet    Sucrose      scale </span>
@@ -380,7 +378,7 @@
 <span class="co">#&gt; $nloglik</span>
 <span class="co">#&gt; [1] 38.15569</span></code></pre></div>
 <p>That’s good and all, but how well does a model run with those parameters “visually” fit the data? We can obtain the predictions from the model via the <code>fit_predict</code> function.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">prediction</span> <span class="op">=</span> <span class="fu"><a href="../reference/fit_helpers.html">fit_predict</a></span><span class="op">(</span><span class="va">the_fit</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">block</span>, <span class="va">us</span>, <span class="va">response</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span>
@@ -393,7 +391,7 @@
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">us</span><span class="op">~</span><span class="va">response</span><span class="op">)</span></code></pre></div>
-<p><img src="fitting_heidi_files/figure-html/unnamed-chunk-16-1.png" width="672"></p>
+<p><img src="fitting_heidi_files/figure-html/unnamed-chunk-15-1.png" width="672"></p>
 <p>This looks pretty good! Save from some blatant misfits, of course. Now you know everything you need to fit heidi to your empirical data. Go forth!</p>
 <div class="section level4">
 <h4 id="a-final-note">A final note<a class="anchor" aria-label="anchor" href="#a-final-note"></a>

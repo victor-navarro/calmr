@@ -70,28 +70,17 @@
 <dt>param_df</dt>
 <dd><p>A data.frame of dimensions N,2; where N is the number of stimuli in the experimental design.</p></dd>
 <dt>options</dt>
-<dd><p>A list of options, as returned by get_heidi_opts.</p></dd>
+<dd><p>A list of options, as returned by <code>get_heidi_opts</code>.</p></dd>
 <dt>parse</dt>
-<dd><p>A logical specifying whether the results should be parsed. Default = TRUE.</p></dd>
+<dd><p>A logical specifying whether the results should be parsed via <code>parse_heidi_results</code>. Default = TRUE.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A list with parsed results or a tibble with raw results</p>
     </div>
     <div class="section level2">
-    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p>The specification of design_df should adhere to the following rules:</p><ul><li><p>The first column should specify the Group names</p></li>
-<li><p>The remaining columns should be paired, each pair denoting a single experimental phase.
-The first containing trial strings (see below) and logicals denoting whether the trials should be randomized or not.</p></li>
-<li><p>Trial strings use a specific syntax. Take the string "30AX(US)/10A", for example.
-</p><ul><li><p>The "/" character is used to denote different trials. Above, the string specifies two trial types.</p></li>
-<li><p>Parentheses are used to denote complex stimuli (or stimuli that need to be specifically named). Above, US is a named stimulus.</p></li>
-<li><p>The numbers at the beginning of each trial type denote the number of trials given within a phase.</p></li>
-</ul></li>
-</ul></div>
-    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>get_heidi_opts, parse_design, train_pav_heidi, parse_heidi_results</p></div>
+    <div class="dont-index"><p><code><a href="get_heidi_opts.html">get_heidi_opts</a></code>, <code><a href="heidi_helpers.html">parse_heidi_results</a></code></p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

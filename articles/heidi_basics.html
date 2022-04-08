@@ -251,14 +251,14 @@
 <p>You can also take a look at the state of the model’s associations at any point during training, using the function <code>make_graphs</code>.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">my_graph_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/heidi_plots.html">get_graph_opts</a></span><span class="op">(</span><span class="st">"small"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/heidi_plots.html">make_graphs</a></span><span class="op">(</span><span class="va">my_sim</span>, trial <span class="op">=</span> <span class="fl">10</span>, opts <span class="op">=</span> <span class="va">my_graph_opts</span><span class="op">)</span>
+<span class="fu"><a href="../reference/heidi_plots.html">make_graphs</a></span><span class="op">(</span><span class="va">my_sim</span>, t <span class="op">=</span> <span class="fl">10</span>, graph_opts <span class="op">=</span> <span class="va">my_graph_opts</span><span class="op">)</span>
 <span class="co">#&gt; $`Group Control: (Trial 10)`</span></code></pre></div>
 <p><img src="heidi_basics_files/figure-html/unnamed-chunk-14-1.png" width="672"></p>
 <pre><code><span class="co">#&gt; </span>
 <span class="co">#&gt; $`Group Exp: (Trial 10)`</span></code></pre>
 <p><img src="heidi_basics_files/figure-html/unnamed-chunk-14-2.png" width="672"></p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/heidi_plots.html">make_graphs</a></span><span class="op">(</span><span class="va">my_sim</span>, trial <span class="op">=</span> <span class="fl">20</span>, opts <span class="op">=</span> <span class="va">my_graph_opts</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/heidi_plots.html">make_graphs</a></span><span class="op">(</span><span class="va">my_sim</span>, t <span class="op">=</span> <span class="fl">20</span>, graph_opts <span class="op">=</span> <span class="va">my_graph_opts</span><span class="op">)</span>
 <span class="co">#&gt; $`Group Control: (Trial 20)`</span></code></pre></div>
 <p><img src="heidi_basics_files/figure-html/unnamed-chunk-14-3.png" width="672"></p>
 <pre><code><span class="co">#&gt; </span>
