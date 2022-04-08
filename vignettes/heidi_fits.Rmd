@@ -1,9 +1,9 @@
 ---
-title: "fitting_heidi"
+title: "heidi_fits"
 author: "Victor Navarro"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{fitting_heidi}
+  %\VignetteIndexEntry{heidi_fits}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -210,8 +210,8 @@ the_fit <- fit_heidi(pati_summ$rpert,
 ```
 
 ```{r, include = F, echo = F}
-#save("the_fit", file = "fitting_heidi_fit.rda")
-load(file = "fitting_heidi_fit.rda")
+#save("the_fit", file = "heidi_fits_fit.rda")
+load(file = "heidi_fits_fit.rda")
 ```
 
 
