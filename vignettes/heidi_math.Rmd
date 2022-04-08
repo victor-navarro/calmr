@@ -10,7 +10,7 @@ vignette: >
 
 # The mathematics behind HeiDI
 
-The HeiDI model has four major components: 1) the acquisition of reciprocal associations between stimuli, 2) the pooling of those associations to activate stimulus representations, 3) the distribution of those activations into stimulus-specific response units, and 4) the generation of responses.
+The HeiDI model has four major components: 1) the acquisition of reciprocal associations between stimuli, 2) the pooling of those associations into stimulus activations, 3) the distribution of those activations into stimulus-specific response units, and 4) the generation of responses.
 
 ## 1 - Acquiring reciprocal associations
 
@@ -27,9 +27,7 @@ $$
 e_j  = \sum_{k}^{K}x_kv_{k,j}
 $$
 
-where $K$ is the set containing all stimuli in the experiment, and $x_k$ is a quantity denoting the presence or absence of stimulus $k$ (1 or 0, respectively)^[
-We go the extra length of specifying $x$ quantities because the stimulus expectation and learning rules can be vectorized, as $\textbf{e} = \textbf{x}V$ and $\Delta V = (\textbf{x}\odot\textbf{a})'  (c(\textbf{x}\odot\textbf{a})-\textbf{e})$, respectively. Here, the matrix $V$ contains all associations between each pair of stimuli, the row vectors $\textbf x$ and $\textbf a$ denote the presence and salience of all stimuli $K$, the $\odot$ symbol specifies element-wise multiplication, and the $'$ symbol denotes transposition. Note further that the $\Delta V$ matrix must be made hollow before summing it to $V$.
-].
+where $K$ is the set containing all stimuli in the experiment, and $x_k$ is a quantity denoting the presence or absence of stimulus $k$ (1 or 0, respectively)[^note1].
 
 ### 1.2 - Learning rule
 
@@ -130,3 +128,6 @@ r_q = R_jw_{j,q}
 $$
 
 where $w_{j,q}$ is a weight representing the association between stimulus-specific unit $j$ and motor unit $q$.
+
+[^note1]: 
+We go the extra length of specifying $x$ quantities because the stimulus expectation and learning rules can be vectorized, as $\textbf{e} = \textbf{x}V$ and $\Delta V = (\textbf{x}\odot\textbf{a})'  (c(\textbf{x}\odot\textbf{a})-\textbf{e})$, respectively. Here, the matrix $V$ contains all associations between each pair of stimuli, the row vectors $\textbf x$ and $\textbf a$ denote the presence and salience of all stimuli $K$, the $\odot$ symbol specifies element-wise multiplication, and the $'$ symbol denotes transposition. Note further that the $\Delta V$ matrix must be made hollow before summing it to $V$.

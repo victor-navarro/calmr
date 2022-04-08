@@ -108,9 +108,9 @@ experiment.</p>
 <div class="section level3">
 <h3 id="the-design-data-frame">The design data.frame<a class="anchor" aria-label="anchor" href="#the-design-data-frame"></a>
 </h3>
-<p>In the so-called design data.frame the user specifies their
-experimental design. A few rules about the this data.frame:</p>
-<ol start="0" style="list-style-type: decimal">
+<p>In the design data.frame, we specify our experimental design. A few
+rules about the this data.frame:</p>
+<ol style="list-style-type: decimal">
 <li>Each row represents a group.</li>
 <li>Its first column contains the group labels.</li>
 <li>The remaining columns are organized in pairs. The first column in
@@ -122,33 +122,49 @@ should be randomized.</li>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="va">my_blocking</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Exp"</span>, <span class="st">"Control"</span><span class="op">)</span>,
-                          Phase1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"10A(US)"</span>, <span class="st">"10C(US)"</span><span class="op">)</span>,
+                          Phase1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"10A&gt;(US)"</span>, <span class="st">"10C&gt;(US)"</span><span class="op">)</span>,
                           R1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span>,
-                          Phase2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"10AB(US)"</span>, <span class="st">"10AB(US)"</span><span class="op">)</span>,
+                          Phase2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"10AB&gt;(US)"</span>, <span class="st">"10AB&gt;(US)"</span><span class="op">)</span>,
                           R2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span>,
-                          Test <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1A/1B"</span>, <span class="st">"1A/1B"</span><span class="op">)</span>,
+                          Test <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1A#/1B#"</span>, <span class="st">"1A#/1B#"</span><span class="op">)</span>,
                           R3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span>
 <span class="va">my_blocking</span>
-<span class="co">#&gt;     Group  Phase1    R1   Phase2    R2  Test    R3</span>
-<span class="co">#&gt; 1     Exp 10A(US) FALSE 10AB(US) FALSE 1A/1B FALSE</span>
-<span class="co">#&gt; 2 Control 10C(US) FALSE 10AB(US) FALSE 1A/1B FALSE</span></code></pre></div>
-<p>A few observations about the trial notation: 0. Trials are preceded
-by a number. That number represents the number of times that trial will
-be given in each phase. “10A(US)” means that the “A(US)” trial will be
-given 10 times. 1. The presence and absence of the unconditioned
-stimulus is not denoted with the traditional “+” and “-” symbols.
-Instead, we use parenthesis to denote “complex” stimuli. These can be
-thought of as an element with a complex name (i.e., with more than one
-character). As such, “(US)” specifies a single element to represent the
-US. 2. The “/” character is used as a trial separator (it does not imply
+<span class="co">#&gt;     Group   Phase1    R1    Phase2    R2    Test    R3</span>
+<span class="co">#&gt; 1     Exp 10A&gt;(US) FALSE 10AB&gt;(US) FALSE 1A#/1B# FALSE</span>
+<span class="co">#&gt; 2 Control 10C&gt;(US) FALSE 10AB&gt;(US) FALSE 1A#/1B# FALSE</span></code></pre></div>
+<p>A few observations about the trial notation:</p>
+<ol style="list-style-type: decimal">
+<li>Trials are preceded by a number. That number represents the number
+of times that trial will be given in each phase. “10A&gt;(US)” means
+that the “A&gt;(US)” trial will be given 10 times.</li>
+<li>The presence and absence of the unconditioned stimulus is not
+denoted with the traditional “+” and “-” symbols. Instead, here we use
+parenthesis to denote “complex” stimuli. These can be thought of as an
+element with a complex name (i.e., with more than one character). As
+such, “(US)” specifies a single element to represent the US.</li>
+<li>In the same vein, multiple characters with no parentheses denote
+individual elements. For example, “AB” implies the presence of two
+stimuli, A and B.</li>
+<li>The “&gt;” character is used as a separator of the “expectations”
+and “correction” steps within the trial. “10A&gt;(US)” means that the
+model generates an expectation with A only, but learns from the
+co-occurence of A and the US.</li>
+<li>The “/” character is used as a trial separator (it does not imply
 randomization by itself). Thus, “1A/1B” specifies that a single “A”
 trial and a single “B” trial will be given during that phase. Recall
 that randomization of trials within a phase is specified by the column
-after it (above, R1, R2, and R3).</p>
-<p>If you ever want to check if your trials string will work with the
-simulator, you can use <code><a href="../reference/trial_parser.html">heidi::trial_parser</a></code>. The function
-returns a list with a lot of information. Check
-<code>??trial_parser</code> for more information. Let’s have a go.</p>
+after it (above, R1, R2, and R3).</li>
+<li>The “#” character is used to denote probe trials. In contrast to
+real life, probe trials here entail no update of the model’s
+associations. As such, probe trials can be used to track the development
+of key associations, with no repercussion to what the model learns on
+normal training trials.</li>
+</ol>
+<p>If you want to check if your trials string will work with the
+simulator, you can use <code>trial_parser</code>. Check
+<code>??trial_parser</code> for more information. The function returns a
+list with a lot of information, so let’s print only some of the
+fields.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">trial</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trial_parser.html">trial_parser</a></span><span class="op">(</span><span class="st">"AB/10AC"</span><span class="op">)</span>  <span class="co">#not specifying a number of AB trials. Bad practice!</span>
 <span class="va">trial</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"trial_names"</span>, <span class="st">"trial_repeats"</span><span class="op">)</span><span class="op">]</span>
@@ -165,7 +181,7 @@ returns a list with a lot of information. Check
 <div class="section level3">
 <h3 id="the-parameters-data-frame">The parameters data.frame<a class="anchor" aria-label="anchor" href="#the-parameters-data-frame"></a>
 </h3>
-<p>You can run a simulation with a design data.frame only (the
+<p>You can run a simulation with only a design data.frame (the
 simulation function will use default salience values for the stimuli).
 However, if you want specific salience values for the stimuli in your
 experiment, you should pass a data.frame with parameters. Let’s specify
@@ -211,12 +227,12 @@ see.</p>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 x 8</span></span>
 <span class="co">#&gt;   group   trial trial_type phase  s1    s2    block_size value</span>
 <span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Control     1 C(US)      Phase1 A     B              1     0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Control     1 C(US)      Phase1 A     C              1     0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Control     1 C(US)      Phase1 A     US             1     0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Control     1 C(US)      Phase1 B     A              1     0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Control     1 C(US)      Phase1 B     C              1     0</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> Control     1 C(US)      Phase1 B     US             1     0</span></code></pre></div>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Control     1 C&gt;(US)     Phase1 A     B              1     0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Control     1 C&gt;(US)     Phase1 A     C              1     0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Control     1 C&gt;(US)     Phase1 A     US             1     0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Control     1 C&gt;(US)     Phase1 B     A              1     0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Control     1 C&gt;(US)     Phase1 B     C              1     0</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> Control     1 C&gt;(US)     Phase1 B     US             1     0</span></code></pre></div>
 </div>
 </div>
 <div class="section level3">

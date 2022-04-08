@@ -30,32 +30,36 @@ To successfully simulate you only need a data.frame specifying the groups, phase
 
 ## The design data.frame
 
-In the so-called design data.frame the user specifies their experimental design. A few rules about the this data.frame:
+In the design data.frame, we specify our experimental design. A few rules about the this data.frame:
 
-0. Each row represents a group.
-1. Its first column contains the group labels.
-2. The remaining columns are organized in pairs. The first column in each pair specifies the trials to give in the phase, whereas the second column in each pair specifies whether the trials within that phase should be randomized.
+1. Each row represents a group.
+2. Its first column contains the group labels.
+3. The remaining columns are organized in pairs. The first column in each pair specifies the trials to give in the phase, whereas the second column in each pair specifies whether the trials within that phase should be randomized.
 
 Let's build a design matrix for a blocking experiment.
 
 ```{r}
 
 my_blocking <- data.frame(Group = c("Exp", "Control"),
-                          Phase1 = c("10A(US)", "10C(US)"),
+                          Phase1 = c("10A>(US)", "10C>(US)"),
                           R1 = c(FALSE, FALSE),
-                          Phase2 = c("10AB(US)", "10AB(US)"),
+                          Phase2 = c("10AB>(US)", "10AB>(US)"),
                           R2 = c(FALSE, FALSE),
-                          Test = c("1A/1B", "1A/1B"),
+                          Test = c("1A#/1B#", "1A#/1B#"),
                           R3 = c(FALSE, FALSE))
 my_blocking
 ```
 
 A few observations about the trial notation:
-0. Trials are preceded by a number. That number represents the number of times that trial will be given in each phase. "10A(US)" means that the "A(US)" trial will be given 10 times.
-1. The presence and absence of the unconditioned stimulus is not denoted with the traditional "+" and "-" symbols. Instead, we use parenthesis to denote "complex" stimuli. These can be thought of as an element with a complex name (i.e., with more than one character). As such, "(US)" specifies a single element to represent the US.
-2. The "/" character is used as a trial separator (it does not imply randomization by itself). Thus, "1A/1B" specifies that a single "A" trial and a single "B" trial will be given during that phase. Recall that randomization of trials within a phase is specified by the column after it (above, R1, R2, and R3).
 
-If you ever want to check if your trials string will work with the simulator, you can use `heidi::trial_parser`. The function returns a list with a lot of information. Check `??trial_parser` for more information. Let's have a go.
+1. Trials are preceded by a number. That number represents the number of times that trial will be given in each phase. "10A>(US)" means that the "A>(US)" trial will be given 10 times.
+2. The presence and absence of the unconditioned stimulus is not denoted with the traditional "+" and "-" symbols. Instead, here we use parenthesis to denote "complex" stimuli. These can be thought of as an element with a complex name (i.e., with more than one character). As such, "(US)" specifies a single element to represent the US.
+3. In the same vein, multiple characters with no parentheses denote individual elements. For example, "AB" implies the presence of two stimuli, A and B.
+4. The ">" character is used as a separator of the "expectations" and "correction" steps within the trial. "10A>(US)" means that the model generates an expectation with A only, but learns from the co-occurence of A and the US.
+5. The "/" character is used as a trial separator (it does not imply randomization by itself). Thus, "1A/1B" specifies that a single "A" trial and a single "B" trial will be given during that phase. Recall that randomization of trials within a phase is specified by the column after it (above, R1, R2, and R3).
+6. The "#" character is used to denote probe trials. In contrast to real life, probe trials here entail no update of the model's associations. As such, probe trials can be used to track the development of key associations, with no repercussion to what the model learns on normal training trials.
+
+If you want to check if your trials string will work with the simulator, you can use `trial_parser`. Check `??trial_parser` for more information. The function returns a list with a lot of information, so let's print only some of the fields.
 
 ```{r}
 trial <- trial_parser("AB/10AC")  #not specifying a number of AB trials. Bad practice!
@@ -68,7 +72,7 @@ trial[c("unique_nominal_stimuli")]
 
 ## The parameters data.frame
 
-You can run a simulation with a design data.frame only (the simulation function will use default salience values for the stimuli). However, if you want specific salience values for the stimuli in your experiment, you should pass a data.frame with parameters. Let's specify those for our experiment.
+You can run a simulation with only a design data.frame (the simulation function will use default salience values for the stimuli). However, if you want specific salience values for the stimuli in your experiment, you should pass a data.frame with parameters. Let's specify those for our experiment.
 
 ```{r}
 my_pars <- get_params(my_blocking, default_par = .2) #Note we can quickly get a table with parameters directly from the design data.frame; a good way to check we are going in the right direction
