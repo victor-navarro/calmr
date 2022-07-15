@@ -47,7 +47,12 @@ make_graphs(
 
 patch_graphs(graphs, selection = names(graphs))
 
-patch_plots(plots, selection, plot_options = get_plot_opts())
+patch_plots(
+  plots,
+  selection = NULL,
+  type = NULL,
+  plot_options = get_plot_opts()
+)
 }
 \arguments{
 \item{vals}{A data.frame containing parsed values.}
@@ -75,6 +80,8 @@ patch_plots(plots, selection, plot_options = get_plot_opts())
 \item{graphs}{A list of graphs, as returned by make_graphs}
 
 \item{selection}{A character vector with the selected plots}
+
+\item{type}{A string specifying the type of plots requested. One of \code{c("vs", "rs_simple", "rs_complex", "acts_learning", "acts_bar", "as")}}
 
 \item{plot_options}{A list with options}
 }

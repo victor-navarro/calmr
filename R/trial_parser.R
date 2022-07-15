@@ -103,7 +103,6 @@ trial_parser <- function(trial_string){
   trial_post_functional = lapply(trial_post_functional, function(x) x[!is.na(x)])
   trial_pre_nominal = lapply(trial_pre_nominal, function(x) x[!is.na(x)])
   trial_post_nominal = lapply(trial_post_nominal, function(x) x[!is.na(x)])
-
   return(list(trial_names = trial_names,
               trial_repeats = trial_repeats,
               trial_pre_functional = trial_pre_functional,

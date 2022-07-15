@@ -13,6 +13,7 @@
 #' @param parsed_model A parsed model, as returned by parse_heidi_results.
 #' @param plots A named list with plots
 #' @param selection A character vector with the selected plots
+#' @param type A string specifying the type of plots requested. One of `c("vs", "rs_simple", "rs_complex", "acts_learning", "acts_bar", "as")`
 #' @param plot_options A list with options
 #' @param common_scale A logical. Whether to plot the data in a common y-scale.
 #' @param weights A data.frame containing parsed weights, as returned by parse_heidi_results
@@ -114,7 +115,7 @@ plot_rs <- function(vals, simple = F){
       ggplot2::scale_colour_viridis_d(drop = FALSE) +
       ggplot2::scale_x_continuous(breaks = NULL) +
       ggplot2::facet_grid(.data$s2~.data$phase+.data$trial_type, scales = 'free_x') +
-      ggplot2::labs(x = "Trial/Miniblock", y = 'R value', colour = 'Target') +
+      ggplot2::labs(x = "Trial/Miniblock", y = 'R value', colour = 'Stimulus') +
       ggplot2::theme_bw()
   }
   plt
@@ -266,7 +267,27 @@ patch_graphs <- function(graphs, selection = names(graphs)){
 
 #' @rdname heidi_plots
 #' @export
-patch_plots <- function(plots, selection, plot_options = get_plot_opts()){
+patch_plots <- function(plots, selection = NULL, type = NULL, plot_options = get_plot_opts()){
+  type_mapping = data.frame(type = c("vs", "rs_simple", "rs_complex", "acts_learning", "acts_bar", "as"),
+                            str = c(": Vs", ': Rs \\(simple\\)', ': Rs \\(complex\\)', ': Acts \\(learning\\)', ': Acts \\(bar\\)', ": As"))
+
+  # argument checks
+  if (is.null(selection) & is.null(type)) stop("You must pass either a selection or a type.")
+  if (!is.null(selection)){
+    if (!(selection %in% names(plots))){
+      stop("Selection must match names in plots")
+    }
+  }
+  if (!is.null(type)){
+    if (!all(type %in% type_mapping$type)){
+      stop(c("Argument type must be one of ", paste(type_mapping$type, collapse = ", ")))
+    }
+    if (length(type) > 1){
+      stop(c("Argument type must be length 1."))
+    }
+    pnames = names(plots)
+    selection = pnames[grepl(type_mapping$str[type_mapping$type == type], pnames)]
+  }
   cow = NULL
   selected = length(selection)
   if (selected){

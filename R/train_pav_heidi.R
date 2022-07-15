@@ -254,6 +254,7 @@ train_pav_heidi <- function(sals, V, tps,
       }
     }
     as[ab] = abs(total_sum) #Note the absolute function; important to study it
+    #as[ab] = min(c(0, total_sum))
   }
   as
 }
