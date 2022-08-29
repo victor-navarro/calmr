@@ -37,7 +37,7 @@ plot_vs <- function(vals){
     ggplot2::scale_colour_viridis_d(drop = FALSE) +
     ggplot2::scale_x_continuous(breaks = NULL) +
     ggplot2::facet_grid(.data$s1~.data$phase, scales = 'free_x') +
-    ggplot2::labs(x = "Trial/Miniblock", y = 'Strength', colour = 'Predictee') +
+    ggplot2::labs(x = "Trial/Miniblock", y = 'Strength', colour = 'Target') +
     ggplot2::theme_bw()
 }
 
@@ -95,27 +95,28 @@ plot_rs <- function(vals, simple = F){
     dplyr::summarise(value = mean(.data$value), .groups = "drop")
   if (simple){
     plt = summ %>%
-      dplyr::group_by(.data$trial, .data$phase, .data$trial_type, .data$s1) %>%
+      dplyr::group_by(.data$trial, .data$phase, .data$trial_type, .data$s2) %>%
       dplyr::summarise(value = sum(.data$value), .groups = "drop") %>%
-      ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s1)) +
+      ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s2)) +
       ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
       ggplot2::geom_line() +
       ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
       ggplot2::scale_colour_viridis_d(drop = FALSE) +
       ggplot2::scale_x_continuous(breaks = NULL) +
       ggplot2::facet_grid(~.data$phase+.data$trial_type, scales = 'free_x') +
-      ggplot2::labs(x = "Trial/Miniblock", y = 'R value', colour = 'Stimulus Source') +
+      ggplot2::labs(x = "Trial/Miniblock", y = 'R value', colour = 'Target') +
       ggplot2::theme_bw()
 
   }else{
-    plt = summ %>% ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s1)) +
+    plt = summ %>%
+      ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s1)) +
       ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
       ggplot2::geom_line() +
       ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
       ggplot2::scale_colour_viridis_d(drop = FALSE) +
       ggplot2::scale_x_continuous(breaks = NULL) +
       ggplot2::facet_grid(.data$s2~.data$phase+.data$trial_type, scales = 'free_x') +
-      ggplot2::labs(x = "Trial/Miniblock", y = 'R value', colour = 'Stimulus Source') +
+      ggplot2::labs(x = "Trial/Miniblock", y = 'R value', colour = 'Source') +
       ggplot2::theme_bw()
   }
   plt
@@ -134,7 +135,7 @@ plot_as <- function(vals){
     ggplot2::scale_colour_viridis_d(drop = FALSE) +
     ggplot2::scale_x_continuous(breaks = NULL) +
     ggplot2::facet_grid(.~.data$phase+.data$trial_type, scales = 'free_x') +
-    ggplot2::labs(x = "Trial/Miniblock", y = 'Alpha Value', colour = 'Stimulus Source') +
+    ggplot2::labs(x = "Trial/Miniblock", y = 'Alpha Value', colour = 'Source') +
     ggplot2::theme_bw()
 }
 
@@ -274,7 +275,7 @@ patch_plots <- function(plots, selection = NULL, type = NULL, plot_options = get
   # argument checks
   if (is.null(selection) & is.null(type)) stop("You must pass either a selection or a type.")
   if (!is.null(selection)){
-    if (!(selection %in% names(plots))){
+    if (!all(selection %in% names(plots))){
       stop("Selection must match names in plots")
     }
   }

@@ -117,32 +117,53 @@ plot_names
 Here they are, paired side by side:
 
 ### Stimulus-specific responding (simple)
+
+The plots below show responding across phases (left to right panels, and trials within). Note, these show the sum of R values (i.e., overall level of responding) per stimulus (absent or present). They do not identify the sources of that responding (i.e., whether A or B is producing the responding); for that, we must look at complex plots.
+
 ```{r}
 patch_plots(plots = my_plots, selection = plot_names[c(1, 7)]) #Responding
 ```
 
 ### Stimulus-specific responding (complex)
+
+These are those complex plots. Here, the parsing changes a little bit, in order to allow comparison among the sources of responding. Now, each stimulus source is shown as a different color, and the vertical panels show different target stimuli.
+
 ```{r}
 patch_plots(plots = my_plots, selection = plot_names[c(2, 8)]) #Responding
 ```
 
 
 ### Stimulus activations (bar)
+
+Stimulus activation plots take us a little deeper into the model. In these, the overall stimulus activation that we use to distribute responding is split into comb and chain activations. Comb activations represent activations due to reciprocal associations (e.g., the effect of US->A on A). Chain activations represent activations via indirect associative links.
+
+Below, each bar is coloured based on the stimulus that generates the activation. The vertical panels denote the target stimulus. The x-axis now shows the trial types.
+
 ```{r}
 patch_plots(plots = my_plots, selection = plot_names[c(3, 9)])
 ```
 
-### Stimulus activations (bar)
+### Stimulus activations (curve)
+
+Similar to above, but now the x-axis shows trial number, and the trial_types are embedded across horizontal panels.
+
+
 ```{r}
 patch_plots(plots = my_plots, selection = plot_names[c(4, 10)])
 ```
 
 ### Stimulus associations
+
+Going even deeper now. These are the stimulus-stimulus associations that HeiDI uses to generate activations in the first place. Each vertical panel denotes a stimulus source. THe different colours, the target of the association.
+
 ```{r}
 patch_plots(plots = my_plots, selection = plot_names[c(5, 11)])
 ```
 
 ### Stimulus salience at expression
+
+Venture here only if you're ready. The plots below show the stimulus saliencies at the moment of expression.
+
 ```{r}
 patch_plots(plots = my_plots, selection = plot_names[c(6, 12)])
 ```

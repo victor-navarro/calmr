@@ -255,6 +255,11 @@ plots, and <code>patch_plots</code> to display them.</p>
 <div class="section level4">
 <h4 id="stimulus-specific-responding-simple">Stimulus-specific responding (simple)<a class="anchor" aria-label="anchor" href="#stimulus-specific-responding-simple"></a>
 </h4>
+<p>The plots below show responding across phases (left to right panels,
+and trials within). Note, these show the sum of R values (i.e., overall
+level of responding) per stimulus (absent or present). They do not
+identify the sources of that responding (i.e., whether A or B is
+producing the responding); for that, we must look at complex plots.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/heidi_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">7</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="co">#Responding</span></code></pre></div>
 <p><img src="heidi_basics_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
@@ -262,6 +267,10 @@ plots, and <code>patch_plots</code> to display them.</p>
 <div class="section level4">
 <h4 id="stimulus-specific-responding-complex">Stimulus-specific responding (complex)<a class="anchor" aria-label="anchor" href="#stimulus-specific-responding-complex"></a>
 </h4>
+<p>These are those complex plots. Here, the parsing changes a little
+bit, in order to allow comparison among the sources of responding. Now,
+each stimulus source is shown as a different color, and the vertical
+panels show different target stimuli.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/heidi_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">8</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="co">#Responding</span></code></pre></div>
 <p><img src="heidi_basics_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
@@ -269,13 +278,24 @@ plots, and <code>patch_plots</code> to display them.</p>
 <div class="section level4">
 <h4 id="stimulus-activations-bar">Stimulus activations (bar)<a class="anchor" aria-label="anchor" href="#stimulus-activations-bar"></a>
 </h4>
+<p>Stimulus activation plots take us a little deeper into the model. In
+these, the overall stimulus activation that we use to distribute
+responding is split into comb and chain activations. Comb activations
+represent activations due to reciprocal associations (e.g., the effect
+of US-&gt;A on A). Chain activations represent activations via indirect
+associative links.</p>
+<p>Below, each bar is coloured based on the stimulus that generates the
+activation. The vertical panels denote the target stimulus. The x-axis
+now shows the trial types.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/heidi_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">9</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <p><img src="heidi_basics_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
 </div>
 <div class="section level4">
-<h4 id="stimulus-activations-bar-1">Stimulus activations (bar)<a class="anchor" aria-label="anchor" href="#stimulus-activations-bar-1"></a>
+<h4 id="stimulus-activations-curve">Stimulus activations (curve)<a class="anchor" aria-label="anchor" href="#stimulus-activations-curve"></a>
 </h4>
+<p>Similar to above, but now the x-axis shows trial number, and the
+trial_types are embedded across horizontal panels.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/heidi_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">10</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <p><img src="heidi_basics_files/figure-html/unnamed-chunk-11-1.png" width="672"></p>
@@ -283,6 +303,10 @@ plots, and <code>patch_plots</code> to display them.</p>
 <div class="section level4">
 <h4 id="stimulus-associations">Stimulus associations<a class="anchor" aria-label="anchor" href="#stimulus-associations"></a>
 </h4>
+<p>Going even deeper now. These are the stimulus-stimulus associations
+that HeiDI uses to generate activations in the first place. Each
+vertical panel denotes a stimulus source. THe different colours, the
+target of the association.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/heidi_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">11</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <p><img src="heidi_basics_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
@@ -290,6 +314,8 @@ plots, and <code>patch_plots</code> to display them.</p>
 <div class="section level4">
 <h4 id="stimulus-salience-at-expression">Stimulus salience at expression<a class="anchor" aria-label="anchor" href="#stimulus-salience-at-expression"></a>
 </h4>
+<p>Venture here only if you’re ready. The plots below show the stimulus
+saliencies at the moment of expression.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/heidi_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">12</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <p><img src="heidi_basics_files/figure-html/unnamed-chunk-13-1.png" width="672"></p>

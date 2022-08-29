@@ -220,7 +220,7 @@ shiny::shinyServer(function(input, output) {
   #remaking the graphs on graph_trial change
   shiny::observeEvent(input$graph_trial, {
     if (!is.null(parsed_results())){
-      graphs(heidi::make_graphs(parsed_results(), trial = input$graph_trial))
+      graphs(heidi::make_graphs(parsed_results(), t = input$graph_trial))
     }
   })
 
@@ -303,7 +303,7 @@ shiny::shinyServer(function(input, output) {
 
   output$plot <- shiny::renderPlot({
     if (!is.null(plots())){
-      heidi::patch_plots(plots(), selected_plots(), plot_options())
+      heidi::patch_plots(plots = plots(), selection = selected_plots(), plot_options = plot_options())
     }
   })
 
