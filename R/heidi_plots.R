@@ -104,7 +104,7 @@ plot_rs <- function(vals, simple = F){
       ggplot2::scale_colour_viridis_d(drop = FALSE) +
       ggplot2::scale_x_continuous(breaks = NULL) +
       ggplot2::facet_grid(~.data$phase+.data$trial_type, scales = 'free_x') +
-      ggplot2::labs(x = "Trial/Miniblock", y = 'R value', colour = 'Stimulus') +
+      ggplot2::labs(x = "Trial/Miniblock", y = 'R value', colour = 'Stimulus Source') +
       ggplot2::theme_bw()
 
   }else{
@@ -115,7 +115,7 @@ plot_rs <- function(vals, simple = F){
       ggplot2::scale_colour_viridis_d(drop = FALSE) +
       ggplot2::scale_x_continuous(breaks = NULL) +
       ggplot2::facet_grid(.data$s2~.data$phase+.data$trial_type, scales = 'free_x') +
-      ggplot2::labs(x = "Trial/Miniblock", y = 'R value', colour = 'Stimulus') +
+      ggplot2::labs(x = "Trial/Miniblock", y = 'R value', colour = 'Stimulus Source') +
       ggplot2::theme_bw()
   }
   plt
@@ -134,7 +134,7 @@ plot_as <- function(vals){
     ggplot2::scale_colour_viridis_d(drop = FALSE) +
     ggplot2::scale_x_continuous(breaks = NULL) +
     ggplot2::facet_grid(.~.data$phase+.data$trial_type, scales = 'free_x') +
-    ggplot2::labs(x = "Trial/Miniblock", y = 'Alpha Value', colour = 'Stimulus') +
+    ggplot2::labs(x = "Trial/Miniblock", y = 'Alpha Value', colour = 'Stimulus Source') +
     ggplot2::theme_bw()
 }
 

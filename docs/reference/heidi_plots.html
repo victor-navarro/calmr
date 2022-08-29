@@ -38,8 +38,8 @@ patch_plots and patch_graphs return a composite of plots or graphs."><meta prope
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/fitting_heidi.html">fitting_heidi</a>
     <a class="dropdown-item" href="../articles/heidi_basics.html">heidi_basics</a>
+    <a class="dropdown-item" href="../articles/heidi_fits.html">heidi_fits</a>
     <a class="dropdown-item" href="../articles/heidi_math.html">heidi_math</a>
     <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
   </div>
@@ -113,7 +113,12 @@ patch_plots and patch_graphs return a composite of plots or graphs.</p>
 
 <span class="fu">patch_graphs</span><span class="op">(</span><span class="va">graphs</span>, selection <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">graphs</span><span class="op">)</span><span class="op">)</span>
 
-<span class="fu">patch_plots</span><span class="op">(</span><span class="va">plots</span>, <span class="va">selection</span>, plot_options <span class="op">=</span> <span class="fu">get_plot_opts</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu">patch_plots</span><span class="op">(</span>
+  <span class="va">plots</span>,
+  selection <span class="op">=</span> <span class="cn">NULL</span>,
+  type <span class="op">=</span> <span class="cn">NULL</span>,
+  plot_options <span class="op">=</span> <span class="fu">get_plot_opts</span><span class="op">(</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -144,6 +149,8 @@ patch_plots and patch_graphs return a composite of plots or graphs.</p>
 <dd><p>A list of graphs, as returned by make_graphs</p></dd>
 <dt>selection</dt>
 <dd><p>A character vector with the selected plots</p></dd>
+<dt>type</dt>
+<dd><p>A string specifying the type of plots requested. One of <code>c("vs", "rs_simple", "rs_complex", "acts_learning", "acts_bar", "as")</code></p></dd>
 <dt>plot_options</dt>
 <dd><p>A list with options</p></dd>
 </dl></div>
