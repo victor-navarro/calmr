@@ -100,28 +100,31 @@ make_heidi_args <- function(design, pars, opts = get_heidi_opts()){
 }
 
 .sample_trials <- function(names, test, repeats, randomize, miniblocks, masterlist){
-  #samples trials as a function of a masterlist, and randomizes if necessary
-  tps = unlist(sapply(seq_along(names), function(n) rep(which(masterlist %in% names[n]), repeats[n])))
-  tstps = unlist(sapply(seq_along(names), function(n) rep(test[n], repeats[n])))
   block_size = 1
-  if (randomize){
-    #create miniblocks, if requested
-    if (length(repeats) > 1 & miniblocks){
-      gcd = Reduce(.gcd, repeats)
-      per_block = repeats/gcd
-      block_size = sum(per_block)
-      tps = c() #note the redefining
-      tstps = c()
-      for (b in 1:gcd){
-        ts = unlist(sapply(seq_along(names), function(n) rep(which(masterlist %in% names[n]), per_block[n])))
-        tsts = unlist(sapply(seq_along(names), function(n) rep(test[n], per_block[n])))
-        #randomize
+  #do miniblocks if necessary
+  if (length(repeats) > 1 & miniblocks){
+    gcd = Reduce(.gcd, repeats)
+    per_block = repeats/gcd
+    block_size = sum(per_block)
+    tps = c() #note the redefining
+    tstps = c()
+    for (b in 1:gcd){
+      ts = unlist(sapply(seq_along(names), function(n) rep(which(masterlist %in% names[n]), per_block[n])))
+      tsts = unlist(sapply(seq_along(names), function(n) rep(test[n], per_block[n])))
+      #randomize if necessary
+      if (randomize){
         ri = sample(length(ts))
-        tps = c(tps, ts[ri])
-        tstps = c(tstps, tsts[ri])
+        ts = ts[ri]
+        tsts = tsts[ri]
       }
-    }else{
-      #randomize
+      tps = c(tps, ts)
+      tstps = c(tstps, tsts)
+    }
+  }else{
+    tps = unlist(sapply(seq_along(names), function(n) rep(which(masterlist %in% names[n]), repeats[n])))
+    tstps = unlist(sapply(seq_along(names), function(n) rep(test[n], repeats[n])))
+    #randomize if necessary
+    if (randomize){
       ri = sample(length(tps))
       tps = tps[ri]
       tstps = tstps[ri]
