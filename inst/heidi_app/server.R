@@ -6,8 +6,8 @@
 #                      P3 = c("10B>(US)", "10B>(US)", "10B>(US)"),
 #                      R3 = c(TRUE))
 
-base_df = data.frame(Group = c("A", "B"),
-                     P1 = c("10A>(US)", "10B>(US)"),
+base_df = data.frame(Group = c("G1", "G2"),
+                     P1 = c("10A>(US)/10#A", "10B>(US)"),
                      R1 = c(TRUE))
 
 base_plot_options <- list(common_scale = TRUE)
@@ -145,6 +145,7 @@ shiny::shinyServer(function(input, output) {
         shiny::setProgress(1)
       })
       ran(TRUE)
+
     }, error = function(x){
       print(x)
       shinyalert::shinyalert(

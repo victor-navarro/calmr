@@ -248,11 +248,20 @@ make_graphs <- function(parsed_model,
                         graph_opts = get_graph_opts()){
   plotlist = list()
   for (g in unique(parsed_model$vs$group)){
-    plotlist[[sprintf('Group %s: (Trial %d)', g, t)]] = graph_weights(parsed_model$vs %>% dplyr::filter(.data$group == g),
-                                                                          t = t,
-                                                                          limits = limits,
-                                                                          graph_opts = graph_opts) +
-      ggplot2::labs(title = sprintf('%s (Trial %d)', g, t))
+    gdat = parsed_model$vs %>%
+      dplyr::filter(.data$group == g)
+    gtmax = max(gdat$trial)
+    plot_t = t
+    if (t > gtmax){
+      warning(sprintf("Requested trial (%d) exceeds the maximum of trials (%d) for group %s, plotting the last trial.",
+                      t, gtmax, g))
+      plot_t = gtmax
+    }
+    plotlist[[sprintf('Group %s: (Trial %d)', g, t)]] = graph_weights(gdat,
+                                                                      t = plot_t,
+                                                                      limits = limits,
+                                                                      graph_opts = graph_opts) +
+      ggplot2::labs(title = sprintf('%s (Trial %d)', g, plot_t))
   }
   return(plotlist)
 }
