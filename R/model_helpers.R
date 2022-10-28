@@ -106,27 +106,33 @@ parse_model <- function(model){
 
 #' @rdname model_helpers
 #' @export
-parse_experiment_results <- function(raw_experiment_results, aggregate = T){
+parse_experiment_results <- function(experiment, aggregate = T){
   #expects a tibble with one row per group
   #returns a list with all the relevant data for exporting (and plotting)
-
-  full_results = raw_experiment_results %>% dplyr::rowwise() %>%
-    dplyr::mutate(parsed = list(parse_model(mod_data)@model_results)) %>%
-    tidyr::unnest_wider(.data$parsed) %>%
-    dplyr::ungroup()
+  if (!experiment@is_parsed){
+  experiment@results = experiment@results %>% dplyr::rowwise() %>%
+    dplyr::mutate(parsed_mod_responses = list(parse_model(mod_data)@model_results))
+  experiment@is_parsed = TRUE
+  }
 
   if (aggregate){
-    full_results = aggregate_experiment_results(full_results)
+    experiment@parsed_results = aggregate_experiment_results(experiment)
   }
-  full_results
+  experiment
 }
 
 #' @rdname model_helpers
 #' @export
-aggregate_experiment_results <- function(experiment_results){
+aggregate_experiment_results <- function(parsed_experiment){
+  if (!parsed_experiment@is_parsed) stop("Experiment is not parsed.")
+
   agg = list()
-  for (t in names(experiment_results)){
-    agg[[t]] = .aggregate_results(experiment_results, t)
+  vars = names(parsed_experiment@results$parsed_mod_responses[[1]])
+  dat = parsed_experiment@results %>%
+    tidyr::unnest_wider(.data$parsed_mod_responses) %>%
+    dplyr::ungroup()
+  for (t in vars){
+    agg[[t]] = .aggregate_results(dat, t)
   }
   agg
 }
@@ -171,4 +177,12 @@ aggregate_experiment_results <- function(experiment_results){
 filter_heidi_results <- function(parsed_results, filters){
   lapply(parsed_results, function(x) x %>% dplyr::filter(.data$phase %in% filters$phase & .data$trial_type %in% filters$trial_type))
 }
+
+#' @rdname model_helpers
+#' @export
+#' #returns currently supported models
+get_supported_models <- function(){
+  c("HDI2020", "HD2022", "RW1972")
+}
+
 

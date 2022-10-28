@@ -19,6 +19,6 @@ test_that("quick_model works", {
                          P2 = c("1A", "1A"),
                          R2 = c(TRUE, TRUE))
   simple_pars = data.frame(Stimulus = c("A", "B", "US"), Alpha = c(0.1, 0.2, 0.3))
-  expect_named(quick_model(simple_df, param_df = simple_pars, model = "HD2022"), c("vs",  "rs", "as", "acts"))
+  expect_named(quick_model(simple_df, param_df = simple_pars, model = "HD2022")@parsed_results, c("vs",  "rs", "as", "acts"))
 
 })

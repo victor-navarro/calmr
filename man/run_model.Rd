@@ -4,7 +4,7 @@
 \alias{run_model}
 \title{Run a model}
 \usage{
-run_model(args, model = "HD2022", parse = TRUE)
+run_model(args, parse = TRUE)
 }
 \arguments{
 \item{args}{A tibble as returned by \code{make_model_args}.}
@@ -12,7 +12,7 @@ run_model(args, model = "HD2022", parse = TRUE)
 \item{parse}{A logical specifying whether the results should be parsed. Default = TRUE.}
 }
 \value{
-A list with parsed results or a tibble with raw results
+A HeidiExperiment object.
 }
 \description{
 Runs a model with specific arguments.

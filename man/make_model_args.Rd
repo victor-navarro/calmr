@@ -4,7 +4,7 @@
 \alias{make_model_args}
 \title{Make a tibble to fit a heidi model}
 \usage{
-make_model_args(design, pars, model = "HD2022", opts = get_model_opts())
+make_model_args(design, pars, model, opts = get_model_opts())
 }
 \arguments{
 \item{design}{A design tibble, as returned by \code{parse_design}}

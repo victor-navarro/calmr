@@ -4,46 +4,38 @@
 \alias{model_helpers}
 \alias{get_params}
 \alias{gen_ss_weights}
-\alias{model_vs}
-\alias{parse_acts}
-\alias{parse_rs}
-\alias{parse_as}
+\alias{parse_model}
 \alias{parse_experiment_results}
+\alias{aggregate_experiment_results}
 \alias{filter_heidi_results}
 \title{An assortment of functions to help models}
 \usage{
-get_params(design, default_par = 0.2, model = "HD2022")
+get_params(design, model = "HD2022")
 
 gen_ss_weights(stims, default_val = 0)
 
-model_vs(mod)
+parse_model(model)
 
-parse_acts(mod)
+parse_experiment_results(experiment, aggregate = T)
 
-parse_rs(mod)
-
-parse_as(mod)
-
-parse_experiment_results(raw_results)
+aggregate_experiment_results(parsed_experiment)
 
 filter_heidi_results(parsed_results, filters)
 }
 \arguments{
 \item{design}{An data.frame containing the experimental design.}
 
-\item{default_par}{A float between 0 and 1.}
-
 \item{stims}{A character vector with stimuli}
 
 \item{default_val}{Default alpha value}
 
-\item{mod}{A model list}
-
-\item{raw_results}{A tibble with model information, as returned by quick_model}
-
 \item{parsed_results}{A list with parsed results, as returned by parse_experiment_results}
 
 \item{filters}{A named list containing "phase" and "trial_type" character vectors, for filtering data}
+
+\item{mod}{A model list}
+
+\item{raw_results}{A tibble with model information, as returned by quick_model}
 }
 \description{
 get_params generates a data.frame with stimulus salience parameters.

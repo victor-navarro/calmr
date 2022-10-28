@@ -22,7 +22,7 @@ anchor <- tags$a(href="http://victornavarro.org/heidi", target="_blank", style =
                  'HeiDI Simulator')
 header$children[[2]]$children <- tags$div(anchor, class = 'name')
 
-supported_models <- c("HD2022", "HDI2020")
+supported_models <- get_supported_models()
 
 ui <- shinydashboard::dashboardPage(title = "HeiDI Simulator",
                                     skin = "red",

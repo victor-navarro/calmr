@@ -12,7 +12,7 @@
 
 get_model <- function(model_name){
   #checks
-  supported_models = c("HDI2020", "HD2022", "RW1972")
+  supported_models = get_supported_models()
   if (is.null(model_name) | !(model_name %in% supported_models)){
     stop(paste("You must specificy model_name as one of:", paste(supported_models, collapse = ", ")))
   }

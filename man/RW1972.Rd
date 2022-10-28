@@ -4,18 +4,18 @@
 \alias{RW1972}
 \title{Train the RW1972 model}
 \usage{
-RW1972(alphas, betas, V = NULL, experience, mapping)
+RW1972(alphas, lambdas, V = NULL, experience, mapping)
 }
 \arguments{
 \item{alphas}{A named vector with stimulus saliences.}
+
+\item{lambdas}{A named vector with stimulus asymptotes.}
 
 \item{V}{(optional) A named matrix of dimensions S,S; where S is the number of stimuli.}
 
 \item{experience}{A data.frame specifying trials as rows, as returned by \code{make_model_args}}
 
 \item{mapping}{A named list specifying trial and stimulus mapping, as returned by \code{make_model_args}}
-
-\item{lambdas}{A named vector with stimulus asymptotes.}
 }
 \value{
 A list with

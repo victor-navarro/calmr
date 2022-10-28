@@ -109,14 +109,19 @@ make_model_args <- function(design, pars, model, opts = get_model_opts()){
 
   #now put the trial and stimulus information back
   tb = tb %>% dplyr::rowwise() %>%
-    dplyr::mutate(trial_pre_func = list(trial_pre_functional_list),
+    dplyr::mutate(sdata[sdata$group == .data$group, ],
+                  trial_pre_func = list(trial_pre_functional_list),
                   trial_post_func = list(trial_post_functional_list),
                   trial_pre_nomi = list(trial_pre_nominal_list),
                   trial_post_nomi = list(trial_post_nominal_list),
-                  trial_names = list(master_trial_names),
-                  sdata[sdata$group == .data$group, ])
+                  trial_names = list(master_trial_names))
 
-  mapping = apply(tb[c(-1:-6)], 1, function(x) do.call("list", x))
+  mapping = apply(tb[c("unique_functional_stimuli",
+                       "unique_nominal_stimuli",
+                       "nomi2func", "func2nomi",
+                       "trial_pre_func", "trial_post_func",
+                       "trial_pre_nomi", "trial_post_nomi",
+                       "trial_names")], 1, function(x) do.call("list", x))
 
   #a character vector to select information from tb depending on the model
   tb_select = c("iteration", "group", "alphas")

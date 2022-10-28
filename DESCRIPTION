@@ -11,6 +11,7 @@ BugReports: https://github.com/victor-navarro/heidi/issues
 Imports: 
     cowplot,
     dplyr,
+    GGally,
     ggbeeswarm,
     ggnetwork,
     ggplot2,

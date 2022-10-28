@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_model_opts.R
 \name{get_model_opts}
 \alias{get_model_opts}
-\title{Get options for heidi model}
+\title{Get options for a model}
 \usage{
 get_model_opts(iterations = 1, miniblocks = TRUE)
 }
@@ -15,7 +15,7 @@ get_model_opts(iterations = 1, miniblocks = TRUE)
 A list with default or user-given options.
 }
 \description{
-Get options for heidi model
+Get options for a model
 }
 \note{
 The miniblocks option will direct the sampling function (make_model_args) to create equally-sized miniblocks with random trials within a phase. For example, the phase string "2A/2B" will create two miniblocks with one of each trial. The phase string "2A/4B" will create two miniblocks with one A trial, and 2 B trials. However, the phase string "2A/1B" will not result in miniblocks, even if miniblocks here is set to TRUE.

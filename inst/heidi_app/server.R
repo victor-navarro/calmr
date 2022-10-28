@@ -144,7 +144,7 @@ shiny::shinyServer(function(input, output) {
       raw_results(res)
       #parse results
       shiny::withProgress(message = "Parsing results...", value = 0, {
-        parsed_results(heidi::parse_experiment_results(raw_results()))
+        parsed_results(heidi::parse_experiment(raw_results()))
         shiny::setProgress(1)
       })
       shiny::withProgress(message = "Making plots...", value = 0, {

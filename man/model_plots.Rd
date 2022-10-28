@@ -31,7 +31,8 @@ get_plot_opts(common_scale = TRUE)
 
 graph_weights(
   weights,
-  limits = max(abs(range(weights$value))) * c(-1, 1),
+  limits = NULL,
+  colour_key = F,
   t = max(weights$trial),
   graph_opts = get_graph_opts()
 )
