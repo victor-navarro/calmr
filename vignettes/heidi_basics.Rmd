@@ -82,10 +82,10 @@ my_pars
 
 ### Additional options
 
-The final ingredient is a list with simulation options. We can get a default one with `get_heidi_opts`, and modify them accordingly.
+The final ingredient is a list with simulation options. We can get a default one with `get_model_opts`, and modify them accordingly.
 
 ```{r}
-my_opts <- get_heidi_opts()
+my_opts <- get_model_opts()
 my_opts$iterations <- 10
 my_opts
 
@@ -93,10 +93,10 @@ my_opts
 
 ### Simulating
 
-And we can finally simulate the model with `quick_heidi`. By default, the function returns a list with aggregated data. Let's see.
+And we can finally simulate the model with `quick_model`. By default, the function returns a list with aggregated data. Let's see.
 
 ```{r}
-my_sim <- quick_heidi(design_df = my_blocking,
+my_sim <- quick_model(design_df = my_blocking,
                     param_df = my_pars,
                     options = my_opts)
 names(my_sim) #contains information about weights (vs), activation values (acts), r-values (rs), and alphas (as)

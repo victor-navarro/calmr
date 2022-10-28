@@ -59,7 +59,7 @@ pati_summ <- pati %>%
 head(pati_summ)
 ```
 
-We now prepare the arguments for the model function (as you would pass to `run_heidi`). To achieve this, we will use `make_heidi_args`, a function that requires three other bits: 1) a design data.frame, 2) a table with parameters, and 3) a list with simulation options. Note that these arguments are fixed during the optimization process, which means that the training routine within each iteration of the numerical optimization is always the same.
+We now prepare the arguments for the model function (as you would pass to `run_model`). To achieve this, we will use `make_model_args`, a function that requires three other bits: 1) a design data.frame, 2) a table with parameters, and 3) a list with simulation options. Note that these arguments are fixed during the optimization process, which means that the training routine within each iteration of the numerical optimization is always the same.
 
 This is no minor issue, because the HeiDI is sensitive to order effects. Hence, it is important that the arguments we prepare here reflect the behavior of the model after an "general" experimental procedure, and not the quirks of an unfortunate run of tials. Here, we simply address this issue by running several iterations of the model (with random trial orders) and average all models before evaluating the likelihood of the parameters.
 
@@ -74,22 +74,22 @@ des_df <- data.frame(group = c("CB1", "CB2"),
 #The parameters
 pars <- get_params(des_df) #the actual parameter values don't matter, as our function will re-write them inside the optimizer call
 #The options
-opts <- get_heidi_opts(iterations = 10)
+opts <- get_model_opts(iterations = 10)
 #The arguments
-my_mod_args <- make_heidi_args(design = parse_design(des_df), pars = pars, opts = opts)
+my_mod_args <- make_model_args(design = parse_design(des_df), pars = pars, opts = opts)
 
 ```
 
 Note we specified two counterbalancings as groups. It is very important that we reproduce the counterbalancings in the data we are trying to fit as close as possible. Otherwise, the optimization process might latch onto experimentally-irrelevant variables. For example, it can be seen in `pati` that there was more lever pressing whenever a lever was paired with pellets. If we didn't counterbalance the identities of the levers and USs, the optimization might result into one of the levers being less salient than the other.
 
-We can now begin to write the model function. First, it would be a good idea to see what `run_heidi` returns if run with the arguments above.
+We can now begin to write the model function. First, it would be a good idea to see what `run_model` returns if run with the arguments above.
 
 ```{r}
-mod_res <- run_heidi(args = my_mod_args)
+mod_res <- run_model(args = my_mod_args)
 str(mod_res)
 ```
 
-Although the `run_heidi` function returns a list with 4 tibbles, we only care about one of them: `rs` (the model responses). With that in hand, we can write our model function.
+Although the `run_model` function returns a list with 4 tibbles, we only care about one of them: `rs` (the model responses). With that in hand, we can write our model function.
 
 ```{r}
 my_model_function <- function(pars, model_args){
@@ -97,7 +97,7 @@ my_model_function <- function(pars, model_args){
   names(pars) = names(model_args$stim_alphas[[1]])
   model_args$stim_alphas = list(pars)
   #running the model and selecting rs
-  mod_res = run_heidi(args = model_args)$rs
+  mod_res = run_model(args = model_args)$rs
   #summarizing the model
   mod_res = mod_res %>%
     filter(s2 %in% c("Pellet", "Sucrose")) %>%
@@ -116,7 +116,7 @@ my_model_function <- function(pars, model_args){
 
 Let's dissect the function above in its three parts. 
 
-1. We do some manipulation on the vector of parameters, naming them according to the stimulus names identified in the arguments (`names(model_args$stim_alphas[[1]])`). We do this because the function we use to simulate (i.e., the one called by `run_heidi`) requires a named vector to work, and some optimizers (looking at you optim) strip the names from the numerical vectors they are trying to optimize. 
+1. We do some manipulation on the vector of parameters, naming them according to the stimulus names identified in the arguments (`names(model_args$stim_alphas[[1]])`). We do this because the function we use to simulate (i.e., the one called by `run_model`) requires a named vector to work, and some optimizers (looking at you optim) strip the names from the numerical vectors they are trying to optimize. 
 
 2. We run the model and immediately select the relevant information (rs).
 
@@ -145,7 +145,7 @@ my_model_function <- function(pars, model_args){
   names(pars) = names(model_args$stim_alphas[[1]])
   model_args$stim_alphas = list(pars)
   #running the model and selecting rs
-  mod_res = run_heidi(args = model_args)$rs
+  mod_res = run_model(args = model_args)$rs
   #summarizing the model
   mod_res = mod_res %>%
     filter(s2 %in% c("Pellet", "Sucrose")) %>%

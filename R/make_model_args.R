@@ -2,25 +2,29 @@
 #'
 #' @param design A design tibble, as returned by `parse_design`
 #' @param pars A data.frame containing parameters as returned by `get_params`
-#' @param opts A list with options as returned by `get_heidi_opts`
+#' @param opts A list with options as returned by `get_model_opts`
 #'
 #' @return A tibble with the arguments required to run the model. Each row represents a group in the experimental design.
 #'
-#' @seealso \code{\link{parse_design}}, \code{\link{get_params}}, \code{\link{get_heidi_opts}}
+#' @seealso \code{\link{parse_design}}, \code{\link{get_params}}, \code{\link{get_model_opts}}
 #' @examples
 #' df <- data.frame(Group = c('Group 1', 'Group 2'), P1 = c('10AB(US)', '10A(US)'), R1 = c(TRUE, TRUE))
 #' des <- parse_design(df)
 #' ps <- get_params(des, 0.2)
-#' make_heidi_args(design = des, pars = ps, opts = get_heidi_opts(iterations = 1))
+#' make_model_args(design = des, pars = ps, model = "HD2022", opts = get_model_opts(iterations = 1))
 #'
 #' @export
 
-make_heidi_args <- function(design, pars, opts = get_heidi_opts()){
+make_model_args <- function(design, pars, model, opts = get_model_opts()){
   #Returns a tibble to run design in a rowwise manner (each row is a group)
   #Some early info
   snames = pars$Stimulus
   alphas = pars$Alpha
   names(alphas) = snames
+  if (model == "RW1972"){
+    lambdas = pars$Lambda
+    names(lambdas) = snames
+  }
 
   #the only challenge here is to create a master list of trials (trials)
   #and sample the training for each group (tps)
@@ -54,17 +58,29 @@ make_heidi_args <- function(design, pars, opts = get_heidi_opts()){
   #get some stimulus data and parameters
   sdata = design %>% dplyr::group_by(.data$group) %>%
     tidyr::unnest_wider(.data$trial_info) %>%
-    #this bit saves us having to crunch data about stimuli that are not present in group but are present in the other
+    #this bit saves us having to crunch data about stimuli that are not present in a group but are present in another
     dplyr::group_by(.data$group) %>%
     dplyr::mutate(unique_nominal_stimuli = list(unique(unlist(.data$unique_nominal_stimuli))),
                   unique_functional_stimuli = list(unique(unlist(.data$unique_functional_stimuli))),
-                  nomi_func_map = list(unique(do.call('rbind', .data$nomi_func_map)))) %>%
+                  nomi2func = list({
+                    n2f = do.call('c', .data$nomi2func)
+                    n2f = n2f[!duplicated(n2f)]}),
+                  func2nomi = list({
+                    f2n = do.call('c', .data$func2nomi)
+                    f2n = f2n[!duplicated(f2n)]})) %>%
     #this bit puts the required alphas on a row by row basis
     dplyr::rowwise() %>%
-    dplyr::mutate(stim_alphas = list(alphas[unlist(.data$unique_nominal_stimuli)])) %>%
-    dplyr::select(.data$group, .data$stim_alphas, .data$unique_functional_stimuli,
-                  .data$unique_nominal_stimuli, .data$nomi_func_map) %>%
+    dplyr::mutate(alphas = list(alphas[unlist(.data$unique_nominal_stimuli)])) %>%
+    dplyr::select(.data$group, .data$alphas, .data$unique_functional_stimuli,
+                  .data$unique_nominal_stimuli, .data$nomi2func, .data$func2nomi) %>%
     dplyr::distinct()
+
+  #expand
+  if (model == "RW1972"){
+    sdata = sdata %>%
+      dplyr::mutate(lambdas = list(lambdas[unlist(.data$unique_nominal_stimuli)]))
+  }
+
   #we can sample now
   #Dom, if you are reading this, I apologize for this bit
   #It basically creates a tibble of iterations*groups*phases, with pointers for trials in the masterlist
@@ -83,10 +99,13 @@ make_heidi_args <- function(design, pars, opts = get_heidi_opts()){
                   blocks = list(rep(.data$block_size, length(.data$tps)))) %>%
     #one last manipulation to concatenate phases into single rows
     dplyr::group_by(.data$iteration, .data$group) %>%
-    dplyr::summarize(tps = list(unlist(.data$tps)),
+    dplyr::summarize(tp = list(unlist(.data$tps)),
                      is_test = list(unlist(.data$is_test)),
                      phase = list(unlist(.data$phaselab)),
                      block_size = list(unlist(.data$blocks)))
+
+  #create experiences data.frame
+  experience = apply(tb[c(-1,-2)], 1, function(x) do.call("cbind.data.frame", x))
 
   #now put the trial and stimulus information back
   tb = tb %>% dplyr::rowwise() %>%
@@ -96,7 +115,19 @@ make_heidi_args <- function(design, pars, opts = get_heidi_opts()){
                   trial_post_nomi = list(trial_post_nominal_list),
                   trial_names = list(master_trial_names),
                   sdata[sdata$group == .data$group, ])
-  tb
+
+  mapping = apply(tb[c(-1:-6)], 1, function(x) do.call("list", x))
+
+  #a character vector to select information from tb depending on the model
+  tb_select = c("iteration", "group", "alphas")
+  if (model == "RW1972"){
+    tb_select = c(tb_select, "lambdas")
+  }
+  #return the tibble
+  tibble::tibble(model = model,
+                 tb[tb_select],
+                 experience,
+                 mapping)
 }
 
 .sample_trials <- function(names, test, repeats, randomize, miniblocks, masterlist){

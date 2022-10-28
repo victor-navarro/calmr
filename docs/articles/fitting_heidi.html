@@ -162,8 +162,8 @@ for.</p>
 <span class="co">#&gt; <span style="color: #BCBCBC;">5</span>     2 P     lp       1.57 </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">6</span>     2 P     np       3.51</span></code></pre></div>
 <p>We now prepare the arguments for the model function (as you would
-pass to <code>run_heidi</code>). To achieve this, we will use
-<code>make_heidi_args</code>, a function that requires three other bits:
+pass to <code>run_model</code>). To achieve this, we will use
+<code>make_model_args</code>, a function that requires three other bits:
 1) a design data.frame, 2) a table with parameters, and 3) a list with
 simulation options. Note that these arguments are fixed during the
 optimization process, which means that the training routine within each
@@ -187,11 +187,11 @@ we specify in order to reduce computing time.</p>
                      training <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"12L&gt;(Pellet)/12R&gt;(Sucrose)"</span>, <span class="st">"12L&gt;(Sucrose)/12R&gt;(Pellet)"</span><span class="op">)</span>,
                      rand_train <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
 <span class="co">#The parameters</span>
-<span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/heidi_helpers.html">get_params</a></span><span class="op">(</span><span class="va">des_df</span><span class="op">)</span> <span class="co">#the actual parameter values don't matter, as our function will re-write them inside the optimizer call</span>
+<span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_helpers.html">get_params</a></span><span class="op">(</span><span class="va">des_df</span><span class="op">)</span> <span class="co">#the actual parameter values don't matter, as our function will re-write them inside the optimizer call</span>
 <span class="co">#The options</span>
-<span class="va">opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_heidi_opts.html">get_heidi_opts</a></span><span class="op">(</span>iterations <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
+<span class="va">opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_model_opts.html">get_model_opts</a></span><span class="op">(</span>iterations <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
 <span class="co">#The arguments</span>
-<span class="va">my_mod_args</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_heidi_args.html">make_heidi_args</a></span><span class="op">(</span>design <span class="op">=</span> <span class="fu"><a href="../reference/parse_design.html">parse_design</a></span><span class="op">(</span><span class="va">des_df</span><span class="op">)</span>, pars <span class="op">=</span> <span class="va">pars</span>, opts <span class="op">=</span> <span class="va">opts</span><span class="op">)</span></code></pre></div>
+<span class="va">my_mod_args</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_model_args.html">make_model_args</a></span><span class="op">(</span>design <span class="op">=</span> <span class="fu"><a href="../reference/parse_design.html">parse_design</a></span><span class="op">(</span><span class="va">des_df</span><span class="op">)</span>, pars <span class="op">=</span> <span class="va">pars</span>, opts <span class="op">=</span> <span class="va">opts</span><span class="op">)</span></code></pre></div>
 <p>Note we specified two counterbalancings as groups. It is very
 important that we reproduce the counterbalancings in the data we are
 trying to fit as close as possible. Otherwise, the optimization process
@@ -201,10 +201,10 @@ whenever a lever was paired with pellets. If we didn’t counterbalance
 the identities of the levers and USs, the optimization might result into
 one of the levers being less salient than the other.</p>
 <p>We can now begin to write the model function. First, it would be a
-good idea to see what <code>run_heidi</code> returns if run with the
+good idea to see what <code>run_model</code> returns if run with the
 arguments above.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mod_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_heidi.html">run_heidi</a></span><span class="op">(</span>args <span class="op">=</span> <span class="va">my_mod_args</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">mod_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model.html">run_model</a></span><span class="op">(</span>args <span class="op">=</span> <span class="va">my_mod_args</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mod_res</span><span class="op">)</span>
 <span class="co">#&gt; List of 4</span>
 <span class="co">#&gt;  $ vs  : tibble [1,152 x 8] (S3: tbl_df/tbl/data.frame)</span>
@@ -243,7 +243,7 @@ arguments above.</p>
 <span class="co">#&gt;   ..$ s1        : Factor w/ 4 levels "L","Pellet","R",..: 1 2 3 4 1 2 3 4 1 2 ...</span>
 <span class="co">#&gt;   ..$ block_size: num [1:384] 2 2 2 2 2 2 2 2 2 2 ...</span>
 <span class="co">#&gt;   ..$ value     : num [1:384] 0.2 0 0 0 0 0 0.2 0 0.2 0 ...</span></code></pre></div>
-<p>Although the <code>run_heidi</code> function returns a list with 4
+<p>Although the <code>run_model</code> function returns a list with 4
 tibbles, we only care about one of them: <code>rs</code> (the model
 responses). With that in hand, we can write our model function.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -252,7 +252,7 @@ responses). With that in hand, we can write our model function.</p>
   <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">model_args</span><span class="op">$</span><span class="va">stim_alphas</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
   <span class="va">model_args</span><span class="op">$</span><span class="va">stim_alphas</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span>
   <span class="co">#running the model and selecting rs</span>
-  <span class="va">mod_res</span> <span class="op">=</span> <span class="fu"><a href="../reference/run_heidi.html">run_heidi</a></span><span class="op">(</span>args <span class="op">=</span> <span class="va">model_args</span><span class="op">)</span><span class="op">$</span><span class="va">rs</span>
+  <span class="va">mod_res</span> <span class="op">=</span> <span class="fu"><a href="../reference/run_model.html">run_model</a></span><span class="op">(</span>args <span class="op">=</span> <span class="va">model_args</span><span class="op">)</span><span class="op">$</span><span class="va">rs</span>
   <span class="co">#summarizing the model</span>
   <span class="va">mod_res</span> <span class="op">=</span> <span class="va">mod_res</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">s2</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pellet"</span>, <span class="st">"Sucrose"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
@@ -272,7 +272,7 @@ responses). With that in hand, we can write our model function.</p>
 according to the stimulus names identified in the arguments
 (<code>names(model_args$stim_alphas[[1]])</code>). We do this because
 the function we use to simulate (i.e., the one called by
-<code>run_heidi</code>) requires a named vector to work, and some
+<code>run_model</code>) requires a named vector to work, and some
 optimizers (looking at you optim) strip the names from the numerical
 vectors they are trying to optimize.</p></li>
 <li><p>We run the model and immediately select the relevant information
@@ -334,7 +334,7 @@ ordering of the empirical data. Notice the different order in the
   <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">model_args</span><span class="op">$</span><span class="va">stim_alphas</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
   <span class="va">model_args</span><span class="op">$</span><span class="va">stim_alphas</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span>
   <span class="co">#running the model and selecting rs</span>
-  <span class="va">mod_res</span> <span class="op">=</span> <span class="fu"><a href="../reference/run_heidi.html">run_heidi</a></span><span class="op">(</span>args <span class="op">=</span> <span class="va">model_args</span><span class="op">)</span><span class="op">$</span><span class="va">rs</span>
+  <span class="va">mod_res</span> <span class="op">=</span> <span class="fu"><a href="../reference/run_model.html">run_model</a></span><span class="op">(</span>args <span class="op">=</span> <span class="va">model_args</span><span class="op">)</span><span class="op">$</span><span class="va">rs</span>
   <span class="co">#summarizing the model</span>
   <span class="va">mod_res</span> <span class="op">=</span> <span class="va">mod_res</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">s2</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pellet"</span>, <span class="st">"Sucrose"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>

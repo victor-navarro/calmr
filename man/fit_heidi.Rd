@@ -11,7 +11,7 @@ fit_heidi(data, model_function, model_args, optimizer_options, ...)
 
 \item{model_function}{A function that runs the model and returns data.frame of r-values, organized as data.}
 
-\item{model_args}{The arguments to train the model function. Usually as returned by make_heidi_args.}
+\item{model_args}{The arguments to train the model function. Usually as returned by make_model_args.}
 
 \item{optimizer_options}{A list with options for the optimizer, as returned by get_optimizer_opts.}
 
@@ -40,5 +40,5 @@ Obtain MLE estimates for HeiDI, given data
 See the fitting_heidi vignette for examples
 }
 \seealso{
-\code{\link{get_optimizer_opts}}, \code{\link{make_heidi_args}}
+\code{\link{get_optimizer_opts}}, \code{\link{make_model_args}}
 }

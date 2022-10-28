@@ -102,10 +102,10 @@ HeiDI then distributes the pooled stimulus-specific strength among all $K$ stimu
 
 $$
 \tag{Eq. 8}
-R_j = \frac{\theta(j)}{\sum_{k}^{K}\theta(k)}a_{j,M}
+R_{j,k} = \frac{\theta(j)}{\sum_{k}^{K}\theta(k)}a_{k,M}
 $$
 
-As $K$ can include both present and absent stimuli, the $\theta$ function above depends on whether the stimulus $k$ is absent (i.e., $k \in N$) or not (i.e., $k \in M$), as:
+where $j \in K$. As $K$ can include both present and absent stimuli, the $\theta$ function above depends on whether the stimulus $k$ is absent (i.e., $k \in N$) or not (i.e., $k \in M$), as:
 
 $$
 \tag{Eq. 9}

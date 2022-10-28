@@ -10,20 +10,20 @@
 #' @param vals A data.frame containing parsed values.
 #' @param bars A logical stipulating whether to summarize and use stacked bars, instead of points and lines.
 #' @param simple A logical stipulating whether to simplify the plot by collapsing across sources.
-#' @param parsed_model A parsed model, as returned by parse_heidi_results.
+#' @param parsed_model A parsed model, as returned by parse_experiment_results.
 #' @param plots A named list with plots
 #' @param selection A character vector with the selected plots
 #' @param type A string specifying the type of plots requested. One of `c("vs", "rs_simple", "rs_complex", "acts_learning", "acts_bar", "as")`
 #' @param plot_options A list with options
 #' @param common_scale A logical. Whether to plot the data in a common y-scale.
-#' @param weights A data.frame containing parsed weights, as returned by parse_heidi_results
+#' @param weights A data.frame containing parsed weights, as returned by parse_experiment_results
 #' @param t An integer denoting the trial of the weights to be graphed. Defaults to the last trial in the data.
 #' @param limits A vector of length 2 specifying the range of weights. Defaults to the negative and positive maximum of absolute weights.
 #' @param graph_opts A list of options for graphing weights
 #' @param graph_size A string specifying the desired graph size, from c("large", "small"). Default is "large".
 #' @param graphs A list of graphs, as returned by make_graphs
-#' @seealso \code{\link{parse_heidi_results}}
-#' @rdname heidi_plots
+#' @seealso \code{\link{parse_experiment_results}}
+#' @rdname model_plots
 #' @export
 plot_vs <- function(vals){
   vals %>%
@@ -41,7 +41,7 @@ plot_vs <- function(vals){
     ggplot2::theme_bw()
 }
 
-#' @rdname heidi_plots
+#' @rdname model_plots
 #' @export
 plot_acts <- function(vals, bars = F){
   summ = vals %>%
@@ -86,7 +86,7 @@ plot_acts <- function(vals, bars = F){
   plt
 }
 
-#' @rdname heidi_plots
+#' @rdname model_plots
 #' @export
 plot_rs <- function(vals, simple = F){
   summ = vals %>%
@@ -122,7 +122,7 @@ plot_rs <- function(vals, simple = F){
   plt
 }
 
-#' @rdname heidi_plots
+#' @rdname model_plots
 #' @export
 plot_as <- function(vals){
   vals %>%
@@ -135,11 +135,11 @@ plot_as <- function(vals){
     ggplot2::scale_colour_viridis_d(drop = FALSE) +
     ggplot2::scale_x_continuous(breaks = NULL) +
     ggplot2::facet_grid(.~.data$phase+.data$trial_type, scales = 'free_x') +
-    ggplot2::labs(x = "Trial/Miniblock", y = 'Alpha Value', colour = 'Source') +
+    ggplot2::labs(x = "Trial/Miniblock", y = 'Alpha Value', colour = 'Stimulus') +
     ggplot2::theme_bw()
 }
 
-#' @rdname heidi_plots
+#' @rdname model_plots
 #' @export
 make_plots <- function(parsed_model){
   plotlist = list()
@@ -160,7 +160,7 @@ make_plots <- function(parsed_model){
   return(plotlist)
 }
 
-#' @rdname heidi_plots
+#' @rdname model_plots
 #' @export
 plot_common_scale <- function(plots){
   #get min and max y-scale
@@ -173,16 +173,19 @@ plot_common_scale <- function(plots){
   plots
 }
 
-#' @rdname heidi_plots
+#' @rdname model_plots
 #' @export
 get_plot_opts <- function(common_scale = TRUE){
   return(list(common_scale = common_scale))
 }
 
-#' @rdname heidi_plots
+#' @rdname model_plots
 #' @export
-graph_weights <- function(weights, limits = max(abs(range(weights$value)))*c(-1, 1),
+graph_weights <- function(weights, limits = NULL, colour_key = F,
                           t = max(weights$trial), graph_opts = get_graph_opts()){
+  if (is.null(limits)){
+    limits = max(abs(range(weights$value)))*c(-1, 1)
+  }
   weights = weights %>% dplyr::filter(.data$trial == t) %>%
     dplyr::group_by(.data$s1, .data$s2) %>%
     dplyr::summarise(value = mean(.data$value)) %>%
@@ -192,10 +195,10 @@ graph_weights <- function(weights, limits = max(abs(range(weights$value)))*c(-1,
   net = ggnetwork::ggnetwork(network::as.network(weights),
                              layout = "circle",
                              arrow.gap = graph_opts$arrow.gap)
-  ggplot2::ggplot(net, ggplot2::aes(x = .data$x, y = .data$y,
-                                    xend = .data$xend, yend = .data$yend,
-                                    colour = .data$weight,
-                                    label = .data$vertex.names)) +
+  p = ggplot2::ggplot(net, ggplot2::aes(x = .data$x, y = .data$y,
+                                        xend = .data$xend, yend = .data$yend,
+                                        colour = .data$weight,
+                                        label = .data$vertex.names)) +
     ggnetwork::geom_edges(curvature = graph_opts$arrow.curvature,
                           size = graph_opts$edge.size,
                           arrow = grid::arrow(length = grid::unit(graph_opts$arrow.pt, "pt"), type = "closed")) +
@@ -204,11 +207,15 @@ graph_weights <- function(weights, limits = max(abs(range(weights$value)))*c(-1,
     ggnetwork::geom_nodetext(size = graph_opts$node.text.size, colour = "black") +
     ggplot2::scale_colour_gradient2(high = "#fde725", low = "#440154", mid = "white", midpoint = 0, limits = limits) +
     ggplot2::theme_void() +
-    ggplot2::guides(colour = "none") +
-    ggplot2::coord_cartesian(xlim = c(-0.2, 1.2), ylim = c(-0.2, 1.2))
+    ggplot2::coord_cartesian(xlim = c(-0.2, 1.2), ylim = c(-0.2, 1.2)) +
+    ggplot2::labs(colour = "Strength")
+  if (!colour_key){
+    p = p + ggplot2::guides(colour = "none")
+  }
+  p
 }
 
-#' @rdname heidi_plots
+#' @rdname model_plots
 #' @export
 get_graph_opts <- function(graph_size = "small"){
   if (graph_size == "large"){
@@ -240,7 +247,7 @@ get_graph_opts <- function(graph_size = "small"){
 
 }
 
-#' @rdname heidi_plots
+#' @rdname model_plots
 #' @export
 make_graphs <- function(parsed_model,
                         limits = max(abs(range(parsed_model$vs$value)))*c(-1, 1),
@@ -266,7 +273,7 @@ make_graphs <- function(parsed_model,
   return(plotlist)
 }
 
-#' @rdname heidi_plots
+#' @rdname model_plots
 #' @export
 patch_graphs <- function(graphs, selection = names(graphs)){
   #expects a list of graphs via make_graphs/graph_weights
@@ -275,7 +282,7 @@ patch_graphs <- function(graphs, selection = names(graphs)){
   cow
 }
 
-#' @rdname heidi_plots
+#' @rdname model_plots
 #' @export
 patch_plots <- function(plots, selection = NULL, type = NULL, plot_options = get_plot_opts()){
   type_mapping = data.frame(type = c("vs", "rs_simple", "rs_complex", "acts_learning", "acts_bar", "as"),

@@ -20,7 +20,7 @@ fit_predict(fit, new_args = NULL, type = "response")
 
 \item{fit}{A fit, as returned by \code{fit_heidi}.}
 
-\item{new_args}{A tibble with arguments for the model, as returned by \code{make_heidi_args}.}
+\item{new_args}{A tibble with arguments for the model, as returned by \code{make_model_args}.}
 
 \item{type}{The type of prediction. One from \code{c("response")}. If \code{response}, the link function used to fit the model is applied to the model function before return.}
 }
@@ -32,5 +32,5 @@ fit_predict returns a model prediction given a fit
 Whenever a family function other than the identity is used, the family-specific parameters will always be appended to the end of the relevant lists.
 }
 \seealso{
-\code{\link{fit_heidi}}, \code{\link{make_heidi_args}}
+\code{\link{fit_heidi}}, \code{\link{make_model_args}}
 }

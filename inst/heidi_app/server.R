@@ -105,12 +105,17 @@ shiny::shinyServer(function(input, output) {
     }
   })
 
+  shiny::observeEvent(input$model_selction, {
+    parsed(FALSE)
+    ran(FALSE)
+  })
+
   shiny::observeEvent(input$parse_design, {
     design_df(rhandsontable::hot_to_r(input$design_tbl))
     parsed_design(parse_design(design_df()))
     #get parameters
     #but, keep parameters if there are compatible parameters already
-    new_params = get_params(parsed_design(), input$defaultpar)
+    new_params = get_params(parsed_design(), input$defaultpar, input$model_selection)
     old_params = param_df()
     if (setequal(new_params$Stimulus, old_params$Stimulus)){
       param_df(old_params)
@@ -123,20 +128,23 @@ shiny::shinyServer(function(input, output) {
   shiny::observeEvent(input$runmodel, {
     tryCatch({
       #use design_df and param_df to create a tibble containing all necessary arguments for heidi
-      heidi_args = heidi::make_heidi_args(parsed_design(), param_df(), sim_options())
+      heidi_args = heidi::make_model_args(design = parsed_design(),
+                                          pars = param_df(),
+                                          model = input$model_selection,
+                                          opts = sim_options())
       iterations = sim_options()$iterations
       #run heidi, run!
       res = tibble::tibble()
       shiny::withProgress(message = "Simulating...", value = 0, {
         for (i in 1:nrow(heidi_args)){
-          res = rbind(res, heidi::run_heidi(heidi_args[i, ], parse = FALSE))
+          res = rbind(res, heidi::run_model(heidi_args[i, ], model = input$model_selection, parse = FALSE))
           shiny::incProgress(1/iterations)
         }
       })
       raw_results(res)
       #parse results
       shiny::withProgress(message = "Parsing results...", value = 0, {
-        parsed_results(heidi::parse_heidi_results(raw_results()))
+        parsed_results(heidi::parse_experiment_results(raw_results()))
         shiny::setProgress(1)
       })
       shiny::withProgress(message = "Making plots...", value = 0, {

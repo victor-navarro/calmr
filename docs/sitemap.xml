@@ -40,7 +40,7 @@
     <loc>http://victornavarro.org/heidi/reference/fit_helpers.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/reference/get_heidi_opts.html</loc>
+    <loc>http://victornavarro.org/heidi/reference/get_model_opts.html</loc>
   </url>
   <url>
     <loc>http://victornavarro.org/heidi/reference/get_params.html</loc>
@@ -49,16 +49,16 @@
     <loc>http://victornavarro.org/heidi/reference/heidi_app.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/reference/heidi_helpers.html</loc>
+    <loc>http://victornavarro.org/heidi/reference/model_helpers.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/reference/heidi_plots.html</loc>
+    <loc>http://victornavarro.org/heidi/reference/model_plots.html</loc>
   </url>
   <url>
     <loc>http://victornavarro.org/heidi/reference/index.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/reference/make_heidi_args.html</loc>
+    <loc>http://victornavarro.org/heidi/reference/make_model_args.html</loc>
   </url>
   <url>
     <loc>http://victornavarro.org/heidi/reference/parse_design.html</loc>
@@ -70,10 +70,10 @@
     <loc>http://victornavarro.org/heidi/reference/pipe.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/reference/quick_heidi.html</loc>
+    <loc>http://victornavarro.org/heidi/reference/quick_model.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/reference/run_heidi.html</loc>
+    <loc>http://victornavarro.org/heidi/reference/run_model.html</loc>
   </url>
   <url>
     <loc>http://victornavarro.org/heidi/reference/train_pav_heidi.html</loc>

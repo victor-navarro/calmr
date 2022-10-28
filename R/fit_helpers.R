@@ -7,11 +7,11 @@
 #' @param family A string specifying the family function to generate responses (and calculate the likelihood function with). One from `c("identity", "linear", "poisson")`.
 #' @param adj The adjustment factor for upper and lower bounds of the salience parameters. Default is 1e-6
 #' @param fit A fit, as returned by `fit_heidi`.
-#' @param new_args A tibble with arguments for the model, as returned by `make_heidi_args`.
+#' @param new_args A tibble with arguments for the model, as returned by `make_model_args`.
 #' @param type The type of prediction. One from `c("response")`. If `response`, the link function used to fit the model is applied to the model function before return.
 #' @note Whenever a family function other than the identity is used, the family-specific parameters will always be appended to the end of the relevant lists.
 #' @rdname fit_helpers
-#' @seealso \code{\link{fit_heidi}}, \code{\link{make_heidi_args}}
+#' @seealso \code{\link{fit_heidi}}, \code{\link{make_model_args}}
 #' @export
 get_optimizer_opts <- function(optimizer, stim_names, family, adj = 1e-6){
   npars = length(stim_names)

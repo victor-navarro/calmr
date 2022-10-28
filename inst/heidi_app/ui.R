@@ -22,6 +22,8 @@ anchor <- tags$a(href="http://victornavarro.org/heidi", target="_blank", style =
                  'HeiDI Simulator')
 header$children[[2]]$children <- tags$div(anchor, class = 'name')
 
+supported_models <- c("HD2022", "HDI2020")
+
 ui <- shinydashboard::dashboardPage(title = "HeiDI Simulator",
                                     skin = "red",
                                     header,
@@ -67,6 +69,7 @@ ui <- shinydashboard::dashboardPage(title = "HeiDI Simulator",
                                                       shinydashboard::box(collapsible = TRUE,
                                                                           width = NULL,
                                                                           title = "Sim Preferences",
+                                                                          shiny::selectInput(inputId = "model_selection", label = "Model", choices = supported_models, multiple = F),
                                                                           shiny::sliderInput(inputId = 'iterations', label = 'Sim Iterations', min = 1, max = 200, value = 1, ticks = FALSE),
                                                                           shiny::checkboxInput(inputId = "miniblocks", label = 'Randomize Trials in Miniblocks', value = T)
                                                       ),

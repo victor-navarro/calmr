@@ -2,7 +2,7 @@
 #' @description Obtain MLE estimates for HeiDI, given data
 #' @param data A numeric vector containing data to fit HeiDI against.
 #' @param model_function A function that runs the model and returns data.frame of r-values, organized as data.
-#' @param model_args The arguments to train the model function. Usually as returned by make_heidi_args.
+#' @param model_args The arguments to train the model function. Usually as returned by make_model_args.
 #' @param optimizer_options A list with options for the optimizer, as returned by get_optimizer_opts.
 #' @param ... Extra parameters passed to the optimizer call
 #' @return A list with
@@ -21,7 +21,7 @@
 #' }
 #' @note See the fitting_heidi vignette for examples
 #' @export
-#' @seealso \code{\link{get_optimizer_opts}}, \code{\link{make_heidi_args}}
+#' @seealso \code{\link{get_optimizer_opts}}, \code{\link{make_model_args}}
 fit_heidi <- function(data, model_function, model_args, optimizer_options, ...){
   npars = length(optimizer_options$lower)
   #determine where to the model-specific parameters end

@@ -94,22 +94,26 @@ trial_parser <- function(trial_string){
   unique_functional_stimuli = unique(unlist(c(trial_pre_functional, trial_post_functional)))
   unique_functional_stimuli = unique_functional_stimuli[!is.na(unique_functional_stimuli)]
 
-  nomi_func_map = unique(data.frame(nomi = unlist(c(trial_pre_nominal, trial_post_nominal)),
-                                    func = unlist(c(trial_pre_functional, trial_post_functional))))
-  nomi_func_map = nomi_func_map[!is.na(nomi_func_map$nomi), ]
+  #create mapping between nominal and functional stimuli
+  nomi2func = stats::setNames(unlist(c(trial_pre_functional, trial_post_functional)),
+                                  unlist(c(trial_pre_nominal, trial_post_nominal)))
+  nomi2func = nomi2func[!duplicated(nomi2func) & !is.na(nomi2func)]
+  func2nomi = stats::setNames(names(nomi2func), nomi2func)
 
   #now we can clean everything of NAs
   trial_pre_functional = lapply(trial_pre_functional, function(x) x[!is.na(x)])
   trial_post_functional = lapply(trial_post_functional, function(x) x[!is.na(x)])
   trial_pre_nominal = lapply(trial_pre_nominal, function(x) x[!is.na(x)])
   trial_post_nominal = lapply(trial_post_nominal, function(x) x[!is.na(x)])
+
   return(list(trial_names = trial_names,
               trial_repeats = trial_repeats,
               trial_pre_functional = trial_pre_functional,
               trial_post_functional = trial_post_functional,
               trial_pre_nominal = trial_pre_nominal,
               trial_post_nominal = trial_post_nominal,
-              nomi_func_map = nomi_func_map,
+              nomi2func = nomi2func,
+              func2nomi = func2nomi,
               unique_nominal_stimuli = unique_nominal_stimuli,
               unique_functional_stimuli = unique_functional_stimuli,
               is_test = is_test))

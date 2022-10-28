@@ -187,7 +187,7 @@ However, if you want specific salience values for the stimuli in your
 experiment, you should pass a data.frame with parameters. Let’s specify
 those for our experiment.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/heidi_helpers.html">get_params</a></span><span class="op">(</span><span class="va">my_blocking</span>, default_par <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span> <span class="co">#Note we can quickly get a table with parameters directly from the design data.frame; a good way to check we are going in the right direction</span>
+<code class="sourceCode R"><span class="va">my_pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_helpers.html">get_params</a></span><span class="op">(</span><span class="va">my_blocking</span>, default_par <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span> <span class="co">#Note we can quickly get a table with parameters directly from the design data.frame; a good way to check we are going in the right direction</span>
 <span class="va">my_pars</span><span class="op">$</span><span class="va">Alpha</span><span class="op">[</span><span class="va">my_pars</span><span class="op">$</span><span class="va">Stimulus</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">.4</span>
 <span class="va">my_pars</span>
 <span class="co">#&gt;   Stimulus Alpha</span>
@@ -199,10 +199,10 @@ those for our experiment.</p>
 <h4 id="additional-options">Additional options<a class="anchor" aria-label="anchor" href="#additional-options"></a>
 </h4>
 <p>The final ingredient is a list with simulation options. We can get a
-default one with <code>get_heidi_opts</code>, and modify them
+default one with <code>get_model_opts</code>, and modify them
 accordingly.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_heidi_opts.html">get_heidi_opts</a></span><span class="op">(</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">my_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_model_opts.html">get_model_opts</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">my_opts</span><span class="op">$</span><span class="va">iterations</span> <span class="op">&lt;-</span> <span class="fl">10</span>
 <span class="va">my_opts</span>
 <span class="co">#&gt; $iterations</span>
@@ -214,11 +214,11 @@ accordingly.</p>
 <div class="section level4">
 <h4 id="simulating">Simulating<a class="anchor" aria-label="anchor" href="#simulating"></a>
 </h4>
-<p>And we can finally simulate the model with <code>quick_heidi</code>.
+<p>And we can finally simulate the model with <code>quick_model</code>.
 By default, the function returns a list with aggregated data. Let’s
 see.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/quick_heidi.html">quick_heidi</a></span><span class="op">(</span>design_df <span class="op">=</span> <span class="va">my_blocking</span>,
+<code class="sourceCode R"><span class="va">my_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/quick_model.html">quick_model</a></span><span class="op">(</span>design_df <span class="op">=</span> <span class="va">my_blocking</span>,
                     param_df <span class="op">=</span> <span class="va">my_pars</span>,
                     options <span class="op">=</span> <span class="va">my_opts</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">my_sim</span><span class="op">)</span> <span class="co">#contains information about weights (vs), activation values (acts), r-values (rs), and alphas (as)</span>
@@ -242,7 +242,7 @@ see.</p>
 to see some plots. Let’s use <code>make_plots</code> to create some
 plots, and <code>patch_plots</code> to display them.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_plots</span> <span class="op">=</span> <span class="fu"><a href="../reference/heidi_plots.html">make_plots</a></span><span class="op">(</span><span class="va">my_sim</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">my_plots</span> <span class="op">=</span> <span class="fu"><a href="../reference/model_plots.html">make_plots</a></span><span class="op">(</span><span class="va">my_sim</span><span class="op">)</span>
 <span class="va">plot_names</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">my_plots</span><span class="op">)</span>
 <span class="va">plot_names</span>
 <span class="co">#&gt;  [1] "Control: Rs (simple)"     "Control: Rs (complex)"   </span>
@@ -261,7 +261,7 @@ level of responding) per stimulus (absent or present). They do not
 identify the sources of that responding (i.e., whether A or B is
 producing the responding); for that, we must look at complex plots.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/heidi_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">7</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="co">#Responding</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/model_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">7</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="co">#Responding</span></code></pre></div>
 <p><img src="heidi_basics_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
 </div>
 <div class="section level4">
@@ -272,7 +272,7 @@ bit, in order to allow comparison among the sources of responding. Now,
 each stimulus source is shown as a different color, and the vertical
 panels show different target stimuli.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/heidi_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">8</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="co">#Responding</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/model_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">8</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="co">#Responding</span></code></pre></div>
 <p><img src="heidi_basics_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
 </div>
 <div class="section level4">
@@ -288,7 +288,7 @@ associative links.</p>
 activation. The vertical panels denote the target stimulus. The x-axis
 now shows the trial types.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/heidi_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">9</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/model_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">9</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <p><img src="heidi_basics_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
 </div>
 <div class="section level4">
@@ -297,7 +297,7 @@ now shows the trial types.</p>
 <p>Similar to above, but now the x-axis shows trial number, and the
 trial_types are embedded across horizontal panels.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/heidi_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">10</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/model_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">10</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <p><img src="heidi_basics_files/figure-html/unnamed-chunk-11-1.png" width="672"></p>
 </div>
 <div class="section level4">
@@ -308,7 +308,7 @@ that HeiDI uses to generate activations in the first place. Each
 vertical panel denotes a stimulus source. THe different colours, the
 target of the association.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/heidi_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">11</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/model_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">11</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <p><img src="heidi_basics_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
 </div>
 <div class="section level4">
@@ -317,7 +317,7 @@ target of the association.</p>
 <p>Venture here only if you’re ready. The plots below show the stimulus
 saliencies at the moment of expression.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/heidi_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">12</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/model_plots.html">patch_plots</a></span><span class="op">(</span>plots <span class="op">=</span> <span class="va">my_plots</span>, selection <span class="op">=</span> <span class="va">plot_names</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">12</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <p><img src="heidi_basics_files/figure-html/unnamed-chunk-13-1.png" width="672"></p>
 </div>
 </div>
@@ -328,15 +328,15 @@ saliencies at the moment of expression.</p>
 any point during training, using the function
 <code>make_graphs</code>.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_graph_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/heidi_plots.html">get_graph_opts</a></span><span class="op">(</span><span class="st">"small"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/heidi_plots.html">make_graphs</a></span><span class="op">(</span><span class="va">my_sim</span>, t <span class="op">=</span> <span class="fl">10</span>, graph_opts <span class="op">=</span> <span class="va">my_graph_opts</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">my_graph_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_plots.html">get_graph_opts</a></span><span class="op">(</span><span class="st">"small"</span><span class="op">)</span>
+<span class="fu"><a href="../reference/model_plots.html">make_graphs</a></span><span class="op">(</span><span class="va">my_sim</span>, t <span class="op">=</span> <span class="fl">10</span>, graph_opts <span class="op">=</span> <span class="va">my_graph_opts</span><span class="op">)</span>
 <span class="co">#&gt; $`Group Control: (Trial 10)`</span></code></pre></div>
 <p><img src="heidi_basics_files/figure-html/unnamed-chunk-14-1.png" width="672"></p>
 <pre><code><span class="co">#&gt; </span>
 <span class="co">#&gt; $`Group Exp: (Trial 10)`</span></code></pre>
 <p><img src="heidi_basics_files/figure-html/unnamed-chunk-14-2.png" width="672"></p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/heidi_plots.html">make_graphs</a></span><span class="op">(</span><span class="va">my_sim</span>, t <span class="op">=</span> <span class="fl">20</span>, graph_opts <span class="op">=</span> <span class="va">my_graph_opts</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/model_plots.html">make_graphs</a></span><span class="op">(</span><span class="va">my_sim</span>, t <span class="op">=</span> <span class="fl">20</span>, graph_opts <span class="op">=</span> <span class="va">my_graph_opts</span><span class="op">)</span>
 <span class="co">#&gt; $`Group Control: (Trial 20)`</span></code></pre></div>
 <p><img src="heidi_basics_files/figure-html/unnamed-chunk-14-3.png" width="672"></p>
 <pre><code><span class="co">#&gt; </span>
