@@ -1,6 +1,6 @@
 # calmr
 
-An R-based package to Simulate the Acquisition and Expression of Reciprocal Associations
+Canonical Associative Learning Models in R
 
 ## Installation
 
