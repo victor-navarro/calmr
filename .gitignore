@@ -4,11 +4,11 @@ inst/doc
 .Rdata
 .httr-oauth
 .DS_Store
-/inst/heidi_app/rsconnect/
-/inst/heidi_app/heidi_app_deployment.R
+/inst/calmr_app/rsconnect/
+/inst/calmr_app/calmr_app_deployment.R
 /doc/
 /Meta/
 -Victor’s MacBook Air.Rhistory
-heidi-Victor's MacBook Air.Rproj
-heidi.Rproj
+calmr-Victor's MacBook Air.Rproj
+calmr.Rproj
 /sketches/

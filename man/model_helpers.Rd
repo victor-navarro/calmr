@@ -7,10 +7,10 @@
 \alias{parse_model}
 \alias{parse_experiment_results}
 \alias{aggregate_experiment_results}
-\alias{filter_heidi_results}
+\alias{filter_calmr_results}
 \title{An assortment of functions to help models}
 \usage{
-get_params(design, model = "HD2022")
+get_params(design, model = NULL)
 
 gen_ss_weights(stims, default_val = 0)
 
@@ -20,7 +20,7 @@ parse_experiment_results(experiment, aggregate = T)
 
 aggregate_experiment_results(parsed_experiment)
 
-filter_heidi_results(parsed_results, filters)
+filter_calmr_results(parsed_results, filters)
 }
 \arguments{
 \item{design}{An data.frame containing the experimental design.}
@@ -41,7 +41,7 @@ filter_heidi_results(parsed_results, filters)
 get_params generates a data.frame with stimulus salience parameters.
 gen_ss_weights generates a named matrix with model weights.
 model_vs, parse_acts, parse_rs, parse_as and parse_experiment_results parse the raw outputs of a model into tibbles.
-filter_heidi_results is a convenience function to filter specific phase and trial_type data.
+filter_calmr_results is a convenience function to filter specific phase and trial_type data.
 }
 \seealso{
 \code{\link{parse_design}}, \code{\link{HDI2020}}, \code{\link{quick_model}}

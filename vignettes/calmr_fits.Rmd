@@ -1,9 +1,9 @@
 ---
-title: "heidi_fits"
+title: "calmr_fits"
 author: "Victor Navarro"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{heidi_fits}
+  %\VignetteIndexEntry{calmr_fits}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(heidi)
+library(calmr)
 library(ggplot2)
 library(magrittr)
 library(dplyr)
@@ -29,7 +29,7 @@ data(pati)
 set.seed(2022)
 ```
 
-# Fitting the model to empirical data
+# Fitting HeiDI to empirical data
 
 We now fit the model to some empirical data (Patitucci et al., 2016, Experiment 1). This will involve writing a function that produces model responses organized as the empirical data, and using that function for maximum likelihood estimation (MLE). We begin with a short overview of the data, then move to the model function, and finally fit the model.
 
@@ -72,11 +72,11 @@ des_df <- data.frame(group = c("CB1", "CB2"),
                      training = c("12L>(Pellet)/12R>(Sucrose)", "12L>(Sucrose)/12R>(Pellet)"),
                      rand_train = T)
 #The parameters
-pars <- get_params(des_df) #the actual parameter values don't matter, as our function will re-write them inside the optimizer call
+pars <- get_params(des_df, model = "HD2022") #the actual parameter values don't matter, as our function will re-write them inside the optimizer call
 #The options
-opts <- get_model_opts(iterations = 10)
+opts <- get_model_opts(iterations = 4)
 #The arguments
-my_mod_args <- make_model_args(design = parse_design(des_df), pars = pars, opts = opts)
+my_mod_args <- make_model_args(design = parse_design(des_df), pars = pars, model = "HD2022", opts = opts)
 
 ```
 
@@ -86,18 +86,18 @@ We can now begin to write the model function. First, it would be a good idea to 
 
 ```{r}
 mod_res <- run_model(args = my_mod_args)
-str(mod_res)
+str(mod_res@parsed_results, max.level = 2)
 ```
 
-Although the `run_model` function returns a list with 4 tibbles, we only care about one of them: `rs` (the model responses). With that in hand, we can write our model function.
+Although the `run_model` function returns an S4 class with many things, we only care about one of them: `mod_res@parsed_results$rs` (the model responses). With that in hand, we can write our model function.
 
 ```{r}
 my_model_function <- function(pars, model_args){
   #manipulating pars
-  names(pars) = names(model_args$stim_alphas[[1]])
-  model_args$stim_alphas = list(pars)
+  names(pars) = names(model_args$alphas[[1]])
+  model_args$alphas = list(pars)
   #running the model and selecting rs
-  mod_res = run_model(args = model_args)$rs
+  mod_res = run_model(args = model_args)@parsed_results$rs
   #summarizing the model
   mod_res = mod_res %>%
     filter(s2 %in% c("Pellet", "Sucrose")) %>%
@@ -116,7 +116,7 @@ my_model_function <- function(pars, model_args){
 
 Let's dissect the function above in its three parts. 
 
-1. We do some manipulation on the vector of parameters, naming them according to the stimulus names identified in the arguments (`names(model_args$stim_alphas[[1]])`). We do this because the function we use to simulate (i.e., the one called by `run_model`) requires a named vector to work, and some optimizers (looking at you optim) strip the names from the numerical vectors they are trying to optimize. 
+1. We do some manipulation on the vector of parameters, naming them according to the stimulus names identified in the arguments (`names(model_args$alphas[[1]])`). We do this because the function we use to simulate (i.e., the one called by `run_model`) requires a named vector to work, and some optimizers (looking at you optim) strip the names from the numerical vectors they are trying to optimize. 
 
 2. We run the model and immediately select the relevant information (rs).
 
@@ -142,10 +142,10 @@ Here, we will simply rewrite the model function so it matches the ordering of th
 ```{r}
 my_model_function <- function(pars, model_args){
   #manipulating pars
-  names(pars) = names(model_args$stim_alphas[[1]])
-  model_args$stim_alphas = list(pars)
+  names(pars) = names(model_args$alphas[[1]])
+  model_args$alphas = list(pars)
   #running the model and selecting rs
-  mod_res = run_model(args = model_args)$rs
+  mod_res = run_model(args = model_args)@parsed_results$rs
   #summarizing the model
   mod_res = mod_res %>%
     filter(s2 %in% c("Pellet", "Sucrose")) %>%
@@ -179,7 +179,7 @@ We have done a great job taking care of the first three, so let's tackle the las
 
 ```{r}
 my_optimizer_opts <- get_optimizer_opts(optimizer = "optim",
-                                        stim_names = pars$Stimulus,
+                                        stim_names = pars$stimulus,
                                         family = "linear")
 my_optimizer_opts
 ```
@@ -210,8 +210,9 @@ the_fit <- fit_heidi(pati_summ$rpert,
 ```
 
 ```{r, include = F, echo = F}
-#save("the_fit", file = "heidi_fits_fit.rda")
-load(file = "heidi_fits_fit.rda")
+#save("the_fit", file = "calmr_fits_fit.rda")
+#load(file = "vignettes/calmr_fits_fit.rda")
+load(file = "calmr_fits_fit.rda")
 ```
 
 
@@ -238,7 +239,7 @@ prediction %>% rename("prediction" = "value") %>%
     facet_grid(us~response)
 ```
 
-This looks pretty good! Save from some blatant misfits, of course. Now you know everything you need to fit heidi to your empirical data. Go forth!
+This looks pretty good! Save from some blatant misfits, of course. Now you know everything you need to fit calmr to your empirical data. Go forth!
 
 ### A final note
 This vignette was pre-generated, as I don't want the user to fit the model at the time of installation. I will try to keep up with it as the package develops, but if you spot any inconsistencies, please drop me a line.

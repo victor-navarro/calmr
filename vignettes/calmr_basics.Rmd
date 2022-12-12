@@ -1,9 +1,9 @@
 ---
-title: "heidi_basics"
+title: "calmr_basics"
 author: "Victor Navarro"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{heidi_basics}
+  %\VignetteIndexEntry{calmr_basics}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -19,10 +19,10 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(heidi)
+library(calmr)
 ```
 
-# Using heidi in R
+# Using calmr in R
 
 ## Ingredients
 
@@ -75,8 +75,8 @@ trial[c("unique_nominal_stimuli")]
 You can run a simulation with only a design data.frame (the simulation function will use default salience values for the stimuli). However, if you want specific salience values for the stimuli in your experiment, you should pass a data.frame with parameters. Let's specify those for our experiment.
 
 ```{r}
-my_pars <- get_params(my_blocking, default_par = .2) #Note we can quickly get a table with parameters directly from the design data.frame; a good way to check we are going in the right direction
-my_pars$Alpha[my_pars$Stimulus == "US"] <- .4
+my_pars <- get_params(my_blocking, model = "HD2022") #Note we can quickly get a table with parameters directly from the design data.frame; a good way to check we are going in the right direction
+my_pars$alphas[my_pars$stimulus == "US"] <- .4
 my_pars
 ```
 
@@ -86,7 +86,7 @@ The final ingredient is a list with simulation options. We can get a default one
 
 ```{r}
 my_opts <- get_model_opts()
-my_opts$iterations <- 10
+my_opts$iterations <- 3
 my_opts
 
 ```
@@ -98,74 +98,68 @@ And we can finally simulate the model with `quick_model`. By default, the functi
 ```{r}
 my_sim <- quick_model(design_df = my_blocking,
                     param_df = my_pars,
-                    options = my_opts)
-names(my_sim) #contains information about weights (vs), activation values (acts), r-values (rs), and alphas (as)
-head(my_sim$vs)
+                    options = my_opts,
+                    model = "HD2022")
+my_sim
 
 ```
 
 ## Plotting
 
-But, we rarely want the raw data. If you are like me, you will want to see some plots. Let's use `make_plots` to create some plots, and `patch_plots` to display them.
-
-```{r}
-my_plots = make_plots(my_sim)
-plot_names = names(my_plots)
-plot_names
-```
+But, we rarely want the raw data. If you are like me, you will want to see some plots. Let's use `plot` function with the different plots supported by the package (and the model)
 
 Here they are, paired side by side:
 
-### Stimulus-specific responding (simple)
+### stimulus-specific responding (simple)
 
 The plots below show responding across phases (left to right panels, and trials within). Note, these show the sum of R values (i.e., overall level of responding) per stimulus (absent or present). They do not identify the sources of that responding (i.e., whether A or B is producing the responding); for that, we must look at complex plots.
 
 ```{r}
-patch_plots(plots = my_plots, selection = plot_names[c(1, 7)]) #Responding
+calmr_plot(my_sim, type = "rs", simple = T)
 ```
 
-### Stimulus-specific responding (complex)
+### stimulus-specific responding (complex)
 
 These are those complex plots. Here, the parsing changes a little bit, in order to allow comparison among the sources of responding. Now, each stimulus source is shown as a different color, and the vertical panels show different target stimuli.
 
 ```{r}
-patch_plots(plots = my_plots, selection = plot_names[c(2, 8)]) #Responding
+calmr_plot(my_sim, type = "rs", simple = F)
 ```
 
 
-### Stimulus activations (bar)
+### stimulus activations (bar)
 
-Stimulus activation plots take us a little deeper into the model. In these, the overall stimulus activation that we use to distribute responding is split into comb and chain activations. Comb activations represent activations due to reciprocal associations (e.g., the effect of US->A on A). Chain activations represent activations via indirect associative links.
+stimulus activation plots take us a little deeper into the model. In these, the overall stimulus activation that we use to distribute responding is split into comb and chain activations. Comb activations represent activations due to reciprocal associations (e.g., the effect of US->A on A). Chain activations represent activations via indirect associative links.
 
 Below, each bar is coloured based on the stimulus that generates the activation. The vertical panels denote the target stimulus. The x-axis now shows the trial types.
 
 ```{r}
-patch_plots(plots = my_plots, selection = plot_names[c(3, 9)])
+calmr_plot(my_sim, type = "acts", bar = T)
 ```
 
-### Stimulus activations (curve)
+### stimulus activations (curve)
 
 Similar to above, but now the x-axis shows trial number, and the trial_types are embedded across horizontal panels.
 
 
 ```{r}
-patch_plots(plots = my_plots, selection = plot_names[c(4, 10)])
+calmr_plot(my_sim, type = "acts", bar = F)
 ```
 
-### Stimulus associations
+### stimulus associations
 
 Going even deeper now. These are the stimulus-stimulus associations that HeiDI uses to generate activations in the first place. Each vertical panel denotes a stimulus source. THe different colours, the target of the association.
 
 ```{r}
-patch_plots(plots = my_plots, selection = plot_names[c(5, 11)])
+calmr_plot(my_sim, type = "vs")
 ```
 
-### Stimulus salience at expression
+### stimulus salience at expression
 
 Venture here only if you're ready. The plots below show the stimulus saliencies at the moment of expression.
 
 ```{r}
-patch_plots(plots = my_plots, selection = plot_names[c(6, 12)])
+calmr_plot(my_sim, type = "as")
 ```
 
 ## Graphing
@@ -174,10 +168,9 @@ You can also take a look at the state of the model's associations at any point d
 
 ```{r}
 my_graph_opts <- get_graph_opts("small")
-make_graphs(my_sim, t = 10, graph_opts = my_graph_opts)
-make_graphs(my_sim, t = 20, graph_opts = my_graph_opts)
+calmr_graph(my_sim, t = 10, graph_opts = my_graph_opts)
 ```
 
 ## Final thoughts
 
-The `heidi` package was designed to simulate quickly; write your design and get a glance of the model predictions. However, the package also has some features for more advanced users, so make sure to check more advanced vignettes when you are ready.
+The `calmr` package was designed to simulate quickly; write your design and get a glance of the model predictions. However, the package also has some features for more advanced users, so make sure to check more advanced vignettes when you are ready.

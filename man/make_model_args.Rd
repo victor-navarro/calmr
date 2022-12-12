@@ -2,7 +2,7 @@
 % Please edit documentation in R/make_model_args.R
 \name{make_model_args}
 \alias{make_model_args}
-\title{Make a tibble to fit a heidi model}
+\title{Make a tibble to fit a calmr model}
 \usage{
 make_model_args(design, pars, model, opts = get_model_opts())
 }
@@ -17,7 +17,7 @@ make_model_args(design, pars, model, opts = get_model_opts())
 A tibble with the arguments required to run the model. Each row represents a group in the experimental design.
 }
 \description{
-Make a tibble to fit a heidi model
+Make a tibble to fit a calmr model
 }
 \examples{
 df <- data.frame(Group = c('Group 1', 'Group 2'), P1 = c('10AB(US)', '10A(US)'), R1 = c(TRUE, TRUE))

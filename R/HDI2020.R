@@ -19,7 +19,7 @@ HDI2020 <- function(alphas,
                     experience,
                     mapping){
 
-  mod = new("HeidiModel",
+  mod = new("CalmrModel",
             model = "HDI2020")
 
   #data initialization
@@ -53,7 +53,7 @@ HDI2020 <- function(alphas,
                      db_trial = t)
 
     #identify absent stimuli and calculate their "retrieved" salience
-    ralphas = .getAlphas(V = V,
+    ralphas = .getalphass(V = V,
                          alphas_nomi = alphas,
                          pre_nomi = nprestims,
                          pre_func = fprestims,

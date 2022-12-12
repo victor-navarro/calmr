@@ -117,7 +117,7 @@ shiny::shinyServer(function(input, output) {
     #but, keep parameters if there are compatible parameters already
     new_params = get_params(parsed_design(), input$defaultpar, input$model_selection)
     old_params = param_df()
-    if (setequal(new_params$Stimulus, old_params$Stimulus)){
+    if (setequal(new_params$stimulus, old_params$stimulus)){
       param_df(old_params)
     }else{
       param_df(new_params)
@@ -127,29 +127,29 @@ shiny::shinyServer(function(input, output) {
 
   shiny::observeEvent(input$runmodel, {
     tryCatch({
-      #use design_df and param_df to create a tibble containing all necessary arguments for heidi
-      heidi_args = heidi::make_model_args(design = parsed_design(),
+      #use design_df and param_df to create a tibble containing all necessary arguments for calmr
+      calmr_args = calmr::make_model_args(design = parsed_design(),
                                           pars = param_df(),
                                           model = input$model_selection,
                                           opts = sim_options())
       iterations = sim_options()$iterations
-      #run heidi, run!
+      #run calmr, run!
       res = tibble::tibble()
       shiny::withProgress(message = "Simulating...", value = 0, {
-        for (i in 1:nrow(heidi_args)){
-          res = rbind(res, heidi::run_model(heidi_args[i, ], model = input$model_selection, parse = FALSE))
+        for (i in 1:nrow(calmr_args)){
+          res = rbind(res, calmr::run_model(calmr_args[i, ], model = input$model_selection, parse = FALSE))
           shiny::incProgress(1/iterations)
         }
       })
       raw_results(res)
       #parse results
       shiny::withProgress(message = "Parsing results...", value = 0, {
-        parsed_results(heidi::parse_experiment(raw_results()))
+        parsed_results(calmr::parse_experiment(raw_results()))
         shiny::setProgress(1)
       })
       shiny::withProgress(message = "Making plots...", value = 0, {
-        plots(heidi::make_plots(heidi::filter_heidi_results(parsed_results(), plot_filters())))
-        graphs(heidi::make_graphs(parsed_results()))
+        plots(calmr::make_plots(calmr::filter_calmr_results(parsed_results(), plot_filters())))
+        graphs(calmr::make_graphs(parsed_results()))
         shiny::setProgress(1)
       })
       ran(TRUE)
@@ -182,7 +182,7 @@ shiny::shinyServer(function(input, output) {
 
   shiny::observeEvent(input$defaultpar, {
     if (!is.null(parsed_design()) & parsed()){
-      param_df(heidi::get_params(parsed_design(), input$defaultpar))
+      param_df(calmr::get_params(parsed_design(), input$defaultpar))
     }
   })
 
@@ -229,7 +229,7 @@ shiny::shinyServer(function(input, output) {
   #remaking the graphs on graph_trial change
   shiny::observeEvent(input$graph_trial, {
     if (!is.null(parsed_results())){
-      graphs(heidi::make_graphs(parsed_results(), t = input$graph_trial))
+      graphs(calmr::make_graphs(parsed_results(), t = input$graph_trial))
     }
   })
 
@@ -266,7 +266,7 @@ shiny::shinyServer(function(input, output) {
     filters$phase = input$phase_selection
     plot_filters(filters)
     shiny::withProgress(message = "Making plots...", value = 0, {
-      plots(heidi::make_plots(heidi::filter_heidi_results(parsed_results(), plot_filters())))
+      plots(calmr::make_plots(calmr::filter_calmr_results(parsed_results(), plot_filters())))
       shiny::setProgress(1)
     })
   })
@@ -276,7 +276,7 @@ shiny::shinyServer(function(input, output) {
     filters$trial_type = input$trial_type_selection
     plot_filters(filters)
     shiny::withProgress(message = "Making plots...", value = 0, {
-      plots(heidi::make_plots(heidi::filter_heidi_results(parsed_results(), plot_filters())))
+      plots(calmr::make_plots(calmr::filter_calmr_results(parsed_results(), plot_filters())))
       shiny::setProgress(1)
     })
   })
@@ -297,7 +297,7 @@ shiny::shinyServer(function(input, output) {
   output$parameter_tbl <- rhandsontable::renderRHandsontable({
     if (!is.null(param_df())){
       rhandsontable::rhandsontable(param_df(), rowHeaders = F) %>%
-        rhandsontable::hot_col("Stimulus", readOnly = T)
+        rhandsontable::hot_col("stimulus", readOnly = T)
     }
   })
 
@@ -312,13 +312,13 @@ shiny::shinyServer(function(input, output) {
 
   output$plot <- shiny::renderPlot({
     if (!is.null(plots())){
-      heidi::patch_plots(plots = plots(), selection = selected_plots(), plot_options = plot_options())
+      calmr::patch_plots(plots = plots(), selection = selected_plots(), plot_options = plot_options())
     }
   })
 
   output$graph <- shiny::renderPlot({
     if (!is.null(graphs())){
-      heidi::patch_graphs(graphs())
+      calmr::patch_graphs(graphs())
     }
   })
 

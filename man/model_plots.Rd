@@ -13,7 +13,7 @@
 \alias{make_graphs}
 \alias{patch_graphs}
 \alias{patch_plots}
-\title{Plotting functions for heidi models}
+\title{Plotting functions for calmr models}
 \usage{
 plot_vs(vals)
 

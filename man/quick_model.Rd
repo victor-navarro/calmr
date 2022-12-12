@@ -6,9 +6,9 @@
 \usage{
 quick_model(
   design_df,
+  model = NULL,
   param_df = NULL,
   options = NULL,
-  model = NULL,
   parse = TRUE
 )
 }

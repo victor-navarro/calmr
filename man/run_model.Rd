@@ -12,7 +12,7 @@ run_model(args, parse = TRUE)
 \item{parse}{A logical specifying whether the results should be parsed. Default = TRUE.}
 }
 \value{
-A HeidiExperiment object.
+A CalmrExperiment object.
 }
 \description{
 Runs a model with specific arguments.

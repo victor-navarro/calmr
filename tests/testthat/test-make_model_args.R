@@ -3,7 +3,7 @@ test_that("make_model_args works", {
   df = data.frame(Group = c("X", "Y"),
                   P1 = c("10A/#10A/10B", "2AB/6A/6B/2#AB"),
                   R1 = c(TRUE, TRUE))
-  pars = get_params(df)
+  pars = get_params(df, model = "HD2022")
   #throw error if design is not parsed
   expect_error(make_model_args(df, pars))
   parsed_df = parse_design(df)

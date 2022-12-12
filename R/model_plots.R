@@ -1,4 +1,4 @@
-#' Plotting functions for heidi models
+#' Plotting functions for calmr models
 #' @description plot_vs, plot_acts, plot_rs, and plot_as plot weights, activations, r-values and alphas from a model.
 #' make_plots is a convenience function to generate all the above plots in one go.
 #' plot_common_scale rescales the y-axis of a group of plots, so they are all in the same scale.
@@ -23,8 +23,8 @@
 #' @param graph_size A string specifying the desired graph size, from c("large", "small"). Default is "large".
 #' @param graphs A list of graphs, as returned by make_graphs
 #' @seealso \code{\link{parse_experiment_results}}
+
 #' @rdname model_plots
-#' @export
 plot_vs <- function(vals){
   vals %>%
     dplyr::mutate(trial = ceiling(.data$trial/.data$block_size)) %>%
@@ -42,7 +42,6 @@ plot_vs <- function(vals){
 }
 
 #' @rdname model_plots
-#' @export
 plot_acts <- function(vals, bars = F){
   summ = vals %>%
     dplyr::mutate(trial = ceiling(.data$trial/.data$block_size)) %>%
@@ -87,7 +86,6 @@ plot_acts <- function(vals, bars = F){
 }
 
 #' @rdname model_plots
-#' @export
 plot_rs <- function(vals, simple = F){
   summ = vals %>%
     dplyr::mutate(trial = ceiling(.data$trial/.data$block_size)) %>%
@@ -122,8 +120,8 @@ plot_rs <- function(vals, simple = F){
   plt
 }
 
+
 #' @rdname model_plots
-#' @export
 plot_as <- function(vals){
   vals %>%
     dplyr::mutate(trial = ceiling(.data$trial/.data$block_size)) %>%
@@ -135,7 +133,7 @@ plot_as <- function(vals){
     ggplot2::scale_colour_viridis_d(drop = FALSE) +
     ggplot2::scale_x_continuous(breaks = NULL) +
     ggplot2::facet_grid(.~.data$phase+.data$trial_type, scales = 'free_x') +
-    ggplot2::labs(x = "Trial/Miniblock", y = 'Alpha Value', colour = 'Stimulus') +
+    ggplot2::labs(x = "Trial/Miniblock", y = 'alphas Value', colour = 'stimulus') +
     ggplot2::theme_bw()
 }
 

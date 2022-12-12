@@ -1,84 +1,144 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://victornavarro.org/heidi/404.html</loc>
+    <loc>http://victornavarro.org/calmr/404.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/articles/fitting_heidi.html</loc>
+    <loc>http://victornavarro.org/calmr/articles/calmr_basics.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/articles/heidi_basics.html</loc>
+    <loc>http://victornavarro.org/calmr/articles/calmr_fits.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/articles/heidi_fits.html</loc>
+    <loc>http://victornavarro.org/calmr/articles/fitting_heidi.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/articles/heidi_math.html</loc>
+    <loc>http://victornavarro.org/calmr/articles/heidi_basics.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/articles/heidi_similarity.html</loc>
+    <loc>http://victornavarro.org/calmr/articles/heidi_fits.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/articles/index.html</loc>
+    <loc>http://victornavarro.org/calmr/articles/heidi_math.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/authors.html</loc>
+    <loc>http://victornavarro.org/calmr/articles/heidi_similarity.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/index.html</loc>
+    <loc>http://victornavarro.org/calmr/articles/index.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/LICENSE.html</loc>
+    <loc>http://victornavarro.org/calmr/authors.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/news/index.html</loc>
+    <loc>http://victornavarro.org/calmr/index.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/reference/fit_heidi.html</loc>
+    <loc>http://victornavarro.org/calmr/LICENSE.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/reference/fit_helpers.html</loc>
+    <loc>http://victornavarro.org/calmr/news/index.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/reference/get_model_opts.html</loc>
+    <loc>http://victornavarro.org/calmr/reference/build_model.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/reference/get_params.html</loc>
+    <loc>http://victornavarro.org/calmr/reference/calmr_app.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/reference/heidi_app.html</loc>
+    <loc>http://victornavarro.org/calmr/reference/compare_models.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/reference/model_helpers.html</loc>
+    <loc>http://victornavarro.org/calmr/reference/dot-combV.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/reference/model_plots.html</loc>
+    <loc>http://victornavarro.org/calmr/reference/fit_heidi.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/reference/index.html</loc>
+    <loc>http://victornavarro.org/calmr/reference/fit_helpers.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/reference/make_model_args.html</loc>
+    <loc>http://victornavarro.org/calmr/reference/get_heidi_opts.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/reference/parse_design.html</loc>
+    <loc>http://victornavarro.org/calmr/reference/get_model.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/reference/pati.html</loc>
+    <loc>http://victornavarro.org/calmr/reference/get_model_opts.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/reference/pipe.html</loc>
+    <loc>http://victornavarro.org/calmr/reference/get_params.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/reference/quick_model.html</loc>
+    <loc>http://victornavarro.org/calmr/reference/HD2022.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/reference/run_model.html</loc>
+    <loc>http://victornavarro.org/calmr/reference/HDI2020.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/reference/train_pav_heidi.html</loc>
+    <loc>http://victornavarro.org/calmr/reference/heidi_app.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/heidi/reference/trial_parser.html</loc>
+    <loc>http://victornavarro.org/calmr/reference/heidi_helpers.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/heidi_plots.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/MAC1975.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/make_heidi_args.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/make_model_args.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/model_helpers.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/model_info_funcs.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/model_plots.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/parse_design.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/pati.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/pipe.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/quick_heidi.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/quick_model.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/RAND.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/RSA.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/run_heidi.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/run_model.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/RW1972.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/train_pav_heidi.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/trial_parser.html</loc>
   </url>
 </urlset>

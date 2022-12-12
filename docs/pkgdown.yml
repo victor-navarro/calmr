@@ -1,13 +1,13 @@
-pandoc: 2.17.1.1
+pandoc: 2.19.2
 pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
-  heidi_basics: heidi_basics.html
-  heidi_fits: heidi_fits.html
+  calmr_basics: calmr_basics.html
+  calmr_fits: calmr_fits.html
   heidi_math: heidi_math.html
   heidi_similarity: heidi_similarity.html
-last_built: 2022-08-29T14:33Z
+last_built: 2022-12-12T18:08Z
 urls:
-  reference: http://victornavarro.org/heidi/reference
-  article: http://victornavarro.org/heidi/articles
+  reference: http://victornavarro.org/calmr/reference
+  article: http://victornavarro.org/calmr/articles
 

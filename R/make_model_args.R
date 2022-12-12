@@ -1,4 +1,4 @@
-#' Make a tibble to fit a heidi model
+#' Make a tibble to fit a calmr model
 #'
 #' @param design A design tibble, as returned by `parse_design`
 #' @param pars A data.frame containing parameters as returned by `get_params`
@@ -17,14 +17,9 @@
 
 make_model_args <- function(design, pars, model, opts = get_model_opts()){
   #Returns a tibble to run design in a rowwise manner (each row is a group)
+
   #Some early info
-  snames = pars$Stimulus
-  alphas = pars$Alpha
-  names(alphas) = snames
-  if (model == "RW1972"){
-    lambdas = pars$Lambda
-    names(lambdas) = snames
-  }
+  snames = pars$stimulus
 
   #the only challenge here is to create a master list of trials (trials)
   #and sample the training for each group (tps)
@@ -49,43 +44,48 @@ make_model_args <- function(design, pars, model, opts = get_model_opts()){
   #reduce
   trial_pre_functional_list = trial_pre_functional_list[!duplicated(master_trial_names)]
   trial_post_functional_list = trial_post_functional_list[!duplicated(master_trial_names)]
-
   trial_pre_nominal_list = trial_pre_nominal_list[!duplicated(master_trial_names)]
   trial_post_nominal_list = trial_post_nominal_list[!duplicated(master_trial_names)]
 
   master_trial_names = master_trial_names[!duplicated(master_trial_names)]
 
-  #get some stimulus data and parameters
-  sdata = design %>% dplyr::group_by(.data$group) %>%
-    tidyr::unnest_wider(.data$trial_info) %>%
+  #make stimulus mapping
+  map = design %>%
     #this bit saves us having to crunch data about stimuli that are not present in a group but are present in another
+    tidyr::unnest_wider(.data$trial_info) %>%
     dplyr::group_by(.data$group) %>%
     dplyr::mutate(unique_nominal_stimuli = list(unique(unlist(.data$unique_nominal_stimuli))),
                   unique_functional_stimuli = list(unique(unlist(.data$unique_functional_stimuli))),
                   nomi2func = list({
                     n2f = do.call('c', .data$nomi2func)
-                    n2f = n2f[!duplicated(n2f)]}),
+                    n2f = n2f[!duplicated(names(n2f))]}),
                   func2nomi = list({
                     f2n = do.call('c', .data$func2nomi)
-                    f2n = f2n[!duplicated(f2n)]})) %>%
-    #this bit puts the required alphas on a row by row basis
-    dplyr::rowwise() %>%
-    dplyr::mutate(alphas = list(alphas[unlist(.data$unique_nominal_stimuli)])) %>%
-    dplyr::select(.data$group, .data$alphas, .data$unique_functional_stimuli,
+                    f2n = f2n[!duplicated(names(f2n))]})) %>%
+    dplyr::select(.data$group, .data$unique_functional_stimuli,
                   .data$unique_nominal_stimuli, .data$nomi2func, .data$func2nomi) %>%
-    dplyr::distinct()
+    dplyr::distinct() %>%
+    #add the extra information above
+    dplyr::rowwise() %>%
+    dplyr::mutate(trial_pre_func = list(trial_pre_functional_list),
+                  trial_post_func = list(trial_post_functional_list),
+                  trial_pre_nomi = list(trial_pre_nominal_list),
+                  trial_post_nomi = list(trial_post_nominal_list),
+                  trial_names = list(master_trial_names))
 
-  #expand
-  if (model == "RW1972"){
-    sdata = sdata %>%
-      dplyr::mutate(lambdas = list(lambdas[unlist(.data$unique_nominal_stimuli)]))
-  }
+  #filter
+  map = do.call("rbind", apply(map, 1, function(x){
+    dat = x
+    tibble::tibble(group = dat[[1]], mapping = list(dat[-1]))
+  } ))
+
+  #add stimulus parameters
+  map_par = .add_parameters(map, pars, model)
 
   #we can sample now
   #Dom, if you are reading this, I apologize for this bit
   #It basically creates a tibble of iterations*groups*phases, with pointers for trials in the masterlist
-
-  tb = design %>%
+  exptb = design %>%
     tidyr::unnest_wider(.data$trial_info) %>%
     tidyr::expand_grid(iteration = 1:opts$iterations) %>%
     dplyr::rowwise() %>%
@@ -104,35 +104,14 @@ make_model_args <- function(design, pars, model, opts = get_model_opts()){
                      phase = list(unlist(.data$phaselab)),
                      block_size = list(unlist(.data$blocks)))
 
-  #create experiences data.frame
-  experience = apply(tb[c(-1,-2)], 1, function(x) do.call("cbind.data.frame", x))
+  #bundle into experiences
+  experience = apply(exptb[c(-1)], 1, function(x) do.call("cbind.data.frame", x))
 
-  #now put the trial and stimulus information back
-  tb = tb %>% dplyr::rowwise() %>%
-    dplyr::mutate(sdata[sdata$group == .data$group, ],
-                  trial_pre_func = list(trial_pre_functional_list),
-                  trial_post_func = list(trial_post_functional_list),
-                  trial_pre_nomi = list(trial_pre_nominal_list),
-                  trial_post_nomi = list(trial_post_nominal_list),
-                  trial_names = list(master_trial_names))
-
-  mapping = apply(tb[c("unique_functional_stimuli",
-                       "unique_nominal_stimuli",
-                       "nomi2func", "func2nomi",
-                       "trial_pre_func", "trial_post_func",
-                       "trial_pre_nomi", "trial_post_nomi",
-                       "trial_names")], 1, function(x) do.call("list", x))
-
-  #a character vector to select information from tb depending on the model
-  tb_select = c("iteration", "group", "alphas")
-  if (model == "RW1972"){
-    tb_select = c(tb_select, "lambdas")
-  }
   #return the tibble
-  tibble::tibble(model = model,
-                 tb[tb_select],
-                 experience,
-                 mapping)
+  tibble::tibble(model,
+                 exptb[, c("iteration", "group")],
+                 experience) %>%
+    dplyr::left_join(map_par, by = "group")
 }
 
 .sample_trials <- function(names, test, repeats, randomize, miniblocks, masterlist){
@@ -174,5 +153,12 @@ make_model_args <- function(design, pars, model, opts = get_model_opts()){
   r <- x%%y;
   return(ifelse(r, .gcd(y, r), y))
 }
+
+.add_parameters <- function(map, pars, model){
+  parnames = .get_model_parnames(model)
+  pars = sapply(parnames, function(p) lapply(map$mapping, function(x) setNames(pars[[p]], pars$stimulus)[unlist(x$unique_nominal_stimuli)]), simplify = F)
+  tibble::tibble(map, tibble::as_tibble(pars))
+}
+
 
 

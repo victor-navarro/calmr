@@ -68,7 +68,7 @@
   #a for loop for readability
   if (length(absent)){
     #get retrieved alphas
-    retrieved_as = .absentAlpha(V = V, pre_func = pre_func, db_trial = NA)
+    retrieved_as = .absentalphas(V = V, pre_func = pre_func, db_trial = NA)
     #get the average of their nominal alphas (TEMPORARY)
     nomi_avg_as = as_avg[absent]
     for (po in post_func){
@@ -97,25 +97,25 @@
   return(mat)
 }
 
-.getAlphas <- function(alphas_nomi, V, pre_nomi, pre_func, fsnames, nomi2func, db_trial = NA){
+.getalphass <- function(alphas_nomi, V, pre_nomi, pre_func, fsnames, nomi2func, db_trial = NA){
   #gets the saliencies for a given trial
   #it performs two actions:
   #1. populates a vector of saliencies for functional stimuli
   #[this based on the saliency (alphas) of the nominal stimuli on the trial (pre_nomi)]
-  #2. calculates the saliency for absent stimuli, via the .absentAlpha function
+  #2. calculates the saliency for absent stimuli, via the .absentalphas function
   as = stats::setNames(rep(0, length(fsnames)), fsnames)
   #Annoying bit again, see main function
   as[nomi2func[pre_nomi]] = alphas_nomi[pre_nomi]
   #now do absent stimuli
   absent = names(as[as==0])
   if (length(absent)){
-    as[absent] = .absentAlpha(V = V, pre_func = pre_func, db_trial = t)
+    as[absent] = .absentalphas(V = V, pre_func = pre_func, db_trial = t)
   }
   as
 }
 
 #Function to calculate the alpha of absent stimuli
-.absentAlpha <- function(V, pre_func, db_trial = NA){
+.absentalphas <- function(V, pre_func, db_trial = NA){
   #V is a weight matrix,
   #pre_func is a character vector of the stimuli being presented
   #

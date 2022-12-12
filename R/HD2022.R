@@ -19,7 +19,7 @@ HD2022 <- function(alphas,
                    experience,
                    mapping){
 
-  mod = new("HeidiModel",
+  mod = new("CalmrModel",
             model = "HD2022")
 
   #data initialization
@@ -37,13 +37,13 @@ HD2022 <- function(alphas,
   test_stims = fsnames
 
   for (t in 1:ntrials){
-
     #get pre functional and nominal stimuli
     fprestims = mapping$trial_pre_func[[experience$tp[t]]]
     nprestims = mapping$trial_pre_nomi[[experience$tp[t]]]
     #get post nominal stimuli
     fpoststims = mapping$trial_post_func[[experience$tp[t]]]
     npoststims = mapping$trial_post_nomi[[experience$tp[t]]]
+
 
     #compute combV for all stimuli
     combV = .combV(V = V, pre_func = fprestims, post_func = test_stims, db_trial = t)
@@ -58,7 +58,7 @@ HD2022 <- function(alphas,
                         db_trial = t)
 
     #identify absent stimuli and calculate their "retrieved" salience
-    ralphas = .getAlphas(V = V,
+    ralphas = .getalphass(V = V,
                          alphas_nomi = alphas,
                          pre_nomi = nprestims,
                          pre_func = fprestims,

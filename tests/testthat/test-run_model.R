@@ -9,9 +9,9 @@ test_that("get_model fails if model is not supported", {
   expect_error(get_model(model_name = "NAVARRO"))
 })
 
-supported_mods = get_supported_models()
+supported_mods = supported_models()
 for (m in supported_mods){
   test_that(paste("model", m, "works"), {
-    expect_true(class(run_model(make_model_args(df, get_params(df, model = m), model = m), parse = F)) == "HeidiExperiment")
+    expect_true(class(run_model(make_model_args(df, get_params(df, model = m), model = m), parse = F)) == "CalmrExperiment")
   })
 }

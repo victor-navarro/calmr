@@ -7,18 +7,26 @@
 #' @return A list with parsed results or a tibble with raw results
 #' @seealso \code{\link{get_model_opts}}, \code{\link{parse_experiment_results}}
 #' @export
-quick_model <- function(design_df, param_df = NULL, options = NULL, model = NULL, parse = TRUE){
+quick_model <- function(design_df, model = NULL, param_df = NULL, options = NULL, parse = TRUE){
+  #parse design
   parsed_design = parse_design(design_df)
-  auto_params = get_params(parsed_design) #generate parameters
+
   #check if parameters were passed
+  if (is.null(model)){
+    model = "HD2022"
+    warning("No model supplied. Using HD2022.")
+  }else{
+    .calmr_check("supported_model", given = model)
+  }
+
+  auto_params = get_params(parsed_design, model = model) #generate parameters
+
   if (is.null(param_df)){
     param_df = auto_params
-    warning(sprintf("No parameters supplied, using default values of %1.2f", default_alpha))
+    warning("No parameters supplied, using default values.")
   }else{
     #check if the user-specified parameters match what the parser sees
-    if (!(all(auto_params[, 1] %in% param_df[, 1]))){
-      stop("Error: Found mismatch between user supplied stimulus names and those in the experimental design.")
-    }
+    .calmr_check("params_OK", given = param_df, necessary = auto_params)
   }
   #check if options were passed
   auto_opts = get_model_opts()
@@ -26,20 +34,12 @@ quick_model <- function(design_df, param_df = NULL, options = NULL, model = NULL
     options = auto_opts
   }else{
     #check if the user covered all the options requested
-    if (any(!(names(auto_opts) %in% names(options)))){
-      stop("Error: Did not supply some of the options required to fit the model. Please see ?get_model_opts")
-    }
-  }
-  #check if model was passed
-  auto_mod = "HD2022"
-  if (is.null(model)){
-    model = auto_mod
-    warning(sprintf("No model supplied, using %s", auto_mod))
+    .calmr_check("options_OK", given = options, necessary = auto_opts)
   }
 
   #make the tibble
-  heidi_df = make_model_args(design = parsed_design, pars = param_df, model = model, opts = options)
+  args = make_model_args(design = parsed_design, pars = param_df, model = model, opts = options)
   #run the model
-  results = run_model(heidi_df, parse = parse)
+  results = run_model(args, parse = parse)
   return(results)
 }

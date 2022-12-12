@@ -9,7 +9,7 @@ library(magrittr)
 library(rhandsontable)
 library(stringr)
 library(tibble)
-library(heidi)
+library(calmr)
 
 header <- shinydashboard::dashboardHeader(tags$li(class = "dropdown",
                                                   tags$style(".main-header {max-height: 60px}"),
@@ -17,12 +17,12 @@ header <- shinydashboard::dashboardHeader(tags$li(class = "dropdown",
                                                   tags$style(".sidebar-toggle {height: 20px; padding-top: 1px !important;}"),
                                                   tags$style(".navbar {min-height:60px !important}")))
 
-anchor <- tags$a(href="http://victornavarro.org/heidi", target="_blank", style = 'color: white;',
-                 tags$img(src="heidi_logo.png", height='54', width='46'),
+anchor <- tags$a(href="http://victornavarro.org/calmr", target="_blank", style = 'color: white;',
+                 tags$img(src="calmr_logo.png", height='54', width='46'),
                  'HeiDI Simulator')
 header$children[[2]]$children <- tags$div(anchor, class = 'name')
 
-supported_models <- get_supported_models()
+supported_models <- supported_models()
 
 ui <- shinydashboard::dashboardPage(title = "HeiDI Simulator",
                                     skin = "red",
@@ -62,7 +62,7 @@ ui <- shinydashboard::dashboardPage(title = "HeiDI Simulator",
                                                       shinydashboard::box(collapsible = TRUE,
                                                                           width = NULL,
                                                                           title = "Parameters",
-                                                                          shiny::sliderInput(inputId = 'defaultpar', label = 'Default Alpha', min = 0, max = 1, value = .1, ticks = FALSE),
+                                                                          shiny::sliderInput(inputId = 'defaultpar', label = 'Default alphas', min = 0, max = 1, value = .1, ticks = FALSE),
                                                                           htmltools::br(),
                                                                           shiny::conditionalPanel("output.parsed", rhandsontable::rHandsontableOutput("parameter_tbl", width = "100%")),
                                                       ),

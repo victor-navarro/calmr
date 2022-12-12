@@ -21,17 +21,15 @@ RW1972 <- function(alphas,
                    experience,
                    mapping){
 
-  mod = new("HeidiModel",
+  mod = new("CalmrModel",
             model = "RW1972")
 
   #data initialization
   ntrials = length(experience$tp)
   if(is.null(V)){V = gen_ss_weights(mapping$unique_functional_stimuli)}
 
-  vs = array(NA, dim = c(ntrials, dim(V)),
+  vs = es = array(NA, dim = c(ntrials, dim(V)),
              dimnames = list(NULL, rownames(V), rownames(V)))
-  es = array(NA, dim = c(ntrials, nrow(V)),
-             dimnames = list(NULL, rownames(V)))
 
   fsnames = test_stims = rownames(V) #get functional stimuli names
   nsnames = names(alphas) #get nominal stimuli names
@@ -53,6 +51,8 @@ RW1972 <- function(alphas,
     e = oh_fstims %*% V #expectation
     #e = oh_fprestims %*% V #expectation //under investigation
 
+    #generate expectation matrix (only for data saving purposes)
+    emat = apply(V, 2, function(x) x*oh_fstims)
 
     # #Distribute R
     # r = .distR(ralphas, combV, chainV, t)
@@ -74,7 +74,7 @@ RW1972 <- function(alphas,
 
     #save data
     vs[t, , ] = V
-    es[t, ] = e
+    es[t, , ] = emat
   }
   mod@parameters = list(alphas = alphas,
                         lambdas = lambdas)

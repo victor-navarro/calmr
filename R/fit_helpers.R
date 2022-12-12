@@ -53,7 +53,7 @@ fit_predict <- function(fit, new_args = NULL, type = "response"){
   prediction
 }
 
-.get_heidi_link <- function(family){
+.get_calmr_link <- function(family){
   link_f = NULL
   if (family == "identity"){link_f = function(y, c) y}
   if (family == "linear"){link_f = function(y, c) y*c}
@@ -62,7 +62,7 @@ fit_predict <- function(fit, new_args = NULL, type = "response"){
   link_f
 }
 
-.get_heidi_loglikelihood <- function(family){
+.get_calmr_loglikelihood <- function(family){
   like_f = NULL
   if (family %in% c("identity", "linear")) {like_f = function(dat, mod) stats::dnorm(dat-mod, log = T)}
   if (family =="poisson"){like_f = function(dat, mod) stats::dpois(dat, mod+1e-9, log = T)} #note the adjustment, the poisson needs positive rates
