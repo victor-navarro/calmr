@@ -2,7 +2,6 @@
 % Please edit documentation in R/model_helpers.R
 \name{model_helpers}
 \alias{model_helpers}
-\alias{get_params}
 \alias{gen_ss_weights}
 \alias{parse_model}
 \alias{parse_experiment_results}
@@ -10,8 +9,6 @@
 \alias{filter_calmr_results}
 \title{An assortment of functions to help models}
 \usage{
-get_params(design, model = NULL)
-
 gen_ss_weights(stims, default_val = 0)
 
 parse_model(model)
@@ -23,8 +20,6 @@ aggregate_experiment_results(parsed_experiment)
 filter_calmr_results(parsed_results, filters)
 }
 \arguments{
-\item{design}{An data.frame containing the experimental design.}
-
 \item{stims}{A character vector with stimuli}
 
 \item{default_val}{Default alpha value}
@@ -33,16 +28,18 @@ filter_calmr_results(parsed_results, filters)
 
 \item{filters}{A named list containing "phase" and "trial_type" character vectors, for filtering data}
 
+\item{design}{An data.frame containing the experimental design.}
+
 \item{mod}{A model list}
 
-\item{raw_results}{A tibble with model information, as returned by quick_model}
+\item{raw_results}{A tibble with model information, as returned by run_experiment}
 }
 \description{
-get_params generates a data.frame with stimulus salience parameters.
+get_model_params generates a data.frame with stimulus salience parameters.
 gen_ss_weights generates a named matrix with model weights.
 model_vs, parse_acts, parse_rs, parse_as and parse_experiment_results parse the raw outputs of a model into tibbles.
 filter_calmr_results is a convenience function to filter specific phase and trial_type data.
 }
 \seealso{
-\code{\link{parse_design}}, \code{\link{HDI2020}}, \code{\link{quick_model}}
+\code{\link{parse_design}}, \code{\link{HDI2020}}, \code{\link{run_experiment}}
 }

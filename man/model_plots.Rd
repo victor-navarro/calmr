@@ -91,7 +91,7 @@ plot_vs, plot_acts, plot_rs, and plot_as plot weights, activations, r-values and
 make_plots is a convenience function to generate all the above plots in one go.
 plot_common_scale rescales the y-axis of a group of plots, so they are all in the same scale.
 get_plot_opts returns plotting options.
-graph_weights creates a graph of a model's weights on a given trial.
+graph_weights creates a graph_weights of a model's weights on a given trial.
 get_graph_opts returns graphing options.
 make_graphs is a convenience function to create group graphs, given a model.
 patch_plots and patch_graphs return a composite of plots or graphs.

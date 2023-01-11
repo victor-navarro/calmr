@@ -1,22 +1,29 @@
 #' Make a tibble to fit a calmr model
 #'
 #' @param design A design tibble, as returned by `parse_design`
-#' @param pars A data.frame containing parameters as returned by `get_params`
-#' @param opts A list with options as returned by `get_model_opts`
+#' @param pars A data.frame containing parameters as returned by `get_model_params`
+#' @param opts A list with options as returned by `get_exp_opts`
 #'
 #' @return A tibble with the arguments required to run the model. Each row represents a group in the experimental design.
 #'
-#' @seealso \code{\link{parse_design}}, \code{\link{get_params}}, \code{\link{get_model_opts}}
+#' @seealso \code{\link{parse_design}}, \code{\link{get_model_params}}, \code{\link{get_exp_opts}}
 #' @examples
 #' df <- data.frame(Group = c('Group 1', 'Group 2'), P1 = c('10AB(US)', '10A(US)'), R1 = c(TRUE, TRUE))
 #' des <- parse_design(df)
-#' ps <- get_params(des, 0.2)
-#' make_model_args(design = des, pars = ps, model = "HD2022", opts = get_model_opts(iterations = 1))
+#' ps <- get_model_params(des, 0.2)
+#' make_model_args(design = des, pars = ps, model = "HD2022", opts = get_exp_opts(iterations = 1))
 #'
 #' @export
 
-make_model_args <- function(design, pars, model, opts = get_model_opts()){
-  #Returns a tibble to run design in a rowwise manner (each row is a group)
+make_model_args <- function(design, pars = NULL, model = NULL, opts = get_exp_opts()){
+  #parse design if necessary
+  design = parse_design(design)
+
+  if (is.null(model)){
+    .calmr_default("model_name")
+  }else{
+    .calmr_check("supported_model", given = model)
+  }
 
   #Some early info
   snames = pars$stimulus

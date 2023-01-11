@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="calmr">
-<title>fitting_heidi • calmr</title>
+<title>fitting_model • calmr</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="fitting_heidi">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="fitting_model">
 <meta property="og:description" content="calmr">
 <meta property="og:image" content="http://victornavarro.org/calmr/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -48,7 +48,7 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/fitting_heidi.html">fitting_heidi</a>
+    <a class="dropdown-item" href="../articles/fitting_model.html">fitting_model</a>
     <a class="dropdown-item" href="../articles/calmr_basics.html">calmr_basics</a>
     <a class="dropdown-item" href="../articles/calmr_math.html">calmr_math</a>
     <a class="dropdown-item" href="../articles/calmr_similarity.html">calmr_similarity</a>
@@ -81,13 +81,13 @@
 
 <div class="row">
   <main id="main"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>fitting_heidi</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>fitting_model</h1>
                         <h4 data-toc-skip class="author">Victor
 Navarro</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/victor-navarro/calmr/blob/HEAD/vignettes/fitting_heidi.Rmd" class="external-link"><code>vignettes/fitting_heidi.Rmd</code></a></small>
-      <div class="d-none name"><code>fitting_heidi.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/victor-navarro/calmr/blob/HEAD/vignettes/fitting_model.Rmd" class="external-link"><code>vignettes/fitting_model.Rmd</code></a></small>
+      <div class="d-none name"><code>fitting_model.Rmd</code></div>
     </div>
 
     
@@ -187,9 +187,9 @@ we specify in order to reduce computing time.</p>
                      training <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"12L&gt;(Pellet)/12R&gt;(Sucrose)"</span>, <span class="st">"12L&gt;(Sucrose)/12R&gt;(Pellet)"</span><span class="op">)</span>,
                      rand_train <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
 <span class="co">#The parameters</span>
-<span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_helpers.html">get_params</a></span><span class="op">(</span><span class="va">des_df</span><span class="op">)</span> <span class="co">#the actual parameter values don't matter, as our function will re-write them inside the optimizer call</span>
+<span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_helpers.html">get_model_params</a></span><span class="op">(</span><span class="va">des_df</span><span class="op">)</span> <span class="co">#the actual parameter values don't matter, as our function will re-write them inside the optimizer call</span>
 <span class="co">#The options</span>
-<span class="va">opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_model_opts.html">get_model_opts</a></span><span class="op">(</span>iterations <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
+<span class="va">opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_exp_opts.html">get_exp_opts</a></span><span class="op">(</span>iterations <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
 <span class="co">#The arguments</span>
 <span class="va">my_mod_args</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_model_args.html">make_model_args</a></span><span class="op">(</span>design <span class="op">=</span> <span class="fu"><a href="../reference/parse_design.html">parse_design</a></span><span class="op">(</span><span class="va">des_df</span><span class="op">)</span>, pars <span class="op">=</span> <span class="va">pars</span>, opts <span class="op">=</span> <span class="va">opts</span><span class="op">)</span></code></pre></div>
 <p>Note we specified two counterbalancings as groups. It is very
@@ -368,7 +368,7 @@ ordering of the empirical data. Notice the different order in the
 <div class="section level3">
 <h3 id="fitting-the-model">Fitting the model<a class="anchor" aria-label="anchor" href="#fitting-the-model"></a>
 </h3>
-<p>We fit models using the <code>fit_heidi</code> function. This
+<p>We fit models using the <code>fit_model</code> function. This
 function requires 4 arguments:</p>
 <ol style="list-style-type: decimal">
 <li>The (empirical) data</li>
@@ -449,10 +449,10 @@ I overwrite the trace argument passed to the optimizer.</p>
 <code class="sourceCode R"><span class="va">my_optimizer_opts</span><span class="op">$</span><span class="va">optim_options</span><span class="op">$</span><span class="va">control</span><span class="op">$</span><span class="va">trace</span> <span class="op">=</span> <span class="fl">0</span></code></pre></div>
 <p>And with that, we can fit the model!</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">the_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_heidi.html">fit_heidi</a></span><span class="op">(</span><span class="va">pati_summ</span><span class="op">$</span><span class="va">rpert</span>,
+<code class="sourceCode R"><span class="va">the_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_model.html">fit_model</a></span><span class="op">(</span><span class="va">pati_summ</span><span class="op">$</span><span class="va">rpert</span>,
                      model_function <span class="op">=</span> <span class="va">my_model_function</span>, model_args <span class="op">=</span> <span class="va">my_mod_args</span>,
                      optimizer_options <span class="op">=</span> <span class="va">my_optimizer_opts</span><span class="op">)</span></code></pre></div>
-<p>The <code>fit_heidi</code> function returns a lot of information to
+<p>The <code>fit_model</code> function returns a lot of information to
 track what we put in and what we got out. Regarding the latter, we can
 see the MLE parameters we obtained this time, and their negative log
 likelihood, given the data:</p>

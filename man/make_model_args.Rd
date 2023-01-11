@@ -4,14 +4,14 @@
 \alias{make_model_args}
 \title{Make a tibble to fit a calmr model}
 \usage{
-make_model_args(design, pars, model, opts = get_model_opts())
+make_model_args(design, pars = NULL, model = NULL, opts = get_exp_opts())
 }
 \arguments{
 \item{design}{A design tibble, as returned by \code{parse_design}}
 
-\item{pars}{A data.frame containing parameters as returned by \code{get_params}}
+\item{pars}{A data.frame containing parameters as returned by \code{get_model_params}}
 
-\item{opts}{A list with options as returned by \code{get_model_opts}}
+\item{opts}{A list with options as returned by \code{get_exp_opts}}
 }
 \value{
 A tibble with the arguments required to run the model. Each row represents a group in the experimental design.
@@ -22,10 +22,10 @@ Make a tibble to fit a calmr model
 \examples{
 df <- data.frame(Group = c('Group 1', 'Group 2'), P1 = c('10AB(US)', '10A(US)'), R1 = c(TRUE, TRUE))
 des <- parse_design(df)
-ps <- get_params(des, 0.2)
-make_model_args(design = des, pars = ps, model = "HD2022", opts = get_model_opts(iterations = 1))
+ps <- get_model_params(des, 0.2)
+make_model_args(design = des, pars = ps, model = "HD2022", opts = get_exp_opts(iterations = 1))
 
 }
 \seealso{
-\code{\link{parse_design}}, \code{\link{get_params}}, \code{\link{get_model_opts}}
+\code{\link{parse_design}}, \code{\link{get_model_params}}, \code{\link{get_exp_opts}}
 }

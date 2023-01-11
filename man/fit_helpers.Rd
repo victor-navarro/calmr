@@ -2,23 +2,22 @@
 % Please edit documentation in R/fit_helpers.R
 \name{get_optimizer_opts}
 \alias{get_optimizer_opts}
-\alias{fit_predict}
 \title{An assortment of functions to help fit HeiDI}
 \usage{
-get_optimizer_opts(optimizer, stim_names, family, adj = 1e-06)
-
-fit_predict(fit, new_args = NULL, type = "response")
+get_optimizer_opts(
+  model_pars,
+  ll = rep(NA, length(model_pars)),
+  ul = rep(NA, length(model_pars)),
+  optimizer = NULL,
+  family = NULL
+)
 }
 \arguments{
 \item{optimizer}{A string specifying the optimizer to use. One from \code{c("optim")}}
 
-\item{stim_names}{A character vector with the names of the stimuli in the experiment.}
+\item{family}{A string specifying the family function to generate responses (and calculate the likelihood function with). One from \code{c("identity", "normal", "poisson")}.}
 
-\item{family}{A string specifying the family function to generate responses (and calculate the likelihood function with). One from \code{c("identity", "linear", "poisson")}.}
-
-\item{adj}{The adjustment factor for upper and lower bounds of the salience parameters. Default is 1e-6}
-
-\item{fit}{A fit, as returned by \code{fit_heidi}.}
+\item{fit}{A fit, as returned by \code{fit_model}.}
 
 \item{new_args}{A tibble with arguments for the model, as returned by \code{make_model_args}.}
 
@@ -32,5 +31,5 @@ fit_predict returns a model prediction given a fit
 Whenever a family function other than the identity is used, the family-specific parameters will always be appended to the end of the relevant lists.
 }
 \seealso{
-\code{\link{fit_heidi}}, \code{\link{make_model_args}}
+\code{\link{fit_model}}, \code{\link{make_model_args}}
 }

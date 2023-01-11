@@ -1,7 +1,7 @@
 #' Parse each string in a design data.frame
 #' @param df A data.frame of dimensions Groups, 2*Phases+1
 #'
-#' @return A tibble containing the parsed design in long format.
+#' @return A tibble containing the parsed design in long format and the raw design.
 #' @note
 #' \itemize{
 #' \item{
@@ -14,6 +14,9 @@
 #' @seealso \code{\link{trial_parser}}
 #' @export
 parse_design <- function(df){
+  #if already parsed, skip
+  if ("tbl" %in% class(df)) return(df)
+
   design_list = vector('list', nrow(df))
   phases = colnames(df)
   groups = df[, 1]

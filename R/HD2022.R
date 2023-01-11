@@ -55,15 +55,16 @@ HD2022 <- function(alphas,
                         pre_nomi = nprestims,
                         pre_func = fprestims,
                         post_func = test_stims,
-                        db_trial = t)
+                        db_trial = t);
 
     #identify absent stimuli and calculate their "retrieved" salience
-    ralphas = .getalphass(V = V,
+    ralphas = .getalphas(V = V,
                          alphas_nomi = alphas,
                          pre_nomi = nprestims,
                          pre_func = fprestims,
                          fsnames = fsnames,
                          nomi2func = mapping$nomi2func,
+                         absent_func = .absentalphas_complex,
                          db_trial = t)
 
     #Distribute R

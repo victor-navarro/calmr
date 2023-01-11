@@ -1,6 +1,8 @@
 #' Train the RW1972 model
 #'
 #' @param alphas A named vector with stimulus saliences.
+#' @param betas_on A named vector with stimulus associabilities for present stimuli.
+#' @param betas_off A named vector with stimulus associabilities for absent stimuli.
 #' @param lambdas A named vector with stimulus asymptotes.
 #' @param V (optional) A named matrix of dimensions S,S; where S is the number of stimuli.
 #' @param experience A data.frame specifying trials as rows, as returned by `make_model_args`
@@ -16,6 +18,8 @@
 #' @export
 
 RW1972 <- function(alphas,
+                   betas_on,
+                   betas_off,
                    lambdas,
                    V = NULL,
                    experience,
@@ -30,6 +34,8 @@ RW1972 <- function(alphas,
 
   vs = es = array(NA, dim = c(ntrials, dim(V)),
              dimnames = list(NULL, rownames(V), rownames(V)))
+
+  betas_off_avg = tapply(betas_off, mapping$nomi2func, mean) #average saliencies
 
   fsnames = test_stims = rownames(V) #get functional stimuli names
   nsnames = names(alphas) #get nominal stimuli names
@@ -48,28 +54,32 @@ RW1972 <- function(alphas,
     oh_fpoststims = .makeOH(fpoststims, fsnames)
 
     #generate expectation
-    e = oh_fstims %*% V #expectation
-    #e = oh_fprestims %*% V #expectation //under investigation
+    e1 = oh_fprestims %*% V #first expectation
+    e2 = oh_fpoststims %*% V #second expectation
 
     #generate expectation matrix (only for data saving purposes)
     emat = apply(V, 2, function(x) x*oh_fstims)
 
-    # #Distribute R
-    # r = .distR(ralphas, combV, chainV, t)
-
     #learn if we need to
     if (!experience$is_test[t]){
-      #get alphas and lambdas for learning (nominal only)
-      lalphas = llambdas = stats::setNames(rep(0, length(fsnames)), fsnames)
+      #get alphas betas and lambdas for learning
+      lalphas = lbetas = llambdas = stats::setNames(rep(0, length(fsnames)), fsnames)
+      #populating vector with nominal stimuli values as functional stimuli values
       lalphas[mapping$nomi2func[c(nprestims, npoststims)]] = alphas[c(nprestims, npoststims)]
+      lbetas = betas_off_avg #vector is initialized as if all stimuli are absent
+      lbetas[mapping$nomi2func[c(nprestims, npoststims)]] = betas_on[c(nprestims, npoststims)]
       llambdas[mapping$nomi2func[c(nprestims, npoststims)]] = lambdas[c(nprestims, npoststims)]
 
       #Learn
-      err = oh_fstims*llambdas-e #error
-      d = oh_fprestims*lalphas%*%err #delta
+      err1 = oh_fstims*llambdas-e1 #first error
+      err2 = oh_fpoststims*llambdas-e2 #second error
 
-      diag(d) = 0
-      V = V+d
+      d1 = (oh_fprestims*lalphas*lbetas)%*%err1 #first delta
+      d2 = (oh_fpoststims*lalphas*lbetas)%*%err2 #second delta
+
+      diag(d1) = diag(d2) = 0
+
+      V = V+d1+d2 #learn
     }
 
     #save data
@@ -77,6 +87,8 @@ RW1972 <- function(alphas,
     es[t, , ] = emat
   }
   mod@parameters = list(alphas = alphas,
+                        betas_on = betas_on,
+                        betas_off = betas_off,
                         lambdas = lambdas)
   mod@model_results = list(vs = vs,
                             es = es)

@@ -1,3 +1,5 @@
+require(methods)
+
 setClass("CalmrModel",
          slots = c(model = "character",
                    parameters = "list",
@@ -33,3 +35,15 @@ setClass("CalmrRSATest",
                    n_samples = "numeric",
                    p = "numeric"))
 
+setClass("CalmrFit",
+         slots = c(nloglik = "numeric",
+                   best_pars = "numeric",
+                   model_pars = "numeric",
+                   link_pars = "numeric",
+                   data = "numeric",
+                   model_function = "function",
+                   link_function = "function",
+                   ll_function = "function",
+                   model_args = "tbl",
+                   optimizer_options = "list",
+                   extra_pars = "list"))

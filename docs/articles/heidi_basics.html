@@ -187,7 +187,7 @@ However, if you want specific salience values for the stimuli in your
 experiment, you should pass a data.frame with parameters. Let’s specify
 those for our experiment.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_helpers.html">get_params</a></span><span class="op">(</span><span class="va">my_blocking</span>, default_par <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span> <span class="co">#Note we can quickly get a table with parameters directly from the design data.frame; a good way to check we are going in the right direction</span>
+<code class="sourceCode R"><span class="va">my_pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_helpers.html">get_model_params</a></span><span class="op">(</span><span class="va">my_blocking</span>, default_par <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span> <span class="co">#Note we can quickly get a table with parameters directly from the design data.frame; a good way to check we are going in the right direction</span>
 <span class="va">my_pars</span><span class="op">$</span><span class="va">alphas</span><span class="op">[</span><span class="va">my_pars</span><span class="op">$</span><span class="va">stimulus</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">.4</span>
 <span class="va">my_pars</span>
 <span class="co">#&gt;   stimulus alphas</span>
@@ -199,10 +199,10 @@ those for our experiment.</p>
 <h4 id="additional-options">Additional options<a class="anchor" aria-label="anchor" href="#additional-options"></a>
 </h4>
 <p>The final ingredient is a list with simulation options. We can get a
-default one with <code>get_model_opts</code>, and modify them
+default one with <code>get_exp_opts</code>, and modify them
 accordingly.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_model_opts.html">get_model_opts</a></span><span class="op">(</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">my_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_exp_opts.html">get_exp_opts</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">my_opts</span><span class="op">$</span><span class="va">iterations</span> <span class="op">&lt;-</span> <span class="fl">10</span>
 <span class="va">my_opts</span>
 <span class="co">#&gt; $iterations</span>
@@ -214,11 +214,11 @@ accordingly.</p>
 <div class="section level4">
 <h4 id="simulating">Simulating<a class="anchor" aria-label="anchor" href="#simulating"></a>
 </h4>
-<p>And we can finally simulate the model with <code>quick_model</code>.
+<p>And we can finally simulate the model with <code>run_experiment</code>.
 By default, the function returns a list with aggregated data. Let’s
 see.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/quick_model.html">quick_model</a></span><span class="op">(</span>design_df <span class="op">=</span> <span class="va">my_blocking</span>,
+<code class="sourceCode R"><span class="va">my_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_experiment.html">run_experiment</a></span><span class="op">(</span>design_df <span class="op">=</span> <span class="va">my_blocking</span>,
                     param_df <span class="op">=</span> <span class="va">my_pars</span>,
                     options <span class="op">=</span> <span class="va">my_opts</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">my_sim</span><span class="op">)</span> <span class="co">#contains information about weights (vs), activation values (acts), r-values (rs), and alphas (as)</span>

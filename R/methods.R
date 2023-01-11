@@ -1,16 +1,23 @@
+require(methods)
+
 #### Generics ####
 setGeneric("graph", function(x,...) standardGeneric("graph"))
-setGeneric("calmr_plot", function(x, type, ...) standardGeneric("calmr_plot"))
+setGeneric("NLL", function(object, ...) standardGeneric("NLL"))
 
 #### Exposing methods ####
-
 setMethod("show", "CalmrModel", function(object){
   cat(object@model, "run with:\n\n")
   print(object@parameters)
-  print(graph(object, colour_key = T))
 })
 setMethod("show", "CalmrExperiment", function(object){
   print(object@results)
+})
+setMethod("show", "CalmrFit", function(object){
+  cat("Calmr model fit: \n ",
+      "Parameters: \n")
+  print(object@best_pars)
+  cat("\n",
+      "nLogLik: \n", object@nloglik, "\n")
 })
 setMethod("show", "CalmrComparison", function(object){
   if (object@is_parsed){
@@ -19,7 +26,6 @@ setMethod("show", "CalmrComparison", function(object){
     print(object@results)
   }
 })
-
 setMethod("show", "CalmrRSA", function(object){
   cat("Representational Similarity Analysis\n\n",
       sprintf("Distance metric: %s\n", object@dist_method),
@@ -27,7 +33,6 @@ setMethod("show", "CalmrRSA", function(object){
       "Correlation matrix:\n\n")
   print(object@corr_mat)
 })
-
 setMethod("show", "CalmrRSATest", function(object){
   show(object@RSA)
   cat("\nSignificance matrix:\n\n")
@@ -36,15 +41,21 @@ setMethod("show", "CalmrRSATest", function(object){
               object@n_samples, 1-object@p))
 })
 
+#### Summary methods ####
+setMethod("summary", "CalmrExperiment", function(object, ...){
+  print(object@results$mod_data[[1]])
+  cat("Association strengths:\n")
+  for (g in 1:nrow(object@results)){
+    vs = object@results$mod_data[[g]]@model_results$vs
+    ntrials = dim(vs)[1]
+    cat("Group = ", object@results$group[g],"\n")
+    print(round(vs[ntrials, , ], 3))
+    cat("\n")
+  }
+})
 
 #### Ploting methods ####
-#' @export
-calmr_plot <- function(x, ...) NULL
-
-#' @export
-calmr_graph <- function(x, ...) NULL
-
-setMethod("calmr_plot", "CalmrExperiment",
+setMethod("plot", "CalmrExperiment",
           function(x, type = NULL, ...){
             if (is.null(type)){ type = "vs"}
             if (!x@is_parsed){ x = parse_experiment_results(x)} #parse if model has not been parsed
@@ -58,10 +69,11 @@ setMethod("calmr_plot", "CalmrExperiment",
             dat = x@parsed_results[[type]]
             groups = unique(dat$group)
             ps = sapply(groups, function(g) plotf(dat[dat$group == g,], ...) + ggplot2::labs(title = sprintf("Group = %s", g)), simplify = F)
+            names(ps) = groups
             ps
           })
 
-setMethod("calmr_plot", "CalmrModel",
+setMethod("plot", "CalmrModel",
           function(x, type = NULL, ...){
             if (is.null(type)){ type = "vs"}
             if (!(type %in% names(x@model_results))) stop(sprintf("Model does not contain '%s' in model results.", type))
@@ -79,21 +91,22 @@ setMethod("calmr_plot", "CalmrModel",
           })
 
 
-setMethod("calmr_plot", "CalmrComparison", function(x, ...){
-  #try to make the matrix wide
-  dat = x@results %>% tidyr::pivot_wider(names_from = "model", values_from = "value")
-  if (any(is.na(dat))){
-    warning("Some data entries are not shared among all models and will be omitted.")
-    dat = stats::na.omit(dat)
-  }
+# setMethod("plot", "CalmrComparison", function(x, ...){
+#   #try to make the matrix wide
+#   dat = x@results %>% tidyr::pivot_wider(names_from = "model", values_from = "value")
+#   if (any(is.na(dat))){
+#     warning("Some data entries are not shared among all models and will be omitted.")
+#     dat = stats::na.omit(dat)
+#   }
+#
+#   GGally::ggpairs(dat, columns = x@model_layer_names,
+#                   ggplot2::aes(colour = group),
+#                   diag = list(continuous = GGally::wrap("densityDiag", alpha = 0.5)))
+#
+# })
 
-  GGally::ggpairs(dat, columns = x@model_layer_names,
-                  ggplot2::aes(colour = group),
-                  diag = list(continuous = GGally::wrap("densityDiag", alpha = 0.5)))
-
-})
-
-setMethod("calmr_plot", "CalmrRSA",
+#' @export
+setMethod("plot", "CalmrRSA",
           function(x, ...){
             corrmat = x@corr_mat
             corrmat[lower.tri(corrmat)] = NA
@@ -108,9 +121,9 @@ setMethod("calmr_plot", "CalmrRSA",
               ggplot2::scale_x_discrete(position = "top")
           })
 
-setMethod("calmr_plot", "CalmrRSATest",
+setMethod("plot", "CalmrRSATest",
           function(x, ...){
-            p = calmr_plot(x@RSA)
+            p = plot(x@RSA)
             sigmat = x@sig_mat
             sigmat[lower.tri(sigmat)] = NA
             dat = p$data
@@ -118,7 +131,9 @@ setMethod("calmr_plot", "CalmrRSATest",
             p + ggplot2::geom_label(data = na.omit(dat[dat$sig,]), fill = "white")
           })
 
-setMethod("calmr_graph", "CalmrModel", function(x, ...){
+#' @export
+graph <- function(x, ...) NULL
+setMethod("graph", "CalmrModel", function(x, ...){
   if (x@is_parsed){
     graph_weights(x@model_results$vs, ...)
   }else{
@@ -126,11 +141,44 @@ setMethod("calmr_graph", "CalmrModel", function(x, ...){
   }
 })
 
-setMethod("calmr_graph", "CalmrExperiment", function(x, ...){
+setMethod("graph", "CalmrExperiment", function(x, ...){
   dat = x@parsed_results$vs
   groups = unique(dat$group)
   ps = sapply(groups, function(g) graph_weights(dat[dat$group == g,], ...) +
                 ggplot2::labs(title = sprintf("Group = %s", g)), simplify = F)
+  names(ps) = groups
   ps
 })
+
+#### Predict methods ####
+
+#' @export
+setMethod("predict", "CalmrFit",
+          function(object, type = "response", ...){
+            prediction = object@model_function(object@model_pars, model_args = object@model_args, ...)
+            if (type == "response"){
+              prediction = object@link_function(prediction, object@link_pars)
+            }
+            prediction
+          })
+
+#### GOF methods ####
+#' @export
+NLL <- function(object, ...) NULL
+setMethod("NLL", "CalmrFit", function(object){
+  object@nloglik
+})
+
+#' @export
+setMethod("AIC", "CalmrFit",
+          function(object, ..., k = 2){
+            2*k - 2*-object@nloglik
+          })
+
+#' @export
+setMethod("BIC", "CalmrFit",
+          function(object, ...){
+            length(object@best_pars)*log(length(object@data)) -
+              2*-object@nloglik
+          })
 

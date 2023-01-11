@@ -29,7 +29,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">calmr</a>
 
@@ -80,7 +80,7 @@
 
 
 <div class="row">
-  <main id="main"><div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>calmr_fits</h1>
                         <h4 data-toc-skip class="author">Victor
 Navarro</h4>
@@ -187,9 +187,9 @@ we specify in order to reduce computing time.</p>
                      training <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"12L&gt;(Pellet)/12R&gt;(Sucrose)"</span>, <span class="st">"12L&gt;(Sucrose)/12R&gt;(Pellet)"</span><span class="op">)</span>,
                      rand_train <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
 <span class="co">#The parameters</span>
-<span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_helpers.html">get_params</a></span><span class="op">(</span><span class="va">des_df</span>, model <span class="op">=</span> <span class="st">"HD2022"</span><span class="op">)</span> <span class="co">#the actual parameter values don't matter, as our function will re-write them inside the optimizer call</span>
+<span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_model_params.html">get_model_params</a></span><span class="op">(</span><span class="va">des_df</span>, model <span class="op">=</span> <span class="st">"HD2022"</span><span class="op">)</span> <span class="co">#the actual parameter values don't matter, as our function will re-write them inside the optimizer call</span>
 <span class="co">#The options</span>
-<span class="va">opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_model_opts.html">get_model_opts</a></span><span class="op">(</span>iterations <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
+<span class="va">opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_exp_opts.html">get_exp_opts</a></span><span class="op">(</span>iterations <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
 <span class="co">#The arguments</span>
 <span class="va">my_mod_args</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_model_args.html">make_model_args</a></span><span class="op">(</span>design <span class="op">=</span> <span class="fu"><a href="../reference/parse_design.html">parse_design</a></span><span class="op">(</span><span class="va">des_df</span><span class="op">)</span>, pars <span class="op">=</span> <span class="va">pars</span>, model <span class="op">=</span> <span class="st">"HD2022"</span>, opts <span class="op">=</span> <span class="va">opts</span><span class="op">)</span></code></pre></div>
 <p>Note we specified two counterbalancings as groups. It is very
@@ -231,9 +231,10 @@ in hand, we can write our model function.</p>
     <span class="co">#note this filter below; we do not allow lever presses if the lever was not presented on the trial</span>
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">response</span> <span class="op">==</span> <span class="st">"np"</span> <span class="op">|</span> <span class="op">(</span><span class="va">response</span> <span class="op">==</span> <span class="st">"lp"</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="va">s1</span>, <span class="va">trial_type</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>us <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"Pellet"</span>, <span class="va">trial_type</span><span class="op">)</span>, <span class="st">"P"</span>, <span class="st">"S"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">us</span>, <span class="va">block</span>, <span class="va">response</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">block</span>, <span class="va">us</span>, <span class="va">response</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span>
-  <span class="va">mod_res</span>
+  <span class="co">#print(mod_res)</span>
+  <span class="va">mod_res</span><span class="op">$</span><span class="va">value</span>
 <span class="op">}</span></code></pre></div>
 <p>Let’s dissect the function above in its three parts.</p>
 <ol style="list-style-type: decimal">
@@ -257,87 +258,22 @@ levers), and calculate the mean across blocks of trials.</p></li>
 <p>Let’s see the function in action.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">my_model_function</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.2</span>, <span class="fl">.4</span>, <span class="fl">.3</span><span class="op">)</span>, model_args <span class="op">=</span> <span class="va">my_mod_args</span><span class="op">)</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 24 x 4</span></span>
-<span class="co">#&gt;    us    block response   value</span>
-<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> P         1 lp       0.011<span style="text-decoration: underline;">4</span> </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> P         1 np       0.002<span style="text-decoration: underline;">29</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> P         2 lp       0.038<span style="text-decoration: underline;">8</span> </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> P         2 np       0.017<span style="text-decoration: underline;">2</span> </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> P         3 lp       0.051<span style="text-decoration: underline;">4</span> </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> P         3 np       0.033<span style="text-decoration: underline;">9</span> </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> P         4 lp       0.056<span style="text-decoration: underline;">7</span> </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> P         4 np       0.046<span style="text-decoration: underline;">6</span> </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> P         5 lp       0.054<span style="text-decoration: underline;">3</span> </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> P         5 np       0.053<span style="text-decoration: underline;">2</span> </span>
-<span class="co">#&gt; <span style="color: #949494;"># ... with 14 more rows</span></span></code></pre></div>
-<p>And just as a refresher, here’s the summarised empirical data.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pati_summ</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 24 x 4</span></span>
-<span class="co">#&gt;    block us    response rpert</span>
-<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>     1 P     lp       0.820</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>     1 P     np       3.41 </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>     1 S     lp       0.561</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>     1 S     np       3.28 </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>     2 P     lp       1.57 </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>     2 P     np       3.51 </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>     2 S     lp       0.641</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>     2 S     np       3.07 </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>     3 P     lp       2.29 </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>     3 P     np       3.07 </span>
-<span class="co">#&gt; <span style="color: #949494;"># ... with 14 more rows</span></span></code></pre></div>
-<p>Do you notice anything odd about the ordering? The empirical data is
-sorted in a different way, but I said before that the order of the
-empirical data and model responses must match. I cannot emphasize this
-point enough: there is nothing within the fit function that checks or
-reorders the data for you. You are the sole responsible for making sure
-both of these pieces of data are in the same order.</p>
-<p>Here, we will simply rewrite the model function so it matches the
-ordering of the empirical data. Notice the different order in the
-<code>group_by</code> line below.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_model_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">model_args</span><span class="op">)</span><span class="op">{</span>
-  <span class="co">#manipulating pars</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">model_args</span><span class="op">$</span><span class="va">alphas</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
-  <span class="va">model_args</span><span class="op">$</span><span class="va">alphas</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span>
-  <span class="co">#running the model and selecting rs</span>
-  <span class="va">mod_res</span> <span class="op">=</span> <span class="fu"><a href="../reference/run_model.html">run_model</a></span><span class="op">(</span>args <span class="op">=</span> <span class="va">model_args</span><span class="op">)</span><span class="op">@</span><span class="va">parsed_results</span><span class="op">$</span><span class="va">rs</span>
-  <span class="co">#summarizing the model</span>
-  <span class="va">mod_res</span> <span class="op">=</span> <span class="va">mod_res</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">s2</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pellet"</span>, <span class="st">"Sucrose"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>response <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">s1</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pellet"</span>, <span class="st">"Sucrose"</span><span class="op">)</span>, <span class="st">"np"</span>, <span class="st">"lp"</span><span class="op">)</span>,
-           block <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">trial</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rowwise.html" class="external-link">rowwise</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-    <span class="co">#note this filter below; we do not allow lever presses if the lever was not presented on the trial</span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">response</span> <span class="op">==</span> <span class="st">"np"</span> <span class="op">|</span> <span class="op">(</span><span class="va">response</span> <span class="op">==</span> <span class="st">"lp"</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="va">s1</span>, <span class="va">trial_type</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>us <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"Pellet"</span>, <span class="va">trial_type</span><span class="op">)</span>, <span class="st">"P"</span>, <span class="st">"S"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">block</span>, <span class="va">us</span>, <span class="va">response</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span>
-  <span class="va">mod_res</span>
-<span class="op">}</span>
-
-<span class="fu"><a href="https://dplyr.tidyverse.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="fu">my_model_function</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.2</span>, <span class="fl">.4</span>, <span class="fl">.3</span><span class="op">)</span>, model_args <span class="op">=</span> <span class="va">my_mod_args</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; Rows: 24</span>
-<span class="co">#&gt; Columns: 4</span>
-<span class="co">#&gt; $ block    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6~</span>
-<span class="co">#&gt; $ us       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "P", "P", "S", "S", "P", "P", "S", "S", "P", "P", "S", "S", "~</span>
-<span class="co">#&gt; $ response <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "lp", "np", "lp", "np", "lp", "np", "lp", "np", "lp", "np", "~</span>
-<span class="co">#&gt; $ value    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.011428571, 0.002285714, 0.009086538, 0.001362981, 0.0388438~</span>
-<span class="fu"><a href="https://dplyr.tidyverse.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">pati_summ</span><span class="op">)</span>
-<span class="co">#&gt; Rows: 24</span>
-<span class="co">#&gt; Columns: 4</span>
-<span class="co">#&gt; $ block    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6~</span>
-<span class="co">#&gt; $ us       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "P", "P", "S", "S", "P", "P", "S", "S", "P", "P", "S", "S", "~</span>
-<span class="co">#&gt; $ response <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> lp, np, lp, np, lp, np, lp, np, lp, np, lp, np, lp, np, lp, n~</span>
-<span class="co">#&gt; $ rpert    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.8195313, 3.4109375, 0.5609375, 3.2796875, 1.5738281, 3.5070~</span></code></pre></div>
-<p>Much better! We are now ready to begin fitting the model.</p>
+<span class="co">#&gt;  [1] 0.011428571 0.002285714 0.009086538 0.001362981 0.038843875 0.017203182</span>
+<span class="co">#&gt;  [7] 0.032357846 0.010771163 0.051407435 0.033924176 0.040160990 0.020330205</span>
+<span class="co">#&gt; [13] 0.056681369 0.046570589 0.045429885 0.029039503 0.054260267 0.053247701</span>
+<span class="co">#&gt; [19] 0.053023859 0.037343391 0.055989939 0.060631103 0.055036916 0.042556665</span></code></pre></div>
+<p>The order of the empirical data and model responses must match. I
+cannot emphasize this point enough: there is nothing within the fit
+function that checks or reorders the data for you. You are the sole
+responsible for making sure both of these pieces of data are in the same
+order. A simple way would be to print the model results before the
+return (see above). Once we have made sure everything is looking good,
+we can fit the model.</p>
 </div>
 <div class="section level3">
 <h3 id="fitting-the-model">Fitting the model<a class="anchor" aria-label="anchor" href="#fitting-the-model"></a>
 </h3>
-<p>We fit models using the <code>fit_heidi</code> function. This
+<p>We fit models using the <code>fit_model</code> function. This
 function requires 4 arguments:</p>
 <ol style="list-style-type: decimal">
 <li>The (empirical) data</li>
@@ -347,59 +283,50 @@ function requires 4 arguments:</p>
 </ol>
 <p>We have done a great job taking care of the first three, so let’s
 tackle the last.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_optimizer_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_helpers.html">get_optimizer_opts</a></span><span class="op">(</span>optimizer <span class="op">=</span> <span class="st">"optim"</span>,
-                                        stim_names <span class="op">=</span> <span class="va">pars</span><span class="op">$</span><span class="va">stimulus</span>,
-                                        family <span class="op">=</span> <span class="st">"linear"</span><span class="op">)</span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">my_optimizer_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_helpers.html">get_optimizer_opts</a></span><span class="op">(</span>model_pars <span class="op">=</span> <span class="va">pars</span><span class="op">$</span><span class="va">stimulus</span>,
+                                        optimizer <span class="op">=</span> <span class="st">"ga"</span>,
+                                        ll <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,
+                                        ul <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,
+                                        family <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span>
 <span class="va">my_optimizer_opts</span>
-<span class="co">#&gt; $stim_names</span>
+<span class="co">#&gt; $model_pars</span>
 <span class="co">#&gt; [1] "L"       "R"       "Pellet"  "Sucrose"</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; $lower</span>
-<span class="co">#&gt; [1] 1e-06 1e-06 1e-06 1e-06 1e-06</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $upper</span>
-<span class="co">#&gt; [1]   0.999999   0.999999   0.999999   0.999999 100.000000</span>
-<span class="co">#&gt; </span>
 <span class="co">#&gt; $optimizer</span>
-<span class="co">#&gt; [1] "optim"</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $sample_pars</span>
-<span class="co">#&gt; function () </span>
-<span class="co">#&gt; c(stats::rbeta(npars, 10, 20), stats::rgamma(1, 2))</span>
-<span class="co">#&gt; &lt;bytecode: 0x000000001a808170&gt;</span>
-<span class="co">#&gt; &lt;environment: 0x000000001a807418&gt;</span>
+<span class="co">#&gt; [1] "ga"</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $family</span>
-<span class="co">#&gt; [1] "linear"</span>
+<span class="co">#&gt; [1] "normal"</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $family_pars</span>
-<span class="co">#&gt; [1] "scale"</span>
+<span class="co">#&gt; [1] "normal_scale"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $all_pars</span>
+<span class="co">#&gt; [1] "L"            "R"            "Pellet"       "Sucrose"      "normal_scale"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $ll</span>
+<span class="co">#&gt;            L            R       Pellet      Sucrose normal_scale </span>
+<span class="co">#&gt;            0            0            0            0            0 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $ul</span>
+<span class="co">#&gt;            L            R       Pellet      Sucrose normal_scale </span>
+<span class="co">#&gt;            1            1            1            1          100 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $verbose</span>
-<span class="co">#&gt; [1] FALSE</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $optim_options</span>
-<span class="co">#&gt; $optim_options$method</span>
-<span class="co">#&gt; [1] "L-BFGS-B"</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $optim_options$control</span>
-<span class="co">#&gt; $optim_options$control$trace</span>
-<span class="co">#&gt; [1] 3</span></code></pre></div>
+<span class="co">#&gt; [1] FALSE</span></code></pre></div>
 <p>The <code>get_optimizer_opts</code> function returns many things:</p>
 <ol style="list-style-type: decimal">
-<li>stim_names: The name of the stimuli for which to find salience
-parameters.</li>
-<li>lower and upper: The lower and upper bounds for the parameter
-search. Consider shrinking these to speed up the process.</li>
+<li>model_pars: The name of the model parameters. Here, the name of the
+alphas for each stimuli.</li>
+<li>ll and ul: The lower and upper limits for the parameter search.
+Consider shrinking these to speed up the process.</li>
 <li>optimizer: The numerical optimization technique we wish to use
 during MLE estimation.</li>
-<li>sample_pars: A function that samples parameters from set
-distributions.</li>
 <li>family: The family distribution we assume for our model. In
 practice, what you request here will be used to determine the link
 function to transform model responses, and the likelihood function used
-in the objective function. The linear family here does nothing fancy to
+in the objective function. The normal family here does nothing fancy to
 the model responses, and will estimate an extra parameter, scale, which
 scales the model responses into (roughly) the scale of the empirical
 data. When it comes to likelihood functions, this family will use the
@@ -408,40 +335,40 @@ normal density of the data and model differences.</li>
 salience parameters.</li>
 <li>verbose: Whether to print parameters and objective function values
 as we optimize.</li>
-<li>optim_options: The optimizer-specific options that are used in the
-optimization call.</li>
 </ol>
 <p>You are free to modify these; just make sure the structure of the
-list returned by <code>get_optimizer_opts</code> remains the same. Here,
-I overwrite the trace argument passed to the optimizer.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_optimizer_opts</span><span class="op">$</span><span class="va">optim_options</span><span class="op">$</span><span class="va">control</span><span class="op">$</span><span class="va">trace</span> <span class="op">=</span> <span class="fl">0</span></code></pre></div>
-<p>And with that, we can fit the model!</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">the_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_heidi.html">fit_heidi</a></span><span class="op">(</span><span class="va">pati_summ</span><span class="op">$</span><span class="va">rpert</span>,
+list returned by <code>get_optimizer_opts</code> remains the same. We
+can also pass extra parameters to the optimizer call we are using (e.g.,
+the <code>par</code> argument for <code>optim</code>, or
+<code>parallel</code> for <code>ga</code>). Here, we fit the model in
+parallel with <code>ga</code>, and for only 10 iterations.</p>
+<p>And with that, we can fit the model! (be patient if you are following
+along)</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">the_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_model.html">fit_model</a></span><span class="op">(</span><span class="va">pati_summ</span><span class="op">$</span><span class="va">rpert</span>,
                      model_function <span class="op">=</span> <span class="va">my_model_function</span>, model_args <span class="op">=</span> <span class="va">my_mod_args</span>,
-                     optimizer_options <span class="op">=</span> <span class="va">my_optimizer_opts</span><span class="op">)</span></code></pre></div>
-<p>The <code>fit_heidi</code> function returns a lot of information to
-track what we put in and what we got out. Regarding the latter, we can
-see the MLE parameters we obtained this time, and their negative log
-likelihood, given the data:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">the_fit</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"best_pars"</span>, <span class="st">"nloglik"</span><span class="op">)</span><span class="op">]</span>
-<span class="co">#&gt; $best_pars</span>
-<span class="co">#&gt;          L          R     Pellet    Sucrose      scale </span>
-<span class="co">#&gt;  0.1868586  0.3013351  0.9999990  0.9999990 17.5372371 </span>
+                     optimizer_options <span class="op">=</span> <span class="va">my_optimizer_opts</span>,
+                     maxiter <span class="op">=</span> <span class="fl">10</span>,
+                     parallel <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
+<p>The <code>fit_model</code> function returns a lot of information to
+track what we put in and what we got out. However, typing the model in
+the consol will show the MLE parameters we obtained this time, and their
+negative log likelihood, given the data:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">the_fit</span>
+<span class="co">#&gt; Calmr model fit: </span>
+<span class="co">#&gt;   Parameters: </span>
+<span class="co">#&gt;            L            R       Pellet      Sucrose normal_scale </span>
+<span class="co">#&gt;    0.3393293    0.2059405    0.4570155    0.8230219   22.2735919 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; $nloglik</span>
-<span class="co">#&gt; [1] 37.71307</span></code></pre></div>
+<span class="co">#&gt;  nLogLik: </span>
+<span class="co">#&gt;  50.28647</span></code></pre></div>
 <p>That’s good and all, but how well does a model run with those
 parameters “visually” fit the data? We can obtain the predictions from
-the model via the <code>fit_predict</code> function.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">prediction</span> <span class="op">=</span> <span class="fu"><a href="../reference/fit_helpers.html">fit_predict</a></span><span class="op">(</span><span class="va">the_fit</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">block</span>, <span class="va">us</span>, <span class="va">response</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span>
-<span class="va">prediction</span><span class="op">$</span><span class="va">data</span> <span class="op">=</span> <span class="va">the_fit</span><span class="op">$</span><span class="va">data</span>
-<span class="va">prediction</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span><span class="st">"prediction"</span> <span class="op">=</span> <span class="st">"value"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+the model via the <code>predict</code> function.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pati_summ</span><span class="op">$</span><span class="va">prediction</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">the_fit</span><span class="op">)</span> 
+<span class="va">pati_summ</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span><span class="st">"data"</span> <span class="op">=</span> <span class="st">"rpert"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
     <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"prediction"</span>, <span class="st">"data"</span><span class="op">)</span>,
                         names_to <span class="op">=</span> <span class="st">"type"</span>,
                         values_to <span class="op">=</span> <span class="st">"value"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
@@ -449,7 +376,7 @@ the model via the <code>fit_predict</code> function.</p>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">us</span><span class="op">~</span><span class="va">response</span><span class="op">)</span></code></pre></div>
-<p><img src="calmr_fits_files/figure-html/unnamed-chunk-15-1.png" width="672"></p>
+<p><img src="calmr_fits_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
 <p>This looks pretty good! Save from some blatant misfits, of course.
 Now you know everything you need to fit calmr to your empirical data. Go
 forth!</p>
@@ -476,8 +403,7 @@ line.</p>
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer>

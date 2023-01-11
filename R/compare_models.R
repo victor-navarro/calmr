@@ -3,10 +3,10 @@
 #' @param models A character vector specifying the models to run.
 #' @param layers A character vector of length M (the length of `models`), specifying the layer in each model that will be used for layers.
 #' @param params A list of length M, each entry containing a data.frame of dimensions N,2; where N is the number of stimuli in the experimental design.
-#' @param options A list of options, as returned by get_model_opts.
+#' @param options A list of options, as returned by get_exp_opts.
 #' @returns A CalmrComparison object.
 #' @export
-compare_models <- function(design, models, layers, params = NULL, options = get_model_opts()){
+compare_models <- function(design, models, layers, params = NULL, options = get_exp_opts()){
   supported_models = supported_models()
   if (any(!(models %in% supported_models))) stop("One or more of the models provided are not supported.")
 
@@ -17,7 +17,7 @@ compare_models <- function(design, models, layers, params = NULL, options = get_
 
   if (is.null(params)){
     warning("Parameters not provided. Using default parameters for all models.\n")
-    params = sapply(models, function(m) get_params(design, model = m), simplify = F)
+    params = sapply(models, function(m) get_model_params(design, model = m), simplify = F)
   }
 
   #make the arguments for all the models

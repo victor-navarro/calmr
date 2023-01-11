@@ -4,10 +4,14 @@
 \alias{RW1972}
 \title{Train the RW1972 model}
 \usage{
-RW1972(alphas, lambdas, V = NULL, experience, mapping)
+RW1972(alphas, betas_on, betas_off, lambdas, V = NULL, experience, mapping)
 }
 \arguments{
 \item{alphas}{A named vector with stimulus saliences.}
+
+\item{betas_on}{A named vector with stimulus associabilities for present stimuli.}
+
+\item{betas_off}{A named vector with stimulus associabilities for absent stimuli.}
 
 \item{lambdas}{A named vector with stimulus asymptotes.}
 

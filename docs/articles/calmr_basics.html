@@ -29,7 +29,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">calmr</a>
 
@@ -80,7 +80,7 @@
 
 
 <div class="row">
-  <main id="main"><div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>calmr_basics</h1>
                         <h4 data-toc-skip class="author">Victor
 Navarro</h4>
@@ -179,15 +179,23 @@ fields.</p>
 <span class="co">#&gt; [1] "A"  "B"  "AB" "US"</span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="the-parameters-data-frame">The parameters data.frame<a class="anchor" aria-label="anchor" href="#the-parameters-data-frame"></a>
+<h3 id="picking-a-model-and-the-parameters-data-frame">Picking a model and the parameters data.frame<a class="anchor" aria-label="anchor" href="#picking-a-model-and-the-parameters-data-frame"></a>
 </h3>
 <p>You can run a simulation with only a design data.frame (the
-simulation function will use default salience values for the stimuli).
-However, if you want specific salience values for the stimuli in your
-experiment, you should pass a data.frame with parameters. Let’s specify
-those for our experiment.</p>
+simulation function will use default salience values for the stimuli and
+even the model!). However, you might want to run a model other than the
+default. To get the models currently supported, you can call
+<code><a href="../reference/model_info_funcs.html">supported_models()</a></code>. After choosing a model, we can set
+specific salience values for the stimuli in our experiment in parameters
+data.frame. Just like the design data.frame, the parameters data.frame
+has to follow a specific format. We can get a data.frame with default
+values via <code>get_model_params</code>, and then modify specific
+values by hand.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_helpers.html">get_params</a></span><span class="op">(</span><span class="va">my_blocking</span>, model <span class="op">=</span> <span class="st">"HD2022"</span><span class="op">)</span> <span class="co">#Note we can quickly get a table with parameters directly from the design data.frame; a good way to check we are going in the right direction</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/model_info_funcs.html">supported_models</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; [1] "HDI2020" "HD2022"  "RW1972"  "RAND"</span>
+
+<span class="va">my_pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_model_params.html">get_model_params</a></span><span class="op">(</span><span class="va">my_blocking</span>, model <span class="op">=</span> <span class="st">"HD2022"</span><span class="op">)</span>
 <span class="va">my_pars</span><span class="op">$</span><span class="va">alphas</span><span class="op">[</span><span class="va">my_pars</span><span class="op">$</span><span class="va">stimulus</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">.4</span>
 <span class="va">my_pars</span>
 <span class="co">#&gt;   stimulus alphas</span>
@@ -199,10 +207,10 @@ those for our experiment.</p>
 <h4 id="additional-options">Additional options<a class="anchor" aria-label="anchor" href="#additional-options"></a>
 </h4>
 <p>The final ingredient is a list with simulation options. We can get a
-default one with <code>get_model_opts</code>, and modify them
+default one with <code>get_exp_opts</code>, and modify them
 accordingly.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_model_opts.html">get_model_opts</a></span><span class="op">(</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">my_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_exp_opts.html">get_exp_opts</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">my_opts</span><span class="op">$</span><span class="va">iterations</span> <span class="op">&lt;-</span> <span class="fl">3</span>
 <span class="va">my_opts</span>
 <span class="co">#&gt; $iterations</span>
@@ -214,11 +222,11 @@ accordingly.</p>
 <div class="section level4">
 <h4 id="simulating">Simulating<a class="anchor" aria-label="anchor" href="#simulating"></a>
 </h4>
-<p>And we can finally simulate the model with <code>quick_model</code>.
-By default, the function returns a list with aggregated data. Let’s
+<p>And we can finally simulate the model with `run_experiment``. By
+default, the function returns a list with aggregated data. Let’s
 see.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/quick_model.html">quick_model</a></span><span class="op">(</span>design_df <span class="op">=</span> <span class="va">my_blocking</span>,
+<code class="sourceCode R"><span class="va">my_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_experiment.html">run_experiment</a></span><span class="op">(</span>design_df <span class="op">=</span> <span class="va">my_blocking</span>,
                     param_df <span class="op">=</span> <span class="va">my_pars</span>,
                     options <span class="op">=</span> <span class="va">my_opts</span>,
                     model <span class="op">=</span> <span class="st">"HD2022"</span><span class="op">)</span>
@@ -241,7 +249,12 @@ see.</p>
 </h3>
 <p>But, we rarely want the raw data. If you are like me, you will want
 to see some plots. Let’s use <code>plot</code> function with the
-different plots supported by the package (and the model)</p>
+different plots that the package (and the model) supports by default. We
+can get the supported plots via <code>supported_plots(model)</code>,
+where model is the string of the model we used.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/model_info_funcs.html">supported_plots</a></span><span class="op">(</span><span class="st">"HD2022"</span><span class="op">)</span>
+<span class="co">#&gt; [1] "as"   "acts" "rs"   "vs"</span></code></pre></div>
 <p>Here they are, paired side by side:</p>
 <div class="section level4">
 <h4 id="stimulus-specific-responding-simple">stimulus-specific responding (simple)<a class="anchor" aria-label="anchor" href="#stimulus-specific-responding-simple"></a>
@@ -251,13 +264,13 @@ and trials within). Note, these show the sum of R values (i.e., overall
 level of responding) per stimulus (absent or present). They do not
 identify the sources of that responding (i.e., whether A or B is
 producing the responding); for that, we must look at complex plots.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">calmr_plot</span><span class="op">(</span><span class="va">my_sim</span>, type <span class="op">=</span> <span class="st">"rs"</span>, simple <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span></code></pre></div>
-<p><img src="calmr_basics_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">my_sim</span>, type <span class="op">=</span> <span class="st">"rs"</span>, simple <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
+<span class="co">#&gt; $Control</span></code></pre></div>
+<p><img src="calmr_basics_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
 <pre><code><span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span></code></pre>
-<p><img src="calmr_basics_files/figure-html/unnamed-chunk-7-2.png" width="672"></p>
+<span class="co">#&gt; $Exp</span></code></pre>
+<p><img src="calmr_basics_files/figure-html/unnamed-chunk-8-2.png" width="672"></p>
 </div>
 <div class="section level4">
 <h4 id="stimulus-specific-responding-complex">stimulus-specific responding (complex)<a class="anchor" aria-label="anchor" href="#stimulus-specific-responding-complex"></a>
@@ -266,13 +279,13 @@ producing the responding); for that, we must look at complex plots.</p>
 bit, in order to allow comparison among the sources of responding. Now,
 each stimulus source is shown as a different color, and the vertical
 panels show different target stimuli.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">calmr_plot</span><span class="op">(</span><span class="va">my_sim</span>, type <span class="op">=</span> <span class="st">"rs"</span>, simple <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span></code></pre></div>
-<p><img src="calmr_basics_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">my_sim</span>, type <span class="op">=</span> <span class="st">"rs"</span>, simple <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>
+<span class="co">#&gt; $Control</span></code></pre></div>
+<p><img src="calmr_basics_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
 <pre><code><span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span></code></pre>
-<p><img src="calmr_basics_files/figure-html/unnamed-chunk-8-2.png" width="672"></p>
+<span class="co">#&gt; $Exp</span></code></pre>
+<p><img src="calmr_basics_files/figure-html/unnamed-chunk-9-2.png" width="672"></p>
 </div>
 <div class="section level4">
 <h4 id="stimulus-activations-bar">stimulus activations (bar)<a class="anchor" aria-label="anchor" href="#stimulus-activations-bar"></a>
@@ -286,26 +299,26 @@ associative links.</p>
 <p>Below, each bar is coloured based on the stimulus that generates the
 activation. The vertical panels denote the target stimulus. The x-axis
 now shows the trial types.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">calmr_plot</span><span class="op">(</span><span class="va">my_sim</span>, type <span class="op">=</span> <span class="st">"acts"</span>, bar <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span></code></pre></div>
-<p><img src="calmr_basics_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">my_sim</span>, type <span class="op">=</span> <span class="st">"acts"</span>, bar <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
+<span class="co">#&gt; $Control</span></code></pre></div>
+<p><img src="calmr_basics_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
 <pre><code><span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span></code></pre>
-<p><img src="calmr_basics_files/figure-html/unnamed-chunk-9-2.png" width="672"></p>
+<span class="co">#&gt; $Exp</span></code></pre>
+<p><img src="calmr_basics_files/figure-html/unnamed-chunk-10-2.png" width="672"></p>
 </div>
 <div class="section level4">
 <h4 id="stimulus-activations-curve">stimulus activations (curve)<a class="anchor" aria-label="anchor" href="#stimulus-activations-curve"></a>
 </h4>
 <p>Similar to above, but now the x-axis shows trial number, and the
 trial_types are embedded across horizontal panels.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">calmr_plot</span><span class="op">(</span><span class="va">my_sim</span>, type <span class="op">=</span> <span class="st">"acts"</span>, bar <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span></code></pre></div>
-<p><img src="calmr_basics_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">my_sim</span>, type <span class="op">=</span> <span class="st">"acts"</span>, bar <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>
+<span class="co">#&gt; $Control</span></code></pre></div>
+<p><img src="calmr_basics_files/figure-html/unnamed-chunk-11-1.png" width="672"></p>
 <pre><code><span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span></code></pre>
-<p><img src="calmr_basics_files/figure-html/unnamed-chunk-10-2.png" width="672"></p>
+<span class="co">#&gt; $Exp</span></code></pre>
+<p><img src="calmr_basics_files/figure-html/unnamed-chunk-11-2.png" width="672"></p>
 </div>
 <div class="section level4">
 <h4 id="stimulus-associations">stimulus associations<a class="anchor" aria-label="anchor" href="#stimulus-associations"></a>
@@ -314,26 +327,26 @@ trial_types are embedded across horizontal panels.</p>
 that HeiDI uses to generate activations in the first place. Each
 vertical panel denotes a stimulus source. THe different colours, the
 target of the association.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">calmr_plot</span><span class="op">(</span><span class="va">my_sim</span>, type <span class="op">=</span> <span class="st">"vs"</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span></code></pre></div>
-<p><img src="calmr_basics_files/figure-html/unnamed-chunk-11-1.png" width="672"></p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">my_sim</span>, type <span class="op">=</span> <span class="st">"vs"</span><span class="op">)</span>
+<span class="co">#&gt; $Control</span></code></pre></div>
+<p><img src="calmr_basics_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
 <pre><code><span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span></code></pre>
-<p><img src="calmr_basics_files/figure-html/unnamed-chunk-11-2.png" width="672"></p>
+<span class="co">#&gt; $Exp</span></code></pre>
+<p><img src="calmr_basics_files/figure-html/unnamed-chunk-12-2.png" width="672"></p>
 </div>
 <div class="section level4">
 <h4 id="stimulus-salience-at-expression">stimulus salience at expression<a class="anchor" aria-label="anchor" href="#stimulus-salience-at-expression"></a>
 </h4>
 <p>Venture here only if you’re ready. The plots below show the stimulus
 saliencies at the moment of expression.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">calmr_plot</span><span class="op">(</span><span class="va">my_sim</span>, type <span class="op">=</span> <span class="st">"as"</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span></code></pre></div>
-<p><img src="calmr_basics_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">my_sim</span>, type <span class="op">=</span> <span class="st">"as"</span><span class="op">)</span>
+<span class="co">#&gt; $Control</span></code></pre></div>
+<p><img src="calmr_basics_files/figure-html/unnamed-chunk-13-1.png" width="672"></p>
 <pre><code><span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span></code></pre>
-<p><img src="calmr_basics_files/figure-html/unnamed-chunk-12-2.png" width="672"></p>
+<span class="co">#&gt; $Exp</span></code></pre>
+<p><img src="calmr_basics_files/figure-html/unnamed-chunk-13-2.png" width="672"></p>
 </div>
 </div>
 <div class="section level3">
@@ -342,14 +355,14 @@ saliencies at the moment of expression.</p>
 <p>You can also take a look at the state of the model’s associations at
 any point during training, using the function
 <code>make_graphs</code>.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">my_graph_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_plots.html">get_graph_opts</a></span><span class="op">(</span><span class="st">"small"</span><span class="op">)</span>
-<span class="fu">calmr_graph</span><span class="op">(</span><span class="va">my_sim</span>, t <span class="op">=</span> <span class="fl">10</span>, graph_opts <span class="op">=</span> <span class="va">my_graph_opts</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span></code></pre></div>
-<p><img src="calmr_basics_files/figure-html/unnamed-chunk-13-1.png" width="672"></p>
+<span class="fu">graph</span><span class="op">(</span><span class="va">my_sim</span>, t <span class="op">=</span> <span class="fl">10</span>, graph_opts <span class="op">=</span> <span class="va">my_graph_opts</span><span class="op">)</span>
+<span class="co">#&gt; $Control</span></code></pre></div>
+<p><img src="calmr_basics_files/figure-html/unnamed-chunk-14-1.png" width="672"></p>
 <pre><code><span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span></code></pre>
-<p><img src="calmr_basics_files/figure-html/unnamed-chunk-13-2.png" width="672"></p>
+<span class="co">#&gt; $Exp</span></code></pre>
+<p><img src="calmr_basics_files/figure-html/unnamed-chunk-14-2.png" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="final-thoughts">Final thoughts<a class="anchor" aria-label="anchor" href="#final-thoughts"></a>
@@ -373,8 +386,7 @@ to check more advanced vignettes when you are ready.</p>
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer>

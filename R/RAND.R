@@ -1,4 +1,4 @@
-#' Train the RW1972 model
+#' Train the RAND model
 #'
 #' @param alphas A named vector with stimulus saliences.
 #' @param lambdas A named vector with stimulus asymptotes.
@@ -16,10 +16,9 @@
 #' @export
 
 RAND <- function(alphas,
-                   lambdas,
-                   V = NULL,
-                   experience,
-                   mapping){
+                 V = NULL,
+                 experience,
+                 mapping){
 
   mod = new("CalmrModel",
             model = "RAND")
@@ -44,8 +43,6 @@ RAND <- function(alphas,
 
     #make one-hot vector of functional stimuli (for learning)
     oh_fstims = .makeOH(c(fprestims, fpoststims), fsnames)
-    oh_fprestims = .makeOH(fprestims, fsnames)
-    oh_fpoststims = .makeOH(fpoststims, fsnames)
 
     #randomize weight matrix
     V[] = matrix(runif(length(V), min = -1, max = 1), dim(V))
@@ -57,10 +54,9 @@ RAND <- function(alphas,
     vs[t, , ] = V
     es[t, , ] = emat
   }
-  mod@parameters = list(alphas = alphas,
-                        lambdas = lambdas)
+  mod@parameters = list(alphas = alphas)
   mod@model_results = list(vs = vs,
-                            es = es)
+                           es = es)
   mod@experience = experience
   mod@mapping = mapping
   mod

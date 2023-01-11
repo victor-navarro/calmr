@@ -17,9 +17,9 @@ test_that("RSATest works", {
 })
 
 test_that("plotting RSA works", {
-  expect_true("gg" %in% class(calmr_plot(RSA(comp))))
+  expect_true("gg" %in% class(plot(RSA(comp))))
 })
 
 test_that("plotting RSATest works", {
-  expect_true("gg" %in% class(calmr_plot(rsatest)))
+  expect_true("gg" %in% class(plot(rsatest)))
 })

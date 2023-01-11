@@ -2,12 +2,15 @@
 % Please edit documentation in R/model_info_funcs.R
 \name{supported_models}
 \alias{supported_models}
+\alias{supported_plots}
 \alias{.get_model_parnames}
-\title{Miscellaneous model functions
+\title{Miscellaneous information functions
 \code{supported_models} returns the models supported in the package.
 \code{supported_plots} returns the plots supported by argument \code{model}.}
 \usage{
 supported_models()
+
+supported_plots(model = NULL)
 
 .get_model_parnames(model)
 }
@@ -15,7 +18,7 @@ supported_models()
 \item{model}{A string specifying a model. One in \code{supported_models()}}
 }
 \description{
-Miscellaneous model functions
+Miscellaneous information functions
 \code{supported_models} returns the models supported in the package.
 \code{supported_plots} returns the plots supported by argument \code{model}.
 }

@@ -97,7 +97,9 @@
   return(mat)
 }
 
-.getalphass <- function(alphas_nomi, V, pre_nomi, pre_func, fsnames, nomi2func, db_trial = NA){
+.getalphas <- function(alphas_nomi, V, pre_nomi, pre_func, fsnames, nomi2func,
+                       absent_func = .absentalphas,
+                       db_trial = NA){
   #gets the saliencies for a given trial
   #it performs two actions:
   #1. populates a vector of saliencies for functional stimuli
@@ -109,13 +111,30 @@
   #now do absent stimuli
   absent = names(as[as==0])
   if (length(absent)){
-    as[absent] = .absentalphas(V = V, pre_func = pre_func, db_trial = t)
+    as[absent] = absent_func(V = V, pre_func = pre_func, db_trial = t)
   }
   as
 }
 
-#Function to calculate the alpha of absent stimuli
+#Function to calculate the alpha of absent stimuli (SIMPLE)
 .absentalphas <- function(V, pre_func, db_trial = NA){
+  #NOTE (VN): This implementation simplifies the absent alpha to be only the sum of forward associations
+  #V is a weight matrix,
+  #pre_func is a character vector of the stimuli being presented
+  #
+  #Returns a vector of alphas equal to the number of absent of stimuli
+  allstims = rownames(V)
+  absent = setdiff(allstims, pre_func)
+  as = stats::setNames(rep(0, length(absent)), absent)
+  for (ab in absent){
+    as[ab] = sum(abs(V[pre_func, ab]))
+  }
+  as
+}
+
+#Function to calculate the alpha of absent stimuli (COMPLEX)
+.absentalphas_complex <- function(V, pre_func, db_trial = NA){
+  #NOTE (VN): This implementation goes through chained associations
   #V is a weight matrix,
   #pre_func is a character vector of the stimuli being presented
   #

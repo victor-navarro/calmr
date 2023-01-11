@@ -70,22 +70,24 @@ trial[c("unique_nominal_stimuli")]
 ```
 
 
-## The parameters data.frame
+## Picking a model and the parameters data.frame
 
-You can run a simulation with only a design data.frame (the simulation function will use default salience values for the stimuli). However, if you want specific salience values for the stimuli in your experiment, you should pass a data.frame with parameters. Let's specify those for our experiment.
+You can run a simulation with only a design data.frame (the simulation function will use default salience values for the stimuli and even the model!). However, you might want to run a model other than the default. To get the models currently supported, you can call `supported_models()`. After choosing a model, we can set specific salience values for the stimuli in our experiment in parameters data.frame. Just like the design data.frame, the parameters data.frame has to follow a specific format. We can get a data.frame with default values via `get_model_params`, and then modify specific values by hand.
 
 ```{r}
-my_pars <- get_params(my_blocking, model = "HD2022") #Note we can quickly get a table with parameters directly from the design data.frame; a good way to check we are going in the right direction
+supported_models()
+
+my_pars <- get_model_params(my_blocking, model = "HD2022")
 my_pars$alphas[my_pars$stimulus == "US"] <- .4
 my_pars
 ```
 
 ### Additional options
 
-The final ingredient is a list with simulation options. We can get a default one with `get_model_opts`, and modify them accordingly.
+The final ingredient is a list with simulation options. We can get a default one with `get_exp_opts`, and modify them accordingly.
 
 ```{r}
-my_opts <- get_model_opts()
+my_opts <- get_exp_opts()
 my_opts$iterations <- 3
 my_opts
 
@@ -93,10 +95,10 @@ my_opts
 
 ### Simulating
 
-And we can finally simulate the model with `quick_model`. By default, the function returns a list with aggregated data. Let's see.
+And we can finally simulate the model with `run_experiment``. By default, the function returns a list with aggregated data. Let's see.
 
 ```{r}
-my_sim <- quick_model(design_df = my_blocking,
+my_sim <- run_experiment(design_df = my_blocking,
                     param_df = my_pars,
                     options = my_opts,
                     model = "HD2022")
@@ -106,7 +108,12 @@ my_sim
 
 ## Plotting
 
-But, we rarely want the raw data. If you are like me, you will want to see some plots. Let's use `plot` function with the different plots supported by the package (and the model)
+But, we rarely want the raw data. If you are like me, you will want to see some plots. Let's use `plot` function with the different plots that the package (and the model) supports by default. We can get the supported plots via `supported_plots(model)`, where model is the string of the model we used.
+
+```{r}
+supported_plots("HD2022")
+```
+
 
 Here they are, paired side by side:
 
@@ -115,7 +122,7 @@ Here they are, paired side by side:
 The plots below show responding across phases (left to right panels, and trials within). Note, these show the sum of R values (i.e., overall level of responding) per stimulus (absent or present). They do not identify the sources of that responding (i.e., whether A or B is producing the responding); for that, we must look at complex plots.
 
 ```{r}
-calmr_plot(my_sim, type = "rs", simple = T)
+plot(my_sim, type = "rs", simple = T)
 ```
 
 ### stimulus-specific responding (complex)
@@ -123,7 +130,7 @@ calmr_plot(my_sim, type = "rs", simple = T)
 These are those complex plots. Here, the parsing changes a little bit, in order to allow comparison among the sources of responding. Now, each stimulus source is shown as a different color, and the vertical panels show different target stimuli.
 
 ```{r}
-calmr_plot(my_sim, type = "rs", simple = F)
+plot(my_sim, type = "rs", simple = F)
 ```
 
 
@@ -134,7 +141,7 @@ stimulus activation plots take us a little deeper into the model. In these, the 
 Below, each bar is coloured based on the stimulus that generates the activation. The vertical panels denote the target stimulus. The x-axis now shows the trial types.
 
 ```{r}
-calmr_plot(my_sim, type = "acts", bar = T)
+plot(my_sim, type = "acts", bar = T)
 ```
 
 ### stimulus activations (curve)
@@ -143,7 +150,7 @@ Similar to above, but now the x-axis shows trial number, and the trial_types are
 
 
 ```{r}
-calmr_plot(my_sim, type = "acts", bar = F)
+plot(my_sim, type = "acts", bar = F)
 ```
 
 ### stimulus associations
@@ -151,7 +158,7 @@ calmr_plot(my_sim, type = "acts", bar = F)
 Going even deeper now. These are the stimulus-stimulus associations that HeiDI uses to generate activations in the first place. Each vertical panel denotes a stimulus source. THe different colours, the target of the association.
 
 ```{r}
-calmr_plot(my_sim, type = "vs")
+plot(my_sim, type = "vs")
 ```
 
 ### stimulus salience at expression
@@ -159,7 +166,7 @@ calmr_plot(my_sim, type = "vs")
 Venture here only if you're ready. The plots below show the stimulus saliencies at the moment of expression.
 
 ```{r}
-calmr_plot(my_sim, type = "as")
+plot(my_sim, type = "as")
 ```
 
 ## Graphing
@@ -168,7 +175,7 @@ You can also take a look at the state of the model's associations at any point d
 
 ```{r}
 my_graph_opts <- get_graph_opts("small")
-calmr_graph(my_sim, t = 10, graph_opts = my_graph_opts)
+graph(my_sim, t = 10, graph_opts = my_graph_opts)
 ```
 
 ## Final thoughts

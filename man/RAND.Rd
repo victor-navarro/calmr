@@ -2,20 +2,20 @@
 % Please edit documentation in R/RAND.R
 \name{RAND}
 \alias{RAND}
-\title{Train the RW1972 model}
+\title{Train the RAND model}
 \usage{
-RAND(alphas, lambdas, V = NULL, experience, mapping)
+RAND(alphas, V = NULL, experience, mapping)
 }
 \arguments{
 \item{alphas}{A named vector with stimulus saliences.}
-
-\item{lambdas}{A named vector with stimulus asymptotes.}
 
 \item{V}{(optional) A named matrix of dimensions S,S; where S is the number of stimuli.}
 
 \item{experience}{A data.frame specifying trials as rows, as returned by \code{make_model_args}}
 
 \item{mapping}{A named list specifying trial and stimulus mapping, as returned by \code{make_model_args}}
+
+\item{lambdas}{A named vector with stimulus asymptotes.}
 }
 \value{
 A list with
@@ -27,7 +27,7 @@ A list with
 }
 }
 \description{
-Train the RW1972 model
+Train the RAND model
 }
 \note{
 

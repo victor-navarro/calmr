@@ -58,6 +58,12 @@
     <loc>http://victornavarro.org/calmr/reference/fit_helpers.html</loc>
   </url>
   <url>
+    <loc>http://victornavarro.org/calmr/reference/fit_model.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/get_exp_opts.html</loc>
+  </url>
+  <url>
     <loc>http://victornavarro.org/calmr/reference/get_heidi_opts.html</loc>
   </url>
   <url>
@@ -65,6 +71,9 @@
   </url>
   <url>
     <loc>http://victornavarro.org/calmr/reference/get_model_opts.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/get_model_params.html</loc>
   </url>
   <url>
     <loc>http://victornavarro.org/calmr/reference/get_params.html</loc>
@@ -125,6 +134,9 @@
   </url>
   <url>
     <loc>http://victornavarro.org/calmr/reference/RSA.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/run_experiment.html</loc>
   </url>
   <url>
     <loc>http://victornavarro.org/calmr/reference/run_heidi.html</loc>

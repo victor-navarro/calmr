@@ -1,6 +1,6 @@
 #' An assortment of functions to help models
 #' @description
-#' get_params generates a data.frame with stimulus salience parameters.
+#' get_model_params generates a data.frame with stimulus salience parameters.
 #' gen_ss_weights generates a named matrix with model weights.
 #' model_vs, parse_acts, parse_rs, parse_as and parse_experiment_results parse the raw outputs of a model into tibbles.
 #' filter_calmr_results is a convenience function to filter specific phase and trial_type data.
@@ -8,44 +8,21 @@
 #' @param stims A character vector with stimuli
 #' @param default_val Default alpha value
 #' @param mod A model list
-#' @param raw_results A tibble with model information, as returned by quick_model
+#' @param raw_results A tibble with model information, as returned by run_experiment
 #' @param parsed_results A list with parsed results, as returned by parse_experiment_results
 #' @param filters A named list containing "phase" and "trial_type" character vectors, for filtering data
 #' @importFrom rlang .data
-#' @seealso \code{\link{parse_design}}, \code{\link{HDI2020}}, \code{\link{quick_model}}
+#' @seealso \code{\link{parse_design}}, \code{\link{HDI2020}}, \code{\link{run_experiment}}
 #' @name model_helpers
 NULL
 #> NULL
-#' @rdname model_helpers
-#' @export
-get_params <- function(design, model = NULL){
-  if (is.null(model)){
-    warning("No model passed. Using 'HD2022'.")
-    model = "HD2022"
-  }
-  if (!tibble::is_tibble(design)){
-    design = parse_design(design)
-  }
-  stims = design %>%
-    tidyr::unnest_wider(.data$trial_info) %>%
-    dplyr::select(.data$unique_nominal_stimuli) %>%
-    unlist() %>%
-    unique()
 
-  if (model %in% c("HDI2020", "HD2022")){
-    df = data.frame(stimulus = stims, alphas = 0.2)
-  }
-  if (model %in% c("RW1972", "RAND", "MAC1975")){
-    df = data.frame(stimulus = stims, alphas = 0.2, lambdas = 1)
-  }
-  df
-}
 #' @rdname model_helpers
 #' @export
 gen_ss_weights <- function(stims, default_val = 0){
   mat = matrix(default_val, ncol = length(stims), nrow = length(stims)) #perhaps a diagonal with 1s? Would accommodate self-association but increases model complexity.
-  rownames(mat) = stims
-  colnames(mat) = stims
+  rownames(mat) = sort(stims)
+  colnames(mat) = sort(stims)
   return(mat)
 }
 

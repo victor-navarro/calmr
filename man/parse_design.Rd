@@ -10,7 +10,7 @@ parse_design(df)
 \item{df}{A data.frame of dimensions Groups, 2*Phases+1}
 }
 \value{
-A tibble containing the parsed design in long format.
+A tibble containing the parsed design in long format and the raw design.
 }
 \description{
 Parse each string in a design data.frame

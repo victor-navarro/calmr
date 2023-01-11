@@ -53,7 +53,7 @@ HDI2020 <- function(alphas,
                      db_trial = t)
 
     #identify absent stimuli and calculate their "retrieved" salience
-    ralphas = .getalphass(V = V,
+    ralphas = .getalphas(V = V,
                          alphas_nomi = alphas,
                          pre_nomi = nprestims,
                          pre_func = fprestims,
