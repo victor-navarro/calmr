@@ -49,9 +49,6 @@
     <loc>http://victornavarro.org/calmr/reference/RW1972.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/build_model.html</loc>
-  </url>
-  <url>
     <loc>http://victornavarro.org/calmr/reference/calmr_app.html</loc>
   </url>
   <url>
@@ -61,16 +58,19 @@
     <loc>http://victornavarro.org/calmr/reference/dot-combV.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/fit_heidi.html</loc>
+    <loc>http://victornavarro.org/calmr/reference/fit_helpers.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/fit_helpers.html</loc>
+    <loc>http://victornavarro.org/calmr/reference/fit_model.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/get_exp_opts.html</loc>
   </url>
   <url>
     <loc>http://victornavarro.org/calmr/reference/get_model.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/get_model_opts.html</loc>
+    <loc>http://victornavarro.org/calmr/reference/get_model_params.html</loc>
   </url>
   <url>
     <loc>http://victornavarro.org/calmr/reference/index.html</loc>
@@ -97,7 +97,7 @@
     <loc>http://victornavarro.org/calmr/reference/pipe.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/quick_model.html</loc>
+    <loc>http://victornavarro.org/calmr/reference/run_experiment.html</loc>
   </url>
   <url>
     <loc>http://victornavarro.org/calmr/reference/run_model.html</loc>
