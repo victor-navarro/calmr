@@ -19,7 +19,6 @@ supported_families <- function(){
   c("identity", "normal", "poisson")
 }
 
-#' @rdname model_info_funcs
 #' @export
 supported_plots <- function(model = NULL){
   plot_info = list(

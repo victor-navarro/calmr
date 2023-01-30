@@ -10,7 +10,7 @@
 #' @param vals A data.frame containing parsed values.
 #' @param bars A logical stipulating whether to summarize and use stacked bars, instead of points and lines.
 #' @param simple A logical stipulating whether to simplify the plot by collapsing across sources.
-#' @param parsed_model A parsed model, as returned by parse_experiment_results.
+#' @param parsed_results A parsed experiment, as returned by parse_experiment_results.
 #' @param plots A named list with plots
 #' @param selection A character vector with the selected plots
 #' @param type A string specifying the type of plots requested. One of `c("vs", "rs_simple", "rs_complex", "acts_learning", "acts_bar", "as")`
@@ -139,24 +139,31 @@ plot_as <- function(vals){
 
 #' @rdname model_plots
 #' @export
-make_plots <- function(parsed_model){
-  plotlist = list()
-  for (g in unique(parsed_model$vs$group)){
-    plotlist[[paste0(g, ': Rs (simple)')]] = plot_rs(parsed_model$rs %>% dplyr::filter(.data$group == g), simple = TRUE) +
-      ggplot2::labs(title = paste0(g, ': Rs (simple)'))
-    plotlist[[paste0(g, ': Rs (complex)')]] = plot_rs(parsed_model$rs %>% dplyr::filter(.data$group == g), simple = FALSE) +
-      ggplot2::labs(title = paste0(g, ': Rs (complex)'))
-    plotlist[[paste0(g, ': Acts (bar)')]] = plot_acts(parsed_model$acts %>% dplyr::filter(.data$group == g), bars = TRUE) +
-      ggplot2::labs(title = paste0(g, ': Acts (bar)'))
-    plotlist[[paste0(g, ': Acts (learning)')]] = plot_acts(parsed_model$acts %>% dplyr::filter(.data$group == g)) +
-      ggplot2::labs(title = paste0(g, ': Acts (learning)'))
-    plotlist[[paste0(g, ': Vs')]] = plot_vs(parsed_model$vs %>% dplyr::filter(.data$group == g)) +
-      ggplot2::labs(title = paste0(g, ': Vs'))
-    plotlist[[paste0(g, ': As')]] = plot_as(parsed_model$as %>% dplyr::filter(.data$group == g)) +
-      ggplot2::labs(title = paste0(g, ': As'))
+make_plots <- function(parsed_experiment){
+  if (!is.null(parsed_experiment)){
+    if (!("CalmrExperiment" %in% class(parsed_experiment))) stop("parsed_experiment must be a CalmrExperiment")
+    parsed_results = parsed_experiment@parsed_results
+    plot_types = names(parsed_results)
+    plot_funs = .get_plot_functions(plot_types)
+    plotlist = list()
+    for (g in unique(parsed_results[[1]]$group)){
+      for (p in 1:length(plot_funs)){
+        plotlist[[sprintf("%s: %s", g, plot_funs[[p]]$name)]] = plot_funs[[p]]$fun(subset(parsed_results[[p]], group == g))
+      }
+    }
+    plotlist
   }
-  return(plotlist)
 }
+
+.get_plot_functions <- function(name){
+  defs = list("as" = list(fun = plot_as, name = "Alphas"),
+         "acts" = list(fun = plot_acts, name = "Activations"),
+         "rs" = list(fun = plot_rs, name = "Responses"),
+         "vs" = list(fun = plot_vs, name = "Associations"),
+         "es" = list(fun = plot_vs, name = "Expectations"))
+  defs[name]
+}
+
 
 #' @rdname model_plots
 #' @export
@@ -203,7 +210,7 @@ graph_weights <- function(weights, limits = NULL, colour_key = F,
     ggnetwork::geom_nodes(size = graph_opts$node.size, pch = 21, colour = 'black',
                           fill = 'white', stroke = graph_opts$node.stroke) +
     ggnetwork::geom_nodetext(size = graph_opts$node.text.size, colour = "black") +
-    ggplot2::scale_colour_gradient2(high = "#fde725", low = "#440154", mid = "white", midpoint = 0, limits = limits) +
+    ggplot2::scale_colour_gradient2(high = "#fde725", low = "#440154", mid = "gray", midpoint = 0, limits = limits) +
     ggplot2::theme_void() +
     ggplot2::coord_cartesian(xlim = c(-0.2, 1.2), ylim = c(-0.2, 1.2)) +
     ggplot2::labs(colour = "Strength")
@@ -247,14 +254,14 @@ get_graph_opts <- function(graph_size = "small"){
 
 #' @rdname model_plots
 #' @export
-make_graphs <- function(parsed_model,
-                        limits = max(abs(range(parsed_model$vs$value)))*c(-1, 1),
-                        t = max(parsed_model$vs$trial),
+make_graphs <- function(parsed_experiment,
+                        limits = max(abs(range(parsed_experiment@parsed_results$vs$value)))*c(-1, 1),
+                        t = max(parsed_experiment@parsed_results$vs$trial),
                         graph_opts = get_graph_opts()){
   plotlist = list()
-  for (g in unique(parsed_model$vs$group)){
-    gdat = parsed_model$vs %>%
-      dplyr::filter(.data$group == g)
+  vs = parsed_experiment@parsed_results$vs
+  for (g in unique(vs$group)){
+    gdat = subset(vs, group == g)
     gtmax = max(gdat$trial)
     plot_t = t
     if (t > gtmax){
@@ -268,7 +275,7 @@ make_graphs <- function(parsed_model,
                                                                       graph_opts = graph_opts) +
       ggplot2::labs(title = sprintf('%s (Trial %d)', g, plot_t))
   }
-  return(plotlist)
+  plotlist
 }
 
 #' @rdname model_plots

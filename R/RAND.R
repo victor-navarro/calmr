@@ -12,8 +12,6 @@
 #' \item{combs, chains - Lists of length P with combined and chained activation values.}
 #' \item{experience, mapping - As passed in arguments; carryover arguments further processing.}
 #' }
-#' @note
-#' @export
 
 RAND <- function(alphas,
                  V = NULL,

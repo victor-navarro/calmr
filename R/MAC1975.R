@@ -1,4 +1,4 @@
-#' Train the RW1972 model
+#' Train the MAC1975 model
 #'
 #' @param alphas A named vector with stimulus saliences.
 #' @param lambdas A named vector with stimulus asymptotes.
@@ -12,8 +12,6 @@
 #' \item{combs, chains - Lists of length P with combined and chained activation values.}
 #' \item{experience, mapping - As passed in arguments; carryover arguments further processing.}
 #' }
-#' @note
-#' @export
 
 MAC1975 <- function(alphas,
                    lambdas,

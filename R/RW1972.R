@@ -14,8 +14,6 @@
 #' \item{combs, chains - Lists of length P with combined and chained activation values.}
 #' \item{experience, mapping - As passed in arguments; carryover arguments further processing.}
 #' }
-#' @note
-#' @export
 
 RW1972 <- function(alphas,
                    betas_on,

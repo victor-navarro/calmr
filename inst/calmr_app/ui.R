@@ -1,6 +1,7 @@
 library(shiny)
 library(shinydashboard)
 library(shinyalert)
+library(shinyWidgets)
 library(tidyr)
 library(dplyr)
 library(ggbeeswarm)
@@ -12,19 +13,23 @@ library(tibble)
 library(calmr)
 
 header <- shinydashboard::dashboardHeader(tags$li(class = "dropdown",
-                                                  tags$style(".main-header {max-height: 60px}"),
-                                                  tags$style(".main-header .logo {height: 60px;}"),
-                                                  tags$style(".sidebar-toggle {height: 20px; padding-top: 1px !important;}"),
-                                                  tags$style(".navbar {min-height:60px !important}")))
+                                                  tags$style(".main-header .logo {height: 60px;}")),
+                                          tags$li(a(href = 'https://victornavarro.org/calmr/',
+                                                    target = "_blank",
+                                                    icon("power-off"),
+                                                    title = "Help"),
+                                            style = "padding-top:5px; padding-right:10px;",
+                                            class = "dropdown"))
 
-anchor <- tags$a(href="http://victornavarro.org/calmr", target="_blank", style = 'color: white;',
-                 tags$img(src="calmr_logo.png", height='54', width='46'),
-                 'HeiDI Simulator')
+anchor <- tags$a(href="https://victornavarro.org/calmr", target="_blank", style = 'color: white;',
+                 tags$img(src="logo.png", height='54', width='46'),
+                 'Calmr Simulator')
 header$children[[2]]$children <- tags$div(anchor, class = 'name')
+
 
 supported_models <- supported_models()
 
-ui <- shinydashboard::dashboardPage(title = "HeiDI Simulator",
+ui <- shinydashboard::dashboardPage(title = "Calmr Simulator",
                                     skin = "red",
                                     header,
                                     shinydashboard::dashboardSidebar(disable = T),
@@ -48,37 +53,35 @@ ui <- shinydashboard::dashboardPage(title = "HeiDI Simulator",
                                                                                htmltools::br(), htmltools::br(),
                                                                                rhandsontable::rHandsontableOutput("design_tbl", width = "100%")
                                                            ),
-                                                           shinydashboard::box(width = 12,
-                                                                               title = "Import/Export",
-                                                                               htmltools::div(
-                                                                                 shiny::fileInput("loaddesign", "Load Sim", multiple = FALSE, accept = c(".rds"), buttonLabel = "...", width = "79%"),
-                                                                                 htmltools::div(style = "margin-top: -15px"),
-                                                                                 shiny::downloadButton("savedesign", "Save Sim", icon = shiny::icon("save"), class = "btn-s"),
-                                                                                 shiny::downloadButton("exportresults", "Save Data", icon = shiny::icon("file-download"), class = "btn-s")
-                                                                               )
-                                                           )
+                                                           shinydashboard::box(collapsible = TRUE,
+                                                                               width = NULL,
+                                                                               title = "Parameters",
+                                                                               shiny::conditionalPanel("output.parsed", rhandsontable::rHandsontableOutput("parameter_tbl", width = "100%")),
+                                                           ),
+                                                           # shinydashboard::box(width = 12,
+                                                           #                     title = "Import/Export",
+                                                           #                     htmltools::div(
+                                                           #                       shiny::fileInput("loaddesign", "Load Sim", multiple = FALSE, accept = c(".rds"), buttonLabel = "...", width = "79%"),
+                                                           #                       htmltools::div(style = "margin-top: -15px"),
+                                                           #                       shiny::downloadButton("savedesign", "Save Sim", icon = shiny::icon("save"), class = "btn-s"),
+                                                           #                       shiny::downloadButton("exportresults", "Save Data", icon = shiny::icon("file-download"), class = "btn-s")
+                                                           #                     )
+                                                           # )
                                         ),
                                         shiny::column(width = 3,
                                                       shinydashboard::box(collapsible = TRUE,
                                                                           width = NULL,
-                                                                          title = "Parameters",
-                                                                          shiny::sliderInput(inputId = 'defaultpar', label = 'Default alphas', min = 0, max = 1, value = .1, ticks = FALSE),
-                                                                          htmltools::br(),
-                                                                          shiny::conditionalPanel("output.parsed", rhandsontable::rHandsontableOutput("parameter_tbl", width = "100%")),
-                                                      ),
-                                                      shinydashboard::box(collapsible = TRUE,
-                                                                          width = NULL,
                                                                           title = "Sim Preferences",
-                                                                          shiny::selectInput(inputId = "model_selection", label = "Model", choices = supported_models, multiple = F),
-                                                                          shiny::sliderInput(inputId = 'iterations', label = 'Sim Iterations', min = 1, max = 200, value = 1, ticks = FALSE),
-                                                                          shiny::checkboxInput(inputId = "miniblocks", label = 'Randomize Trials in Miniblocks', value = T)
+                                                                          shiny::selectInput(inputId = "model_selection", label = "Model", choices = supported_models, selected = "RW1972", multiple = F),
+                                                                          shiny::sliderInput(inputId = 'iterations', label = 'Iterations', min = 1, max = 200, value = 1, ticks = FALSE),
+                                                                          shiny::checkboxInput(inputId = "miniblocks", label = 'Randomize trials in miniblocks', value = T)
                                                       ),
                                                       shinydashboard::box(collapsible = TRUE,
                                                                           width = NULL,
                                                                           title = "Plot Preferences",
-                                                                          shiny::checkboxInput(inputId = "common_scale", label = 'Plot in Common Scale', value = T),
-                                                                          shiny::selectInput(inputId = "phase_selection", label = 'Phase Selection', choices = NULL, multiple = TRUE),
-                                                                          shiny::selectInput(inputId = "trial_type_selection", label = 'Trial Type Selection', choices = NULL, multiple = TRUE)
+                                                                          shiny::checkboxInput(inputId = "common_scale", label = 'Plot in common scale', value = T),
+                                                                          shiny::selectInput(inputId = "phase_selection", label = 'Phase selection', choices = NULL, multiple = TRUE),
+                                                                          shiny::selectInput(inputId = "trial_type_selection", label = 'Trial type selection', choices = NULL, multiple = TRUE)
                                                       )
                                         ),
                                         shiny::column(width = 9,

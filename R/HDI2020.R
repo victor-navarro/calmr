@@ -12,7 +12,6 @@
 #' \item{experience, mapping - As passed in arguments; carryover arguments further processing.}
 #' }
 #' @note The array V contains the associations for all stimuli involved in the experiment. Entry i,j specifies the associative strength between stimulus i to stimulus j. Entry j,i specifies the opposite direction.
-#' @export
 
 HDI2020 <- function(alphas,
                     V = NULL,

@@ -7,14 +7,16 @@
 #                      R3 = c(TRUE))
 
 base_df = data.frame(Group = c("G1", "G2"),
-                     P1 = c("10A>(US)/10#A", "10B>(US)"),
-                     R1 = c(TRUE))
+                     P1 = c("10A>(US)", "10C>(US)"),
+                     R1 = TRUE,
+                     P2 = c("10AB>(US)/#10B", "10AB>(US)/#10B"),
+                     R2 = TRUE)
 
 base_plot_options <- list(common_scale = TRUE)
 base_sim_options <- list(iterations = 1, miniblocks = TRUE)
 
 # Define server logic required to draw a histogram
-shiny::shinyServer(function(input, output) {
+shiny::shinyServer(function(input, output){
 
   #### Reactive values ####
 
@@ -29,8 +31,9 @@ shiny::shinyServer(function(input, output) {
   parsed = shiny::reactiveVal(FALSE)
   ran = shiny::reactiveVal(FALSE)
   raw_results = shiny::reactiveVal()
-  parsed_results = shiny::reactiveVal()
+  parsed_experiment = shiny::reactiveVal()
   plot_filters = shiny::reactiveVal()
+  model_parameters = shiny::reactiveVal()
 
   #### Input Logic ####
   shiny::observeEvent(input$loaddesign, {
@@ -62,7 +65,7 @@ shiny::shinyServer(function(input, output) {
     parsed(dsg$parsed)
     ran(dsg$ran)
     raw_results(dsg$raw_results)
-    parsed_results(dsg$parsed_results)
+    parsed_experiment(dsg$parsed_experiment)
 
   })
 
@@ -105,7 +108,8 @@ shiny::shinyServer(function(input, output) {
     }
   })
 
-  shiny::observeEvent(input$model_selction, {
+  shiny::observeEvent(input$model_selection, {
+    model_parameters(.get_model_parnames(input$model_selection))
     parsed(FALSE)
     ran(FALSE)
   })
@@ -115,9 +119,10 @@ shiny::shinyServer(function(input, output) {
     parsed_design(parse_design(design_df()))
     #get parameters
     #but, keep parameters if there are compatible parameters already
-    new_params = get_params(parsed_design(), input$defaultpar, input$model_selection)
+    new_params = get_model_params(design = parsed_design(),
+                                  model = input$model_selection)
     old_params = param_df()
-    if (setequal(new_params$stimulus, old_params$stimulus)){
+    if (setequal(new_params$stimulus, old_params$stimulus) & setequal(names(new_params), names(old_params))){
       param_df(old_params)
     }else{
       param_df(new_params)
@@ -136,24 +141,22 @@ shiny::shinyServer(function(input, output) {
       #run calmr, run!
       res = tibble::tibble()
       shiny::withProgress(message = "Simulating...", value = 0, {
-        for (i in 1:nrow(calmr_args)){
-          res = rbind(res, calmr::run_model(calmr_args[i, ], model = input$model_selection, parse = FALSE))
-          shiny::incProgress(1/iterations)
-        }
+        res = calmr::run_model(calmr_args, parse = FALSE)
+        shiny::incProgress(1)
+        #' TODO: Create rbind method for CalmrExperiment so we can have a proper progress bar
       })
       raw_results(res)
       #parse results
       shiny::withProgress(message = "Parsing results...", value = 0, {
-        parsed_results(calmr::parse_experiment(raw_results()))
+        parsed_experiment(calmr::parse_experiment_results(raw_results()))
         shiny::setProgress(1)
       })
       shiny::withProgress(message = "Making plots...", value = 0, {
-        plots(calmr::make_plots(calmr::filter_calmr_results(parsed_results(), plot_filters())))
-        graphs(calmr::make_graphs(parsed_results()))
+        plots(calmr::make_plots(calmr::filter_calmr_results(parsed_experiment(), plot_filters())))
+        graphs(calmr::make_graphs(parsed_experiment()))
         shiny::setProgress(1)
       })
       ran(TRUE)
-
     }, error = function(x){
       print(x)
       shinyalert::shinyalert(
@@ -180,11 +183,6 @@ shiny::shinyServer(function(input, output) {
     sim_options(sopts)
   })
 
-  shiny::observeEvent(input$defaultpar, {
-    if (!is.null(parsed_design()) & parsed()){
-      param_df(calmr::get_params(parsed_design(), input$defaultpar))
-    }
-  })
 
   #populating the phase selectInput and the options
   shiny::observeEvent(parsed_design(), {
@@ -219,8 +217,8 @@ shiny::shinyServer(function(input, output) {
   })
 
   #populating the slider for graph_trial selection
-  shiny::observeEvent(parsed_results(), {
-    last_trial = max(parsed_results()$vs$trial)
+  shiny::observeEvent(parsed_experiment(), {
+    last_trial = max(parsed_experiment()@parsed_results$vs$trial)
     shiny::updateSliderInput(inputId = "graph_trial",
                              value = last_trial,
                              max = last_trial)
@@ -228,15 +226,15 @@ shiny::shinyServer(function(input, output) {
 
   #remaking the graphs on graph_trial change
   shiny::observeEvent(input$graph_trial, {
-    if (!is.null(parsed_results())){
-      graphs(calmr::make_graphs(parsed_results(), t = input$graph_trial))
+    if (!is.null(parsed_experiment())){
+      graphs(calmr::make_graphs(parsed_experiment(), t = input$graph_trial))
     }
   })
 
   #### Other reactives
   shiny::observeEvent(plots(), {
     plot_names = names(plots())
-    #remember selection, it gets annoying to reselect plots when playing with alpha
+    #remember selection
     selection = plot_names[1]
     if (!is.null(selected_plots())){
       if (all(selected_plots() %in% plot_names)){
@@ -266,7 +264,7 @@ shiny::shinyServer(function(input, output) {
     filters$phase = input$phase_selection
     plot_filters(filters)
     shiny::withProgress(message = "Making plots...", value = 0, {
-      plots(calmr::make_plots(calmr::filter_calmr_results(parsed_results(), plot_filters())))
+      plots(calmr::make_plots(calmr::filter_calmr_results(parsed_experiment(), plot_filters())))
       shiny::setProgress(1)
     })
   })
@@ -276,7 +274,7 @@ shiny::shinyServer(function(input, output) {
     filters$trial_type = input$trial_type_selection
     plot_filters(filters)
     shiny::withProgress(message = "Making plots...", value = 0, {
-      plots(calmr::make_plots(calmr::filter_calmr_results(parsed_results(), plot_filters())))
+      plots(calmr::make_plots(calmr::filter_calmr_results(parsed_experiment(), plot_filters())))
       shiny::setProgress(1)
     })
   })
@@ -296,9 +294,16 @@ shiny::shinyServer(function(input, output) {
 
   output$parameter_tbl <- rhandsontable::renderRHandsontable({
     if (!is.null(param_df())){
-      rhandsontable::rhandsontable(param_df(), rowHeaders = F) %>%
-        rhandsontable::hot_col("stimulus", readOnly = T)
+      par_df = param_df()
+      names(par_df) = stringr::str_to_title(names(par_df))
+      rhandsontable::rhandsontable(par_df, rowHeaders = F) %>%
+        rhandsontable::hot_col("Stimulus", readOnly = T)
     }
+  })
+
+  #To activate parameter sliders
+  output$par_alpha <- shiny::reactive({
+    return("alphas" %in% model_parameters())
   })
 
   #To export the state of the design and hide/show run button
@@ -337,17 +342,18 @@ shiny::shinyServer(function(input, output) {
                    parsed = parsed(),
                    ran = ran(),
                    raw_results = raw_results(),
-                   parsed_results = parsed_results()), fpath)
+                   parsed_experiment = parsed_experiment()), fpath)
     }
   )
 
   output$exportresults <- shiny::downloadHandler(
     filename = "my_simulation_results.xlsx",
     content = function(fpath){
-      openxlsx::write.xlsx(parsed_results(), file = fpath, overwrite = TRUE)
+      openxlsx::write.xlsx(parsed_experiment(), file = fpath, overwrite = TRUE)
     })
 
   shiny::outputOptions(output, "parsed", suspendWhenHidden = FALSE)
   shiny::outputOptions(output, "ran", suspendWhenHidden = FALSE)
+  shiny::outputOptions(output, "par_alpha", suspendWhenHidden = FALSE)
 
 })

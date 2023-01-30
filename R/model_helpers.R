@@ -168,8 +168,10 @@ aggregate_experiment_results <- function(parsed_experiment){
 }
 
 #' @rdname model_helpers
-#' @export
-filter_calmr_results <- function(parsed_results, filters){
-  lapply(parsed_results, function(x) x %>% dplyr::filter(.data$phase %in% filters$phase & .data$trial_type %in% filters$trial_type))
+filter_calmr_results <- function(parsed_experiment, filters){
+  if (!is.null(parsed_experiment)){
+    parsed_experiment@parsed_results = lapply(parsed_experiment@parsed_results, function(x) x %>% dplyr::filter(.data$phase %in% filters$phase & .data$trial_type %in% filters$trial_type))
+  }
+  parsed_experiment
 }
 

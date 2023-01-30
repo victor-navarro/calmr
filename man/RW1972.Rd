@@ -33,6 +33,3 @@ A list with
 \description{
 Train the RW1972 model
 }
-\note{
-
-}
