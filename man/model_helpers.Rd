@@ -17,14 +17,12 @@ parse_experiment_results(experiment, aggregate = T)
 
 aggregate_experiment_results(parsed_experiment)
 
-filter_calmr_results(parsed_results, filters)
+filter_calmr_results(parsed_experiment, filters)
 }
 \arguments{
 \item{stims}{A character vector with stimuli}
 
 \item{default_val}{Default alpha value}
-
-\item{parsed_results}{A list with parsed results, as returned by parse_experiment_results}
 
 \item{filters}{A named list containing "phase" and "trial_type" character vectors, for filtering data}
 
@@ -33,6 +31,8 @@ filter_calmr_results(parsed_results, filters)
 \item{mod}{A model list}
 
 \item{raw_results}{A tibble with model information, as returned by run_experiment}
+
+\item{parsed_results}{A list with parsed results, as returned by parse_experiment_results}
 }
 \description{
 get_model_params generates a data.frame with stimulus salience parameters.

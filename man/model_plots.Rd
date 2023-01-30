@@ -23,7 +23,7 @@ plot_rs(vals, simple = F)
 
 plot_as(vals)
 
-make_plots(parsed_model)
+make_plots(parsed_experiment)
 
 plot_common_scale(plots)
 
@@ -40,9 +40,9 @@ graph_weights(
 get_graph_opts(graph_size = "small")
 
 make_graphs(
-  parsed_model,
-  limits = max(abs(range(parsed_model$vs$value))) * c(-1, 1),
-  t = max(parsed_model$vs$trial),
+  parsed_experiment,
+  limits = max(abs(range(parsed_experiment@parsed_results$vs$value))) * c(-1, 1),
+  t = max(parsed_experiment@parsed_results$vs$trial),
   graph_opts = get_graph_opts()
 )
 
@@ -61,8 +61,6 @@ patch_plots(
 \item{bars}{A logical stipulating whether to summarize and use stacked bars, instead of points and lines.}
 
 \item{simple}{A logical stipulating whether to simplify the plot by collapsing across sources.}
-
-\item{parsed_model}{A parsed model, as returned by parse_experiment_results.}
 
 \item{plots}{A named list with plots}
 
@@ -85,6 +83,8 @@ patch_plots(
 \item{type}{A string specifying the type of plots requested. One of \code{c("vs", "rs_simple", "rs_complex", "acts_learning", "acts_bar", "as")}}
 
 \item{plot_options}{A list with options}
+
+\item{parsed_results}{A parsed experiment, as returned by parse_experiment_results.}
 }
 \description{
 plot_vs, plot_acts, plot_rs, and plot_as plot weights, activations, r-values and alphas from a model.

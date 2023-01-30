@@ -1,7 +1,6 @@
 library(shiny)
 library(shinydashboard)
 library(shinyalert)
-library(shinyWidgets)
 library(tidyr)
 library(dplyr)
 library(ggbeeswarm)
@@ -11,12 +10,12 @@ library(rhandsontable)
 library(stringr)
 library(tibble)
 library(calmr)
+library(shinyscreenshot)
 
 header <- shinydashboard::dashboardHeader(tags$li(class = "dropdown",
                                                   tags$style(".main-header .logo {height: 60px;}")),
-                                          tags$li(a(href = 'https://victornavarro.org/calmr/',
+                                          tags$li(a("Help", href = 'https://victornavarro.org/calmr/articles/calmr_app.html',
                                                     target = "_blank",
-                                                    icon("power-off"),
                                                     title = "Help"),
                                             style = "padding-top:5px; padding-right:10px;",
                                             class = "dropdown"))

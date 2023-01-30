@@ -29,6 +29,3 @@ A list with
 \description{
 Train the RAND model
 }
-\note{
-
-}

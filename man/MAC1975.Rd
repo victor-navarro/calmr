@@ -2,7 +2,7 @@
 % Please edit documentation in R/MAC1975.R
 \name{MAC1975}
 \alias{MAC1975}
-\title{Train the RW1972 model}
+\title{Train the MAC1975 model}
 \usage{
 MAC1975(alphas, lambdas, V = NULL, experience, mapping)
 }
@@ -27,8 +27,5 @@ A list with
 }
 }
 \description{
-Train the RW1972 model
-}
-\note{
-
+Train the MAC1975 model
 }

@@ -8,9 +8,9 @@
 
 base_df = data.frame(Group = c("G1", "G2"),
                      P1 = c("10A>(US)", "10C>(US)"),
-                     R1 = TRUE,
+                     R1 = FALSE,
                      P2 = c("10AB>(US)/#10B", "10AB>(US)/#10B"),
-                     R2 = TRUE)
+                     R2 = FALSE)
 
 base_plot_options <- list(common_scale = TRUE)
 base_sim_options <- list(iterations = 1, miniblocks = TRUE)
@@ -182,7 +182,6 @@ shiny::shinyServer(function(input, output){
     sopts$miniblocks = input$miniblocks
     sim_options(sopts)
   })
-
 
   #populating the phase selectInput and the options
   shiny::observeEvent(parsed_design(), {
