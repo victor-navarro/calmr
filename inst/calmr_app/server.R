@@ -152,7 +152,7 @@ shiny::shinyServer(function(input, output){
         shiny::setProgress(1)
       })
       shiny::withProgress(message = "Making plots...", value = 0, {
-        plots(calmr::make_plots(calmr::filter_calmr_results(parsed_experiment(), plot_filters())))
+        plots(calmr::make_plots(calmr:::filter_calmr_results(parsed_experiment(), plot_filters())))
         graphs(calmr::make_graphs(parsed_experiment()))
         shiny::setProgress(1)
       })
@@ -263,7 +263,7 @@ shiny::shinyServer(function(input, output){
     filters$phase = input$phase_selection
     plot_filters(filters)
     shiny::withProgress(message = "Making plots...", value = 0, {
-      plots(calmr::make_plots(calmr::filter_calmr_results(parsed_experiment(), plot_filters())))
+      plots(calmr::make_plots(calmr:::filter_calmr_results(parsed_experiment(), plot_filters())))
       shiny::setProgress(1)
     })
   })
@@ -273,7 +273,7 @@ shiny::shinyServer(function(input, output){
     filters$trial_type = input$trial_type_selection
     plot_filters(filters)
     shiny::withProgress(message = "Making plots...", value = 0, {
-      plots(calmr::make_plots(calmr::filter_calmr_results(parsed_experiment(), plot_filters())))
+      plots(calmr::make_plots(calmr:::filter_calmr_results(parsed_experiment(), plot_filters())))
       shiny::setProgress(1)
     })
   })
