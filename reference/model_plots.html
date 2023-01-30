@@ -38,6 +38,7 @@ patch_plots and patch_graphs return a composite of plots or graphs."><meta prope
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/calmr_app.html">calmr_app</a>
     <a class="dropdown-item" href="../articles/calmr_basics.html">calmr_basics</a>
     <a class="dropdown-item" href="../articles/calmr_fits.html">calmr_fits</a>
     <a class="dropdown-item" href="../articles/heidi_math.html">heidi_math</a>
@@ -89,7 +90,7 @@ patch_plots and patch_graphs return a composite of plots or graphs.</p>
 <span></span>
 <span><span class="fu">plot_as</span><span class="op">(</span><span class="va">vals</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">make_plots</span><span class="op">(</span><span class="va">parsed_model</span><span class="op">)</span></span>
+<span><span class="fu">make_plots</span><span class="op">(</span><span class="va">parsed_experiment</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">plot_common_scale</span><span class="op">(</span><span class="va">plots</span><span class="op">)</span></span>
 <span></span>
@@ -106,9 +107,9 @@ patch_plots and patch_graphs return a composite of plots or graphs.</p>
 <span><span class="fu">get_graph_opts</span><span class="op">(</span>graph_size <span class="op">=</span> <span class="st">"small"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">make_graphs</span><span class="op">(</span></span>
-<span>  <span class="va">parsed_model</span>,</span>
-<span>  limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">parsed_model</span><span class="op">$</span><span class="va">vs</span><span class="op">$</span><span class="va">value</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span>
-<span>  t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">parsed_model</span><span class="op">$</span><span class="va">vs</span><span class="op">$</span><span class="va">trial</span><span class="op">)</span>,</span>
+<span>  <span class="va">parsed_experiment</span>,</span>
+<span>  limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">parsed_experiment</span><span class="op">@</span><span class="va">parsed_results</span><span class="op">$</span><span class="va">vs</span><span class="op">$</span><span class="va">value</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">parsed_experiment</span><span class="op">@</span><span class="va">parsed_results</span><span class="op">$</span><span class="va">vs</span><span class="op">$</span><span class="va">trial</span><span class="op">)</span>,</span>
 <span>  graph_opts <span class="op">=</span> <span class="fu">get_graph_opts</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -134,10 +135,6 @@ patch_plots and patch_graphs return a composite of plots or graphs.</p>
 
 <dt>simple</dt>
 <dd><p>A logical stipulating whether to simplify the plot by collapsing across sources.</p></dd>
-
-
-<dt>parsed_model</dt>
-<dd><p>A parsed model, as returned by parse_experiment_results.</p></dd>
 
 
 <dt>plots</dt>
@@ -182,6 +179,10 @@ patch_plots and patch_graphs return a composite of plots or graphs.</p>
 
 <dt>plot_options</dt>
 <dd><p>A list with options</p></dd>
+
+
+<dt>parsed_results</dt>
+<dd><p>A parsed experiment, as returned by parse_experiment_results.</p></dd>
 
 </dl></div>
     <div class="section level2">
