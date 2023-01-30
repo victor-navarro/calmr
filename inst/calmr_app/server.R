@@ -109,7 +109,7 @@ shiny::shinyServer(function(input, output){
   })
 
   shiny::observeEvent(input$model_selection, {
-    model_parameters(.get_model_parnames(input$model_selection))
+    model_parameters(calmr:::.get_model_parnames(input$model_selection))
     parsed(FALSE)
     ran(FALSE)
   })
