@@ -244,7 +244,9 @@ shiny::shinyServer(function(input, output){
   })
 
   shiny::observeEvent(input$parameter_tbl$changes$changes, {
-    param_df(rhandsontable::hot_to_r(input$parameter_tbl))
+    df = rhandsontable::hot_to_r(input$parameter_tbl)
+    names(df) = stringr::str_to_lower(names(df))
+    param_df(df)
     ran(FALSE)
   })
 
