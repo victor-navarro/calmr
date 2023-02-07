@@ -10,10 +10,7 @@ compare_models <- function(design, models, layers, params = NULL, options = get_
   supported_models = supported_models()
   if (any(!(models %in% supported_models))) stop("One or more of the models provided are not supported.")
 
-  #parse design if not parsed
-  if (!tibble::is_tibble(design)){
-    design = parse_design(design)
-  }
+  parsed_design = parse_design(design)
 
   if (is.null(params)){
     warning("Parameters not provided. Using default parameters for all models.\n")

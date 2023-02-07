@@ -50,7 +50,7 @@ get_optimizer_opts <- function(model_pars,
 
 .get_calmr_link <- function(family){
   link_f = NULL
-  if (family == "identity"){link_f = function(y, c) y}
+  if (family %in% c("identity", "OLS")){link_f = function(y, c) y}
   if (family == "normal"){link_f = function(y, c) y*c}
   if (family == "poisson"){link_f = function(y, c) exp(y*c)}
   if (is.null(link_f)) stop(sprintf("Couldn't find a link function when using family %s", family))
@@ -59,6 +59,7 @@ get_optimizer_opts <- function(model_pars,
 
 .get_calmr_loglikelihood <- function(family){
   like_f = NULL
+  if (family == "OLS"){like_f = function(dat, mod) -sum((dat-mod)^2)}
   if (family %in% c("identity", "normal")) {like_f = function(dat, mod) stats::dnorm(dat-mod, log = T)}
   if (family =="poisson"){like_f = function(dat, mod) stats::dpois(dat, mod+1e-9, log = T)} #note the adjustment, the poisson needs positive rates
   if (is.null(like_f)) stop(sprintf("Couldn't find a likelihood function when using family %s", family))
@@ -70,11 +71,10 @@ get_optimizer_opts <- function(model_pars,
   if (!file.exists(file)) return(FALSE)
   fit = readRDS(file)
   args = parent.frame()
-  tests = c(all.equal(args$data, fit@data),
-            all.equal(args$model_function, fit@model_function),
-            all.equal(args$link_function, fit@link_function),
-            all.equal(args$ll_function, fit@ll_function),
-            all.equal(args$model_args, fit@model_args),
-            all.equal(args$optimizer_options, fit@optimizer_options))
+  tests = c(isTRUE(all.equal(args$data, fit@data)),
+            isTRUE(all.equal(args$model_function, fit@model_function)),
+            isTRUE(all.equal(args$link_function, fit@link_function)),
+            isTRUE(all.equal(args$ll_function, fit@ll_function)),
+            isTRUE(all.equal(args$optimizer_options, fit@optimizer_options)))
   all(tests)
 }

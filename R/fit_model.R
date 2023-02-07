@@ -2,7 +2,6 @@
 #' @description Obtain MLE estimates for model, given data
 #' @param data A numeric vector containing data to fit model against.
 #' @param model_function A function that runs the model and returns data.frame of r-values, organized as data.
-#' @param model_args The arguments to train the model function. Usually as returned by make_model_args.
 #' @param optimizer_options A list with options for the optimizer, as returned by get_optimizer_opts.
 #' @param file A path to save the model fit. If the arguments to the fit call are found to be identical to those in the file, the model just gets loaded.
 #' @param ... Extra parameters passed to the optimizer call
@@ -16,14 +15,13 @@
 #' \item {model_function: the model function supplied by the user}
 #' \item {link_function: the link function used during the process}
 #' \item {ll_function: the log-likelihood function used during the search process}
-#' \item {model_args: the model function arguments supplied by the user}
 #' \item {optimizer_options: the optimizer options supplied by the user}
 #' \item {extra_pars: any extra parameters passed to the optimizer call via ...}
 #' }
 #' @note See the calmr_fits vignette for examples
 #' @export
 #' @seealso \code{\link{get_optimizer_opts}}, \code{\link{make_model_args}}
-fit_model <- function(data, model_function, model_args, optimizer_options, file = NULL, ...){
+fit_model <- function(data, model_function, optimizer_options, file = NULL, ...){
   #check if the user passed lower and upper limits
   .calmr_check("limits")
   #check if user wants to save the fit in a file
@@ -42,7 +40,6 @@ fit_model <- function(data, model_function, model_args, optimizer_options, file 
   objective_function = function(pars, ...){
     #generate model responses
     model_responses = model_function(pars[model_par_pointers],
-                                     model_args = model_args,
                                      ...)
     #apply link
     model_responses = link_function(model_responses, pars[link_par_pointers])
@@ -95,7 +92,6 @@ fit_model <- function(data, model_function, model_args, optimizer_options, file 
              model_function = model_function,
              link_function = link_function,
              ll_function = ll_function,
-             model_args = model_args,
              optimizer_options = optimizer_options,
              extra_pars = list(...))
 

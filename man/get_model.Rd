@@ -7,7 +7,7 @@
 get_model(model_name)
 }
 \arguments{
-\item{model_name}{A string specifying the model to be returned. One of \verb{c("HDI2020", "HD2022", "RW1972)}.}
+\item{model_name}{A string specifying the model to be returned. One of \code{supported_models()}.}
 }
 \description{
 Given a model string, returns a model function that can be used elsewhere in the package.

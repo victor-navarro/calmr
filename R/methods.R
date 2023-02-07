@@ -59,36 +59,33 @@ setMethod("plot", "CalmrExperiment",
           function(x, type = NULL, ...){
             if (is.null(type)){ type = "vs"}
             if (!x@is_parsed){ x = parse_experiment_results(x)} #parse if model has not been parsed
-            if (!(type %in% names(x@parsed_results))) stop(sprintf("Model does not contain '%s' in model results.", type))
-            plotf = switch(type,
-                           "vs" = plot_vs,
-                           "es" = plot_vs,
-                           "as" = plot_as,
-                           "acts" = plot_acts,
-                           "rs" = plot_rs)
-            dat = x@parsed_results[[type]]
+            .calmr_check("supported_plot", type, names(x@parsed_results))
+            plotf = get(paste0("plot_", type))
+
+            if (type %in% c("evs", "ivs")){
+              dat = rbind(data.frame(x@parsed_results[["evs"]], assoc_type = "Excitatory"),
+                          data.frame(x@parsed_results[["ivs"]], assoc_type = "Inhibitory"))
+            }else{
+              dat = x@parsed_results[[type]]
+            }
             groups = unique(dat$group)
             ps = sapply(groups, function(g) plotf(dat[dat$group == g,], ...) + ggplot2::labs(title = sprintf("Group = %s", g)), simplify = F)
             names(ps) = groups
             ps
           })
 
-setMethod("plot", "CalmrModel",
-          function(x, type = NULL, ...){
-            if (is.null(type)){ type = "vs"}
-            if (!(type %in% names(x@model_results))) stop(sprintf("Model does not contain '%s' in model results.", type))
-            plotf = switch(type,
-                           "vs" = plot_vs,
-                           "es" = plot_vs,
-                           "as" = plot_as,
-                           "acts" = plot_acts,
-                           "rs" = plot_rs)
-            if (x@is_parsed){
-              plotf(x@model_results[[type]], ...)
-            }else{
-              plotf(.parse(x, type), ...)
-            }
-          })
+# setMethod("plot", "CalmrModel",
+#           function(x, type = NULL, ...){
+#             if (is.null(type)){ type = "vs"}
+#             .calmr_check("supported_plot", type, names(x@model_results))
+#             plotf = get(paste0("plot_", type))
+#
+#             if (x@is_parsed){
+#               plotf(x@model_results[[type]], ...)
+#             }else{
+#               plotf(.parse(x, type), ...)
+#             }
+#           })
 
 
 # setMethod("plot", "CalmrComparison", function(x, ...){
@@ -151,11 +148,10 @@ setMethod("graph", "CalmrExperiment", function(x, ...){
 })
 
 #### Predict methods ####
-
 #' @export
 setMethod("predict", "CalmrFit",
           function(object, type = "response", ...){
-            prediction = object@model_function(object@model_pars, model_args = object@model_args, ...)
+            prediction = object@model_function(object@model_pars, ...)
             if (type == "response"){
               prediction = object@link_function(prediction, object@link_pars)
             }

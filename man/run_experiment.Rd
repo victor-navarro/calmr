@@ -5,7 +5,7 @@
 \title{Run experiment}
 \usage{
 run_experiment(
-  design_df,
+  design,
   model = NULL,
   param_df = NULL,
   options = NULL,
@@ -13,7 +13,7 @@ run_experiment(
 )
 }
 \arguments{
-\item{design_df}{A data.frame of dimensions G,2*P+1; where G is the number of groups and P is the number of phases.}
+\item{design}{A data.frame of dimensions G,2*P+1; where G is the number of groups and P is the number of phases.}
 
 \item{param_df}{A data.frame of dimensions N,2; where N is the number of stimuli in the experimental design.}
 

@@ -97,7 +97,7 @@ trial_parser <- function(trial_string){
   #create mapping between nominal and functional stimuli
   nomi2func = stats::setNames(unlist(c(trial_pre_functional, trial_post_functional)),
                                   unlist(c(trial_pre_nominal, trial_post_nominal)))
-  nomi2func = nomi2func[!duplicated(nomi2func) & !is.na(nomi2func)]
+  nomi2func = nomi2func[!duplicated(names(nomi2func)) & !is.na(nomi2func)]
   func2nomi = stats::setNames(names(nomi2func), nomi2func)
 
   #now we can clean everything of NAs

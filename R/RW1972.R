@@ -51,29 +51,35 @@ RW1972 <- function(alphas,
     oh_fprestims = .makeOH(fprestims, fsnames)
     oh_fpoststims = .makeOH(fpoststims, fsnames)
 
-    #generate expectation
+    #generate expectations
     e1 = oh_fprestims %*% V #first expectation
     e2 = oh_fpoststims %*% V #second expectation
 
-    #generate expectation matrix (only for data saving purposes)
-    emat = apply(V, 2, function(x) x*oh_fstims)
+    #generate full expectation matrix (only for data saving purposes)
+    pre_emat = V*oh_fprestims
 
     #learn if we need to
     if (!experience$is_test[t]){
       #get alphas betas and lambdas for learning
-      lalphas = lbetas = llambdas = stats::setNames(rep(0, length(fsnames)), fsnames)
+      talphas = tbetas = pre_tlambdas = post_tlambdas = stats::setNames(rep(0, length(fsnames)), fsnames)
+
       #populating vector with nominal stimuli values as functional stimuli values
-      lalphas[mapping$nomi2func[c(nprestims, npoststims)]] = alphas[c(nprestims, npoststims)]
-      lbetas = betas_off_avg #vector is initialized as if all stimuli are absent
-      lbetas[mapping$nomi2func[c(nprestims, npoststims)]] = betas_on[c(nprestims, npoststims)]
-      llambdas[mapping$nomi2func[c(nprestims, npoststims)]] = lambdas[c(nprestims, npoststims)]
+      talphas[mapping$nomi2func[c(nprestims, npoststims)]] = alphas[c(nprestims, npoststims)]
+
+      #vector is initialized as if all stimuli are absent
+      tbetas = betas_off_avg
+      tbetas[mapping$nomi2func[c(nprestims, npoststims)]] = betas_on[c(nprestims, npoststims)]
+
+      pre_tlambdas[mapping$nomi2func[c(nprestims, npoststims)]] = lambdas[c(nprestims, npoststims)]
+      post_tlambdas[mapping$nomi2func[c(npoststims)]] = lambdas[c(npoststims)]
+
 
       #Learn
-      err1 = oh_fstims*llambdas-e1 #first error
-      err2 = oh_fpoststims*llambdas-e2 #second error
+      err1 = oh_fstims*pre_tlambdas-e1 #first error (includes all stimuli in the sequence)
+      err2 = oh_fpoststims*post_tlambdas-e2 #second error (includes only the second half stimuli)
 
-      d1 = (oh_fprestims*lalphas*lbetas)%*%err1 #first delta
-      d2 = (oh_fpoststims*lalphas*lbetas)%*%err2 #second delta
+      d1 = (oh_fprestims*talphas*tbetas)%*%err1 #first delta
+      d2 = (oh_fpoststims*talphas*tbetas)%*%err2 #second delta
 
       diag(d1) = diag(d2) = 0
 
@@ -82,7 +88,7 @@ RW1972 <- function(alphas,
 
     #save data
     vs[t, , ] = V
-    es[t, , ] = emat
+    es[t, , ] = pre_emat
   }
   mod@parameters = list(alphas = alphas,
                         betas_on = betas_on,

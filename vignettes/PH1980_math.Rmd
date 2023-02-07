@@ -1,0 +1,54 @@
+---
+title: "ph1980_math"
+author: "Victor Navarro"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{ph1980_math}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# The mathematics behind PH1980
+
+Another departure from global error term models such as RW1972, the PH1980 model does not use an error term for learning associations, and ties stimulus associability ($\alpha$) to the absolute prediction error.
+
+## 1 - Generating expectations
+
+Let $v_{k,j}$ denote the associative strength from stimulus $k$ to stimulus $j$. On any given trial, the expectation of stimulus $j$, $e_j$, is given by:
+
+$$
+\tag{Eq.1}
+e_j = \sum_{k}^{K}x_k v_{k,j}
+$$
+
+$x_k$ denotes the presence (1) or absence (0) of stimulus $k$, and the set $K$ represents all stimuli in the design.
+
+## 2 - Learning associations
+
+Changes to the association from stimulus $i$ to $j$, $v_{i,j}$, are given by:
+
+$$
+\tag{Eq.2}
+\Delta v_{i,j} = x_i \theta_i \alpha_i \lambda_j
+$$
+
+where $\theta_i$ and $\alpha_i$ are the intensity and associability of the CS, respectively, and $\lambda_j$ is the strength of $j$.
+
+## 3 - Learning to attend
+
+The associability parameter $\alpha_i$ changes completely from trial to trial as a function of learning (note the lack of $\Delta$ below), with the change being equal to the difference of the absolute global error, via:
+
+$$
+\tag{Eq.3}
+\alpha_{i} = x_i \sum_{j}^{K}\gamma_j(|\lambda_j - \sum_{k}^{K}v_{k,j}|)
+$$
+where $\gamma_j$ denotes the contribution of the prediction error based on the jth stimulus. To this regard, it is important to note that Pearce and Hall (1980) did not extend their model to account for the predictive power of within-compound associations, yet the implementation of the model in this package does. This can sometimes result in unexpected behaviour, and as such, Eq. 3 above includes the extra parameter $\gamma_j$ (defaulting to 1/K) that denotes whether the expectation of stimulus $j$ contributes to attentional learning. As such, the user can set these parameters manually in order to reflect contribution of the different experimental stimuli. For example, setting $\gamma_{US}$ = 1 and $\gamma_{CS} = 0$ leads to the behaviour of the original model.
+
+## 4 - Generating responses
+
+There is no specification of response-generating mechanisms in PH1980. The simplest response function to be adopted is the identity function on stimulus expectations. The responses reflecting the nature of $j$, $r_j$, can thus be given by:
+
+$$
+\tag{Eq.4}
+r_j = e_j
+$$

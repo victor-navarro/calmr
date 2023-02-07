@@ -44,6 +44,5 @@ setClass("CalmrFit",
                    model_function = "function",
                    link_function = "function",
                    ll_function = "function",
-                   model_args = "tbl",
                    optimizer_options = "list",
                    extra_pars = "list"))

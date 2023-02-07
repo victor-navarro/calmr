@@ -26,8 +26,6 @@ filter_calmr_results(parsed_experiment, filters)
 
 \item{filters}{A named list containing "phase" and "trial_type" character vectors, for filtering data}
 
-\item{design}{An data.frame containing the experimental design.}
-
 \item{mod}{A model list}
 
 \item{raw_results}{A tibble with model information, as returned by run_experiment}

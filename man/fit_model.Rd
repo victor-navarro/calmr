@@ -4,21 +4,12 @@
 \alias{fit_model}
 \title{Fit model to data}
 \usage{
-fit_model(
-  data,
-  model_function,
-  model_args,
-  optimizer_options,
-  file = NULL,
-  ...
-)
+fit_model(data, model_function, optimizer_options, file = NULL, ...)
 }
 \arguments{
 \item{data}{A numeric vector containing data to fit model against.}
 
 \item{model_function}{A function that runs the model and returns data.frame of r-values, organized as data.}
-
-\item{model_args}{The arguments to train the model function. Usually as returned by make_model_args.}
 
 \item{optimizer_options}{A list with options for the optimizer, as returned by get_optimizer_opts.}
 
@@ -37,7 +28,6 @@ A list with
 \item {model_function: the model function supplied by the user}
 \item {link_function: the link function used during the process}
 \item {ll_function: the log-likelihood function used during the search process}
-\item {model_args: the model function arguments supplied by the user}
 \item {optimizer_options: the optimizer options supplied by the user}
 \item {extra_pars: any extra parameters passed to the optimizer call via ...}
 }

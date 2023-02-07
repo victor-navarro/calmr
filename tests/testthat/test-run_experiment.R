@@ -7,7 +7,7 @@ pars = data.frame(stimulus = c("A", "B", "C", "US"), alphas = c(0.1, 0.2, 0.2, 0
 
 test_that("run_experiment works", {
   #warning for not passing parameters
-  expect_warning(run_experiment(design_df = df, model = "HD2022", options = get_exp_opts()))
+  expect_warning(run_experiment(design = df, model = "HD2022", options = get_exp_opts()))
   #error for not passing enough parameters
   expect_error(run_experiment(df, param_df = pars[1, ], model = "HD2022", options = get_exp_opts()))
   #error for passing bad options
@@ -21,11 +21,10 @@ test_that("run_experiment works", {
                          R2 = c(TRUE, TRUE))
   simple_pars = data.frame(stimulus = c("A", "B", "US"), alphas = c(0.1, 0.2, 0.3))
   expect_named(run_experiment(simple_df, param_df = simple_pars, model = "HD2022", options = get_exp_opts())@parsed_results, c("vs",  "rs", "as", "acts"))
-
 })
 
-test_that("run_experiment works with minimal experiments", {
+test_that("run_experiment stops overly minimal experiments", {
   df = data.frame(group = "A", p1 = "1A", r1 = T)
   model = "HD2022"
-  expect_success(run_experiment(df, model = model, param_df = get_model_params(df, model = model)))
+  expect_error(run_experiment(df, model = model, param_df = get_model_params(df, model = model), options = get_exp_opts()))
 })

@@ -7,7 +7,7 @@
 make_model_args(design, pars = NULL, model = NULL, opts = get_exp_opts())
 }
 \arguments{
-\item{design}{A design tibble, as returned by \code{parse_design}}
+\item{design}{A design data.frame}
 
 \item{pars}{A data.frame containing parameters as returned by \code{get_model_params}}
 

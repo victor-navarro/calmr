@@ -1,6 +1,6 @@
 #' Make a tibble to fit a calmr model
 #'
-#' @param design A design tibble, as returned by `parse_design`
+#' @param design A design data.frame
 #' @param pars A data.frame containing parameters as returned by `get_model_params`
 #' @param opts A list with options as returned by `get_exp_opts`
 #'
@@ -16,13 +16,22 @@
 #' @export
 
 make_model_args <- function(design, pars = NULL, model = NULL, opts = get_exp_opts()){
-  #parse design if necessary
-  design = parse_design(design)
+  parsed_design = parse_design(design)
 
+  #check model
   if (is.null(model)){
-    .calmr_default("model_name")
+    model = .calmr_default("model_name")
   }else{
     .calmr_check("supported_model", given = model)
+  }
+
+  #check parameters
+  if (is.null(pars)){
+    pars = .calmr_default("model_params", design = design, model = model)
+  }else{
+    #check if the user-specified parameters match what the parser sees
+    auto_params = get_model_params(design = design, model = model)
+    .calmr_check("params_OK", given = pars, necessary = auto_params)
   }
 
   #Some early info
@@ -31,22 +40,19 @@ make_model_args <- function(design, pars = NULL, model = NULL, opts = get_exp_op
   #the only challenge here is to create a master list of trials (trials)
   #and sample the training for each group (tps)
   #create master lists of trials and trial_names
-  tinfo = design %>% tidyr::unnest_wider(.data$trial_info) %>%
+  tinfo = parsed_design %>% tidyr::unnest_wider(.data$trial_info) %>%
     dplyr::select(.data$trial_pre_functional,
                   .data$trial_post_functional,
                   .data$trial_pre_nominal,
                   .data$trial_post_nominal,
                   .data$trial_names)
 
-  if (class(tinfo$trial_names) == "list"){
-    master_trial_names = do.call('c', tinfo$trial_names)
-  }else{
-    master_trial_names = tinfo$trial_names
-  }
-  trial_pre_functional_list = do.call('c', tinfo$trial_pre_functional)
-  trial_post_functional_list = do.call('c', tinfo$trial_post_functional)
-  trial_pre_nominal_list = do.call('c', tinfo$trial_pre_nominal)
-  trial_post_nominal_list = do.call('c', tinfo$trial_post_nominal)
+  master_trial_names = unlist(tinfo$trial_names)
+
+  trial_pre_functional_list = unlist(tinfo$trial_pre_functional, recursive = F)
+  trial_post_functional_list = unlist(tinfo$trial_post_functional, recursive = F)
+  trial_pre_nominal_list = unlist(tinfo$trial_pre_nominal, recursive = F)
+  trial_post_nominal_list = unlist(tinfo$trial_post_nominal, recursive = F)
 
   #reduce
   trial_pre_functional_list = trial_pre_functional_list[!duplicated(master_trial_names)]
@@ -57,17 +63,17 @@ make_model_args <- function(design, pars = NULL, model = NULL, opts = get_exp_op
   master_trial_names = master_trial_names[!duplicated(master_trial_names)]
 
   #make stimulus mapping
-  map = design %>%
+  map = parsed_design %>%
     #this bit saves us having to crunch data about stimuli that are not present in a group but are present in another
     tidyr::unnest_wider(.data$trial_info) %>%
     dplyr::group_by(.data$group) %>%
     dplyr::mutate(unique_nominal_stimuli = list(unique(unlist(.data$unique_nominal_stimuli))),
                   unique_functional_stimuli = list(unique(unlist(.data$unique_functional_stimuli))),
                   nomi2func = list({
-                    n2f = do.call('c', .data$nomi2func)
+                    n2f = unlist(.data$nomi2func)
                     n2f = n2f[!duplicated(names(n2f))]}),
                   func2nomi = list({
-                    f2n = do.call('c', .data$func2nomi)
+                    f2n = unlist(.data$func2nomi)
                     f2n = f2n[!duplicated(names(f2n))]})) %>%
     dplyr::select(.data$group, .data$unique_functional_stimuli,
                   .data$unique_nominal_stimuli, .data$nomi2func, .data$func2nomi) %>%
@@ -92,7 +98,7 @@ make_model_args <- function(design, pars = NULL, model = NULL, opts = get_exp_op
   #we can sample now
   #Dom, if you are reading this, I apologize for this bit
   #It basically creates a tibble of iterations*groups*phases, with pointers for trials in the masterlist
-  exptb = design %>%
+  exptb = parsed_design %>%
     tidyr::unnest_wider(.data$trial_info) %>%
     tidyr::expand_grid(iteration = 1:opts$iterations) %>%
     dplyr::rowwise() %>%

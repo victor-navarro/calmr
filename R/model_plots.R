@@ -41,6 +41,38 @@ plot_vs <- function(vals){
     ggplot2::theme_bw()
 }
 
+plot_evs <- function(vals){
+  vals %>%
+    dplyr::mutate(trial = ceiling(.data$trial/.data$block_size)) %>%
+    dplyr::group_by(.data$trial, .data$phase, .data$s1, .data$s2, .data$assoc_type) %>%
+    dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
+    ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s2, linetype = .data$assoc_type)) +
+    ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
+    ggplot2::geom_line() +
+    ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
+    ggplot2::scale_colour_viridis_d(drop = FALSE) +
+    ggplot2::scale_x_continuous(breaks = NULL) +
+    ggplot2::facet_grid(.data$s1~.data$phase, scales = 'free_x') +
+    ggplot2::labs(x = "Trial/Miniblock", y = 'Strength', colour = 'Target', linetype = "Association Type") +
+    ggplot2::theme_bw()
+}
+
+plot_es <- function(vals){
+  vals %>%
+    dplyr::mutate(trial = ceiling(.data$trial/.data$block_size)) %>%
+    dplyr::group_by(.data$trial, .data$phase, .data$trial_type, .data$s1, .data$s2) %>%
+    dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
+    ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s1)) +
+    ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
+    ggplot2::geom_line() +
+    ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
+    ggplot2::scale_colour_viridis_d(drop = FALSE) +
+    ggplot2::scale_x_continuous(breaks = NULL) +
+    ggplot2::facet_grid(.data$s2~.data$phase+.data$trial_type, scales = 'free_x') +
+    ggplot2::labs(x = "Trial/Miniblock", y = 'Strength', colour = 'Source') +
+    ggplot2::theme_bw()
+}
+
 #' @rdname model_plots
 plot_acts <- function(vals, bars = F){
   summ = vals %>%
@@ -133,7 +165,7 @@ plot_as <- function(vals){
     ggplot2::scale_colour_viridis_d(drop = FALSE) +
     ggplot2::scale_x_continuous(breaks = NULL) +
     ggplot2::facet_grid(.~.data$phase+.data$trial_type, scales = 'free_x') +
-    ggplot2::labs(x = "Trial/Miniblock", y = 'alphas Value', colour = 'stimulus') +
+    ggplot2::labs(x = "Trial/Miniblock", y = 'Alpha Value', colour = 'stimulus') +
     ggplot2::theme_bw()
 }
 
@@ -160,7 +192,7 @@ make_plots <- function(parsed_experiment){
          "acts" = list(fun = plot_acts, name = "Activations"),
          "rs" = list(fun = plot_rs, name = "Responses"),
          "vs" = list(fun = plot_vs, name = "Associations"),
-         "es" = list(fun = plot_vs, name = "Expectations"))
+         "es" = list(fun = plot_es, name = "Expectations"))
   defs[name]
 }
 
