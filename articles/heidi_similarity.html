@@ -48,11 +48,14 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/PKH1982_math.html">PKH1982_math</a>
+    <a class="dropdown-item" href="../articles/RW1972_math.html">RW1972_math</a>
     <a class="dropdown-item" href="../articles/calmr_app.html">calmr_app</a>
     <a class="dropdown-item" href="../articles/calmr_basics.html">calmr_basics</a>
     <a class="dropdown-item" href="../articles/calmr_fits.html">calmr_fits</a>
     <a class="dropdown-item" href="../articles/heidi_math.html">heidi_math</a>
     <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
+    <a class="dropdown-item" href="../articles/mac1975_math.html">MAC1975_math</a>
   </div>
 </li>
 <li class="nav-item">
@@ -140,7 +143,7 @@ saliency was .40. The saliencies of A and the US were fixed to .30 and
 <span>                 R2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>stimulus <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"X_a"</span>, <span class="st">"X_b"</span>, <span class="st">"US"</span><span class="op">)</span>,</span>
 <span>                     alphas <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.30</span>, <span class="fl">.40</span>, <span class="fl">.36</span>, <span class="fl">.50</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_experiment.html">run_experiment</a></span><span class="op">(</span>design_df <span class="op">=</span> <span class="va">df</span>, model <span class="op">=</span> <span class="st">"HD2022"</span>, param_df <span class="op">=</span> <span class="va">params</span>, options <span class="op">=</span> <span class="op">)</span></span></code></pre></div>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_experiment.html">run_experiment</a></span><span class="op">(</span>design <span class="op">=</span> <span class="va">df</span>, model <span class="op">=</span> <span class="st">"HD2022"</span>, param_df <span class="op">=</span> <span class="va">params</span>, options <span class="op">=</span> <span class="op">)</span></span></code></pre></div>
 <div class="section level4">
 <h4 id="plotting-the-similarity-between-saliencies">Plotting the similarity between saliencies<a class="anchor" aria-label="anchor" href="#plotting-the-similarity-between-saliencies"></a>
 </h4>
@@ -191,7 +194,7 @@ designs.</p>
 <span><span class="co">#&gt; 6    S6 6A(X_a) FALSE 10(X_a)&gt;(US) FALSE A# FALSE</span></span></code></pre></div>
 <p>Run the model.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_experiment.html">run_experiment</a></span><span class="op">(</span>design_df <span class="op">=</span> <span class="va">df</span>, model <span class="op">=</span> <span class="st">"HD2022"</span>, param_df <span class="op">=</span> <span class="va">params</span>, options <span class="op">=</span> <span class="fu"><a href="../reference/get_exp_opts.html">get_exp_opts</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_experiment.html">run_experiment</a></span><span class="op">(</span>design <span class="op">=</span> <span class="va">df</span>, model <span class="op">=</span> <span class="st">"HD2022"</span>, param_df <span class="op">=</span> <span class="va">params</span>, options <span class="op">=</span> <span class="fu"><a href="../reference/get_exp_opts.html">get_exp_opts</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>And now we can manually plot the distribution of responding among
 stimuli <code>model$rs</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">

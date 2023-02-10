@@ -38,11 +38,14 @@ patch_plots and patch_graphs return a composite of plots or graphs."><meta prope
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/PKH1982_math.html">PKH1982_math</a>
+    <a class="dropdown-item" href="../articles/RW1972_math.html">RW1972_math</a>
     <a class="dropdown-item" href="../articles/calmr_app.html">calmr_app</a>
     <a class="dropdown-item" href="../articles/calmr_basics.html">calmr_basics</a>
     <a class="dropdown-item" href="../articles/calmr_fits.html">calmr_fits</a>
     <a class="dropdown-item" href="../articles/heidi_math.html">heidi_math</a>
     <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
+    <a class="dropdown-item" href="../articles/mac1975_math.html">MAC1975_math</a>
   </div>
 </li>
 <li class="nav-item">
@@ -88,39 +91,7 @@ patch_plots and patch_graphs return a composite of plots or graphs.</p>
 <span></span>
 <span><span class="fu">plot_rs</span><span class="op">(</span><span class="va">vals</span>, simple <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">plot_as</span><span class="op">(</span><span class="va">vals</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">make_plots</span><span class="op">(</span><span class="va">parsed_experiment</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">plot_common_scale</span><span class="op">(</span><span class="va">plots</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">get_plot_opts</span><span class="op">(</span>common_scale <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">graph_weights</span><span class="op">(</span></span>
-<span>  <span class="va">weights</span>,</span>
-<span>  limits <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  colour_key <span class="op">=</span> <span class="cn">F</span>,</span>
-<span>  t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">weights</span><span class="op">$</span><span class="va">trial</span><span class="op">)</span>,</span>
-<span>  graph_opts <span class="op">=</span> <span class="fu">get_graph_opts</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">get_graph_opts</span><span class="op">(</span>graph_size <span class="op">=</span> <span class="st">"small"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">make_graphs</span><span class="op">(</span></span>
-<span>  <span class="va">parsed_experiment</span>,</span>
-<span>  limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">parsed_experiment</span><span class="op">@</span><span class="va">parsed_results</span><span class="op">$</span><span class="va">vs</span><span class="op">$</span><span class="va">value</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span>
-<span>  t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">parsed_experiment</span><span class="op">@</span><span class="va">parsed_results</span><span class="op">$</span><span class="va">vs</span><span class="op">$</span><span class="va">trial</span><span class="op">)</span>,</span>
-<span>  graph_opts <span class="op">=</span> <span class="fu">get_graph_opts</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">patch_graphs</span><span class="op">(</span><span class="va">graphs</span>, selection <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">graphs</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">patch_plots</span><span class="op">(</span></span>
-<span>  <span class="va">plots</span>,</span>
-<span>  selection <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  type <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  plot_options <span class="op">=</span> <span class="fu">get_plot_opts</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">plot_as</span><span class="op">(</span><span class="va">vals</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -137,36 +108,12 @@ patch_plots and patch_graphs return a composite of plots or graphs.</p>
 <dd><p>A logical stipulating whether to simplify the plot by collapsing across sources.</p></dd>
 
 
+<dt>parsed_results</dt>
+<dd><p>A parsed experiment, as returned by parse_experiment_results.</p></dd>
+
+
 <dt>plots</dt>
 <dd><p>A named list with plots</p></dd>
-
-
-<dt>common_scale</dt>
-<dd><p>A logical. Whether to plot the data in a common y-scale.</p></dd>
-
-
-<dt>weights</dt>
-<dd><p>A data.frame containing parsed weights, as returned by parse_experiment_results</p></dd>
-
-
-<dt>limits</dt>
-<dd><p>A vector of length 2 specifying the range of weights. Defaults to the negative and positive maximum of absolute weights.</p></dd>
-
-
-<dt>t</dt>
-<dd><p>An integer denoting the trial of the weights to be graphed. Defaults to the last trial in the data.</p></dd>
-
-
-<dt>graph_opts</dt>
-<dd><p>A list of options for graphing weights</p></dd>
-
-
-<dt>graph_size</dt>
-<dd><p>A string specifying the desired graph size, from c("large", "small"). Default is "large".</p></dd>
-
-
-<dt>graphs</dt>
-<dd><p>A list of graphs, as returned by make_graphs</p></dd>
 
 
 <dt>selection</dt>
@@ -181,13 +128,37 @@ patch_plots and patch_graphs return a composite of plots or graphs.</p>
 <dd><p>A list with options</p></dd>
 
 
-<dt>parsed_results</dt>
-<dd><p>A parsed experiment, as returned by parse_experiment_results.</p></dd>
+<dt>common_scale</dt>
+<dd><p>A logical. Whether to plot the data in a common y-scale.</p></dd>
+
+
+<dt>weights</dt>
+<dd><p>A data.frame containing parsed weights, as returned by parse_experiment_results</p></dd>
+
+
+<dt>t</dt>
+<dd><p>An integer denoting the trial of the weights to be graphed. Defaults to the last trial in the data.</p></dd>
+
+
+<dt>limits</dt>
+<dd><p>A vector of length 2 specifying the range of weights. Defaults to the negative and positive maximum of absolute weights.</p></dd>
+
+
+<dt>graph_opts</dt>
+<dd><p>A list of options for graphing weights</p></dd>
+
+
+<dt>graph_size</dt>
+<dd><p>A string specifying the desired graph size, from c("large", "small"). Default is "large".</p></dd>
+
+
+<dt>graphs</dt>
+<dd><p>A list of graphs, as returned by make_graphs</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="model_helpers.html">parse_experiment_results</a></code></p></div>
+    <div class="dont-index"><p><code>parse_experiment_results</code></p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

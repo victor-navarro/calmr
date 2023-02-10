@@ -24,11 +24,14 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/PKH1982_math.html">PKH1982_math</a>
+    <a class="dropdown-item" href="../articles/RW1972_math.html">RW1972_math</a>
     <a class="dropdown-item" href="../articles/calmr_app.html">calmr_app</a>
     <a class="dropdown-item" href="../articles/calmr_basics.html">calmr_basics</a>
     <a class="dropdown-item" href="../articles/calmr_fits.html">calmr_fits</a>
     <a class="dropdown-item" href="../articles/heidi_math.html">heidi_math</a>
     <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
+    <a class="dropdown-item" href="../articles/mac1975_math.html">MAC1975_math</a>
   </div>
 </li>
 <li class="nav-item">
@@ -61,14 +64,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fit_model</span><span class="op">(</span></span>
-<span>  <span class="va">data</span>,</span>
-<span>  <span class="va">model_function</span>,</span>
-<span>  <span class="va">model_args</span>,</span>
-<span>  <span class="va">optimizer_options</span>,</span>
-<span>  file <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fit_model</span><span class="op">(</span><span class="va">data</span>, <span class="va">model_function</span>, <span class="va">optimizer_options</span>, file <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -79,10 +75,6 @@
 
 <dt>model_function</dt>
 <dd><p>A function that runs the model and returns data.frame of r-values, organized as data.</p></dd>
-
-
-<dt>model_args</dt>
-<dd><p>The arguments to train the model function. Usually as returned by make_model_args.</p></dd>
 
 
 <dt>optimizer_options</dt>
@@ -109,7 +101,6 @@
 <li><p>model_function: the model function supplied by the user</p></li>
 <li><p>link_function: the link function used during the process</p></li>
 <li><p>ll_function: the log-likelihood function used during the search process</p></li>
-<li><p>model_args: the model function arguments supplied by the user</p></li>
 <li><p>optimizer_options: the optimizer options supplied by the user</p></li>
 <li><p>extra_pars: any extra parameters passed to the optimizer call via ...</p></li>
 </ul></div>

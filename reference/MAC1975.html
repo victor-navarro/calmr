@@ -24,11 +24,14 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/PKH1982_math.html">PKH1982_math</a>
+    <a class="dropdown-item" href="../articles/RW1972_math.html">RW1972_math</a>
     <a class="dropdown-item" href="../articles/calmr_app.html">calmr_app</a>
     <a class="dropdown-item" href="../articles/calmr_basics.html">calmr_basics</a>
     <a class="dropdown-item" href="../articles/calmr_fits.html">calmr_fits</a>
     <a class="dropdown-item" href="../articles/heidi_math.html">heidi_math</a>
     <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
+    <a class="dropdown-item" href="../articles/mac1975_math.html">MAC1975_math</a>
   </div>
 </li>
 <li class="nav-item">
@@ -61,7 +64,19 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">MAC1975</span><span class="op">(</span><span class="va">alphas</span>, <span class="va">lambdas</span>, V <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">experience</span>, <span class="va">mapping</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">MAC1975</span><span class="op">(</span></span>
+<span>  <span class="va">alphas</span>,</span>
+<span>  <span class="va">min_alphas</span>,</span>
+<span>  <span class="va">max_alphas</span>,</span>
+<span>  <span class="va">betas_on</span>,</span>
+<span>  <span class="va">betas_off</span>,</span>
+<span>  <span class="va">lambdas</span>,</span>
+<span>  <span class="va">thetas</span>,</span>
+<span>  <span class="va">gammas</span>,</span>
+<span>  V <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">experience</span>,</span>
+<span>  <span class="va">mapping</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -70,8 +85,32 @@
 <dd><p>A named vector with stimulus saliences.</p></dd>
 
 
+<dt>min_alphas</dt>
+<dd><p>A named vector with minimum stimulus saliences.</p></dd>
+
+
+<dt>max_alphas</dt>
+<dd><p>A named vector with maximum stimulus saliences.</p></dd>
+
+
+<dt>betas_on</dt>
+<dd><p>A named vector with stimulus associabilities for present stimuli.</p></dd>
+
+
+<dt>betas_off</dt>
+<dd><p>A named vector with stimulus associabilities for absent stimuli.</p></dd>
+
+
 <dt>lambdas</dt>
 <dd><p>A named vector with stimulus asymptotes.</p></dd>
+
+
+<dt>thetas</dt>
+<dd><p>A named vector with stimulus attentional learning rates.</p></dd>
+
+
+<dt>gammas</dt>
+<dd><p>A named vector with stimulus contributions to attentional learning rules</p></dd>
 
 
 <dt>V</dt>
