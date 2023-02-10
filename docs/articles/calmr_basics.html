@@ -53,6 +53,9 @@
     <a class="dropdown-item" href="../articles/calmr_fits.html">calmr_fits</a>
     <a class="dropdown-item" href="../articles/heidi_math.html">heidi_math</a>
     <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
+    <a class="dropdown-item" href="../articles/MAC1975_math.html">MAC1975_math</a>
+    <a class="dropdown-item" href="../articles/PKH1982_math.html">PKH1982_math</a>
+    <a class="dropdown-item" href="../articles/RW1972_math.html">RW1972_math</a>
   </div>
 </li>
 <li class="nav-item">
@@ -194,7 +197,7 @@ values via <code>get_model_params</code>, and then modify specific
 values by hand.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/model_info_funcs.html">supported_models</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; [1] "HDI2020" "HD2022"  "RW1972"  "RAND"</span>
+<span class="co">#&gt; [1] "HDI2020" "HD2022"  "RW1972"  "MAC1975" "PKH1982" "RAND"</span>
 
 <span class="va">my_pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_model_params.html">get_model_params</a></span><span class="op">(</span><span class="va">my_blocking</span>, model <span class="op">=</span> <span class="st">"HD2022"</span><span class="op">)</span>
 <span class="va">my_pars</span><span class="op">$</span><span class="va">alphas</span><span class="op">[</span><span class="va">my_pars</span><span class="op">$</span><span class="va">stimulus</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">.4</span>
@@ -254,7 +257,7 @@ different plots that the package (and the model) supports by default. We
 can get the supported plots via <code>supported_plots(model)</code>,
 where model is the string of the model we used.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="http://victornavarro.org/calmr/reference/model_info_funcs.html">supported_plots</a></span><span class="op">(</span><span class="st">"HD2022"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu">supported_plots</span><span class="op">(</span><span class="st">"HD2022"</span><span class="op">)</span>
 <span class="co">#&gt; [1] "as"   "acts" "rs"   "vs"</span></code></pre></div>
 <p>Here they are, paired side by side:</p>
 <div class="section level4">
@@ -357,8 +360,8 @@ saliencies at the moment of expression.</p>
 any point during training, using the function
 <code>make_graphs</code>.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_graph_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_plots.html">get_graph_opts</a></span><span class="op">(</span><span class="st">"small"</span><span class="op">)</span>
-<span class="fu">graph</span><span class="op">(</span><span class="va">my_sim</span>, t <span class="op">=</span> <span class="fl">10</span>, graph_opts <span class="op">=</span> <span class="va">my_graph_opts</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">my_graph_opts</span> <span class="op">&lt;-</span> <span class="fu">get_graph_opts</span><span class="op">(</span><span class="st">"small"</span><span class="op">)</span>
+<span class="fu"><a href="../reference/graph.html">graph</a></span><span class="op">(</span><span class="va">my_sim</span>, t <span class="op">=</span> <span class="fl">10</span>, graph_opts <span class="op">=</span> <span class="va">my_graph_opts</span><span class="op">)</span>
 <span class="co">#&gt; $Control</span></code></pre></div>
 <p><img src="calmr_basics_files/figure-html/unnamed-chunk-14-1.png" width="672"></p>
 <pre><code><span class="co">#&gt; </span>

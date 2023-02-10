@@ -98,7 +98,7 @@ my_opts
 And we can finally simulate the model with `run_experiment``. By default, the function returns a list with aggregated data. Let's see.
 
 ```{r}
-my_sim <- run_experiment(design_df = my_blocking,
+my_sim <- run_experiment(design = my_blocking,
                     param_df = my_pars,
                     options = my_opts,
                     model = "HD2022")

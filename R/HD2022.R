@@ -18,7 +18,7 @@ HD2022 <- function(alphas,
                    experience,
                    mapping){
 
-  mod = new("CalmrModel",
+  mod = methods::new("CalmrModel",
             model = "HD2022")
 
   #data initialization

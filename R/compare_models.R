@@ -44,7 +44,7 @@ compare_models <- function(design, models, layers, params = NULL, options = get_
   },
   error = function(e) stop("ERROR: Could not concatenate models using requested layers."))
 
-  new("CalmrComparison",
+  methods::new("CalmrComparison",
       results = res,
       models = models,
       layers = layers,

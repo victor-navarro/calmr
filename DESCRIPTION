@@ -3,7 +3,7 @@ Title: Canonical associative learning models in R
 Version: 0.1.0
 Authors@R: 
     person("Victor", "Navarro", , "navarrov@cardiff.ac.uk", role = c("aut", "cre"))
-Description: Tools to simulate associative learning models
+Description: Tools to simulate associative learning models.
 License: GPL (>= 3)
 URL: https://github.com/victor-navarro/calmr,
     http://victornavarro.org/calmr/
@@ -11,11 +11,13 @@ BugReports: https://github.com/victor-navarro/calmr/issues
 Imports: 
     cowplot,
     dplyr,
+    GA,
     ggbeeswarm,
     ggnetwork,
     ggplot2,
     htmltools,
     magrittr,
+    methods,
     network,
     openxlsx,
     rhandsontable,

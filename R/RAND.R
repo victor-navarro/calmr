@@ -1,7 +1,6 @@
 #' Train the RAND model
 #'
 #' @param alphas A named vector with stimulus saliences.
-#' @param lambdas A named vector with stimulus asymptotes.
 #' @param V (optional) A named matrix of dimensions S,S; where S is the number of stimuli.
 #' @param experience A data.frame specifying trials as rows, as returned by `make_model_args`
 #' @param mapping A named list specifying trial and stimulus mapping, as returned by `make_model_args`
@@ -18,7 +17,7 @@ RAND <- function(alphas,
                  experience,
                  mapping){
 
-  mod = new("CalmrModel",
+  mod = methods::new("CalmrModel",
             model = "RAND")
 
   #data initialization
@@ -43,7 +42,7 @@ RAND <- function(alphas,
     oh_fstims = .makeOH(c(fprestims, fpoststims), fsnames)
 
     #randomize weight matrix
-    V[] = matrix(runif(length(V), min = -1, max = 1), dim(V))
+    V[] = matrix(stats::runif(length(V), min = -1, max = 1), dim(V))
 
     #generate expectation matrix (only for data saving purposes)
     emat = apply(V, 2, function(x) x*oh_fstims)

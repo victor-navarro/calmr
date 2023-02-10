@@ -18,7 +18,7 @@ HDI2020 <- function(alphas,
                     experience,
                     mapping){
 
-  mod = new("CalmrModel",
+  mod = methods::new("CalmrModel",
             model = "HDI2020")
 
   #data initialization

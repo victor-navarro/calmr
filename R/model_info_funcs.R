@@ -1,7 +1,10 @@
 #' Miscellaneous information functions
 #' `supported_models` returns the models supported in the package.
 #' `supported_plots` returns the plots supported by argument `model`.
-#' @param model A string specifying a model. One in `supported_models()`
+#' `supported_families` returns the families supported by \code{\link{fit_model}}.
+#' `supported_optimizers` returns the optimizers supported by \code{\link{fit_model}}.
+#' `suported_plots` returns the plots supported by argument `model`.
+#' @param model A string specifying a model. One from `supported_models()`
 #' @rdname model_info_funcs
 
 #' @export

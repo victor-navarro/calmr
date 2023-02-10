@@ -1,12 +1,10 @@
-#' An assortment of functions to help fit HeiDI
+#' An assortment of functions to help fit models
 #' @description
 #' get_optimizer_opts returns a list with options for optimization
-#' fit_predict returns a model prediction given a fit
+#' @param model_pars A character vector specifying the name of the parameters to fit.
+#' @param ll,ul A numeric vector specifying the lower and upper limits of the parameters to fit, respectively
 #' @param optimizer A string specifying the optimizer to use. One from `c("optim")`
 #' @param family A string specifying the family function to generate responses (and calculate the likelihood function with). One from `c("identity", "normal", "poisson")`.
-#' @param fit A fit, as returned by `fit_model`.
-#' @param new_args A tibble with arguments for the model, as returned by `make_model_args`.
-#' @param type The type of prediction. One from `c("response")`. If `response`, the link function used to fit the model is applied to the model function before return.
 #' @note Whenever a family function other than the identity is used, the family-specific parameters will always be appended to the end of the relevant lists.
 #' @rdname fit_helpers
 #' @seealso \code{\link{fit_model}}, \code{\link{make_model_args}}

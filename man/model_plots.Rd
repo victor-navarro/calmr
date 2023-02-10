@@ -5,14 +5,6 @@
 \alias{plot_acts}
 \alias{plot_rs}
 \alias{plot_as}
-\alias{make_plots}
-\alias{plot_common_scale}
-\alias{get_plot_opts}
-\alias{graph_weights}
-\alias{get_graph_opts}
-\alias{make_graphs}
-\alias{patch_graphs}
-\alias{patch_plots}
 \title{Plotting functions for calmr models}
 \usage{
 plot_vs(vals)
@@ -22,38 +14,6 @@ plot_acts(vals, bars = F)
 plot_rs(vals, simple = F)
 
 plot_as(vals)
-
-make_plots(parsed_experiment)
-
-plot_common_scale(plots)
-
-get_plot_opts(common_scale = TRUE)
-
-graph_weights(
-  weights,
-  limits = NULL,
-  colour_key = F,
-  t = max(weights$trial),
-  graph_opts = get_graph_opts()
-)
-
-get_graph_opts(graph_size = "small")
-
-make_graphs(
-  parsed_experiment,
-  limits = max(abs(range(parsed_experiment@parsed_results$vs$value))) * c(-1, 1),
-  t = max(parsed_experiment@parsed_results$vs$trial),
-  graph_opts = get_graph_opts()
-)
-
-patch_graphs(graphs, selection = names(graphs))
-
-patch_plots(
-  plots,
-  selection = NULL,
-  type = NULL,
-  plot_options = get_plot_opts()
-)
 }
 \arguments{
 \item{vals}{A data.frame containing parsed values.}
@@ -62,21 +22,9 @@ patch_plots(
 
 \item{simple}{A logical stipulating whether to simplify the plot by collapsing across sources.}
 
+\item{parsed_results}{A parsed experiment, as returned by parse_experiment_results.}
+
 \item{plots}{A named list with plots}
-
-\item{common_scale}{A logical. Whether to plot the data in a common y-scale.}
-
-\item{weights}{A data.frame containing parsed weights, as returned by parse_experiment_results}
-
-\item{limits}{A vector of length 2 specifying the range of weights. Defaults to the negative and positive maximum of absolute weights.}
-
-\item{t}{An integer denoting the trial of the weights to be graphed. Defaults to the last trial in the data.}
-
-\item{graph_opts}{A list of options for graphing weights}
-
-\item{graph_size}{A string specifying the desired graph size, from c("large", "small"). Default is "large".}
-
-\item{graphs}{A list of graphs, as returned by make_graphs}
 
 \item{selection}{A character vector with the selected plots}
 
@@ -84,7 +32,19 @@ patch_plots(
 
 \item{plot_options}{A list with options}
 
-\item{parsed_results}{A parsed experiment, as returned by parse_experiment_results.}
+\item{common_scale}{A logical. Whether to plot the data in a common y-scale.}
+
+\item{weights}{A data.frame containing parsed weights, as returned by parse_experiment_results}
+
+\item{t}{An integer denoting the trial of the weights to be graphed. Defaults to the last trial in the data.}
+
+\item{limits}{A vector of length 2 specifying the range of weights. Defaults to the negative and positive maximum of absolute weights.}
+
+\item{graph_opts}{A list of options for graphing weights}
+
+\item{graph_size}{A string specifying the desired graph size, from c("large", "small"). Default is "large".}
+
+\item{graphs}{A list of graphs, as returned by make_graphs}
 }
 \description{
 plot_vs, plot_acts, plot_rs, and plot_as plot weights, activations, r-values and alphas from a model.

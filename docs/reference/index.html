@@ -29,6 +29,9 @@
     <a class="dropdown-item" href="../articles/calmr_fits.html">calmr_fits</a>
     <a class="dropdown-item" href="../articles/heidi_math.html">heidi_math</a>
     <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
+    <a class="dropdown-item" href="../articles/MAC1975_math.html">MAC1975_math</a>
+    <a class="dropdown-item" href="../articles/PKH1982_math.html">PKH1982_math</a>
+    <a class="dropdown-item" href="../articles/RW1972_math.html">RW1972_math</a>
   </div>
 </li>
 <li class="nav-item">
@@ -66,6 +69,46 @@
 
       <dl><dt>
           
+          <code><a href="AIC-CalmrFit-method.html">AIC(<i>&lt;CalmrFit&gt;</i>)</a></code> 
+        </dt>
+        <dd>AIC of CalmrFit</dd>
+      </dl><dl><dt>
+          
+          <code><a href="BIC-CalmrFit-method.html">BIC(<i>&lt;CalmrFit&gt;</i>)</a></code> 
+        </dt>
+        <dd>BIC of CalmrFit</dd>
+      </dl><dl><dt>
+          
+          <code><a href="CalmrComparison-class.html">CalmrComparison-class</a></code> 
+        </dt>
+        <dd>S4 class for Calmr Comparisons</dd>
+      </dl><dl><dt>
+          
+          <code><a href="CalmrExperiment-class.html">CalmrExperiment-class</a></code> 
+        </dt>
+        <dd>S4 class for Calmr Experiments</dd>
+      </dl><dl><dt>
+          
+          <code><a href="CalmrFit-class.html">CalmrFit-class</a></code> 
+        </dt>
+        <dd>S4 class for Calmr Fit</dd>
+      </dl><dl><dt>
+          
+          <code><a href="CalmrModel-class.html">CalmrModel-class</a></code> 
+        </dt>
+        <dd>S4 class for Calmr Models</dd>
+      </dl><dl><dt>
+          
+          <code><a href="CalmrRSA-class.html">CalmrRSA-class</a></code> 
+        </dt>
+        <dd>S4 class for Calmr RSA</dd>
+      </dl><dl><dt>
+          
+          <code><a href="CalmrRSATest-class.html">CalmrRSATest-class</a></code> 
+        </dt>
+        <dd>S4 class for Calmr RSA Test</dd>
+      </dl><dl><dt>
+          
           <code><a href="calmr_app.html">calmr_app()</a></code> 
         </dt>
         <dd>Run the calmr GUI</dd>
@@ -78,17 +121,22 @@
           
           <code><a href="dot-combV.html">.combV()</a></code> 
         </dt>
-        <dd>Supporting functions to train the models</dd>
+        <dd>Model support functions</dd>
       </dl><dl><dt>
           
           <code><a href="fit_helpers.html">get_optimizer_opts()</a></code> 
         </dt>
-        <dd>An assortment of functions to help fit HeiDI</dd>
+        <dd>An assortment of functions to help fit models</dd>
       </dl><dl><dt>
           
           <code><a href="fit_model.html">fit_model()</a></code> 
         </dt>
         <dd>Fit model to data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="gen_ss_weights.html">gen_ss_weights()</a></code> 
+        </dt>
+        <dd>Model helpers</dd>
       </dl><dl><dt>
           
           <code><a href="get_exp_opts.html">get_exp_opts()</a></code> 
@@ -104,6 +152,16 @@
           <code><a href="get_model_params.html">get_model_params()</a></code> 
         </dt>
         <dd>Obtain model parameters</dd>
+      </dl><dl><dt>
+          
+          <code><a href="graph-CalmrExperiment-method.html">graph(<i>&lt;CalmrExperiment&gt;</i>)</a></code> 
+        </dt>
+        <dd>Graph model associations</dd>
+      </dl><dl><dt>
+          
+          <code><a href="graph.html">graph()</a></code> 
+        </dt>
+        <dd>Graph model associations</dd>
       </dl><dl><dt>
           
           <code><a href="HD2022.html">HD2022()</a></code> 
@@ -126,21 +184,24 @@
         <dd>Make a tibble to fit a calmr model</dd>
       </dl><dl><dt>
           
-          <code><a href="model_helpers.html">gen_ss_weights()</a></code> <code><a href="model_helpers.html">parse_model()</a></code> <code><a href="model_helpers.html">parse_experiment_results()</a></code> <code><a href="model_helpers.html">aggregate_experiment_results()</a></code> <code><a href="model_helpers.html">filter_calmr_results()</a></code> 
-        </dt>
-        <dd>An assortment of functions to help models</dd>
-      </dl><dl><dt>
-          
           <code><a href="model_info_funcs.html">supported_models()</a></code> <code><a href="model_info_funcs.html">.get_model_parnames()</a></code> 
         </dt>
         <dd>Miscellaneous information functions
 <code>supported_models</code> returns the models supported in the package.
-<code>supported_plots</code> returns the plots supported by argument <code>model</code>.</dd>
+<code>supported_plots</code> returns the plots supported by argument <code>model</code>.
+<code>supported_families</code> returns the families supported by <code>fit_model</code>.
+<code>supported_optimizers</code> returns the optimizers supported by <code>fit_model</code>.
+<code>suported_plots</code> returns the plots supported by argument <code>model</code>.</dd>
       </dl><dl><dt>
           
-          <code><a href="model_plots.html">plot_vs()</a></code> <code><a href="model_plots.html">plot_acts()</a></code> <code><a href="model_plots.html">plot_rs()</a></code> <code><a href="model_plots.html">plot_as()</a></code> <code><a href="model_plots.html">make_plots()</a></code> <code><a href="model_plots.html">plot_common_scale()</a></code> <code><a href="model_plots.html">get_plot_opts()</a></code> <code><a href="model_plots.html">graph_weights()</a></code> <code><a href="model_plots.html">get_graph_opts()</a></code> <code><a href="model_plots.html">make_graphs()</a></code> <code><a href="model_plots.html">patch_graphs()</a></code> <code><a href="model_plots.html">patch_plots()</a></code> 
+          <code><a href="model_plots.html">plot_vs()</a></code> <code><a href="model_plots.html">plot_acts()</a></code> <code><a href="model_plots.html">plot_rs()</a></code> <code><a href="model_plots.html">plot_as()</a></code> 
         </dt>
         <dd>Plotting functions for calmr models</dd>
+      </dl><dl><dt>
+          
+          <code><a href="NLL.html">NLL()</a></code> 
+        </dt>
+        <dd>NLL of CalmrFit</dd>
       </dl><dl><dt>
           
           <code><a href="parse_design.html">parse_design()</a></code> 
@@ -151,6 +212,31 @@
           <code><a href="pati.html">pati</a></code> 
         </dt>
         <dd>Rat responses from Patittucci et al. 2016</dd>
+      </dl><dl><dt>
+          
+          <code><a href="PKH1982.html">PKH1982()</a></code> 
+        </dt>
+        <dd>Train the PKH1982 model</dd>
+      </dl><dl><dt>
+          
+          <code><a href="plot-CalmrExperiment-method.html">plot(<i>&lt;CalmrExperiment&gt;</i>)</a></code> 
+        </dt>
+        <dd>Plot CalmrExperiment</dd>
+      </dl><dl><dt>
+          
+          <code><a href="plot-CalmrRSA-method.html">plot(<i>&lt;CalmrRSA&gt;</i>)</a></code> 
+        </dt>
+        <dd>Plot RSA</dd>
+      </dl><dl><dt>
+          
+          <code><a href="plot-CalmrRSATest-method.html">plot(<i>&lt;CalmrRSATest&gt;</i>)</a></code> 
+        </dt>
+        <dd>Plot RSA test</dd>
+      </dl><dl><dt>
+          
+          <code><a href="predict-CalmrFit-method.html">predict(<i>&lt;CalmrFit&gt;</i>)</a></code> 
+        </dt>
+        <dd>Predict from CalmrFit</dd>
       </dl><dl><dt>
           
           <code><a href="RAND.html">RAND()</a></code> 

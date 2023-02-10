@@ -179,7 +179,7 @@ load(file = "calmr_fits_fit.rda")
 ```
 
 
-The `fit_model` function returns a lot of information to track what we put in and what we got out. However, typing the model in the consol will show the MLE parameters we obtained this time, and their negative log likelihood, given the data:
+The `fit_model` function returns a lot of information to track what we put in and what we got out. However, typing the model in the console will show the MLE parameters we obtained this time and their negative log likelihood, given the data:
 
 ```{r}
 the_fit
@@ -188,7 +188,7 @@ the_fit
 That's good and all, but how well does a model run with those parameters "visually" fit the data? We can obtain the predictions from the model via the `predict` function.
 
 ```{r}
-pati_summ$prediction = predict(the_fit) 
+pati_summ$prediction = predict(the_fit, model_args = my_mod_args) 
 pati_summ %>% rename("data" = "rpert") %>%
     pivot_longer(cols = c("prediction", "data"),
                         names_to = "type",

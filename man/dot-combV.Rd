@@ -2,10 +2,10 @@
 % Please edit documentation in R/model_support_functions.R
 \name{.combV}
 \alias{.combV}
-\title{Supporting functions to train the models}
+\title{Model support functions}
 \usage{
 .combV(V, pre_func, post_func, db_trial = NA)
 }
 \description{
-Supporting functions to train the models
+An assortment of functions to support models (mostly HeiDI)
 }

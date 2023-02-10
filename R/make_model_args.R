@@ -2,16 +2,17 @@
 #'
 #' @param design A design data.frame
 #' @param pars A data.frame containing parameters as returned by `get_model_params`
+#' @param model A string specifying the model name. One of `supported_models()`
 #' @param opts A list with options as returned by `get_exp_opts`
 #'
 #' @return A tibble with the arguments required to run the model. Each row represents a group in the experimental design.
 #'
 #' @seealso \code{\link{parse_design}}, \code{\link{get_model_params}}, \code{\link{get_exp_opts}}
 #' @examples
-#' df <- data.frame(Group = c('Group 1', 'Group 2'), P1 = c('10AB(US)', '10A(US)'), R1 = c(TRUE, TRUE))
-#' des <- parse_design(df)
-#' ps <- get_model_params(des, 0.2)
-#' make_model_args(design = des, pars = ps, model = "HD2022", opts = get_exp_opts(iterations = 1))
+#' des <- data.frame(Group = "G1", P1 = "10A>(US)", R1 = TRUE)
+#' ps <- get_model_params(des, model = "HD2022")
+#' op <- get_exp_opts(iterations = 1)
+#' make_model_args(design = des, pars = ps, model = "HD2022", opts = op)
 #'
 #' @export
 
@@ -169,7 +170,7 @@ make_model_args <- function(design, pars = NULL, model = NULL, opts = get_exp_op
 
 .add_parameters <- function(map, pars, model){
   parnames = .get_model_parnames(model)
-  pars = sapply(parnames, function(p) lapply(map$mapping, function(x) setNames(pars[[p]], pars$stimulus)[unlist(x$unique_nominal_stimuli)]), simplify = F)
+  pars = sapply(parnames, function(p) lapply(map$mapping, function(x) stats::setNames(pars[[p]], pars$stimulus)[unlist(x$unique_nominal_stimuli)]), simplify = F)
   tibble::tibble(map, tibble::as_tibble(pars))
 }
 

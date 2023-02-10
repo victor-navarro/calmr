@@ -33,7 +33,7 @@ PKH1982 <- function(alphas,
                    experience,
                    mapping){
 
-  mod = new("CalmrModel",
+  mod = methods::new("CalmrModel",
             model = "PKH1982")
 
   .calmr_check("no_functional_stimuli", mapping)
@@ -71,6 +71,7 @@ PKH1982 <- function(alphas,
     ee1 = oh_prestims %*% EV
     ie1 = oh_prestims %*% IV
     ne1 = ee1-ie1 #net
+
     #second expectation
     ee2 = oh_poststims %*% EV
     ie2 = oh_poststims %*% IV
@@ -80,6 +81,12 @@ PKH1982 <- function(alphas,
     pre_emat = (EV*oh_prestims) - (IV*oh_prestims)
     post_emat = (EV*oh_poststims) - (IV*oh_poststims)
 
+    #save data
+    evs[t, , ] = EV
+    ivs[t, , ] = IV
+    as[t, ] = alphas
+    es[t, , ] = pre_emat
+
     #learn if we need to
     if (!experience$is_test[t]){
       #get parameters for learning
@@ -88,42 +95,47 @@ PKH1982 <- function(alphas,
       pre_tlambdas[allstims] = lambdas[allstims]
       post_tlambdas[poststims] = lambdas[poststims]
 
-      #Learn associations
+      #association deltas
       #first delta
       #excitatory
       ed1 = oh_prestims*alphas %*% t(pre_tlambdas*betas_ex)
+      ed1 = t(t(ed1) * as.numeric((pre_tlambdas - ne1) > 0)) #only learn when expectation expectation is lower than lambda
+
       #inhibitory ; hack to collapse ne1 into a numeric
-      id1 = oh_prestims*alphas %*% t(abs(pre_tlambdas-as.numeric(ne1))*betas_in)
+      id1 = oh_prestims*alphas %*% t((pre_tlambdas-as.numeric(ne1))*betas_in)
+      id1[id1>0] = 0 #only learn when expectation is higher than lambda
+      id1 = abs(id1)
 
       #second delta
       ed2 = oh_poststims*alphas %*% t(post_tlambdas*betas_ex)
-      id2 = oh_poststims*alphas %*% t(abs(post_tlambdas-as.numeric(ne2))*betas_in)
+      ed2 = t(t(ed2) * as.numeric((post_tlambdas - ne2) > 0)) #only learn when expectation expectation is lower than lambda
+
+      id2 = oh_poststims*alphas %*% t((post_tlambdas-as.numeric(ne2))*betas_in)
+      id2[id2>0] = 0 #only learn when expectation is higher than lambda
+      id2 = abs(id2)
       diag(ed1) = diag(ed2) = diag(id1) = diag(id2) = 0
 
+      #alpha deltas
+      alphasd1 = oh_prestims %*% abs(gammas * (pre_tlambdas-ne1))
+      alphasd2 = oh_poststims %*% abs(gammas * (post_tlambdas-ne2))
+      diag(alphasd1) = diag(alphasd2) = 0
+
+      #learn
       EV = EV+ed1+ed2
       IV = IV+id1+id2
 
-      #Learn alphas
-      #deltas
-      alphasd1 = oh_prestims %*% (gammas * (pre_tlambdas-ne1))
-      alphasd2 = oh_poststims %*% (gammas * (post_tlambdas-ne2))
+      #Need to be careful here, as there is no decay for absent stimuli
+      talphasd = (1-thetas)*alphas + thetas*(rowSums(alphasd1) + rowSums(alphasd2))
+      alphas[allstims] = talphasd[allstims]
 
-      diag(alphasd1) = diag(alphasd2) = 0
-
-      alphas[] = (1-thetas)*alphas + thetas*(rowSums(alphasd1) + rowSums(alphasd2))
       #apply lower limit on alphas
       alphas[] = sapply(1:nstim, function(i) max(min_alphas[i], alphas[i]))
       #apply upper limit on alphas
       alphas[] = sapply(1:nstim, function(i) min(max_alphas[i], alphas[i]))
 
     }
-
-    #save data
-    evs[t, , ] = EV
-    ivs[t, , ] = EV
-    as[t, ] = alphas
-    es[t, , ] = pre_emat
   }
+
   mod@parameters = list(alphas = alphas,
                         min_alphas = min_alphas,
                         max_alphas = max_alphas,
@@ -134,7 +146,6 @@ PKH1982 <- function(alphas,
                            ivs = ivs,
                            as = as,
                            es = es)
-
   mod@experience = experience
   mod@mapping = mapping
   mod

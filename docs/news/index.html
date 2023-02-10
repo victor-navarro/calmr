@@ -29,6 +29,9 @@
     <a class="dropdown-item" href="../articles/calmr_fits.html">calmr_fits</a>
     <a class="dropdown-item" href="../articles/heidi_math.html">heidi_math</a>
     <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
+    <a class="dropdown-item" href="../articles/MAC1975_math.html">MAC1975_math</a>
+    <a class="dropdown-item" href="../articles/PKH1982_math.html">PKH1982_math</a>
+    <a class="dropdown-item" href="../articles/RW1972_math.html">RW1972_math</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -55,15 +58,19 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.0" id="calmr-020">calmr 0.2.0<a class="anchor" aria-label="anchor" href="#calmr-020"></a></h2>
+<ul><li>Added multiple models to package and app (RW1972, PKH1982, MAC1975).</li>
+<li>Implementation of basic S4 classes for model, experiment, fit, and RSA comparison objects, as well as their methods.</li>
+<li>Added genetic algorithms (via <code>GA</code>) for parameter estimation.</li>
+<li>Added basic tools to perform representational similarity analysis.</li>
+<li>Documentation progress.</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="calmr-010">calmr 0.1.0<a class="anchor" aria-label="anchor" href="#calmr-010"></a></h2>
 <ul><li>Major overhaul of the training function (train_pav_model). All relevant calculations are now done as a function of all functional stimuli instead of just the US.</li>
 <li>Support for the specification of expectation/correction steps within the trial via “&gt;”. For example, the trial “A&gt;(US)” will use only A to generate the expectation, but will learn about both stimuli during the correction step.</li>
 <li>The previous plotting function for R-values has been revamped to allow both simple and complex versions. The complex version facets r-values on a predictor basis, and uses colour lines for each target.</li>
 <li>Bugfix related to stimulus saliencies.</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.0.9000" id="calmr-0009000">calmr 0.0.0.9000<a class="anchor" aria-label="anchor" href="#calmr-0009000"></a></h2>
-<ul><li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
 </ul></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>

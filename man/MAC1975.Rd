@@ -23,6 +23,8 @@ MAC1975(
 
 \item{min_alphas}{A named vector with minimum stimulus saliences.}
 
+\item{max_alphas}{A named vector with maximum stimulus saliences.}
+
 \item{betas_on}{A named vector with stimulus associabilities for present stimuli.}
 
 \item{betas_off}{A named vector with stimulus associabilities for absent stimuli.}

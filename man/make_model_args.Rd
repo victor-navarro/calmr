@@ -11,6 +11,8 @@ make_model_args(design, pars = NULL, model = NULL, opts = get_exp_opts())
 
 \item{pars}{A data.frame containing parameters as returned by \code{get_model_params}}
 
+\item{model}{A string specifying the model name. One of \code{supported_models()}}
+
 \item{opts}{A list with options as returned by \code{get_exp_opts}}
 }
 \value{
@@ -20,10 +22,10 @@ A tibble with the arguments required to run the model. Each row represents a gro
 Make a tibble to fit a calmr model
 }
 \examples{
-df <- data.frame(Group = c('Group 1', 'Group 2'), P1 = c('10AB(US)', '10A(US)'), R1 = c(TRUE, TRUE))
-des <- parse_design(df)
-ps <- get_model_params(des, 0.2)
-make_model_args(design = des, pars = ps, model = "HD2022", opts = get_exp_opts(iterations = 1))
+des <- data.frame(Group = "G1", P1 = "10A>(US)", R1 = TRUE)
+ps <- get_model_params(des, model = "HD2022")
+op <- get_exp_opts(iterations = 1)
+make_model_args(design = des, pars = ps, model = "HD2022", opts = op)
 
 }
 \seealso{

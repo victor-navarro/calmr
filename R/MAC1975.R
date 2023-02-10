@@ -2,6 +2,7 @@
 #'
 #' @param alphas A named vector with stimulus saliences.
 #' @param min_alphas A named vector with minimum stimulus saliences.
+#' @param max_alphas A named vector with maximum stimulus saliences.
 #' @param betas_on A named vector with stimulus associabilities for present stimuli.
 #' @param betas_off A named vector with stimulus associabilities for absent stimuli.
 #' @param lambdas A named vector with stimulus asymptotes.
@@ -30,7 +31,7 @@ MAC1975 <- function(alphas,
                     experience,
                     mapping){
 
-  mod = new("CalmrModel",
+  mod = methods::new("CalmrModel",
             model = "MAC1975")
 
   .calmr_check("no_functional_stimuli", mapping)

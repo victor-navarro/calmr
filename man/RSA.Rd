@@ -24,7 +24,7 @@ RSATest(comparison, n_samples = 1000, p = 0.95, ...)
 
 \item{corr_method}{A character specifying the correlation method to be used in \code{cor}. Default is "spearman".}
 
-\item{...}{Additional parameters passed to \code{dist} and \code{cor} (in the case of RSA) or \code{RSA} (in the case of RSATest).}
+\item{...}{Additional parameters passed to \code{stats::dist} and \code{stats::cor} (in the case of RSA) or \code{RSA} (in the case of RSATest).}
 
 \item{n_samples}{An integer specifying the number of samples for the permutation test. Default is 1e3.}
 

@@ -45,7 +45,7 @@ df <- data.frame(Group = c("Same", "Reduced"),
                  R2 = c(FALSE, FALSE))
 params <- data.frame(stimulus = c("A", "X_a", "X_b", "US"),
                      alphas = c(.30, .40, .36, .50))
-model <- run_experiment(design_df = df, model = "HD2022", param_df = params, options = )
+model <- run_experiment(design = df, model = "HD2022", param_df = params, options = )
 ```
 
 ### Plotting the similarity between saliencies
@@ -87,7 +87,7 @@ head(df)
 Run the model.
 
 ```{r}
-model <- run_experiment(design_df = df, model = "HD2022", param_df = params, options = get_exp_opts())
+model <- run_experiment(design = df, model = "HD2022", param_df = params, options = get_exp_opts())
 ```
 
 

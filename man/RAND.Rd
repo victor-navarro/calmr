@@ -14,8 +14,6 @@ RAND(alphas, V = NULL, experience, mapping)
 \item{experience}{A data.frame specifying trials as rows, as returned by \code{make_model_args}}
 
 \item{mapping}{A named list specifying trial and stimulus mapping, as returned by \code{make_model_args}}
-
-\item{lambdas}{A named vector with stimulus asymptotes.}
 }
 \value{
 A list with

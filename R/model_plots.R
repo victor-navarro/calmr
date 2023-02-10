@@ -23,6 +23,7 @@
 #' @param graph_size A string specifying the desired graph size, from c("large", "small"). Default is "large".
 #' @param graphs A list of graphs, as returned by make_graphs
 #' @seealso \code{\link{parse_experiment_results}}
+#' @importFrom ggplot2 .data
 
 #' @rdname model_plots
 plot_vs <- function(vals){
@@ -41,36 +42,63 @@ plot_vs <- function(vals){
     ggplot2::theme_bw()
 }
 
-plot_evs <- function(vals){
+plot_evs <- function(vals, overall = T){
+  vals$value = ifelse(vals$assoc_type == "Excitatory", vals$value, -vals$value)
+  netvals = vals[vals$assoc_type == "Excitatory",]
+  netvals$assoc_type = "Net"
+  netvals$value = netvals$value+vals$value[vals$assoc_type == "Inhibitory"]
+  vals = rbind(vals, netvals)
+  vals$assoc_type = factor(vals$assoc_type, levels = c("Net", "Excitatory", "Inhibitory"))
+
   vals %>%
     dplyr::mutate(trial = ceiling(.data$trial/.data$block_size)) %>%
     dplyr::group_by(.data$trial, .data$phase, .data$s1, .data$s2, .data$assoc_type) %>%
     dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
-    ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s2, linetype = .data$assoc_type)) +
+    ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s2,
+                                 linetype = .data$assoc_type, shape = .data$assoc_type)) +
     ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
     ggplot2::geom_line() +
     ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
     ggplot2::scale_colour_viridis_d(drop = FALSE) +
     ggplot2::scale_x_continuous(breaks = NULL) +
     ggplot2::facet_grid(.data$s1~.data$phase, scales = 'free_x') +
-    ggplot2::labs(x = "Trial/Miniblock", y = 'Strength', colour = 'Target', linetype = "Association Type") +
+    ggplot2::labs(x = "Trial/Miniblock", y = 'Strength', colour = 'Target',
+                  linetype = "Association Type") +
     ggplot2::theme_bw()
+
 }
 
-plot_es <- function(vals){
-  vals %>%
+plot_es <- function(vals, overall = T){
+  vals = vals %>%
     dplyr::mutate(trial = ceiling(.data$trial/.data$block_size)) %>%
     dplyr::group_by(.data$trial, .data$phase, .data$trial_type, .data$s1, .data$s2) %>%
-    dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
-    ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s1)) +
-    ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
-    ggplot2::geom_line() +
-    ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
-    ggplot2::scale_colour_viridis_d(drop = FALSE) +
-    ggplot2::scale_x_continuous(breaks = NULL) +
-    ggplot2::facet_grid(.data$s2~.data$phase+.data$trial_type, scales = 'free_x') +
-    ggplot2::labs(x = "Trial/Miniblock", y = 'Strength', colour = 'Source') +
-    ggplot2::theme_bw()
+    dplyr::summarise(value = mean(.data$value), .groups = "drop")
+
+  if (overall){
+    vals %>%
+      dplyr::group_by(.data$trial, .data$phase, .data$trial_type, .data$s2) %>%
+      dplyr::summarise(value = sum(.data$value)) %>%
+      ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s2)) +
+      ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
+      ggplot2::geom_line() +
+      ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
+      ggplot2::scale_colour_viridis_d(drop = FALSE) +
+      ggplot2::scale_x_continuous(breaks = NULL) +
+      ggplot2::facet_grid(~.data$phase+.data$trial_type, scales = 'free_x') +
+      ggplot2::labs(x = "Trial/Miniblock", y = 'Expectation Strength', colour = 'Target') +
+      ggplot2::theme_bw()
+  }else{
+    vals %>%
+      ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s2)) +
+      ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
+      ggplot2::geom_line() +
+      ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
+      ggplot2::scale_colour_viridis_d(drop = FALSE) +
+      ggplot2::scale_x_continuous(breaks = NULL) +
+      ggplot2::facet_grid(.data$s1~.data$phase+.data$trial_type, scales = 'free_x') +
+      ggplot2::labs(x = "Trial/Miniblock", y = 'Expectation Strength', colour = 'Target') +
+      ggplot2::theme_bw()
+  }
 }
 
 #' @rdname model_plots
@@ -169,8 +197,6 @@ plot_as <- function(vals){
     ggplot2::theme_bw()
 }
 
-#' @rdname model_plots
-#' @export
 make_plots <- function(parsed_experiment){
   if (!is.null(parsed_experiment)){
     if (!("CalmrExperiment" %in% class(parsed_experiment))) stop("parsed_experiment must be a CalmrExperiment")
@@ -180,7 +206,9 @@ make_plots <- function(parsed_experiment){
     plotlist = list()
     for (g in unique(parsed_results[[1]]$group)){
       for (p in 1:length(plot_funs)){
-        plotlist[[sprintf("%s: %s", g, plot_funs[[p]]$name)]] = plot_funs[[p]]$fun(subset(parsed_results[[p]], group == g))
+        plotlist[[sprintf("%s: %s", g, plot_funs[[p]]$name)]] = {
+          dat = parsed_results[[p]] %>% dplyr::filter(.data$group == g)
+          plot_funs[[p]]$fun(dat)}
       }
     }
     plotlist
@@ -189,16 +217,13 @@ make_plots <- function(parsed_experiment){
 
 .get_plot_functions <- function(name){
   defs = list("as" = list(fun = plot_as, name = "Alphas"),
-         "acts" = list(fun = plot_acts, name = "Activations"),
-         "rs" = list(fun = plot_rs, name = "Responses"),
-         "vs" = list(fun = plot_vs, name = "Associations"),
-         "es" = list(fun = plot_es, name = "Expectations"))
+              "acts" = list(fun = plot_acts, name = "Activations"),
+              "rs" = list(fun = plot_rs, name = "Responses"),
+              "vs" = list(fun = plot_vs, name = "Associations"),
+              "es" = list(fun = plot_es, name = "Expectations"))
   defs[name]
 }
 
-
-#' @rdname model_plots
-#' @export
 plot_common_scale <- function(plots){
   #get min and max y-scale
   ranges = unlist(lapply(plots, function(p) ggplot2::layer_scales(p)$y$range$range))
@@ -210,14 +235,10 @@ plot_common_scale <- function(plots){
   plots
 }
 
-#' @rdname model_plots
-#' @export
 get_plot_opts <- function(common_scale = TRUE){
   return(list(common_scale = common_scale))
 }
 
-#' @rdname model_plots
-#' @export
 graph_weights <- function(weights, limits = NULL, colour_key = F,
                           t = max(weights$trial), graph_opts = get_graph_opts()){
   if (is.null(limits)){
@@ -252,7 +273,6 @@ graph_weights <- function(weights, limits = NULL, colour_key = F,
   p
 }
 
-#' @rdname model_plots
 #' @export
 get_graph_opts <- function(graph_size = "small"){
   if (graph_size == "large"){
@@ -284,8 +304,6 @@ get_graph_opts <- function(graph_size = "small"){
 
 }
 
-#' @rdname model_plots
-#' @export
 make_graphs <- function(parsed_experiment,
                         limits = max(abs(range(parsed_experiment@parsed_results$vs$value)))*c(-1, 1),
                         t = max(parsed_experiment@parsed_results$vs$trial),
@@ -293,7 +311,7 @@ make_graphs <- function(parsed_experiment,
   plotlist = list()
   vs = parsed_experiment@parsed_results$vs
   for (g in unique(vs$group)){
-    gdat = subset(vs, group == g)
+    gdat = vs[vs$group == g,]
     gtmax = max(gdat$trial)
     plot_t = t
     if (t > gtmax){
@@ -310,8 +328,6 @@ make_graphs <- function(parsed_experiment,
   plotlist
 }
 
-#' @rdname model_plots
-#' @export
 patch_graphs <- function(graphs, selection = names(graphs)){
   #expects a list of graphs via make_graphs/graph_weights
   graphs = graphs[selection]
@@ -319,8 +335,6 @@ patch_graphs <- function(graphs, selection = names(graphs)){
   cow
 }
 
-#' @rdname model_plots
-#' @export
 patch_plots <- function(plots, selection = NULL, type = NULL, plot_options = get_plot_opts()){
   type_mapping = data.frame(type = c("vs", "rs_simple", "rs_complex", "acts_learning", "acts_bar", "as"),
                             str = c(": Vs", ': Rs \\(simple\\)', ': Rs \\(complex\\)', ': Acts \\(learning\\)', ': Acts \\(bar\\)', ": As"))

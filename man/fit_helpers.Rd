@@ -2,7 +2,7 @@
 % Please edit documentation in R/fit_helpers.R
 \name{get_optimizer_opts}
 \alias{get_optimizer_opts}
-\title{An assortment of functions to help fit HeiDI}
+\title{An assortment of functions to help fit models}
 \usage{
 get_optimizer_opts(
   model_pars,
@@ -13,19 +13,16 @@ get_optimizer_opts(
 )
 }
 \arguments{
+\item{model_pars}{A character vector specifying the name of the parameters to fit.}
+
+\item{ll, ul}{A numeric vector specifying the lower and upper limits of the parameters to fit, respectively}
+
 \item{optimizer}{A string specifying the optimizer to use. One from \code{c("optim")}}
 
 \item{family}{A string specifying the family function to generate responses (and calculate the likelihood function with). One from \code{c("identity", "normal", "poisson")}.}
-
-\item{fit}{A fit, as returned by \code{fit_model}.}
-
-\item{new_args}{A tibble with arguments for the model, as returned by \code{make_model_args}.}
-
-\item{type}{The type of prediction. One from \code{c("response")}. If \code{response}, the link function used to fit the model is applied to the model function before return.}
 }
 \description{
 get_optimizer_opts returns a list with options for optimization
-fit_predict returns a model prediction given a fit
 }
 \note{
 Whenever a family function other than the identity is used, the family-specific parameters will always be appended to the end of the relevant lists.

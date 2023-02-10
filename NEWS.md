@@ -1,3 +1,11 @@
+# calmr 0.2.0
+
+* Added multiple models to package and app (RW1972, PKH1982, MAC1975).
+* Implementation of basic S4 classes for model, experiment, fit, and RSA comparison objects, as well as their methods.
+* Added genetic algorithms (via `GA`) for parameter estimation.
+* Added basic tools to perform representational similarity analysis.
+* Documentation progress.
+
 # calmr 0.1.0
 
 * Major overhaul of the training function (train_pav_model). All relevant calculations are now done as a function of all functional stimuli instead of just the US.
@@ -5,6 +13,3 @@
 * The previous plotting function for R-values has been revamped to allow both simple and complex versions. The complex version facets r-values on a predictor basis, and uses colour lines for each target.
 * Bugfix related to stimulus saliencies.
 
-# calmr 0.0.0.9000
-
-* Added a `NEWS.md` file to track changes to the package.

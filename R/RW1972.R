@@ -23,7 +23,7 @@ RW1972 <- function(alphas,
                    experience,
                    mapping){
 
-  mod = new("CalmrModel",
+  mod = methods::new("CalmrModel",
             model = "RW1972")
 
   #data initialization

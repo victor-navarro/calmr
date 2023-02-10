@@ -34,7 +34,7 @@ setMethod("show", "CalmrRSA", function(object){
   print(object@corr_mat)
 })
 setMethod("show", "CalmrRSATest", function(object){
-  show(object@RSA)
+  methods::show(object@RSA)
   cat("\nSignificance matrix:\n\n")
   print(object@sig_mat)
   cat(sprintf("\n%d permutation samples, two-tailed test with alpha = %1.2f.\n",
@@ -55,19 +55,28 @@ setMethod("summary", "CalmrExperiment", function(object, ...){
 })
 
 #### Ploting methods ####
+#' Plot CalmrExperiment
+#'
+#' Creates a plot depicting results from CalmrExperiment
+#'
+#' @param x An object of class \code{\link{CalmrExperiment-class}}.
+#' @param type A string specifying the type of plot to create. See ??supported_plots.
+#' @param ... Additional parameters passed to the plotting function.
+#' @return A ggplot object
+#' @export
 setMethod("plot", "CalmrExperiment",
           function(x, type = NULL, ...){
             if (is.null(type)){ type = "vs"}
             if (!x@is_parsed){ x = parse_experiment_results(x)} #parse if model has not been parsed
             .calmr_check("supported_plot", type, names(x@parsed_results))
             plotf = get(paste0("plot_", type))
-
             if (type %in% c("evs", "ivs")){
               dat = rbind(data.frame(x@parsed_results[["evs"]], assoc_type = "Excitatory"),
                           data.frame(x@parsed_results[["ivs"]], assoc_type = "Inhibitory"))
             }else{
               dat = x@parsed_results[[type]]
             }
+
             groups = unique(dat$group)
             ps = sapply(groups, function(g) plotf(dat[dat$group == g,], ...) + ggplot2::labs(title = sprintf("Group = %s", g)), simplify = F)
             names(ps) = groups
@@ -102,13 +111,22 @@ setMethod("plot", "CalmrExperiment",
 #
 # })
 
+#' Plot RSA
+#'
+#' Plot a correlogram from RSA results
+#'
+#' @param x An object of class \code{\link{CalmrRSA-class}}.
+#' @param ... Additional parameters passed to the plotting function.
+#' @return A ggplot object
 #' @export
 setMethod("plot", "CalmrRSA",
           function(x, ...){
             corrmat = x@corr_mat
             corrmat[lower.tri(corrmat)] = NA
             dat = data.frame(as.table(corrmat))
-            dat %>% ggplot2::ggplot(ggplot2::aes(x = Var1, y = Var2, fill = Freq, label = round(Freq, 2))) +
+            dat$label = round(dat$Freq, 2)
+            dat %>% ggplot2::ggplot(ggplot2::aes_string(x = "Var1", y = "Var2",
+                                                        fill = "Freq", label = "label")) +
               ggplot2::geom_tile(na.rm = T) +
               ggplot2::geom_text(na.rm = T) +
               ggplot2::scale_fill_gradient2(limits = c(-1, 1), na.value = "white") +
@@ -118,6 +136,14 @@ setMethod("plot", "CalmrRSA",
               ggplot2::scale_x_discrete(position = "top")
           })
 
+#' Plot RSA test
+#'
+#' Plot a correlogram from RSA test results
+#'
+#' @param x An object of class \code{\link{CalmrRSATest-class}}.
+#' @param ... Additional parameters passed to the plotting function.
+#' @return A ggplot object
+#' @export
 setMethod("plot", "CalmrRSATest",
           function(x, ...){
             p = plot(x@RSA)
@@ -125,21 +151,48 @@ setMethod("plot", "CalmrRSATest",
             sigmat[lower.tri(sigmat)] = NA
             dat = p$data
             dat$sig = data.frame(as.table(sigmat))$Freq
-            p + ggplot2::geom_label(data = na.omit(dat[dat$sig,]), fill = "white")
+            p + ggplot2::geom_label(data = stats::na.omit(dat[dat$sig,]), fill = "white")
           })
 
+#' Graph model associations
+#'
+#' Creates a network graph of model associations
+#'
+#' @param x An object of class \code{\link{CalmrModel-class}} or \code{\link{CalmrExperiment-class}}.
+#' @param ... Additional parameters passed to the \code{\link{graph_weights}} function.
+#' @return A ggplot object
 #' @export
 graph <- function(x, ...) NULL
 setMethod("graph", "CalmrModel", function(x, ...){
   if (x@is_parsed){
-    graph_weights(x@model_results$vs, ...)
+    if (any(c("evs", "ivs") %in% names(x@model_results))){
+      dat = x@model_results$evs
+      dat$value = dat$value - x@model_results$ivs$value
+      graph_weights(dat, ...)
+    }else{
+      graph_weights(x@model_results$vs, ...)
+    }
   }else{
-    graph_weights(.parse(x, "vs"), ...)
+    # TODO: Implement this for unparsed models
+    stop("The graph method requires a parsed model.")
   }
 })
 
+#' Graph model associations
+#'
+#' Creates a network graph of model associations
+#'
+#' @param x An object of class \code{\link{CalmrModel-class}} or \code{\link{CalmrExperiment-class}}.
+#' @param ... Additional parameters passed to the \code{\link{graph_weights}} function.
+#' @return A ggplot object
+#' @export
 setMethod("graph", "CalmrExperiment", function(x, ...){
-  dat = x@parsed_results$vs
+  if (any(c("evs", "ivs") %in% names(x@parsed_results))){
+    dat = x@parsed_results$evs
+    dat$value = dat$value - x@parsed_results$ivs$value
+  }else{
+    dat = x@parsed_results$vs
+  }
   groups = unique(dat$group)
   ps = sapply(groups, function(g) graph_weights(dat[dat$group == g,], ...) +
                 ggplot2::labs(title = sprintf("Group = %s", g)), simplify = F)
@@ -148,6 +201,13 @@ setMethod("graph", "CalmrExperiment", function(x, ...){
 })
 
 #### Predict methods ####
+#' Predict from CalmrFit
+#'
+#' Obtain a prediction from CalmrFit
+#'
+#' @param object An object of class \code{\link{CalmrFit-class}}.
+#' @param type A string. If `response`, model responses are transformed via the link function.
+#' @param ... Additional parameters passed to the function (`object@model_function`).
 #' @export
 setMethod("predict", "CalmrFit",
           function(object, type = "response", ...){
@@ -159,18 +219,41 @@ setMethod("predict", "CalmrFit",
           })
 
 #### GOF methods ####
+#' NLL of CalmrFit
+#'
+#' Returns the negative log likelihood of a model fit via calmr::fit_model
+#'
+#' @param object An object of class \code{\link{CalmrFit-class}}.
+#' @param ... Unused
+#' @return A numeric
 #' @export
 NLL <- function(object, ...) NULL
 setMethod("NLL", "CalmrFit", function(object){
   object@nloglik
 })
 
+#' AIC of CalmrFit
+#'
+#' Returns the Akaike Information Criterion of a model fit via calmr::fit_model
+#'
+#' @param object An object of class \code{\link{CalmrFit-class}}.
+#' @param ... Unused
+#' @param k Numeric. Penalty term (default = 2)
+#' @return A numeric
+#' @details The AIC is defined as `2*k - 2*-NLL`, where k is a penalty term and NLL is the negative log likelihood of the model.
 #' @export
 setMethod("AIC", "CalmrFit",
           function(object, ..., k = 2){
             2*k - 2*-object@nloglik
           })
-
+#' BIC of CalmrFit
+#'
+#' Returns the Bayesian Information Criterion of a model fit via calmr::fit_model
+#'
+#' @param object An object of class \code{\link{CalmrFit-class}}.
+#' @param ... Unused
+#' @return A numeric
+#' @details The AIC is defined as `k*log(n) - 2*-NLL`, where k is the number of parameters in the model and n is the number of observations
 #' @export
 setMethod("BIC", "CalmrFit",
           function(object, ...){

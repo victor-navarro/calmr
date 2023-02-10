@@ -29,6 +29,9 @@
     <a class="dropdown-item" href="../articles/calmr_fits.html">calmr_fits</a>
     <a class="dropdown-item" href="../articles/heidi_math.html">heidi_math</a>
     <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
+    <a class="dropdown-item" href="../articles/MAC1975_math.html">MAC1975_math</a>
+    <a class="dropdown-item" href="../articles/PKH1982_math.html">PKH1982_math</a>
+    <a class="dropdown-item" href="../articles/RW1972_math.html">RW1972_math</a>
   </div>
 </li>
 <li class="nav-item">
@@ -67,11 +70,15 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>design</dt>
-<dd><p>A design tibble, as returned by <code>parse_design</code></p></dd>
+<dd><p>A design data.frame</p></dd>
 
 
 <dt>pars</dt>
 <dd><p>A data.frame containing parameters as returned by <code>get_model_params</code></p></dd>
+
+
+<dt>model</dt>
+<dd><p>A string specifying the model name. One of <code><a href="model_info_funcs.html">supported_models()</a></code></p></dd>
 
 
 <dt>opts</dt>
@@ -91,11 +98,14 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Group 1'</span>, <span class="st">'Group 2'</span><span class="op">)</span>, P1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'10AB(US)'</span>, <span class="st">'10A(US)'</span><span class="op">)</span>, R1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">des</span> <span class="op">&lt;-</span> <span class="fu"><a href="parse_design.html">parse_design</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">ps</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_model_params.html">get_model_params</a></span><span class="op">(</span><span class="va">des</span>, <span class="fl">0.2</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">make_model_args</span><span class="op">(</span>design <span class="op">=</span> <span class="va">des</span>, pars <span class="op">=</span> <span class="va">ps</span>, model <span class="op">=</span> <span class="st">"HD2022"</span>, opts <span class="op">=</span> <span class="fu"><a href="get_exp_opts.html">get_exp_opts</a></span><span class="op">(</span>iterations <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object of type 'closure' is not subsettable</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">des</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Group <span class="op">=</span> <span class="st">"G1"</span>, P1 <span class="op">=</span> <span class="st">"10A&gt;(US)"</span>, R1 <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">ps</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_model_params.html">get_model_params</a></span><span class="op">(</span><span class="va">des</span>, model <span class="op">=</span> <span class="st">"HD2022"</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_exp_opts.html">get_exp_opts</a></span><span class="op">(</span>iterations <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">make_model_args</span><span class="op">(</span>design <span class="op">=</span> <span class="va">des</span>, pars <span class="op">=</span> <span class="va">ps</span>, model <span class="op">=</span> <span class="st">"HD2022"</span>, opts <span class="op">=</span> <span class="va">op</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 x 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   model  iteration group experience    mapping          alphas   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> HD2022         1 G1    <span style="color: #949494;">&lt;df [10 x 5]&gt;</span> <span style="color: #949494;">&lt;named list [9]&gt;</span> <span style="color: #949494;">&lt;dbl [2]&gt;</span></span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>

@@ -1,6 +1,7 @@
 #' @title Run experiment
 #' @description Runs an experiment with minimal parameters.
 #' @param design A data.frame of dimensions G,2*P+1; where G is the number of groups and P is the number of phases.
+#' @param model A string specifying the model name. One of `supported_models()`
 #' @param param_df A data.frame of dimensions N,2; where N is the number of stimuli in the experimental design.
 #' @param options A list of options, as returned by `get_exp_opts`.
 #' @param parse A logical specifying whether the results should be parsed via `parse_experiment_results`. Default = TRUE.

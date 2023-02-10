@@ -83,9 +83,9 @@ fit_model <- function(data, model_function, optimizer_options, file = NULL, ...)
     names(best_pars) = unlist(optimizer_options[c('stim_names', 'family_pars')])
   }
 
-  fit <- new("CalmrFit",
+  fit <- methods::new("CalmrFit",
              nloglik = best_nloglik,
-             best_pars = setNames(best_pars, optimizer_options$all_pars),
+             best_pars = stats::setNames(best_pars, optimizer_options$all_pars),
              model_pars = best_pars[model_par_pointers],
              link_pars = best_pars[link_par_pointers],
              data = data,

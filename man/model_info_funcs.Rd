@@ -5,17 +5,23 @@
 \alias{.get_model_parnames}
 \title{Miscellaneous information functions
 \code{supported_models} returns the models supported in the package.
-\code{supported_plots} returns the plots supported by argument \code{model}.}
+\code{supported_plots} returns the plots supported by argument \code{model}.
+\code{supported_families} returns the families supported by \code{\link{fit_model}}.
+\code{supported_optimizers} returns the optimizers supported by \code{\link{fit_model}}.
+\code{suported_plots} returns the plots supported by argument \code{model}.}
 \usage{
 supported_models()
 
 .get_model_parnames(model)
 }
 \arguments{
-\item{model}{A string specifying a model. One in \code{supported_models()}}
+\item{model}{A string specifying a model. One from \code{supported_models()}}
 }
 \description{
 Miscellaneous information functions
 \code{supported_models} returns the models supported in the package.
 \code{supported_plots} returns the plots supported by argument \code{model}.
+\code{supported_families} returns the families supported by \code{\link{fit_model}}.
+\code{supported_optimizers} returns the optimizers supported by \code{\link{fit_model}}.
+\code{suported_plots} returns the plots supported by argument \code{model}.
 }

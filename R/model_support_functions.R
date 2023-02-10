@@ -1,4 +1,5 @@
-#' Supporting functions to train the models
+#' Model support functions
+#' @description An assortment of functions to support models (mostly HeiDI)
 
 #Calculation of combined V
 .combV <- function(V, pre_func, post_func, db_trial = NA){

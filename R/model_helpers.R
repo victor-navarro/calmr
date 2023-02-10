@@ -1,23 +1,6 @@
-#' An assortment of functions to help models
-#' @description
-#' get_model_params generates a data.frame with stimulus salience parameters.
-#' gen_ss_weights generates a named matrix with model weights.
-#' model_vs, parse_acts, parse_rs, parse_as and parse_experiment_results parse the raw outputs of a model into tibbles.
-#' filter_calmr_results is a convenience function to filter specific phase and trial_type data.
-#' @param stims A character vector with stimuli
-#' @param default_val Default alpha value
-#' @param mod A model list
-#' @param raw_results A tibble with model information, as returned by run_experiment
-#' @param parsed_results A list with parsed results, as returned by parse_experiment_results
-#' @param filters A named list containing "phase" and "trial_type" character vectors, for filtering data
-#' @importFrom rlang .data
-#' @seealso \code{\link{parse_design}}, \code{\link{HDI2020}}, \code{\link{run_experiment}}
-#' @name model_helpers
-NULL
-#> NULL
+#' Model helpers
+#' @description An assorment of functions to help models
 
-#' @rdname model_helpers
-#' @export
 gen_ss_weights <- function(stims, default_val = 0){
   mat = matrix(default_val, ncol = length(stims), nrow = length(stims)) #perhaps a diagonal with 1s? Would accommodate self-association but increases model complexity.
   rownames(mat) = stims
@@ -85,8 +68,6 @@ gen_ss_weights <- function(stims, default_val = 0){
   dat
 }
 
-#' @rdname model_helpers
-#' @export
 parse_model <- function(model){
   toparse = names(model@model_results)
   for (p in toparse){
@@ -95,16 +76,12 @@ parse_model <- function(model){
   model
 }
 
-
-#' @rdname model_helpers
-#' @export
 parse_experiment_results <- function(experiment, aggregate = T){
   #expects a tibble with one row per group
   #returns a list with all the relevant data for exporting (and plotting)
-
   if (!experiment@is_parsed){
     experiment@results = experiment@results %>% dplyr::rowwise() %>%
-      dplyr::mutate(parsed_mod_responses = list(parse_model(mod_data)@model_results))
+      dplyr::mutate(parsed_mod_responses = list(parse_model(.data$mod_data)@model_results))
     experiment@is_parsed = TRUE
   }
 
@@ -114,8 +91,6 @@ parse_experiment_results <- function(experiment, aggregate = T){
   experiment
 }
 
-#' @rdname model_helpers
-#' @export
 aggregate_experiment_results <- function(parsed_experiment){
   if (!parsed_experiment@is_parsed) stop("Experiment is not parsed.")
   agg = list()
@@ -178,7 +153,6 @@ aggregate_experiment_results <- function(parsed_experiment){
   dat
 }
 
-#' @rdname model_helpers
 filter_calmr_results <- function(parsed_experiment, filters){
   if (!is.null(parsed_experiment)){
     parsed_experiment@parsed_results = lapply(parsed_experiment@parsed_results, function(x) x %>% dplyr::filter(.data$phase %in% filters$phase & .data$trial_type %in% filters$trial_type))
