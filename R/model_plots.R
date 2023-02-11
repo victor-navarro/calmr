@@ -202,13 +202,21 @@ make_plots <- function(parsed_experiment){
     if (!("CalmrExperiment" %in% class(parsed_experiment))) stop("parsed_experiment must be a CalmrExperiment")
     parsed_results = parsed_experiment@parsed_results
     plot_types = names(parsed_results)
+    if ("ivs" %in% plot_types){
+      plot_types = plot_types[plot_types != "ivs"]
+    }
     plot_funs = .get_plot_functions(plot_types)
     plotlist = list()
     for (g in unique(parsed_results[[1]]$group)){
       for (p in 1:length(plot_funs)){
-        plotlist[[sprintf("%s: %s", g, plot_funs[[p]]$name)]] = {
-          dat = parsed_results[[p]] %>% dplyr::filter(.data$group == g)
-          plot_funs[[p]]$fun(dat)}
+        if (plot_types[p] == "evs"){
+          dat = parsed_results$evs
+          dat$value = dat$value-parsed_results$ivs$value
+        }else{
+          dat = parsed_results[[p]]
+        }
+        dat = dat %>% dplyr::filter(.data$group == g)
+        plotlist[[sprintf("%s: %s", g, plot_funs[[p]]$name)]] = plot_funs[[p]]$fun(dat)
       }
     }
     plotlist
@@ -220,7 +228,8 @@ make_plots <- function(parsed_experiment){
               "acts" = list(fun = plot_acts, name = "Activations"),
               "rs" = list(fun = plot_rs, name = "Responses"),
               "vs" = list(fun = plot_vs, name = "Associations"),
-              "es" = list(fun = plot_es, name = "Expectations"))
+              "es" = list(fun = plot_es, name = "Expectations"),
+              "evs" = list(fun = plot_evs, name = "Associations"))
   defs[name]
 }
 
