@@ -153,7 +153,7 @@ shiny::shinyServer(function(input, output){
       })
       shiny::withProgress(message = "Making plots...", value = 0, {
         plots(calmr:::make_plots(calmr:::filter_calmr_results(parsed_experiment(), plot_filters())))
-        graphs(graph(parsed_experiment()))
+        graphs(calmr:::make_graphs(parsed_experiment()))
         shiny::setProgress(1)
       })
       ran(TRUE)
@@ -226,7 +226,7 @@ shiny::shinyServer(function(input, output){
   #remaking the graphs on graph_trial change
   shiny::observeEvent(input$graph_trial, {
     if (!is.null(parsed_experiment())){
-      graphs(graph(parsed_experiment(), t = input$graph_trial))
+      graphs(calmr:::make_graphs(parsed_experiment(), t = input$graph_trial))
     }
   })
 
