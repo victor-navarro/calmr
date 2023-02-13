@@ -1,12 +1,5 @@
-#' Model helpers
+#' Model parsers
 #' @description An assorment of functions to help models
-
-gen_ss_weights <- function(stims, default_val = 0){
-  mat = matrix(default_val, ncol = length(stims), nrow = length(stims)) #perhaps a diagonal with 1s? Would accommodate self-association but increases model complexity.
-  rownames(mat) = stims
-  colnames(mat) = stims
-  return(mat)
-}
 
 .parse <- function(mod, type){
   #check if mod has the type
@@ -77,8 +70,8 @@ parse_model <- function(model){
 }
 
 parse_experiment_results <- function(experiment, aggregate = T){
-  #expects a tibble with one row per group
-  #returns a list with all the relevant data for exporting (and plotting)
+  #expects a CalmrExperiment
+  #puts in it a list with all the relevant data for exporting (and plotting)
   if (!experiment@is_parsed){
     experiment@results = experiment@results %>% dplyr::rowwise() %>%
       dplyr::mutate(parsed_mod_responses = list(parse_model(.data$mod_data)@model_results))
@@ -92,12 +85,16 @@ parse_experiment_results <- function(experiment, aggregate = T){
 }
 
 aggregate_experiment_results <- function(parsed_experiment){
-  if (!parsed_experiment@is_parsed) stop("Experiment is not parsed.")
   agg = list()
   vars = names(parsed_experiment@results$parsed_mod_responses[[1]])
   dat = parsed_experiment@results %>%
     tidyr::unnest_wider(.data$parsed_mod_responses) %>%
     dplyr::ungroup()
+  #check for Konorskian models
+  if (all(c("evs", "ivs") %in% vars)){
+    vars = vars[!(vars %in% c("evs", "ivs"))]
+    vars = c(vars, "eivs")
+  }
   for (t in vars){
     agg[[t]] = .aggregate_results(dat, t)
   }
@@ -115,7 +112,7 @@ aggregate_experiment_results <- function(parsed_experiment){
                     s2 = as.factor(.data$s2), trial_type = as.factor(.data$trial_type),
                     phase = as.factor(.data$phase))
   }
-  if (type %in% c("vs", "evs", "ivs")){
+  if (type == "vs"){
     dat = do.call("rbind", res[[type]]) %>%
       dplyr::group_by(.data$group, .data$trial, .data$trial_type, .data$phase,
                       .data$s1, .data$s2, .data$block_size) %>% #summarize
@@ -123,6 +120,26 @@ aggregate_experiment_results <- function(parsed_experiment){
       dplyr::mutate(group = as.factor(.data$group), s1 = as.factor(.data$s1),
                     s2 = as.factor(.data$s2), trial_type = as.factor(.data$trial_type),
                     phase = as.factor(.data$phase))
+  }
+  if (type == "eivs"){
+    ev = do.call("rbind", res$evs) %>%
+      dplyr::group_by(.data$group, .data$trial, .data$trial_type, .data$phase,
+                      .data$s1, .data$s2, .data$block_size) %>% #summarize
+      dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
+      dplyr::mutate(group = as.factor(.data$group), s1 = as.factor(.data$s1),
+                    s2 = as.factor(.data$s2), trial_type = as.factor(.data$trial_type),
+                    phase = as.factor(.data$phase), assoc_type = "Excitatory")
+    iv = do.call("rbind", res$ivs) %>%
+      dplyr::group_by(.data$group, .data$trial, .data$trial_type, .data$phase,
+                      .data$s1, .data$s2, .data$block_size) %>% #summarize
+      dplyr::summarise(value = -mean(.data$value), .groups = "drop") %>%
+      dplyr::mutate(group = as.factor(.data$group), s1 = as.factor(.data$s1),
+                    s2 = as.factor(.data$s2), trial_type = as.factor(.data$trial_type),
+                    phase = as.factor(.data$phase), assoc_type = "Inhibitory")
+    net = ev
+    net$value = net$value+iv$value
+    net$assoc_type = "Net"
+    dat = rbind(ev, iv, net)
   }
   if (type == "as"){
     dat = do.call("rbind", res$as) %>%

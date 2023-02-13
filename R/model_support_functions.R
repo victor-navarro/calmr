@@ -1,6 +1,14 @@
 #' Model support functions
 #' @description An assortment of functions to support models (mostly HeiDI)
 
+#Generate a matrix with named columns and rows
+gen_ss_weights <- function(stims, default_val = 0){
+  mat = matrix(default_val, ncol = length(stims), nrow = length(stims))
+  rownames(mat) = stims
+  colnames(mat) = stims
+  return(mat)
+}
+
 #Calculation of combined V
 .combV <- function(V, pre_func, post_func, db_trial = NA){
   #V is a weight matrix,

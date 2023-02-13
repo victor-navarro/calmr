@@ -29,7 +29,7 @@ supported_plots <- function(model = NULL){
     "HD2022" = c("as", "acts", "rs", "vs"),
     "RW1972" = c("es", "vs"),
     "MAC1975" = c("as", "es", "vs"),
-    "PKH1982" = c("as", "es", "evs"),
+    "PKH1982" = c("as", "es", "eivs"),
     "RAND" = c("es", "vs")
   )
   if (is.null(model)){

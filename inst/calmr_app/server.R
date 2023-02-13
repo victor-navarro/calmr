@@ -148,12 +148,12 @@ shiny::shinyServer(function(input, output){
       raw_results(res)
       #parse results
       shiny::withProgress(message = "Parsing results...", value = 0, {
-        parsed_experiment(calmr::parse_experiment_results(raw_results()))
+        parsed_experiment(calmr:::parse_experiment_results(raw_results()))
         shiny::setProgress(1)
       })
       shiny::withProgress(message = "Making plots...", value = 0, {
-        plots(calmr::make_plots(calmr:::filter_calmr_results(parsed_experiment(), plot_filters())))
-        graphs(calmr::make_graphs(parsed_experiment()))
+        plots(calmr:::make_plots(calmr:::filter_calmr_results(parsed_experiment(), plot_filters())))
+        graphs(calmr:::make_graphs(parsed_experiment()))
         shiny::setProgress(1)
       })
       ran(TRUE)
@@ -217,7 +217,7 @@ shiny::shinyServer(function(input, output){
 
   #populating the slider for graph_trial selection
   shiny::observeEvent(parsed_experiment(), {
-    last_trial = max(parsed_experiment()@parsed_results$vs$trial)
+    last_trial = max(parsed_experiment()@parsed_results[[1]]$trial)
     shiny::updateSliderInput(inputId = "graph_trial",
                              value = last_trial,
                              max = last_trial)
@@ -226,7 +226,7 @@ shiny::shinyServer(function(input, output){
   #remaking the graphs on graph_trial change
   shiny::observeEvent(input$graph_trial, {
     if (!is.null(parsed_experiment())){
-      graphs(calmr::make_graphs(parsed_experiment(), t = input$graph_trial))
+      graphs(calmr:::make_graphs(parsed_experiment(), t = input$graph_trial))
     }
   })
 
@@ -265,7 +265,7 @@ shiny::shinyServer(function(input, output){
     filters$phase = input$phase_selection
     plot_filters(filters)
     shiny::withProgress(message = "Making plots...", value = 0, {
-      plots(calmr::make_plots(calmr:::filter_calmr_results(parsed_experiment(), plot_filters())))
+      plots(calmr:::make_plots(calmr:::filter_calmr_results(parsed_experiment(), plot_filters())))
       shiny::setProgress(1)
     })
   })
@@ -275,7 +275,7 @@ shiny::shinyServer(function(input, output){
     filters$trial_type = input$trial_type_selection
     plot_filters(filters)
     shiny::withProgress(message = "Making plots...", value = 0, {
-      plots(calmr::make_plots(calmr:::filter_calmr_results(parsed_experiment(), plot_filters())))
+      plots(calmr:::make_plots(calmr:::filter_calmr_results(parsed_experiment(), plot_filters())))
       shiny::setProgress(1)
     })
   })
@@ -318,13 +318,13 @@ shiny::shinyServer(function(input, output){
 
   output$plot <- shiny::renderPlot({
     if (!is.null(plots())){
-      calmr::patch_plots(plots = plots(), selection = selected_plots(), plot_options = plot_options())
+      calmr:::patch_plots(plots = plots(), selection = selected_plots(), plot_options = plot_options())
     }
   })
 
   output$graph <- shiny::renderPlot({
     if (!is.null(graphs())){
-      calmr::patch_graphs(graphs())
+      calmr:::patch_graphs(graphs())
     }
   })
 

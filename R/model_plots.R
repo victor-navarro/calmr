@@ -42,14 +42,7 @@ plot_vs <- function(vals){
     ggplot2::theme_bw()
 }
 
-plot_evs <- function(vals, overall = T){
-  vals$value = ifelse(vals$assoc_type == "Excitatory", vals$value, -vals$value)
-  netvals = vals[vals$assoc_type == "Excitatory",]
-  netvals$assoc_type = "Net"
-  netvals$value = netvals$value+vals$value[vals$assoc_type == "Inhibitory"]
-  vals = rbind(vals, netvals)
-  vals$assoc_type = factor(vals$assoc_type, levels = c("Net", "Excitatory", "Inhibitory"))
-
+plot_eivs <- function(vals, overall = T){
   vals %>%
     dplyr::mutate(trial = ceiling(.data$trial/.data$block_size)) %>%
     dplyr::group_by(.data$trial, .data$phase, .data$s1, .data$s2, .data$assoc_type) %>%
@@ -63,7 +56,7 @@ plot_evs <- function(vals, overall = T){
     ggplot2::scale_x_continuous(breaks = NULL) +
     ggplot2::facet_grid(.data$s1~.data$phase, scales = 'free_x') +
     ggplot2::labs(x = "Trial/Miniblock", y = 'Strength', colour = 'Target',
-                  linetype = "Association Type") +
+                  shape = "Association Type", linetype = "Association Type") +
     ggplot2::theme_bw()
 
 }
@@ -202,13 +195,21 @@ make_plots <- function(parsed_experiment){
     if (!("CalmrExperiment" %in% class(parsed_experiment))) stop("parsed_experiment must be a CalmrExperiment")
     parsed_results = parsed_experiment@parsed_results
     plot_types = names(parsed_results)
+    if ("ivs" %in% plot_types){
+      plot_types = plot_types[plot_types != "ivs"]
+    }
     plot_funs = .get_plot_functions(plot_types)
     plotlist = list()
     for (g in unique(parsed_results[[1]]$group)){
       for (p in 1:length(plot_funs)){
-        plotlist[[sprintf("%s: %s", g, plot_funs[[p]]$name)]] = {
-          dat = parsed_results[[p]] %>% dplyr::filter(.data$group == g)
-          plot_funs[[p]]$fun(dat)}
+        if (plot_types[p] == "evs"){
+          dat = parsed_results$evs
+          dat$value = dat$value-parsed_results$ivs$value
+        }else{
+          dat = parsed_results[[p]]
+        }
+        dat = dat %>% dplyr::filter(.data$group == g)
+        plotlist[[sprintf("%s: %s", g, plot_funs[[p]]$name)]] = plot_funs[[p]]$fun(dat)
       }
     }
     plotlist
@@ -220,7 +221,8 @@ make_plots <- function(parsed_experiment){
               "acts" = list(fun = plot_acts, name = "Activations"),
               "rs" = list(fun = plot_rs, name = "Responses"),
               "vs" = list(fun = plot_vs, name = "Associations"),
-              "es" = list(fun = plot_es, name = "Expectations"))
+              "es" = list(fun = plot_es, name = "Expectations"),
+              "eivs" = list(fun = plot_eivs, name = "Associations"))
   defs[name]
 }
 
@@ -241,15 +243,15 @@ get_plot_opts <- function(common_scale = TRUE){
 
 graph_weights <- function(weights, limits = NULL, colour_key = F,
                           t = max(weights$trial), graph_opts = get_graph_opts()){
-  if (is.null(limits)){
-    limits = max(abs(range(weights$value)))*c(-1, 1)
-  }
   weights = weights %>% dplyr::filter(.data$trial == t) %>%
     dplyr::group_by(.data$s1, .data$s2) %>%
     dplyr::summarise(value = mean(.data$value)) %>%
     dplyr::mutate(s1 = as.character(.data$s1), s2 = as.character(.data$s2)) %>%
     dplyr::rename(from = .data$s1, to = .data$s2, weight = .data$value) %>%
     as.data.frame()
+  if (is.null(limits)){
+    limits = max(abs(range(weights$weight)))*c(-1, 1)
+  }
   net = ggnetwork::ggnetwork(network::as.network(weights),
                              layout = "circle",
                              arrow.gap = graph_opts$arrow.gap)
@@ -305,11 +307,22 @@ get_graph_opts <- function(graph_size = "small"){
 }
 
 make_graphs <- function(parsed_experiment,
-                        limits = max(abs(range(parsed_experiment@parsed_results$vs$value)))*c(-1, 1),
-                        t = max(parsed_experiment@parsed_results$vs$trial),
+                        limits = NULL,
+                        t = NULL,
                         graph_opts = get_graph_opts()){
   plotlist = list()
-  vs = parsed_experiment@parsed_results$vs
+  if ("eivs" %in% names(parsed_experiment@parsed_results)){
+    vs = parsed_experiment@parsed_results$eivs %>% filter(assoc_type == "Net")
+  }else{
+    vs = parsed_experiment@parsed_results$vs
+  }
+  if (is.null(t)){
+    t = max(vs$trial)
+  }
+  if (is.null(limits)){
+    limits = max(abs(range(vs$value)))*c(-1, 1)
+  }
+
   for (g in unique(vs$group)){
     gdat = vs[vs$group == g,]
     gtmax = max(gdat$trial)
