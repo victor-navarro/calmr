@@ -17,8 +17,6 @@ gen_ss_weights <- function(stims, default_val = 0){
   #
   #returns a matrix of dimensions pre_func x post_func, with the combV values
 
-  #intial implementation used invidual terms that were later summed
-  #late implementation just returns
 
   #if (db_trial == 1) browser()
   #if (length(pre_func) > 1)
@@ -49,7 +47,7 @@ gen_ss_weights <- function(stims, default_val = 0){
 
   if (length(absent)){
     #a for loop for readability
-    for (po in post_func){
+    for (po in absent){
       for (pr in pre_func){
         total_sum = 0
         for (a in absent){
@@ -80,7 +78,7 @@ gen_ss_weights <- function(stims, default_val = 0){
     retrieved_as = .absentalphas(V = V, pre_func = pre_func, db_trial = NA)
     #get the average of their nominal alphas (TEMPORARY)
     nomi_avg_as = as_avg[absent]
-    for (po in post_func){
+    for (po in absent){
       for (pr in pre_func){
         total_sum = 0
         for (a in absent){
