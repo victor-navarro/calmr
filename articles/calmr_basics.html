@@ -203,10 +203,10 @@ values by hand.</p>
 <span><span class="va">my_pars</span><span class="op">$</span><span class="va">alphas</span><span class="op">[</span><span class="va">my_pars</span><span class="op">$</span><span class="va">stimulus</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">.4</span></span>
 <span><span class="va">my_pars</span></span>
 <span><span class="co">#&gt;   stimulus alphas</span></span>
-<span><span class="co">#&gt; 1        A    0.2</span></span>
+<span><span class="co">#&gt; 1        A    0.4</span></span>
 <span><span class="co">#&gt; 2       US    0.4</span></span>
-<span><span class="co">#&gt; 3        B    0.2</span></span>
-<span><span class="co">#&gt; 4        C    0.2</span></span></code></pre></div>
+<span><span class="co">#&gt; 3        B    0.4</span></span>
+<span><span class="co">#&gt; 4        C    0.4</span></span></code></pre></div>
 <div class="section level4">
 <h4 id="additional-options">Additional options<a class="anchor" aria-label="anchor" href="#additional-options"></a>
 </h4>
@@ -235,17 +235,16 @@ see.</p>
 <span>                    options <span class="op">=</span> <span class="va">my_opts</span>,</span>
 <span>                    model <span class="op">=</span> <span class="st">"HD2022"</span><span class="op">)</span></span>
 <span><span class="va">my_sim</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 8</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Rowwise: </span></span></span>
-<span><span class="co">#&gt;   model  iteration group   experie…¹ mapping      alphas mod_data   parsed_mod…²</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;list&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> HD2022         1 Control &lt;df&gt;      &lt;named list&gt; &lt;dbl&gt;  <span style="color: #949494;">&lt;CalmrMdl&gt;</span> &lt;named list&gt;</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> HD2022         1 Exp     &lt;df&gt;      &lt;named list&gt; &lt;dbl&gt;  <span style="color: #949494;">&lt;CalmrMdl&gt;</span> &lt;named list&gt;</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> HD2022         2 Control &lt;df&gt;      &lt;named list&gt; &lt;dbl&gt;  <span style="color: #949494;">&lt;CalmrMdl&gt;</span> &lt;named list&gt;</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> HD2022         2 Exp     &lt;df&gt;      &lt;named list&gt; &lt;dbl&gt;  <span style="color: #949494;">&lt;CalmrMdl&gt;</span> &lt;named list&gt;</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> HD2022         3 Control &lt;df&gt;      &lt;named list&gt; &lt;dbl&gt;  <span style="color: #949494;">&lt;CalmrMdl&gt;</span> &lt;named list&gt;</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> HD2022         3 Exp     &lt;df&gt;      &lt;named list&gt; &lt;dbl&gt;  <span style="color: #949494;">&lt;CalmrMdl&gt;</span> &lt;named list&gt;</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with abbreviated variable names ¹​experience, ²​parsed_mod_responses</span></span></span></code></pre></div>
+<span><span class="co">#&gt; HD2022 run with:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $alphas</span></span>
+<span><span class="co">#&gt;   C  US   A   B </span></span>
+<span><span class="co">#&gt; 0.4 0.4 0.4 0.4 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Available model outputs:</span></span>
+<span><span class="co">#&gt; vs rs as acts </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Use `get_output(model, type)` to access the outputs (e.g., `get_output(object, 'vs')`)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
