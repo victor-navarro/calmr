@@ -31,7 +31,7 @@
     <loc>http://victornavarro.org/calmr/articles/index.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/articles/MAC1975_math.html</loc>
+    <loc>http://victornavarro.org/calmr/articles/mac1975_math.html</loc>
   </url>
   <url>
     <loc>http://victornavarro.org/calmr/articles/PKH1982_math.html</loc>
@@ -88,6 +88,9 @@
     <loc>http://victornavarro.org/calmr/reference/dot-combV.html</loc>
   </url>
   <url>
+    <loc>http://victornavarro.org/calmr/reference/dot-parse.html</loc>
+  </url>
+  <url>
     <loc>http://victornavarro.org/calmr/reference/fit_heidi.html</loc>
   </url>
   <url>
@@ -113,6 +116,9 @@
   </url>
   <url>
     <loc>http://victornavarro.org/calmr/reference/get_model_params.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/get_output.html</loc>
   </url>
   <url>
     <loc>http://victornavarro.org/calmr/reference/get_params.html</loc>
@@ -209,6 +215,9 @@
   </url>
   <url>
     <loc>http://victornavarro.org/calmr/reference/RW1972.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/summary-CalmrExperiment-method.html</loc>
   </url>
   <url>
     <loc>http://victornavarro.org/calmr/reference/train_pav_heidi.html</loc>

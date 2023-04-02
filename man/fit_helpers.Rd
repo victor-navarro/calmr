@@ -6,6 +6,7 @@
 \usage{
 get_optimizer_opts(
   model_pars,
+  initial_pars = rep(NA, length(model_pars)),
   ll = rep(NA, length(model_pars)),
   ul = rep(NA, length(model_pars)),
   optimizer = NULL,
@@ -14,6 +15,8 @@ get_optimizer_opts(
 }
 \arguments{
 \item{model_pars}{A character vector specifying the name of the parameters to fit.}
+
+\item{initial_pars}{A numeric vector specifying the initial parameter values to evaluate the model at (required by \code{optim}). Defaults to 0 for each parameter.}
 
 \item{ll, ul}{A numeric vector specifying the lower and upper limits of the parameters to fit, respectively}
 

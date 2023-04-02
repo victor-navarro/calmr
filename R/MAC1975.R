@@ -88,8 +88,8 @@ MAC1975 <- function(alphas,
       err1 = oh_stims*t(pre_tlambdas-t(pre_emat)) #first error (includes all stimuli in the sequence)
       err2 = oh_poststims*t(post_tlambdas-t(post_emat)) #second error (includes only the second half stimuli)
 
-      d1 = t(t(oh_prestims*talphas*err1))*oh_prestims*tbetas #first delta
-      d2 = t(t(oh_poststims*talphas*err2))*oh_poststims*tbetas #second delta
+      d1 = t(t(oh_prestims*talphas*err1)*tbetas) #first delta
+      d2 = t(t(oh_poststims*talphas*err2)*tbetas) #second delta
 
       diag(d1) = diag(d2) = 0
       V = V+d1+d2

@@ -9,36 +9,37 @@
     dat = tibble::enframe(apply(mod@model_results$es, 1, function(x) as.data.frame(as.table(x))), name = "trial") %>%
       dplyr::bind_cols(mod@experience) %>%
       dplyr::mutate(tp = mod@mapping$trial_names[mod@experience$tp]) %>%
-      tidyr::unnest(.data$value) %>%
+      tidyr::unnest("value") %>%
       dplyr::mutate(Var1 = as.character(.data$Var1),
                     Var2 = as.character(.data$Var2)) %>%
       dplyr::filter(.data$Var1 != .data$Var2) %>%
-      dplyr::rename(trial_type = .data$tp, s1 = .data$Var1, s2 = .data$Var2, value = .data$Freq)
+      dplyr::rename("trial_type" = "tp", "s1" = "Var1", "s2" = "Var2", "value" = "Freq")
   }
   if (type %in% c("vs", "evs", "ivs")){
     dat = tibble::enframe(apply(mod@model_results[[type]], 1, function(x) as.data.frame(as.table(x))), name = "trial") %>%
       dplyr::bind_cols(mod@experience) %>%
       dplyr::mutate(tp = mod@mapping$trial_names[mod@experience$tp]) %>%
-      tidyr::unnest(.data$value) %>%
+      tidyr::unnest("value") %>%
       dplyr::mutate(Var1 = as.character(.data$Var1),
                     Var2 = as.character(.data$Var2)) %>%
       dplyr::filter(.data$Var1 != .data$Var2) %>%
-      dplyr::rename(trial_type = .data$tp, s1 = .data$Var1, s2 = .data$Var2, value = .data$Freq)
+      dplyr::rename("trial_type" = "tp", "s1" = "Var1", "s2" = "Var2", "value" = "Freq")
   }
   if (type == "acts"){
     combs = tibble::enframe(lapply(mod@model_results$acts$combvs, function(x) as.data.frame(as.table(x))), name = 'trial') %>%
       dplyr::bind_cols(mod@experience) %>%
       dplyr::mutate(tp = mod@mapping$trial_names[mod@experience$tp]) %>%
-      tidyr::unnest(.data$value) %>% dplyr::mutate(Var1 = as.character(.data$Var1),
+      tidyr::unnest("value") %>% dplyr::mutate(Var1 = as.character(.data$Var1),
                                                    Var2 = as.character(.data$Var2)) %>%
-      dplyr::rename(trial_type = .data$tp, s1 = .data$Var1, s2 = .data$Var2, value = .data$Freq) %>% dplyr::mutate(act_type = 'comb')
+      dplyr::rename("trial_type" = "tp", "s1" = "Var1", "s2" = "Var2", "value" = "Freq") %>% dplyr::mutate(act_type = 'comb')
 
     chains = tibble::enframe(lapply(mod@model_results$acts$chainvs, function(x) as.data.frame(as.table(x))), name = 'trial') %>%
       dplyr::bind_cols(mod@experience) %>%
       dplyr::mutate(tp = mod@mapping$trial_names[mod@experience$tp]) %>%
-      tidyr::unnest(.data$value) %>% dplyr::mutate(Var1 = as.character(.data$Var1),
+      tidyr::unnest("value") %>% dplyr::mutate(Var1 = as.character(.data$Var1),
                                                    Var2 = as.character(.data$Var2)) %>%
-      dplyr::rename(trial_type = .data$tp, s1 = .data$Var1, s2 = .data$Var2, value = .data$Freq) %>% dplyr::mutate(act_type = 'chain')
+      dplyr::rename("trial_type" = "tp", "s1" = "Var1", "s2" = "Var2", "value" = "Freq") %>%
+      dplyr::mutate(act_type = 'chain')
     dat = rbind(combs, chains)
   }
   if (type == "as"){
@@ -46,17 +47,17 @@
       dplyr::mutate(trial = 1:dplyr::n()) %>%
       dplyr::bind_cols(mod@experience) %>%
       dplyr::mutate(tp = mod@mapping$trial_names[mod@experience$tp]) %>%
-      tidyr::pivot_longer(cols = -c(.data$trial, .data$group, .data$is_test, .data$tp,
-                                    .data$phase, .data$block_size), names_to = "s1") %>%
-      dplyr::rename(trial_type = .data$tp)
+      tidyr::pivot_longer(cols = -c("trial", "group", "is_test", "tp",
+                                    "phase", "block_size"), names_to = "s1") %>%
+      dplyr::rename("trial_type" = "tp")
   }
   if (type == "rs"){
     dat = tibble::enframe(apply(mod@model_results$rs, 1, function(x) as.data.frame(as.table(x))), name = "trial") %>%
       dplyr::bind_cols(mod@experience) %>%
       dplyr::mutate(tp = mod@mapping$trial_names[mod@experience$tp]) %>%
-      tidyr::unnest(.data$value) %>% dplyr::mutate(Var1 = as.character(.data$Var1),
+      tidyr::unnest("value") %>% dplyr::mutate(Var1 = as.character(.data$Var1),
                                                    Var2 = as.character(.data$Var2)) %>%
-      dplyr::rename(trial_type = .data$tp, s1 = .data$Var1, s2 = .data$Var2, value = .data$Freq)
+      dplyr::rename("trial_type" = "tp", "s1" = "Var1", "s2" = "Var2", "value" = "Freq")
   }
   dat
 }
@@ -88,7 +89,7 @@ aggregate_experiment_results <- function(parsed_experiment){
   agg = list()
   vars = names(parsed_experiment@results$parsed_mod_responses[[1]])
   dat = parsed_experiment@results %>%
-    tidyr::unnest_wider(.data$parsed_mod_responses) %>%
+    tidyr::unnest_wider("parsed_mod_responses") %>%
     dplyr::ungroup()
   #check for Konorskian models
   if (all(c("evs", "ivs") %in% vars)){

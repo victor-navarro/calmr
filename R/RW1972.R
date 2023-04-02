@@ -78,8 +78,8 @@ RW1972 <- function(alphas,
       err1 = oh_fstims*pre_tlambdas-e1 #first error (includes all stimuli in the sequence)
       err2 = oh_fpoststims*post_tlambdas-e2 #second error (includes only the second half stimuli)
 
-      d1 = (oh_fprestims*talphas*tbetas)%*%err1 #first delta
-      d2 = (oh_fpoststims*talphas*tbetas)%*%err2 #second delta
+      d1 = t(t((oh_fprestims*talphas)%*%err1)*tbetas) #first delta
+      d2 = t(t((oh_fpoststims*talphas)%*%err2)*tbetas) #second delta
 
       diag(d1) = diag(d2) = 0
 

@@ -1,5 +1,5 @@
 pandoc: 2.19.2
-pkgdown: 2.0.6
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   calmr_app: calmr_app.html
@@ -7,10 +7,10 @@ articles:
   calmr_fits: calmr_fits.html
   heidi_math: heidi_math.html
   heidi_similarity: heidi_similarity.html
-  MAC1975_math: MAC1975_math.html
+  mac1975_math: mac1975_math.html
   PKH1982_math: PKH1982_math.html
   RW1972_math: RW1972_math.html
-last_built: 2023-02-10T16:55Z
+last_built: 2023-04-02T20:19Z
 urls:
   reference: http://victornavarro.org/calmr/reference
   article: http://victornavarro.org/calmr/articles

@@ -1,15 +1,7 @@
-# base_df = data.frame(Group = c("X+", "A+", "A"),
-#                      P1 = c("10AX/10BX", "10AX/10BX", "10AX/10BX"),
-#                      R1 = c(TRUE),
-#                      P2 = c("1X>(US)", "1A>(US)", "1A"),
-#                      R2 = c(TRUE),
-#                      P3 = c("10B>(US)", "10B>(US)", "10B>(US)"),
-#                      R3 = c(TRUE))
-
-base_df = data.frame(Group = c("G1", "G2"),
-                     P1 = c("10A>(US)", "10C>(US)"),
+base_df = data.frame(Group = c("Blocking", "Control"),
+                     P1 = c("10N>(US)", ""),
                      R1 = FALSE,
-                     P2 = c("10AB>(US)/#10B", "10AB>(US)/#10B"),
+                     P2 = c("10NL>(US)/#10L", "10NL>(US)/#10L"),
                      R2 = FALSE)
 
 base_plot_options <- list(common_scale = TRUE)
@@ -56,8 +48,8 @@ shiny::shinyServer(function(input, output){
     shiny::updateSelectInput(inputId = "phase_selection", selected = dsg$plot_filters$phase, choices = parsed_design()$phase)
     shiny::updateSelectInput(inputId = "trial_type_selection", selected = dsg$plot_filters$trial_type, choices = parsed_design() %>%
                                filter(phase %in% dsg$plot_filters$phase) %>%
-                               unnest_wider(trial_info) %>%
-                               select(trial_names) %>%
+                               unnest_wider("trial_info") %>%
+                               select("trial_names") %>%
                                unlist() %>%
                                unique())
 
@@ -188,8 +180,8 @@ shiny::shinyServer(function(input, output){
     if (!is.null(parsed_design())){
       ph_choices = unique(parsed_design()$phase)
       t_choices = parsed_design() %>%
-        unnest_wider(trial_info) %>%
-        select(trial_names) %>%
+        unnest_wider("trial_info") %>%
+        select("trial_names") %>%
         unlist() %>%
         unique()
     }
@@ -207,8 +199,8 @@ shiny::shinyServer(function(input, output){
     if (!is.null(parsed_design())){
       t_choices = parsed_design() %>%
         filter(phase %in% input$phase_selection) %>%
-        unnest_wider(trial_info) %>%
-        select(trial_names) %>%
+        unnest_wider("trial_info") %>%
+        select("trial_names") %>%
         unlist() %>%
         unique()
       shiny::updateSelectInput(inputId = "trial_type_selection", choices = t_choices, selected = t_choices)
@@ -349,8 +341,11 @@ shiny::shinyServer(function(input, output){
 
   output$exportresults <- shiny::downloadHandler(
     filename = "my_simulation_results.xlsx",
-    content = function(fpath){
-      openxlsx::write.xlsx(parsed_experiment(), file = fpath, overwrite = TRUE)
+
+    content = function(filename){
+      data = c(list(design = design_df(), parameters = data.frame(model = input$model_selection, param_df())),
+               parsed_experiment()@parsed_results)
+      openxlsx::write.xlsx(data, file = filename, overwrite = TRUE)
     })
 
   shiny::outputOptions(output, "parsed", suspendWhenHidden = FALSE)

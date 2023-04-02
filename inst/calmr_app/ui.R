@@ -10,7 +10,6 @@ library(rhandsontable)
 library(stringr)
 library(tibble)
 library(calmr)
-library(shinyscreenshot)
 
 header <- shinydashboard::dashboardHeader(tags$li(class = "dropdown",
                                                   tags$style(".main-header .logo {height: 60px;}")),
@@ -56,16 +55,7 @@ ui <- shinydashboard::dashboardPage(title = "Calmr Simulator",
                                                                                width = NULL,
                                                                                title = "Parameters",
                                                                                shiny::conditionalPanel("output.parsed", rhandsontable::rHandsontableOutput("parameter_tbl", width = "100%")),
-                                                           ),
-                                                           # shinydashboard::box(width = 12,
-                                                           #                     title = "Import/Export",
-                                                           #                     htmltools::div(
-                                                           #                       shiny::fileInput("loaddesign", "Load Sim", multiple = FALSE, accept = c(".rds"), buttonLabel = "...", width = "79%"),
-                                                           #                       htmltools::div(style = "margin-top: -15px"),
-                                                           #                       shiny::downloadButton("savedesign", "Save Sim", icon = shiny::icon("save"), class = "btn-s"),
-                                                           #                       shiny::downloadButton("exportresults", "Save Data", icon = shiny::icon("file-download"), class = "btn-s")
-                                                           #                     )
-                                                           # )
+                                                           )
                                         ),
                                         shiny::column(width = 3,
                                                       shinydashboard::box(collapsible = TRUE,
@@ -73,7 +63,8 @@ ui <- shinydashboard::dashboardPage(title = "Calmr Simulator",
                                                                           title = "Sim Preferences",
                                                                           shiny::selectInput(inputId = "model_selection", label = "Model", choices = supported_models, selected = "RW1972", multiple = F),
                                                                           shiny::sliderInput(inputId = 'iterations', label = 'Iterations', min = 1, max = 200, value = 1, ticks = FALSE),
-                                                                          shiny::checkboxInput(inputId = "miniblocks", label = 'Randomize trials in miniblocks', value = T)
+                                                                          shiny::checkboxInput(inputId = "miniblocks", label = 'Create trial blocks', value = T),
+                                                                          shiny::conditionalPanel("output.ran", shiny::downloadButton("exportresults", "Save Data", icon = shiny::icon("file-download"), class = "btn-s"))
                                                       ),
                                                       shinydashboard::box(collapsible = TRUE,
                                                                           width = NULL,

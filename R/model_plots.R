@@ -34,7 +34,7 @@ plot_vs <- function(vals){
     ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s2)) +
     ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
     ggplot2::geom_line() +
-    ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
+    ggbeeswarm::geom_beeswarm() +
     ggplot2::scale_colour_viridis_d(drop = FALSE) +
     ggplot2::scale_x_continuous(breaks = NULL) +
     ggplot2::facet_grid(.data$s1~.data$phase, scales = 'free_x') +
@@ -51,7 +51,7 @@ plot_eivs <- function(vals, overall = T){
                                  linetype = .data$assoc_type, shape = .data$assoc_type)) +
     ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
     ggplot2::geom_line() +
-    ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
+    ggbeeswarm::geom_beeswarm() +
     ggplot2::scale_colour_viridis_d(drop = FALSE) +
     ggplot2::scale_x_continuous(breaks = NULL) +
     ggplot2::facet_grid(.data$s1~.data$phase, scales = 'free_x') +
@@ -74,7 +74,7 @@ plot_es <- function(vals, overall = T){
       ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s2)) +
       ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
       ggplot2::geom_line() +
-      ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
+      ggbeeswarm::geom_beeswarm() +
       ggplot2::scale_colour_viridis_d(drop = FALSE) +
       ggplot2::scale_x_continuous(breaks = NULL) +
       ggplot2::facet_grid(~.data$phase+.data$trial_type, scales = 'free_x') +
@@ -85,7 +85,7 @@ plot_es <- function(vals, overall = T){
       ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s2)) +
       ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
       ggplot2::geom_line() +
-      ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
+      ggbeeswarm::geom_beeswarm() +
       ggplot2::scale_colour_viridis_d(drop = FALSE) +
       ggplot2::scale_x_continuous(breaks = NULL) +
       ggplot2::facet_grid(.data$s1~.data$phase+.data$trial_type, scales = 'free_x') +
@@ -107,7 +107,7 @@ plot_acts <- function(vals, bars = F){
                                    colour = .data$s1, linetype = .data$act_type,
                                    shape = .data$act_type)) +
       ggplot2::geom_line() +
-      ggbeeswarm::geom_beeswarm(groupOnX =FALSE, fill = "white") +
+      ggbeeswarm::geom_beeswarm(, fill = "white") +
       ggplot2::scale_shape_manual(values = c(21, 16), drop = FALSE) +
       ggplot2::scale_colour_viridis_d(drop = FALSE) +
       ggplot2::scale_linetype_manual(values = c('dashed', 'solid'), drop = FALSE) +
@@ -151,7 +151,7 @@ plot_rs <- function(vals, simple = F){
       ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s2)) +
       ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
       ggplot2::geom_line() +
-      ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
+      ggbeeswarm::geom_beeswarm() +
       ggplot2::scale_colour_viridis_d(drop = FALSE) +
       ggplot2::scale_x_continuous(breaks = NULL) +
       ggplot2::facet_grid(~.data$phase+.data$trial_type, scales = 'free_x') +
@@ -163,7 +163,7 @@ plot_rs <- function(vals, simple = F){
       ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s1)) +
       ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
       ggplot2::geom_line() +
-      ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
+      ggbeeswarm::geom_beeswarm() +
       ggplot2::scale_colour_viridis_d(drop = FALSE) +
       ggplot2::scale_x_continuous(breaks = NULL) +
       ggplot2::facet_grid(.data$s2~.data$phase+.data$trial_type, scales = 'free_x') +
@@ -182,7 +182,7 @@ plot_as <- function(vals){
     dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
     ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s1)) +
     ggplot2::geom_line() +
-    ggbeeswarm::geom_beeswarm(groupOnX =FALSE) +
+    ggbeeswarm::geom_beeswarm() +
     ggplot2::scale_colour_viridis_d(drop = FALSE) +
     ggplot2::scale_x_continuous(breaks = NULL) +
     ggplot2::facet_grid(.~.data$phase+.data$trial_type, scales = 'free_x') +

@@ -3,6 +3,7 @@ require(methods)
 #### Generics ####
 setGeneric("graph", function(x,...) standardGeneric("graph"))
 setGeneric("NLL", function(object, ...) standardGeneric("NLL"))
+setGeneric("get_output", function(object, ...) standardGeneric("get_output"))
 
 #### Exposing methods ####
 setMethod("show", "CalmrModel", function(object){
@@ -10,7 +11,7 @@ setMethod("show", "CalmrModel", function(object){
   print(object@parameters)
 })
 setMethod("show", "CalmrExperiment", function(object){
-  print(object@results)
+  summary(object)
 })
 setMethod("show", "CalmrFit", function(object){
   cat("Calmr model fit: \n ",
@@ -41,17 +42,50 @@ setMethod("show", "CalmrRSATest", function(object){
               object@n_samples, 1-object@p))
 })
 
+#### Accesing methods ####
+#' Get output from CalmrExperiment
+#'
+#' Returns a tibble containing parsed outputs of CalmrExperiment
+#'
+#' @param object An object of class \code{\link{CalmrFit-class}}.
+#' @param type The type of output
+#' @return A numeric
+#' @export
+
+get_output <- function(object, type = NULL) NULL
+setMethod("get_output", "CalmrExperiment", function(object, type = NULL){
+  if (is.null(type)){
+    outputs = names(object@results$mod_data[[1]]@model_results) #works for parsed and non-parsed objects
+    cat("Available model outputs:\n")
+    cat(outputs, "\n\n")
+    cat(sprintf("Use `get_output(model, type)` to access the outputs (e.g., `get_output(%s, '%s')`)", as.character(substitute(object)), outputs[1]), "\n")
+  }else{
+    if (!object@is_parsed){
+      object = parse_experiment_results(object)
+    }
+    object@parsed_results[[type]]
+  }
+
+})
+
+
+
 #### Summary methods ####
+#' Summarise CalmrExperiment
+#'
+#' Shows a summary for a CalmrExperiment
+#'
+#' @param object An object of class \code{\link{CalmrExperiment-class}}.
+#' @param ... Additional parameters passed to the summary function.
+#' @return A
+#' @export
 setMethod("summary", "CalmrExperiment", function(object, ...){
   print(object@results$mod_data[[1]])
-  cat("Association strengths:\n")
-  for (g in 1:nrow(object@results)){
-    vs = object@results$mod_data[[g]]@model_results$vs
-    ntrials = dim(vs)[1]
-    cat("Group = ", object@results$group[g],"\n")
-    print(round(vs[ntrials, , ], 3))
-    cat("\n")
-  }
+  outputs = names(object@results$mod_data[[1]]@model_results) #works for parsed and non-parsed objects
+  cat("Available model outputs:\n")
+  cat(outputs, "\n\n")
+  cat(sprintf("Use `get_output(model, type)` to access the outputs (e.g., `get_output(%s, '%s')`)", as.character(substitute(object)), outputs[1]), "\n")
+  #cat(sprintf("Use %s(model) "))
 })
 
 #### Ploting methods ####
@@ -125,8 +159,8 @@ setMethod("plot", "CalmrRSA",
             corrmat[lower.tri(corrmat)] = NA
             dat = data.frame(as.table(corrmat))
             dat$label = round(dat$Freq, 2)
-            dat %>% ggplot2::ggplot(ggplot2::aes_string(x = "Var1", y = "Var2",
-                                                        fill = "Freq", label = "label")) +
+            dat %>% ggplot2::ggplot(ggplot2::aes(x = .data$Var1, y = .data$Var2,
+                                                 fill = .data$Freq, label = .data$label)) +
               ggplot2::geom_tile(na.rm = T) +
               ggplot2::geom_text(na.rm = T) +
               ggplot2::scale_fill_gradient2(limits = c(-1, 1), na.value = "white") +
@@ -260,4 +294,8 @@ setMethod("BIC", "CalmrFit",
             length(object@best_pars)*log(length(object@data)) -
               2*-object@nloglik
           })
+
+
+#### Comparison methods ####
+
 

@@ -40,7 +40,6 @@ supported_plots <- function(model = NULL){
   }
 }
 
-
 #' @rdname model_info_funcs
 .get_model_parnames <- function(model){
   #check if model is supported

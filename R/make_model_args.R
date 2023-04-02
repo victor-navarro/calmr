@@ -41,12 +41,12 @@ make_model_args <- function(design, pars = NULL, model = NULL, opts = get_exp_op
   #the only challenge here is to create a master list of trials (trials)
   #and sample the training for each group (tps)
   #create master lists of trials and trial_names
-  tinfo = parsed_design %>% tidyr::unnest_wider(.data$trial_info) %>%
-    dplyr::select(.data$trial_pre_functional,
-                  .data$trial_post_functional,
-                  .data$trial_pre_nominal,
-                  .data$trial_post_nominal,
-                  .data$trial_names)
+  tinfo = parsed_design %>% tidyr::unnest_wider("trial_info") %>%
+    dplyr::select("trial_pre_functional",
+                  "trial_post_functional",
+                  "trial_pre_nominal",
+                  "trial_post_nominal",
+                  "trial_names")
 
   master_trial_names = unlist(tinfo$trial_names)
 
@@ -66,7 +66,7 @@ make_model_args <- function(design, pars = NULL, model = NULL, opts = get_exp_op
   #make stimulus mapping
   map = parsed_design %>%
     #this bit saves us having to crunch data about stimuli that are not present in a group but are present in another
-    tidyr::unnest_wider(.data$trial_info) %>%
+    tidyr::unnest_wider("trial_info") %>%
     dplyr::group_by(.data$group) %>%
     dplyr::mutate(unique_nominal_stimuli = list(unique(unlist(.data$unique_nominal_stimuli))),
                   unique_functional_stimuli = list(unique(unlist(.data$unique_functional_stimuli))),
@@ -76,8 +76,8 @@ make_model_args <- function(design, pars = NULL, model = NULL, opts = get_exp_op
                   func2nomi = list({
                     f2n = unlist(.data$func2nomi)
                     f2n = f2n[!duplicated(names(f2n))]})) %>%
-    dplyr::select(.data$group, .data$unique_functional_stimuli,
-                  .data$unique_nominal_stimuli, .data$nomi2func, .data$func2nomi) %>%
+    dplyr::select("group", "unique_functional_stimuli",
+                  "unique_nominal_stimuli", "nomi2func", "func2nomi") %>%
     dplyr::distinct() %>%
     #add the extra information above
     dplyr::rowwise() %>%
@@ -100,14 +100,14 @@ make_model_args <- function(design, pars = NULL, model = NULL, opts = get_exp_op
   #Dom, if you are reading this, I apologize for this bit
   #It basically creates a tibble of iterations*groups*phases, with pointers for trials in the masterlist
   exptb = parsed_design %>%
-    tidyr::unnest_wider(.data$trial_info) %>%
+    tidyr::unnest_wider("trial_info") %>%
     tidyr::expand_grid(iteration = 1:opts$iterations) %>%
     dplyr::rowwise() %>%
     #the pointers are returned by the function .sample_trial
     dplyr::mutate(samp = list(.sample_trials(.data$trial_names, .data$is_test, .data$trial_repeats,
                                              .data$randomize, opts$miniblocks, master_trial_names))) %>%
-    dplyr::select(-.data$is_test) %>% #unfortunate naming
-    tidyr::unnest_wider(.data$samp) %>%
+    dplyr::select(-"is_test") %>% #unfortunate naming
+    tidyr::unnest_wider("samp") %>%
     dplyr::rowwise() %>%
     dplyr::mutate(phaselab = list(rep(.data$phase, length(.data$tps))),
                   blocks = list(rep(.data$block_size, length(.data$tps)))) %>%

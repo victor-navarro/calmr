@@ -2,6 +2,7 @@
 #' @description
 #' get_optimizer_opts returns a list with options for optimization
 #' @param model_pars A character vector specifying the name of the parameters to fit.
+#' @param initial_pars A numeric vector specifying the initial parameter values to evaluate the model at (required by `optim`). Defaults to 0 for each parameter.
 #' @param ll,ul A numeric vector specifying the lower and upper limits of the parameters to fit, respectively
 #' @param optimizer A string specifying the optimizer to use. One from `c("optim")`
 #' @param family A string specifying the family function to generate responses (and calculate the likelihood function with). One from `c("identity", "normal", "poisson")`.
@@ -10,6 +11,7 @@
 #' @seealso \code{\link{fit_model}}, \code{\link{make_model_args}}
 #' @export
 get_optimizer_opts <- function(model_pars,
+                               initial_pars = rep(NA, length(model_pars)),
                                ll = rep(NA, length(model_pars)),
                                ul = rep(NA, length(model_pars)),
                                optimizer = NULL, family = NULL){
@@ -41,6 +43,7 @@ get_optimizer_opts <- function(model_pars,
        family = family,
        family_pars = family_pars,
        all_pars = all_pars,
+       initial_pars = initial_pars,
        ll = ll,
        ul = ul,
        verbose = F)

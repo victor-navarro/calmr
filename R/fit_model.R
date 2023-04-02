@@ -59,7 +59,8 @@ fit_model <- function(data, model_function, optimizer_options, file = NULL, ...)
 
   if (optimizer_options$optimizer == 'optim'){
     #optimize
-    opt_res = stats::optim(fn = objective_function,
+    opt_res = stats::optim(par = optimizer_options$initial_pars,
+                           fn = objective_function,
                            lower = optimizer_options$ll,
                            upper = optimizer_options$ul,
                            ...)

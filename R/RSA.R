@@ -16,14 +16,14 @@
 RSA <- function(comparison, trials = "all", dist_method = "euclidean", corr_method = "spearman", ...){
   dat = comparison@results
   if (trials == "last"){
-    dat = dat %>% dplyr::group_by(.data$group, .data$trial_type, .data$model) %>%
+    dat = dat %>% dplyr::group_by("group", "trial_type", "model") %>%
       dplyr::filter(.data$trial == max(.data$trial)) %>%
       dplyr::ungroup()
   }
 
   #get trial size per model
   tsize = dat %>% dplyr::count(.data$model, .data$group, .data$trial, .data$trial_type) %>%
-    dplyr::select(.data$model, .data$n) %>% dplyr::distinct()
+    dplyr::select("model", "n") %>% dplyr::distinct()
 
   trialmats = sapply(unique(dat$model),
                      function(x) matrix(dat$value[dat$model == x],
