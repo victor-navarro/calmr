@@ -3,10 +3,13 @@
 
 #Generate a matrix with named columns and rows
 gen_ss_weights <- function(stims, default_val = 0){
-  mat = matrix(default_val, ncol = length(stims), nrow = length(stims))
-  rownames(mat) = stims
-  colnames(mat) = stims
-  return(mat)
+  array(default_val, dim = rep(length(stims), 2), dimnames = list(stims, stims))
+}
+
+#Generate a three dimensional matrix with named axes
+gen_os_values <- function(stims, default_val = -1){
+  array(default_val, dim = rep(length(stims), 3), dimnames = list(stims, stims, stims))
+
 }
 
 #Calculation of combined V
@@ -175,6 +178,43 @@ gen_ss_weights <- function(stims, default_val = 0){
 .makeOH <- function(s, stimnames){
   return(as.numeric(stimnames %in% s))
 }
+
+
+#Carries out a comparison process in a recursive manner
+.comparator_proc <- function(act, i, j, K, O, gammas, order, debug = F){
+  ks = setdiff(K, c(i,j))
+  if (debug) cat("Order:", order, "\n")
+  if (order){ #order > 0
+    val = act[i, j] -
+      sum(gammas[ks] * O[i,ks,j] *
+            #recursion from i to k
+            sapply(ks, function(x) .comparator_proc(act = act,
+                                                    i = i,
+                                                    j = x,
+                                                    K = K,
+                                                    O = O,
+                                                    gammas = gammas,
+                                                    order = order-1,
+                                                    debug = debug)) *
+            #recursion from k to j
+            sapply(ks, function(x) .comparator_proc(act = act,
+                                                    i = x,
+                                                    j = j,
+                                                    K = K,
+                                                    O = O,
+                                                    gammas = gammas,
+                                                    order = order-1,
+                                                    debug = debug)))
+  }else{
+    val = act[i, j] -
+      sum(gammas[ks] * O[i,ks,j] * act[i, ks] * act[ks, j]) #order 0; recursion stops here
+  }
+  if (debug) cat("Link value:", val, "\n")
+  val
+}
+
+
+
 
 #### Unused ####
 #Softmax function

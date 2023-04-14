@@ -49,5 +49,15 @@ get_model_params <- function(design, model = NULL){
                     thetas = 1,
                     gammas = 1/length(stims))
   }
+  if (model %in% c("SM2007")){
+    df = data.frame(stimulus = stims,
+                    alphas = 0.4,
+                    lambdas = 1,
+                    omegas = 0.2,
+                    rhos = 1,
+                    gammas = 1,
+                    kappas = 0.2,
+                    orders = 1)
+  }
   df
 }

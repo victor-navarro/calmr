@@ -9,7 +9,7 @@
 
 #' @export
 supported_models <- function(){
-  c("HDI2020", "HD2022", "RW1972", "MAC1975", "PKH1982", "RAND")
+  c("HDI2020", "HD2022", "RW1972", "MAC1975", "PKH1982", "SM2007", "RAND")
 }
 
 #' @export
@@ -29,6 +29,7 @@ supported_plots <- function(model = NULL){
     "HD2022" = c("as", "acts", "rs", "vs"),
     "RW1972" = c("es", "vs"),
     "MAC1975" = c("as", "es", "vs"),
+    "SM2007" = c("acts", "vs"),
     "PKH1982" = c("as", "es", "eivs"),
     "RAND" = c("es", "vs")
   )
@@ -94,12 +95,17 @@ supported_plots <- function(model = NULL){
            }
          },
          "good_experiment" = {
-           #checks if there
            if (any(unlist(lapply(given$mapping, function(x) length(x$unique_nominal_stimuli))) == 1)){
              stop("Experiment is too simple to run for one or more groups. Please check your design.", call. = F)
            }
 
+         },
+         "comparator_order" = {
+           if (unique(given)>1){
+             stop("Multiple orders for comparison process are not currently supported. Please make sure the orders column only contains one value.")
+           }
          }
+
 
 
   )

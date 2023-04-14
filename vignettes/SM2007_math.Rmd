@@ -1,0 +1,83 @@
+---
+title: "SM2007_math"
+author: "Victor Navarro"
+output: rmarkdown::html_vignette
+bibliography: references.bib
+csl: apa.csl
+vignette: >
+  %\VignetteIndexEntry{SOCR_math}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# The mathematics behind SOCR
+
+The first formalization of the comparator hypothesis [@miller_comparator_1988], the sometimes competing retrieval model [or SOCR\; @stout_sometimes-competing_2007] learns from local error and responds as a function of the relative associative strength between present and retrieved stimuli.
+
+## 1 - Learning associations
+
+The SOCR model uses two different learning equations for the strengthening and weakening of associations. Whenever two stimuli are contiguous, strengthening occurs. In such a case, the strengthening of the association from stimulus $i$ to $j$ after trial $t$, $v_{i,j}^t$ is given by:
+
+$$
+\tag{Eq.1a}
+\Delta v_{i,j}^t = x^t_i \alpha_i \alpha_j (\lambda_j - v_{i,j}^{t-1})
+$$
+
+where $x^t_i$ denotes the presence (1) or absence (0) of stimulus $i$ on trial $t$. As such, the SOCR model only learns about stimuli that are presented. The parameters $\alpha_i$ and $\alpha_j$ are the saliencies of stimuli i and j, respectively, and $\lambda_j$ is a the maximum association strength supported by $j$ (the asymptote).
+
+Whenever stimulus $i$ is presented alone (i.e., stimulus $j$ is absent), the weakening of that association is given by:
+
+$$
+\tag{Eq.1b}
+\Delta v_{i,j}^t = x_i \alpha_i \times -\omega_j v_{i,j}^{t-1}
+$$
+
+where $\omega_j$ determines the weakening rate for stimulus $j$.[^note1]
+
+## 2 - Activating stimuli
+
+SOCR posits competition by stimuli that are presented and/or associatively retrieved. Dropping the trial notation for the sake of simplicity, the degree to which stimulus $i$ activates stimulus $j$, $act_{i,j}$, is given by:
+
+$$
+\tag{Eq.2}
+act_{i, j} = x_i v_{i,j} + x_j\rho_j\alpha_j
+$$
+
+where $\rho_j$ (bound between 0 and +$\infty$) determines how much of salience of stimulus $j$ contributes to its unconditioned activation. These first-order activation values are the key quantities involved in the comparison processes.
+
+## 3 - Generating responses and comparison processes
+
+Stimulus $i$ generates j-oriented responding at the time of retrieval as a function of its relative ability to activate stimulus $j$. This relative ability is expressed as a comparison process, given by:
+
+$$
+\tag{Eq.3}
+r^j_i = act_{i,j} - \Sigma_{k \neq i,j} ^K \gamma_k \times o_{i,k,j} \times r^k_i \times r^j_k
+$$
+where $r^j_i$ is the relative activation of stimulus $j$ by stimulus $i$, $K$ is the set of all experimental stimuli not including $i$ or $j$, $\gamma_k$ is a parameter determining the degree to which stimulus $k$, a comparison stimulus, contributes to the comparison process (bound between 0 and 1), and $o_{i,k,j}$ is an operator switch that determines whether $i$ and $k$ associations with $j$ engage in facilitation or competition. Finally, $r^k_i$ is the relative activation of stimulus $k$ by stimulus $i$, representing the ability of stimulus $i$ to activate a comparison, and $r^j_k$ is the relative activation of stimulus $j$ by stimulus $k$, representing the ability of the comparison stimulus $k$ to activate stimulus $j$.[^note2] 
+
+Most notably, the last two quantities ($r^k_i$ and $r^j_k$) are also determined by their corresponding instantiations of Eq. 3. That is, they involve comparison processes themselves. The number of potential comparison processes is technically infinite (each comparison process can nest two extra comparison processes itself), so the user must determine the order of model using an extra global parameter (`order`). For all n-th order models (with $n > 0$), the model will behave like the extended comparator hypothesis [@denniston_extended_2001], implementing $n$ comparison processes each time the relative activations are calculated. With `order = 0`, SM2007 will behave like it was originally written, and only consider one comparison process. Indeed, n-th order models are accomplished via recursion using the 0-th order model as the stopping condition. When such a condition is reached, the $r^k_i$ and $r^j_k$ terms in Eq. 3 become $act_{i,k}$ and $act_{k,j}$, respectively.
+
+## 4 - Switching between facilitation and competition
+
+The operator switch in Eq. 3, $o_{i,k,j}$, changes as subjects learn to discriminate between the directly (via $i$) and indirectly activated (via $k$) representations of stimulus $j$. The change to this quantity depends on the value of $v_{i,j}$, as follows:
+
+$$
+\tag{Eq.4}
+\Delta o_{i,k,j} = 
+\begin{cases}
+  \phi_j\alpha_iv_{i,k}v_{k,j}(1-o_{i,k,j})   &\text{, if } v_{i,j} = 0\\
+  1-o_{i,k,j} & \text{, otherwise}
+\end{cases}
+$$
+
+
+where negative values of $o$ indicate facilitation and positive values of $o$ indicate competition. The default value for all operator switches at the outset of training is set as -1 by default.
+
+
+[^note1]: 
+The `calmr` implementation of the SOCR model specifies different $\omega$, $\rho$, $\gamma$, and $\kappa$ parameters for each stimulus, but the authors of the model meant these parameters as global parameters.
+
+[^note2]:
+In the aim of generality, the SOCR implementation in `calmr` does not distinguish between relative activation and response generation. The published formalizations of SOCR made a special distinction (and adopted a different notation) for calculating US responding [e.g., @witnauer_performance_2012], but such responding is a direct result of relative activation of the US representation by a CS.
+
+## References
