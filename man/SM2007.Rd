@@ -10,11 +10,14 @@ SM2007(
   omegas,
   rhos,
   gammas,
-  kappas,
-  C,
+  taus,
+  orders,
   V = NULL,
+  O = NULL,
   experience,
-  mapping
+  mapping,
+  debug = F,
+  ...
 )
 }
 \arguments{
@@ -28,11 +31,13 @@ SM2007(
 
 \item{gammas}{A named vector with weights for contribution of each stimulus in comparison processes.}
 
-\item{kappas}{A named vector with stimulus-specific rates for operator switch.}
+\item{taus}{A named vector with stimulus-specific rates for operator switch.}
 
-\item{C}{An integer specifying the depth of the comparison process. Defaults to 1.}
+\item{orders}{An integer specifying the order of the comparison process. Defaults to 1.}
 
-\item{V}{(optional) A named matrix of dimensions S,S; where S is the number of stimuli.}
+\item{V}{(optional) A named matrix of dimensions S,S (the associative strengths); where S is the number of stimuli.}
+
+\item{O}{(optional) A named matrix of dimensions S,S,S (the operator switches).}
 
 \item{experience}{A data.frame specifying trials as rows, as returned by \code{make_model_args}}
 
@@ -48,4 +53,9 @@ A list with
 }
 \description{
 Train the SM2007 model
+}
+\note{
+Correct usage of the V and O parameters requires the matrices to adhere to a specific format.
+For V, entry i,j represents the association from stimulus i to stimulus j.
+For O, entry i,k,j represents the operator switch between stimulus i and comparator k with respect to stimulus j.
 }

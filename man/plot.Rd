@@ -4,7 +4,7 @@
 \alias{plot,CalmrExperiment-method}
 \title{Plot CalmrExperiment}
 \usage{
-\S4method{plot}{CalmrExperiment}(x, type = NULL, ...)
+\S4method{plot}{CalmrExperiment}(x, type = NULL, y = NULL, ...)
 }
 \arguments{
 \item{x}{An object of class \code{\link{CalmrExperiment-class}}.}

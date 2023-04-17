@@ -98,12 +98,16 @@ setMethod("summary", "CalmrExperiment", function(object, ...){
 #' @param ... Additional parameters passed to the plotting function.
 #' @return A ggplot object
 #' @export
+#' @rdname plot
+
 setMethod("plot", "CalmrExperiment",
-          function(x, type = NULL, ...){
+          function(x, type = NULL, y = NULL, ...){
             if (is.null(type)){ type = "vs"}
             if (!x@is_parsed){ x = parse_experiment_results(x)} #parse if model has not been parsed
             .calmr_check("supported_plot", type, names(x@parsed_results))
-            plotf = get(paste0("plot_", type))
+            plotinfo = .get_plot_functions(type)
+
+            plotf = plotinfo[[type]]$fun
             if (type %in% c("evs", "ivs")){
               dat = rbind(data.frame(x@parsed_results[["evs"]], assoc_type = "Excitatory"),
                           data.frame(x@parsed_results[["ivs"]], assoc_type = "Inhibitory"))
@@ -112,7 +116,8 @@ setMethod("plot", "CalmrExperiment",
             }
 
             groups = unique(dat$group)
-            ps = sapply(groups, function(g) plotf(dat[dat$group == g,], ...) + ggplot2::labs(title = sprintf("Group = %s", g)), simplify = F)
+            ps = sapply(groups, function(g) plotf(dat[dat$group == g,], ...) +
+                          ggplot2::labs(title = sprintf("Group = %s", g)), simplify = F)
             names(ps) = groups
             ps
           })

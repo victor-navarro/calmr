@@ -9,7 +9,8 @@ run_experiment(
   model = NULL,
   param_df = NULL,
   options = NULL,
-  parse = TRUE
+  parse = TRUE,
+  ...
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ run_experiment(
 \item{options}{A list of options, as returned by \code{get_exp_opts}.}
 
 \item{parse}{A logical specifying whether the results should be parsed via \code{parse_experiment_results}. Default = TRUE.}
+
+\item{...}{Extra parameters passed to the model call (e.g., debug)}
 }
 \value{
 A list with parsed results or a tibble with raw results

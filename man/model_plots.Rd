@@ -5,22 +5,25 @@
 \alias{plot_acts}
 \alias{plot_rs}
 \alias{plot_as}
+\alias{plot_os}
 \title{Plotting functions for calmr models}
 \usage{
 plot_vs(vals)
 
-plot_acts(vals, bars = F)
+plot_acts(vals)
 
 plot_rs(vals, simple = F)
 
 plot_as(vals)
+
+plot_os(vals)
 }
 \arguments{
 \item{vals}{A data.frame containing parsed values.}
 
-\item{bars}{A logical stipulating whether to summarize and use stacked bars, instead of points and lines.}
-
 \item{simple}{A logical stipulating whether to simplify the plot by collapsing across sources.}
+
+\item{bars}{A logical stipulating whether to summarize and use stacked bars, instead of points and lines.}
 
 \item{parsed_results}{A parsed experiment, as returned by parse_experiment_results.}
 

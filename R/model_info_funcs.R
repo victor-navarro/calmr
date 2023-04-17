@@ -29,7 +29,7 @@ supported_plots <- function(model = NULL){
     "HD2022" = c("as", "acts", "rs", "vs"),
     "RW1972" = c("es", "vs"),
     "MAC1975" = c("as", "es", "vs"),
-    "SM2007" = c("acts", "vs"),
+    "SM2007" = c("acts", "relacts", "vs", "os"),
     "PKH1982" = c("as", "es", "eivs"),
     "RAND" = c("es", "vs")
   )
@@ -101,7 +101,7 @@ supported_plots <- function(model = NULL){
 
          },
          "comparator_order" = {
-           if (unique(given)>1){
+           if (length(unique(given))>1){
              stop("Multiple orders for comparison process are not currently supported. Please make sure the orders column only contains one value.")
            }
          }

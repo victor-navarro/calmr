@@ -65,7 +65,7 @@ $$
 \tag{Eq.4}
 \Delta o_{i,k,j} = 
 \begin{cases}
-  \phi_j\alpha_iv_{i,k}v_{k,j}(1-o_{i,k,j})   &\text{, if } v_{i,j} = 0\\
+  \tau_j\alpha_iv_{i,k}v_{k,j}(1-o_{i,k,j})   &\text{, if } v_{i,j} = 0\\
   1-o_{i,k,j} & \text{, otherwise}
 \end{cases}
 $$
@@ -75,7 +75,7 @@ where negative values of $o$ indicate facilitation and positive values of $o$ in
 
 
 [^note1]: 
-The `calmr` implementation of the SOCR model specifies different $\omega$, $\rho$, $\gamma$, and $\kappa$ parameters for each stimulus, but the authors of the model meant these parameters as global parameters.
+The `calmr` implementation of the SOCR model specifies different $\omega$, $\rho$, $\gamma$, and $\tau$ parameters for each stimulus, but the authors of the model meant these parameters as global parameters.
 
 [^note2]:
 In the aim of generality, the SOCR implementation in `calmr` does not distinguish between relative activation and response generation. The published formalizations of SOCR made a special distinction (and adopted a different notation) for calculating US responding [e.g., @witnauer_performance_2012], but such responding is a direct result of relative activation of the US representation by a CS.

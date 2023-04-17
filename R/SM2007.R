@@ -5,7 +5,7 @@
 #' @param omegas A named vector with weakening rates (extinction).
 #' @param rhos A named vector with weights for activation of present stimuli.
 #' @param gammas A named vector with weights for contribution of each stimulus in comparison processes.
-#' @param kappas A named vector with stimulus-specific rates for operator switch.
+#' @param taus A named vector with stimulus-specific rates for operator switch.
 #' @param orders An integer specifying the order of the comparison process. Defaults to 1.
 #' @param V (optional) A named matrix of dimensions S,S (the associative strengths); where S is the number of stimuli.
 #' @param O (optional) A named matrix of dimensions S,S,S (the operator switches).
@@ -27,12 +27,14 @@ SM2007 <- function(alphas,
                    omegas,
                    rhos,
                    gammas,
-                   kappas,
+                   taus,
                    orders,
                    V = NULL,
                    O = NULL,
                    experience,
-                   mapping){
+                   mapping,
+                   debug = F,
+                   ...){
 
   mod = methods::new("CalmrModel",
                      model = "SM2007")
@@ -45,15 +47,18 @@ SM2007 <- function(alphas,
   ntrials = length(experience$tp) #max trials
   if(is.null(V)){V = gen_ss_weights(mapping$unique_functional_stimuli)} #association weights
   if(is.null(O)){O = gen_os_values(mapping$unique_functional_stimuli)} #operator switches
+  dO = O #deltas for O
   order = unique(orders)
   fsnames = rownames(V)
 
   vs = array(NA, dim = c(ntrials, dim(V)),
              dimnames = list(NULL, fsnames, fsnames))
-  acts = array(NA, dim = c(ntrials, dim(V)),
-               dimnames = list(NULL, fsnames, fsnames))
   act = relact = array(NA, dim = dim(V),
                        dimnames = list(fsnames, fsnames))
+  acts = relacts = array(NA, dim = c(ntrials, dim(V)),
+                         dimnames = list(NULL, fsnames, fsnames))
+  os = array(NA, dim = c(ntrials, dim(O)),
+             dimnames = list(NULL, fsnames, fsnames, fsnames))
 
   for (t in 1:ntrials){
     #get pre functional and nominal stimuli
@@ -71,15 +76,16 @@ SM2007 <- function(alphas,
     #generate activations
     act = t(t(oh_fprestims * V) + oh_fprestims*rhos*alphas)
 
-    #do comparison
+    #do comparisons/generate relative activations
+    relact[] = 0
     present = fprestims
     absent = setdiff(fsnames, present)
-
     for (j in fsnames){
-      for (i in fsnames){
+      for (i in present){
+        if (debug) cat("\nActivating", j, "via", i, "\n\n")
         relact[i,j] = .comparator_proc(act = act, i = i, j = j,
                                        K = fsnames, O = O,
-                                       gammas = gammas, order = order, debug = T)
+                                       gammas = gammas, order = order, debug = debug)
       }
     }
 
@@ -104,31 +110,42 @@ SM2007 <- function(alphas,
       ds2 = t(t(oh_fpoststims*talphas*err2)*talphas) #second delta
 
       #get weakening deltas
-      dw1 = t(t(as.numeric(!oh_fstims)*V*-omegas)*oh_fprestims*talphas)
-      dw2 = t(t(as.numeric(!oh_fstims)*V*-omegas)*oh_fpoststims*talphas)
+      dw1 = t(t(oh_fstims*V)*-omegas)*oh_fprestims*talphas
+      dw2 = t(t(oh_fpoststims*V)*-omegas)*oh_fpoststims*talphas
 
-      Vdeltas = ds1 + ds2 + dw1 + dw2
-      diag(Vdeltas) = 0
+      dV = ds1 + ds2 + dw1 + dw2
+      diag(dV) = 0
 
       #now calculate deltas for operator switch
-      #### HERE ####
-
-      V = V+Vdeltas #learn
-
-
+      dO[] = 0
+      for (i in fsnames){
+        for (j in fsnames){
+          d = 1-O[i, ,j]
+          if (!V[i,j]){
+            d = d*taus[j]*alphas[i]*V[i,]*V[,j]
+          }
+          dO[i, , j] = d
+        }
+      }
+      #Apply learning
+      V = V+dV #learn
+      O = O+dO
     }
 
     #save data
     vs[t, , ] = V
+    acts[t, , ] = act
+    relacts[t, , ] = relact
+    os[t, , , ] = O
   }
   mod@parameters = list(alphas = alphas,
                         lambdas = lambdas,
                         omegas = omegas,
                         rhos = rhos,
                         gammas = gammas,
-                        kappas = kappas,
+                        taus = taus,
                         orders = orders)
-  mod@model_results = list(vs = vs)
+  mod@model_results = list(vs = vs, acts = acts, relacts = relacts, os = os)
   mod@experience = experience
   mod@mapping = mapping
   mod

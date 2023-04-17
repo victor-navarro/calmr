@@ -5,10 +5,11 @@
 #' @param param_df A data.frame of dimensions N,2; where N is the number of stimuli in the experimental design.
 #' @param options A list of options, as returned by `get_exp_opts`.
 #' @param parse A logical specifying whether the results should be parsed via `parse_experiment_results`. Default = TRUE.
+#' @param ... Extra parameters passed to the model call (e.g., debug)
 #' @return A list with parsed results or a tibble with raw results
 #' @seealso \code{\link{get_exp_opts}}, \code{\link{parse_experiment_results}}
 #' @export
-run_experiment <- function(design, model = NULL, param_df = NULL, options = NULL, parse = TRUE){
+run_experiment <- function(design, model = NULL, param_df = NULL, options = NULL, parse = TRUE, ...){
   #parse design
   parsed_design = parse_design(design)
 
@@ -42,6 +43,5 @@ run_experiment <- function(design, model = NULL, param_df = NULL, options = NULL
   .calmr_check("good_experiment", given = args)
 
   #run the model
-  results = run_model(args, parse = parse)
-  return(results)
+  run_model(args, parse = parse, ...)
 }

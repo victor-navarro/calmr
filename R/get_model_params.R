@@ -56,7 +56,7 @@ get_model_params <- function(design, model = NULL){
                     omegas = 0.2,
                     rhos = 1,
                     gammas = 1,
-                    kappas = 0.2,
+                    taus = 0.2,
                     orders = 1)
   }
   df

@@ -95,47 +95,36 @@ plot_es <- function(vals, overall = T){
 }
 
 #' @rdname model_plots
-plot_acts <- function(vals, bars = F){
+plot_acts <- function(vals){
+  group_cols = c("trial", "phase", "trial_type", "s1", "s2")
+  if ("act_type" %in% names(vals)){
+    group_cols = c(group_cols, "act_type")
+  }
   summ = vals %>%
     dplyr::mutate(trial = ceiling(.data$trial/.data$block_size)) %>%
-    dplyr::group_by(.data$trial, .data$phase,
-                    .data$trial_type, .data$act_type, .data$s1, .data$s2) %>%
+    dplyr::group_by_at(group_cols) %>%
     dplyr::summarise(value = mean(.data$value), .groups = "drop")
-  if (!bars){
-    plt = summ %>%
-      ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value,
-                                   colour = .data$s1, linetype = .data$act_type,
-                                   shape = .data$act_type)) +
-      ggplot2::geom_line() +
-      ggbeeswarm::geom_beeswarm(, fill = "white") +
-      ggplot2::scale_shape_manual(values = c(21, 16), drop = FALSE) +
-      ggplot2::scale_colour_viridis_d(drop = FALSE) +
-      ggplot2::scale_linetype_manual(values = c('dashed', 'solid'), drop = FALSE) +
-      ggplot2::labs(x = "Trial/Miniblock", y = 'V value', colour = 'Source',
-                    shape = 'V type', linetype = 'V type') +
-      ggplot2::scale_x_continuous(breaks = NULL) +
-      ggplot2::theme_bw() +
-      ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
-      ggplot2::facet_grid(.data$s2~.data$phase+.data$trial_type, scales = 'free_x')
+  if ("act_type" %in% names(vals)){
+    base_plot = summ %>% ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value,
+                                                      colour = .data$s1,
+                                                      linetype = .data$act_type,
+                                                      shape = .data$act_type))
   }else{
-    plt = summ %>%
-      dplyr::group_by(.data$phase, .data$trial_type, .data$act_type,
-                      .data$s1, .data$s2) %>%
-      dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
-      ggplot2::ggplot(ggplot2::aes(x = .data$trial_type, y = .data$value,
-                                   fill = .data$s1, alpha = .data$act_type)) +
-      ggplot2::geom_bar(stat = "identity") +
-      ggplot2::stat_summary(ggplot2::aes(group = 1), geom = "point", fun = "sum") +
-      ggplot2::scale_alpha_manual(values = c(.5, 1)) +
-      ggplot2::labs(x = "Trial/Miniblock", y = 'V value', fill = 'Source',
-                    pattern = 'V type', alpha = 'V type') +
-      ggplot2::theme_bw() +
-      ggplot2::scale_fill_viridis_d(drop = FALSE) +
-      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)) +
-      ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
-      ggplot2::facet_grid(.data$s2~.data$phase, scales = "free_x", space = 'free_x')
+    base_plot = summ %>% ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value,
+                                                      colour = .data$s1))
   }
-  plt
+  base_plot +
+    ggplot2::geom_line() +
+    ggbeeswarm::geom_beeswarm(fill = "white") +
+    ggplot2::scale_shape_manual(values = c(21, 16), drop = FALSE) +
+    ggplot2::scale_colour_viridis_d(drop = FALSE) +
+    ggplot2::scale_linetype_manual(values = c('dashed', 'solid'), drop = FALSE) +
+    ggplot2::labs(x = "Trial/Miniblock", y = 'Activation Strength', colour = 'Source',
+                  shape = 'Type', linetype = 'Type') +
+    ggplot2::scale_x_continuous(breaks = NULL) +
+    ggplot2::theme_bw() +
+    ggplot2::geom_hline(yintercept = 0, linetype = 'dashed') +
+    ggplot2::facet_grid(.data$s2~.data$phase+.data$trial_type, scales = 'free_x')
 }
 
 #' @rdname model_plots
@@ -190,6 +179,22 @@ plot_as <- function(vals){
     ggplot2::theme_bw()
 }
 
+#' @rdname model_plots
+plot_os <- function(vals){
+  vals %>% dplyr::mutate(trial = ceiling(.data$trial/.data$block_size)) %>%
+    dplyr::group_by(.data$trial, .data$phase, .data$s1, .data$comp, .data$s2) %>%
+    dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
+    ggplot2::ggplot(ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$comp)) +
+    ggplot2::geom_line() +
+    ggbeeswarm::geom_beeswarm() +
+    ggplot2::geom_hline(yintercept = 0, linetype = "dashed") +
+    ggplot2::scale_colour_viridis_d(drop = FALSE) +
+    ggplot2::scale_x_continuous(breaks = NULL) +
+    ggplot2::facet_grid(.data$s1~.data$s2+.data$phase, scales = 'free_x', switch = "y") +
+    ggplot2::labs(x = "Trial/Miniblock", y = 'Switch Value', colour = 'Comparison') +
+    ggplot2::theme_bw()
+}
+
 make_plots <- function(parsed_experiment){
   if (!is.null(parsed_experiment)){
     if (!("CalmrExperiment" %in% class(parsed_experiment))) stop("parsed_experiment must be a CalmrExperiment")
@@ -219,10 +224,12 @@ make_plots <- function(parsed_experiment){
 .get_plot_functions <- function(name){
   defs = list("as" = list(fun = plot_as, name = "Alphas"),
               "acts" = list(fun = plot_acts, name = "Activations"),
+              "relacts" = list(fun = plot_acts, name = "Relative Activations"),
               "rs" = list(fun = plot_rs, name = "Responses"),
               "vs" = list(fun = plot_vs, name = "Associations"),
               "es" = list(fun = plot_es, name = "Expectations"),
-              "eivs" = list(fun = plot_eivs, name = "Associations"))
+              "eivs" = list(fun = plot_eivs, name = "Associations"),
+              "os" = list(fun = plot_os, name = "Operator Switches"))
   defs[name]
 }
 

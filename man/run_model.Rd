@@ -4,12 +4,12 @@
 \alias{run_model}
 \title{Run a model}
 \usage{
-run_model(args, parse = TRUE)
+run_model(args, parse, ...)
 }
 \arguments{
 \item{args}{A tibble as returned by \code{make_model_args}.}
 
-\item{parse}{A logical specifying whether the results should be parsed. Default = TRUE.}
+\item{parse}{A logical specifying whether the results should be parsed.}
 }
 \value{
 A CalmrExperiment object.
