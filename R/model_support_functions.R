@@ -186,7 +186,7 @@ gen_os_values <- function(stims, default_val = -1){
   if (order){ #order > 0
     val = act[i, j] -
       sum(gammas[ks] * O[i,ks,j] *
-            #recursion from i to k
+            #recursion from i to k (link 2)
             sapply(ks, function(x) .comparator_proc(act = act,
                                                     i = i,
                                                     j = x,
@@ -195,7 +195,7 @@ gen_os_values <- function(stims, default_val = -1){
                                                     gammas = gammas,
                                                     order = order-1,
                                                     debug = debug)) *
-            #recursion from k to j
+            #recursion from k to j (link 3)
             sapply(ks, function(x) .comparator_proc(act = act,
                                                     i = x,
                                                     j = j,
@@ -214,6 +214,39 @@ gen_os_values <- function(stims, default_val = -1){
   val
 }
 
+#Carries out a comparison process in a recursive manner, but dropping previous i from link 3
+.james_comparator_proc <- function(act, i, j, K, O, gammas, order, debug = F){
+  ks = setdiff(K, c(i,j))
+  if (order){ #order > 0
+    val = act[i, j] -
+      sum(gammas[ks] * O[i,ks,j] *
+            #recursion from i to k (link 2)
+            sapply(ks, function(x) .comparator_proc(act = act,
+                                                    i = i,
+                                                    j = x,
+                                                    K = K,
+                                                    O = O,
+                                                    gammas = gammas,
+                                                    order = order-1,
+                                                    debug = debug)) *
+            #recursion from k to j (link 3)
+            sapply(ks, function(x) .comparator_proc(act = act,
+                                                    i = x,
+                                                    j = j,
+                                                    K = setdiff(K, i),
+                                                    O = O,
+                                                    gammas = gammas,
+                                                    order = order-1,
+                                                    debug = debug)))
+  }else{
+    val = act[i, j] -
+      sum(gammas[ks] * O[i,ks,j] * act[i, ks] * act[ks, j]) #order 0; recursion stops here
+  }
+  if (debug) cat("Order:", order, "\n", "To", j, "via", i, "against", ks, "\n")
+  if (debug) cat("Link value:", val, "\n")
+
+  val
+}
 
 
 
