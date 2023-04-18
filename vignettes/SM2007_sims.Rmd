@@ -1,32 +1,37 @@
 ---
-title: "Witnauer et al. 2012 Simulations"
+title: "SM2007_sims"
 author: "Victor Navarro"
-output: pdf_document
+output: rmarkdown::html_vignette
+bibliography: references.bib
+csl: apa.csl
+vignette: >
+  %\VignetteIndexEntry{SM2007_sims}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
-In this script, I attempt to use calmr's implementation of SOCR to reproduce some of the figures in Witnauer et al. (2012).
-Note, this notebook requires a version of calmr with the SM2007 model implemented. At the time of this notebook, you can install such a version using install
+In this script, I attempt to use calmr's implementation of SOCR to reproduce some of the figures in @witnauer_performance_2012.
+Note, this notebook requires a version of calmr with the SM2007 model implemented. At the time of this notebook, you can install such a version using `devtools::install_github("victor-navarro/calmr@socr-dev")`
+
+```{r, include = F}
+knitr::opts_chunk$set(warning = F, message = F)
+```
+
 
 ```{r}
 rm(list = ls(all =T))
 require(tidyverse)
 require(calmr)
+mod <- "SM2007"
 
 ```
 
+## The fixed parameters
 
+In Witnauer et al (2012), they set the alphas of cues, contexts, and the US to 0.35, 0.15, and 0.50, respectively. The rate at which associations weaken (k1, here, omega) was set to be 0.22. The weight with which comparison stimuli compete (k2, here, gamma) was set to 0.56. The rate at which the operator switch is learned (k3, here, tau) was set to 0.46. Finally, the strength with which present stimuli are activated (k4, here, rho; see Eq. 4 in their paper) was set to 1.60.
 
-#From witnauer et al 2012:
-#alpha cues .35
-#alpha contexts .15
-#alpha US .5
-#omega = .22
-#gamma =  .56
-#tau = .46
-#rho = 1.60
-
-#### Acquisition ####
-mod <- "SM2007"
+## Acquisition ##
+```{r}
 des <- data.frame(Group = "Acquisition",
                   P1 = "100(ctxa)A>(US)/300(ctxa)",
                   R1 = F,
@@ -38,11 +43,12 @@ pars <- get_model_params(des, model = mod)
 pars$alphas <- c(.35, .15, .5, .15)
 pars$omegas <- .22
 pars$gammas <- .56
-pars$rhos <- 0#1.6
+pars$rhos <- 1.6
 pars$taus <- .46
 
-m <- run_experiment(des, model = mod, param_df = pars,
-                    comparator_func = .james_comparator_proc, debug = F)
+pars
+
+m <- run_experiment(des, model = mod, param_df = pars)
 
 #plot(m, "relacts")
 #Fig 2 A
@@ -52,27 +58,30 @@ m@parsed_results$relacts %>%
   group_by(trial) %>% summarise(value = sum(value)) %>%
   ggplot(aes(x = trial, y = value)) +
   geom_line() + geom_point()
-#no bend; assymptote is way higher for calmr
+#overall responding levels are higher for calmr
 
 #Fig 2 B
 m@parsed_results$relacts %>%
   filter(s2 == "US" & phase == "P2") %>%
   group_by(trial_type) %>% summarise(value = sum(value)) %>%
-  mutate(trial_type = ifelse(grepl("b", trial_type), "Neutral Ctx", "Acquisition Ctx")) %>%
+  mutate(trial_type = ifelse(grepl("b", trial_type), 
+                             "Neutral Ctx", "Acquisition Ctx")) %>%
   ggplot(aes(x = trial_type, y = value)) +
   geom_col()
+#overall responding levels are higher for calmr
 
-#asymptote is higher in calmr
+```
 
-#### Extinction ####
-mod <- "SM2007"
+## Extinction ##
+```{r}
+
 des <- data.frame(Group = "Extinction",
-                  P1 = "10(ctxa)A>(US)/30(ctxa)",
-                  R1 = F,
-                  P2 = "30(ctxb)A/90(ctxb)",
-                  R2 = F,
-                  P3 = "1#(ctxa)A/1#(ctxb)A",
-                  R3 = F)
+P1 = "10(ctxa)A>(US)/30(ctxa)",
+R1 = F,
+P2 = "30(ctxb)A/90(ctxb)",
+R2 = F,
+P3 = "1#(ctxa)A/1#(ctxb)A",
+R3 = F)
 
 
 pars <- get_model_params(des, model = mod)
@@ -82,35 +91,40 @@ pars$gammas <- .56
 pars$rhos <- 1.6
 pars$taus <- .46
 
+pars
 
-m <- run_experiment(des, model = mod, param_df = pars,
-                    comparator_func = .james_comparator_proc, debug = F)
+m <- run_experiment(des, model = mod, param_df = pars)
 #plot(m, "relacts")
 #Fig 4 A
 m@parsed_results$relacts %>%
-  filter(s2 == "US" & trial_type == "(ctxb)A" & phase == "P2") %>%
-  mutate(trial = ceiling(trial/block_size)) %>%
-  group_by(trial) %>% summarise(value = sum(value)) %>%
-  ggplot(aes(x = trial, y = value)) +
-  geom_line() + geom_point()
+filter(s2 == "US" & trial_type == "(ctxb)A" & phase == "P2") %>%
+mutate(trial = ceiling(trial/block_size)) %>%
+group_by(trial) %>% summarise(value = sum(value)) %>%
+ggplot(aes(x = trial, y = value)) +
+geom_line() + geom_point()
 #responding at the beginning of extinction is higher
 
 m@parsed_results$relacts %>%
-  filter(s2 == "US" & phase == "P3") %>%
-  group_by(trial_type) %>% summarise(value = sum(value)) %>%
-  mutate(trial_type = ifelse(grepl("b", trial_type), "Extinction Ctx", "Acquisition Ctx")) %>%
-  ggplot(aes(x = trial_type, y = value)) +
-  geom_col() + coord_cartesian(ylim = c(0, .4))
+filter(s2 == "US" & phase == "P3") %>%
+group_by(trial_type) %>% summarise(value = sum(value)) %>%
+mutate(trial_type = ifelse(grepl("b", trial_type), 
+                           "Extinction Ctx", "Acquisition Ctx")) %>%
+ggplot(aes(x = trial_type, y = value)) +
+geom_col() + coord_cartesian(ylim = c(0, .4))
 #remarkably similar
 
-#### SO-CI ####
-mod <- "SM2007"
+```
+
+
+## Second order conditioning/Conditioned inhibition ##
+```{r}
+
 des <- data.frame(Group = c("Few", "Many"),
-                  P1 = c("10(ctx)A>(US)/10(ctx)AX/10(ctx)B>(US)/90(ctx)",
-                         "100(ctx)A>(US)/100(ctx)AX/100(ctx)B>(US)/900(ctx)"),
-                  R1 = F,
-                  P2 = "1#(ctx)X/1#(ctx)BX",
-                  R2 = F)
+P1 = c("10(ctx)A>(US)/10(ctx)AX/10(ctx)B>(US)/90(ctx)",
+"100(ctx)A>(US)/100(ctx)AX/100(ctx)B>(US)/900(ctx)"),
+R1 = F,
+P2 = "1#(ctx)X/1#(ctx)BX",
+R2 = F)
 
 
 pars <- get_model_params(des, model = mod)
@@ -120,34 +134,36 @@ pars$gammas <- .56
 pars$rhos <- 1.6
 pars$taus <- .46
 
-m <- run_experiment(des, model = mod, param_df = pars,
-                    comparator_func = .james_comparator_proc, debug = F)
+m <- run_experiment(des, model = mod, param_df = pars)
 #plot(m, "relacts")
 #Fig 6
 m@parsed_results$relacts %>%
-  filter(s2 == "US" & phase == "P2") %>%
-  group_by(group, trial_type) %>% summarise(value = sum(value)) %>%
-  mutate(trial_type = ifelse(grepl("B", trial_type), "Summation", "Elemental")) %>%
-  ggplot(aes(x = group, y = value, fill = trial_type)) +
-  geom_col(position = position_dodge())
+filter(s2 == "US" & phase == "P2") %>%
+group_by(group, trial_type) %>% summarise(value = sum(value)) %>%
+mutate(trial_type = ifelse(grepl("B", trial_type), "Summation", "Elemental")) %>%
+ggplot(aes(x = group, y = value, fill = trial_type)) +
+geom_col(position = position_dodge())
 #pretty close, but scales are a little bit off
 
+```
 
-#### Blocking ####
-mod <- "SM2007"
+
+
+## Blocking ##
+```{r}
 des <- data.frame(Group = c("Elemental", "Overshadowing", "Blocking", "Recovery From Blocking"),
-                  P1 = "10(ctx)A>(US)/180(ctx)",
-                  R1 = F,
-                  P2 = c("5(ctx)X>(US)/90(ctx)",
-                         "5(ctx)BX>(US)/90(ctx)",
-                         "5(ctx)AX>(US)/90(ctx)",
-                         "5(ctx)AX>(US)/90(ctx)"),
-                  R2 = F,
-                  P3 = c("", "", "", #nothing for the first three grups
-                         "5(ctx)A/90(ctx)"),
-                  R3 = F,
-                  P4 = c("1#(ctx)X"),
-                  R4 = F)
+P1 = "10(ctx)A>(US)/180(ctx)",
+R1 = F,
+P2 = c("5(ctx)X>(US)/90(ctx)",
+"5(ctx)BX>(US)/90(ctx)",
+"5(ctx)AX>(US)/90(ctx)",
+"5(ctx)AX>(US)/90(ctx)"),
+R2 = F,
+P3 = c("", "", "", #nothing for the first three grups
+"5(ctx)A/90(ctx)"),
+R3 = F,
+P4 = c("1#(ctx)X"),
+R4 = F)
 
 
 pars <- get_model_params(des, model = mod)
@@ -157,26 +173,29 @@ pars$gammas <- .56
 pars$rhos <- 1.6
 pars$taus <- .46
 
-m <- run_experiment(des, model = mod, param_df = pars,
-                    comparator_func = .james_comparator_proc, debug = F)
+m <- run_experiment(des, model = mod, param_df = pars)
 #plot(m, "relacts")
 #Fig 10
 m@parsed_results$relacts %>%
-  filter(s2 == "US" & phase == "P4") %>%
-  group_by(group) %>% summarise(value = sum(value)) %>%
-  ggplot(aes(x = group, y = value)) +
-  geom_col()
-#not even close/not enough information to do the simulation?
+filter(s2 == "US" & phase == "P4") %>%
+group_by(group) %>% summarise(value = sum(value)) %>%
+ggplot(aes(x = group, y = value, fill = group)) +
+geom_col()
+#not even close
+#perhaps not enough information to do the simulation?
+```
 
-#### Unequal associative changes ####
+
+## Unequal associative changes ##
+```{r}
 mod <- "SM2007"
 des <- data.frame(Group = "Unequal",
-                  P1 = "100(ctx)X>(US)/100(ctx)XB/100(ctx)XD/100(ctx)A>(US)/100(ctx)C>(US)/1500(ctx)",
-                  R1 = F,
-                  P2 = "3(ctx)AB>(US)/9(ctx)",
-                  R2 = F,
-                  P3 = c("1#(ctx)AD/1#(ctx)BC"),
-                  R3 = F)
+P1 = "100(ctx)X>(US)/100(ctx)XB/100(ctx)XD/100(ctx)A>(US)/100(ctx)C>(US)/1500(ctx)",
+R1 = F,
+P2 = "3(ctx)AB>(US)/9(ctx)",
+R2 = F,
+P3 = c("1#(ctx)AD/1#(ctx)BC"),
+R3 = F)
 
 pars <- get_model_params(des, model = mod)
 pars$alphas <- c(.35, .35, .35, .35, .35, .15, .50)
@@ -185,25 +204,26 @@ pars$gammas <- .56
 pars$rhos <- 1.6
 pars$taus <- .46
 
-m <- run_experiment(des, model = mod, param_df = pars,
-                    comparator_func = .james_comparator_proc, debug = F) #takes a bit
+m <- run_experiment(des, model = mod, param_df = pars) #takes a bit
 #plot(m, "relacts")
 #Fig 14
 m@parsed_results$relacts %>%
-  filter(s2 == "US" & phase == "P3") %>%
-  mutate(trial_type = ifelse(grepl("AD", trial_type), "Test AD", "Test BC")) %>%
-  group_by(trial_type) %>% summarise(value = sum(value)) %>%
-  ggplot(aes(x = trial_type, y = value)) +
-  geom_point()
+filter(s2 == "US" & phase == "P3") %>%
+mutate(trial_type = ifelse(grepl("AD", trial_type), "Test AD", "Test BC")) %>%
+group_by(trial_type) %>% summarise(value = sum(value)) %>%
+ggplot(aes(x = trial_type, y = value)) +
+geom_point()
 #effect in the right direction, but differnce is 4 times as a big (.02 in the paper, .08 here)
 
-#### CS Preexposure ####
-mod <- "SM2007"
+```
+
+## CS Preexposure ##
+```{r}
 des <- data.frame(Group = "CSPreexposure",
-                  P1 = "66(ctx)P/198(ctx)",
-                  R1 = F,
-                  P2 = "6(ctx)P>(US)/6(ctx)N>(US)/36(ctx)",
-                  R2 = F)
+P1 = "66(ctx)P/198(ctx)",
+R1 = F,
+P2 = "6(ctx)P>(US)/6(ctx)N>(US)/36(ctx)",
+R2 = F)
 
 pars <- get_model_params(des, model = mod)
 pars$alphas <- c(.35, .15, .35, .50)
@@ -212,15 +232,18 @@ pars$gammas <- .56
 pars$rhos <- 1.6
 pars$taus <- .46
 
-m <- run_experiment(des, model = mod, param_df = pars,
-                    comparator_func = .james_comparator_proc, debug = F) #takes a bit
+m <- run_experiment(des, model = mod, param_df = pars)
 #plot(m, "relacts")
 #Fig 14
 m@parsed_results$relacts %>%
-  filter(s2 == "US" & phase == "P2" & trial_type != "(ctx)") %>%
-  mutate(trial = ceiling(trial/block_size)) %>%
-  mutate(trial_type = ifelse(grepl("P", trial_type), "Preexposed", "Novel")) %>%
-  group_by(trial, trial_type) %>% summarise(value = sum(value)) %>%
-  ggplot(aes(x = trial, y = value, colour = trial_type)) +
-  geom_point() + geom_line()
+filter(s2 == "US" & phase == "P2" & trial_type != "(ctx)") %>%
+mutate(trial = ceiling(trial/block_size)) %>%
+mutate(trial_type = ifelse(grepl("P", trial_type), "Preexposed", "Novel")) %>%
+group_by(trial, trial_type) %>% summarise(value = sum(value)) %>%
+ggplot(aes(x = trial, y = value, colour = trial_type)) +
+geom_point() + geom_line()
 #fairly close in terms of the difference, but scale is off
+
+```
+
+## References
