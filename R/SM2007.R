@@ -34,6 +34,7 @@ SM2007 <- function(alphas,
                    experience,
                    mapping,
                    debug = F,
+                   comparator_func = .james_comparator_proc,
                    ...){
 
   mod = methods::new("CalmrModel",
@@ -80,10 +81,10 @@ SM2007 <- function(alphas,
     relact[] = 0
     present = fprestims
     absent = setdiff(fsnames, present)
-    for (j in fsnames){
+    for (j in absent){
       for (i in present){
         if (debug) cat("\nActivating", j, "via", i, "\n\n")
-        relact[i,j] = .comparator_proc(act = act, i = i, j = j,
+        relact[i,j] = comparator_func(act = act, i = i, j = j,
                                        K = fsnames, O = O,
                                        gammas = gammas, order = order, debug = debug)
       }
@@ -110,8 +111,8 @@ SM2007 <- function(alphas,
       ds2 = t(t(oh_fpoststims*talphas*err2)*talphas) #second delta
 
       #get weakening deltas
-      dw1 = t(t(oh_fstims*V)*-omegas)*oh_fprestims*talphas
-      dw2 = t(t(oh_fpoststims*V)*-omegas)*oh_fpoststims*talphas
+      dw1 = t(t(oh_fprestims*V)*as.numeric(!oh_fstims)*-omegas)*oh_fprestims*talphas
+      dw2 = t(t(oh_fpoststims*V)*as.numeric(!oh_fpoststims)*-omegas)*oh_fpoststims*talphas
 
       dV = ds1 + ds2 + dw1 + dw2
       diag(dV) = 0
@@ -127,9 +128,11 @@ SM2007 <- function(alphas,
           dO[i, , j] = d
         }
       }
+
       #Apply learning
-      V = V+dV #learn
+      V = V+dV
       O = O+dO
+
     }
 
     #save data
