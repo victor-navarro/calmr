@@ -106,16 +106,10 @@
     <loc>http://victornavarro.org/calmr/reference/compare_models.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/dot-parse.html</loc>
-  </url>
-  <url>
     <loc>http://victornavarro.org/calmr/reference/fit_helpers.html</loc>
   </url>
   <url>
     <loc>http://victornavarro.org/calmr/reference/fit_model.html</loc>
-  </url>
-  <url>
-    <loc>http://victornavarro.org/calmr/reference/gen_ss_weights.html</loc>
   </url>
   <url>
     <loc>http://victornavarro.org/calmr/reference/get_exp_opts.html</loc>
@@ -130,9 +124,6 @@
     <loc>http://victornavarro.org/calmr/reference/get_output.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/graph-CalmrExperiment-method.html</loc>
-  </url>
-  <url>
     <loc>http://victornavarro.org/calmr/reference/graph.html</loc>
   </url>
   <url>
@@ -143,9 +134,6 @@
   </url>
   <url>
     <loc>http://victornavarro.org/calmr/reference/model_info_funcs.html</loc>
-  </url>
-  <url>
-    <loc>http://victornavarro.org/calmr/reference/model_plots.html</loc>
   </url>
   <url>
     <loc>http://victornavarro.org/calmr/reference/parse_design.html</loc>
