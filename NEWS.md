@@ -1,4 +1,4 @@
-# calmr 0.2.1
+# calmr 0.3.0
 
 * Added first version of the SOCR model (SM2007) as well as two vignettes explaining the math behind the implementation and some quick simulations. Warning: EXPERIMENTAL.
 * Documentation progress.
