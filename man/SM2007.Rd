@@ -17,6 +17,7 @@ SM2007(
   experience,
   mapping,
   debug = F,
+  comparator_func = .witnauer_comparator_proc,
   ...
 )
 }
@@ -42,12 +43,18 @@ SM2007(
 \item{experience}{A data.frame specifying trials as rows, as returned by \code{make_model_args}}
 
 \item{mapping}{A named list specifying trial and stimulus mapping, as returned by \code{make_model_args}}
+
+\item{debug}{A logical specifying whether to print information for the comparison process. Defaults to FALSE.}
+
+\item{comparator_func}{A function to be used in the comparison process. Either \code{.witnauer_comparator_func}or \code{.comparator_func}.}
 }
 \value{
 A list with
 \itemize{
 \item{vs, Array of dimensions P,S,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment. Contains stimulus association strengths.}
-\item{acts, As above but of dimensions P, S, S, C, containing relative activations on the n-th order (as determined by argument C).}
+\item{acts} As above but with stimulus activations.
+\item{relacts} As above but with (relative) stimulus activations after comparison process.
+\item{os} Array of dimensions P,S,S,S, with the state of the operator switches. See notes related to \code{O} parameter.
 \item{other, Carryover arguments used for further processing by other functions}
 }
 }

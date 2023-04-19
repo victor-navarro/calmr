@@ -11,7 +11,6 @@ vignette: >
 ---
 
 In this script, I attempt to use calmr's implementation of SOCR to reproduce some of the figures in @witnauer_performance_2012.
-Note, this notebook requires a version of calmr with the SM2007 model implemented. At the time of this notebook, you can install such a version using `devtools::install_github("victor-navarro/calmr@socr-dev")`
 
 ```{r, include = F}
 knitr::opts_chunk$set(warning = F, message = F)

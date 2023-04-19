@@ -134,23 +134,13 @@ plot(my_sim, type = "rs", simple = F)
 ```
 
 
-### stimulus activations (bar)
-
-stimulus activation plots take us a little deeper into the model. In these, the overall stimulus activation that we use to distribute responding is split into comb and chain activations. Comb activations represent activations due to reciprocal associations (e.g., the effect of US->A on A). Chain activations represent activations via indirect associative links.
-
-Below, each bar is coloured based on the stimulus that generates the activation. The vertical panels denote the target stimulus. The x-axis now shows the trial types.
-
-```{r}
-plot(my_sim, type = "acts", bar = T)
-```
-
-### stimulus activations (curve)
+### stimulus activations
 
 Similar to above, but now the x-axis shows trial number, and the trial_types are embedded across horizontal panels.
 
 
 ```{r}
-plot(my_sim, type = "acts", bar = F)
+plot(my_sim, type = "acts")
 ```
 
 ### stimulus associations

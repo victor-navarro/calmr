@@ -4,7 +4,7 @@
 \alias{run_model}
 \title{Run a model}
 \usage{
-run_model(args, parse, ...)
+run_model(args, parse = T, ...)
 }
 \arguments{
 \item{args}{A tibble as returned by \code{make_model_args}.}
