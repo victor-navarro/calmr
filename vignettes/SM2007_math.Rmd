@@ -71,7 +71,7 @@ $$
 $$
 
 
-where negative values of $o$ indicate facilitation and positive values of $o$ indicate competition. The default value for all operator switches at the outset of training is set as -1 by default.
+where negative values of $o$ indicate facilitation and positive values of $o$ indicate competition. The default value for all operator switches at the outset of training is set as -1 by default. The parameter $\tau_j$ specifies the learning rate for the operator switches related to stimulus $j$.
 
 
 [^note1]: 
