@@ -7,7 +7,7 @@
 #' @export
 
 #TODO: Break down the contents of the CalmrExperiment object
-run_model <- function(args, parse, ...){
+run_model <- function(args, parse = T, ...){
   ex = methods::new("CalmrExperiment",
                     results = args)
   ex@results$mod_data = apply(args, 1, function(x) do.call(what = get_model(x[[1]]),
