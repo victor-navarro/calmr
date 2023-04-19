@@ -24,7 +24,7 @@ patch_plots and patch_graphs return a composite of plots or graphs."><meta prope
     
     <a class="navbar-brand me-2" href="../index.html">calmr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,6 +40,8 @@ patch_plots and patch_graphs return a composite of plots or graphs."><meta prope
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/PKH1982_math.html">PKH1982_math</a>
     <a class="dropdown-item" href="../articles/RW1972_math.html">RW1972_math</a>
+    <a class="dropdown-item" href="../articles/SM2007_math.html">SM2007_math</a>
+    <a class="dropdown-item" href="../articles/SM2007_sims.html">SM2007_sims</a>
     <a class="dropdown-item" href="../articles/calmr_app.html">calmr_app</a>
     <a class="dropdown-item" href="../articles/calmr_basics.html">calmr_basics</a>
     <a class="dropdown-item" href="../articles/calmr_fits.html">calmr_fits</a>
@@ -87,11 +89,13 @@ patch_plots and patch_graphs return a composite of plots or graphs.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_vs</span><span class="op">(</span><span class="va">vals</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">plot_acts</span><span class="op">(</span><span class="va">vals</span>, bars <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
+<span><span class="fu">plot_acts</span><span class="op">(</span><span class="va">vals</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">plot_rs</span><span class="op">(</span><span class="va">vals</span>, simple <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">plot_as</span><span class="op">(</span><span class="va">vals</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">plot_as</span><span class="op">(</span><span class="va">vals</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">plot_os</span><span class="op">(</span><span class="va">vals</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -100,12 +104,12 @@ patch_plots and patch_graphs return a composite of plots or graphs.</p>
 <dd><p>A data.frame containing parsed values.</p></dd>
 
 
-<dt>bars</dt>
-<dd><p>A logical stipulating whether to summarize and use stacked bars, instead of points and lines.</p></dd>
-
-
 <dt>simple</dt>
 <dd><p>A logical stipulating whether to simplify the plot by collapsing across sources.</p></dd>
+
+
+<dt>bars</dt>
+<dd><p>A logical stipulating whether to summarize and use stacked bars, instead of points and lines.</p></dd>
 
 
 <dt>parsed_results</dt>

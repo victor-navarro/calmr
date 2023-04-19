@@ -13,6 +13,12 @@
     <loc>http://victornavarro.org/calmr/articles/RW1972_math.html</loc>
   </url>
   <url>
+    <loc>http://victornavarro.org/calmr/articles/SM2007_math.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/articles/SM2007_sims.html</loc>
+  </url>
+  <url>
     <loc>http://victornavarro.org/calmr/articles/calmr_app.html</loc>
   </url>
   <url>
@@ -91,6 +97,9 @@
     <loc>http://victornavarro.org/calmr/reference/RW1972.html</loc>
   </url>
   <url>
+    <loc>http://victornavarro.org/calmr/reference/SM2007.html</loc>
+  </url>
+  <url>
     <loc>http://victornavarro.org/calmr/reference/calmr_app.html</loc>
   </url>
   <url>
@@ -148,13 +157,13 @@
     <loc>http://victornavarro.org/calmr/reference/pipe.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/plot-CalmrExperiment-method.html</loc>
-  </url>
-  <url>
     <loc>http://victornavarro.org/calmr/reference/plot-CalmrRSA-method.html</loc>
   </url>
   <url>
     <loc>http://victornavarro.org/calmr/reference/plot-CalmrRSATest-method.html</loc>
+  </url>
+  <url>
+    <loc>http://victornavarro.org/calmr/reference/plot.html</loc>
   </url>
   <url>
     <loc>http://victornavarro.org/calmr/reference/predict-CalmrFit-method.html</loc>

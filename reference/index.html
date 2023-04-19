@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">calmr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,6 +26,8 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/PKH1982_math.html">PKH1982_math</a>
     <a class="dropdown-item" href="../articles/RW1972_math.html">RW1972_math</a>
+    <a class="dropdown-item" href="../articles/SM2007_math.html">SM2007_math</a>
+    <a class="dropdown-item" href="../articles/SM2007_sims.html">SM2007_sims</a>
     <a class="dropdown-item" href="../articles/calmr_app.html">calmr_app</a>
     <a class="dropdown-item" href="../articles/calmr_basics.html">calmr_basics</a>
     <a class="dropdown-item" href="../articles/calmr_fits.html">calmr_fits</a>
@@ -149,6 +151,11 @@
         <dd>Train the RW1972 model</dd>
       </dl><dl><dt>
           
+          <code><a href="SM2007.html">SM2007()</a></code> 
+        </dt>
+        <dd>Train the SM2007 model</dd>
+      </dl><dl><dt>
+          
           <code><a href="calmr_app.html">calmr_app()</a></code> 
         </dt>
         <dd>Run the calmr GUI</dd>
@@ -224,7 +231,7 @@
 <code>suported_plots</code> returns the plots supported by argument <code>model</code>.</dd>
       </dl><dl><dt>
           
-          <code><a href="model_plots.html">plot_vs()</a></code> <code><a href="model_plots.html">plot_acts()</a></code> <code><a href="model_plots.html">plot_rs()</a></code> <code><a href="model_plots.html">plot_as()</a></code> 
+          <code><a href="model_plots.html">plot_vs()</a></code> <code><a href="model_plots.html">plot_acts()</a></code> <code><a href="model_plots.html">plot_rs()</a></code> <code><a href="model_plots.html">plot_as()</a></code> <code><a href="model_plots.html">plot_os()</a></code> 
         </dt>
         <dd>Plotting functions for calmr models</dd>
       </dl><dl><dt>
@@ -239,11 +246,6 @@
         <dd>Rat responses from Patittucci et al. 2016</dd>
       </dl><dl><dt>
           
-          <code><a href="plot-CalmrExperiment-method.html">plot(<i>&lt;CalmrExperiment&gt;</i>)</a></code> 
-        </dt>
-        <dd>Plot CalmrExperiment</dd>
-      </dl><dl><dt>
-          
           <code><a href="plot-CalmrRSA-method.html">plot(<i>&lt;CalmrRSA&gt;</i>)</a></code> 
         </dt>
         <dd>Plot RSA</dd>
@@ -252,6 +254,11 @@
           <code><a href="plot-CalmrRSATest-method.html">plot(<i>&lt;CalmrRSATest&gt;</i>)</a></code> 
         </dt>
         <dd>Plot RSA test</dd>
+      </dl><dl><dt>
+          
+          <code><a href="plot.html">plot(<i>&lt;CalmrExperiment&gt;</i>)</a></code> 
+        </dt>
+        <dd>Plot CalmrExperiment</dd>
       </dl><dl><dt>
           
           <code><a href="predict-CalmrFit-method.html">predict(<i>&lt;CalmrFit&gt;</i>)</a></code> 

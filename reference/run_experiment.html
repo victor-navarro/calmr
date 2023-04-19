@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">calmr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,6 +26,8 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/PKH1982_math.html">PKH1982_math</a>
     <a class="dropdown-item" href="../articles/RW1972_math.html">RW1972_math</a>
+    <a class="dropdown-item" href="../articles/SM2007_math.html">SM2007_math</a>
+    <a class="dropdown-item" href="../articles/SM2007_sims.html">SM2007_sims</a>
     <a class="dropdown-item" href="../articles/calmr_app.html">calmr_app</a>
     <a class="dropdown-item" href="../articles/calmr_basics.html">calmr_basics</a>
     <a class="dropdown-item" href="../articles/calmr_fits.html">calmr_fits</a>
@@ -69,7 +71,8 @@
 <span>  model <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  param_df <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  options <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  parse <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  parse <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -93,6 +96,10 @@
 
 <dt>parse</dt>
 <dd><p>A logical specifying whether the results should be parsed via <code>parse_experiment_results</code>. Default = TRUE.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Extra parameters passed to the model call (e.g., debug)</p></dd>
 
 </dl></div>
     <div class="section level2">
