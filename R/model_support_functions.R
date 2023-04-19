@@ -19,10 +19,6 @@ gen_os_values <- function(stims, default_val = -1){
   #post_func is a character vector of the stimuli being predicted
   #
   #returns a matrix of dimensions pre_func x post_func, with the combV values
-
-
-  #if (db_trial == 1) browser()
-  #if (length(pre_func) > 1)
   mat = array(0, dim = c(1, length(post_func)), dimnames = list(paste0(pre_func, collapse = ''), post_func))
   for (po in post_func){
     mat[1, po] = sum(V[pre_func, po])+(sum(V[pre_func, po])*(sum(V[po, pre_func])))
@@ -92,7 +88,6 @@ gen_os_values <- function(stims, default_val = -1){
       }
     }
   }
-  #if (db_trial == 10) browser()
   return(mat)
 }
 
@@ -100,8 +95,6 @@ gen_os_values <- function(stims, default_val = -1){
 .distR <- function(alphas, combv, chainv, db_trial = NA){
   #Distributes the associative strength among all stimuli (alphas)
   #returns a matrix of dimensions length(alphas) x ncols(combv)
-  #if (nrow(chainv) > 1) browser()
-  #if (db_trial > 10) browser()
   mat = (alphas/sum(alphas))%*%(combv+colSums(chainv))
   rownames(mat) = names(alphas)
   return(mat)
@@ -215,7 +208,7 @@ gen_os_values <- function(stims, default_val = -1){
 }
 
 #Carries out a comparison process in a recursive manner, but dropping previous i from link 3
-.james_comparator_proc <- function(act, i, j, K, O, gammas, order, debug = F){
+.witnauer_comparator_proc <- function(act, i, j, K, O, gammas, order, debug = F){
   ks = setdiff(K, c(i,j))
   if (order){ #order > 0
     val = act[i, j] -
@@ -247,7 +240,6 @@ gen_os_values <- function(stims, default_val = -1){
 
   val
 }
-
 
 
 #### Unused ####

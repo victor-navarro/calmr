@@ -11,10 +11,14 @@
 #' @param O (optional) A named matrix of dimensions S,S,S (the operator switches).
 #' @param experience A data.frame specifying trials as rows, as returned by `make_model_args`
 #' @param mapping A named list specifying trial and stimulus mapping, as returned by `make_model_args`
+#' @param debug A logical specifying whether to print information for the comparison process. Defaults to FALSE.
+#' @param comparator_func A function to be used in the comparison process. Either `.witnauer_comparator_func`or `.comparator_func`.
 #' @return A list with
 #' \itemize{
 #' \item{vs, Array of dimensions P,S,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment. Contains stimulus association strengths.}
-#' \item{acts, As above but of dimensions P, S, S, C, containing relative activations on the n-th order (as determined by argument C).}
+#' \item{acts} As above but with stimulus activations.
+#' \item{relacts} As above but with (relative) stimulus activations after comparison process.
+#' \item{os} Array of dimensions P,S,S,S, with the state of the operator switches. See notes related to `O` parameter.
 #' \item{other, Carryover arguments used for further processing by other functions}
 #' }
 #' @note
@@ -34,7 +38,7 @@ SM2007 <- function(alphas,
                    experience,
                    mapping,
                    debug = F,
-                   comparator_func = .james_comparator_proc,
+                   comparator_func = .witnauer_comparator_proc,
                    ...){
 
   mod = methods::new("CalmrModel",
@@ -90,6 +94,12 @@ SM2007 <- function(alphas,
       }
     }
 
+    #save data
+    vs[t, , ] = V
+    acts[t, , ] = act
+    relacts[t, , ] = relact
+    os[t, , , ] = O
+
     #learn if we need to
     if (!experience$is_test[t]){
       #get alphas betas and lambdas for learning
@@ -134,12 +144,6 @@ SM2007 <- function(alphas,
       O = O+dO
 
     }
-
-    #save data
-    vs[t, , ] = V
-    acts[t, , ] = act
-    relacts[t, , ] = relact
-    os[t, , , ] = O
   }
   mod@parameters = list(alphas = alphas,
                         lambdas = lambdas,
