@@ -1,10 +1,8 @@
 #' An assortment of functions to help fit models
-#' @description
-#' get_optimizer_opts returns a list with options for optimization
 #' @param model_pars A character vector specifying the name of the parameters to fit.
 #' @param initial_pars A numeric vector specifying the initial parameter values to evaluate the model at (required by `optim`). Defaults to 0 for each parameter.
 #' @param ll,ul A numeric vector specifying the lower and upper limits of the parameters to fit, respectively
-#' @param optimizer A string specifying the optimizer to use. One from `c("optim")`
+#' @param optimizer A string specifying the optimizer to use. One from `c("optim", "ga")`
 #' @param family A string specifying the family function to generate responses (and calculate the likelihood function with). One from `c("identity", "normal", "poisson")`.
 #' @note Whenever a family function other than the identity is used, the family-specific parameters will always be appended to the end of the relevant lists.
 #' @rdname fit_helpers

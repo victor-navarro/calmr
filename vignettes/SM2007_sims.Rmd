@@ -22,7 +22,7 @@ library(ggplot2)
 library(magrittr)
 library(dplyr)
 library(calmr)
-
+theme_set(theme_bw())
 ```
 
 ## The fixed parameters

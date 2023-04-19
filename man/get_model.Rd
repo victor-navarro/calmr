@@ -12,10 +12,3 @@ get_model(model_name)
 \description{
 Given a model string, returns a model function that can be used elsewhere in the package.
 }
-\note{
-The model_name parameter matches published models as follows:
-\itemize{
-\item{HDI2020: Honey, Dwyer, and Illiescu (2020). Psych Review.}
-\item{HD2022: Honey and Dwyer (2022). Psych Review.}
-}
-}

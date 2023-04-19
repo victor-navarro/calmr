@@ -20,12 +20,12 @@ get_optimizer_opts(
 
 \item{ll, ul}{A numeric vector specifying the lower and upper limits of the parameters to fit, respectively}
 
-\item{optimizer}{A string specifying the optimizer to use. One from \code{c("optim")}}
+\item{optimizer}{A string specifying the optimizer to use. One from \code{c("optim", "ga")}}
 
 \item{family}{A string specifying the family function to generate responses (and calculate the likelihood function with). One from \code{c("identity", "normal", "poisson")}.}
 }
 \description{
-get_optimizer_opts returns a list with options for optimization
+An assortment of functions to help fit models
 }
 \note{
 Whenever a family function other than the identity is used, the family-specific parameters will always be appended to the end of the relevant lists.

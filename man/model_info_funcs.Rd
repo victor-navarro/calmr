@@ -2,23 +2,26 @@
 % Please edit documentation in R/model_info_funcs.R
 \name{supported_models}
 \alias{supported_models}
-\alias{.get_model_parnames}
-\title{Miscellaneous information functions
-\code{supported_models} returns the models supported in the package.
-\code{supported_plots} returns the plots supported by argument \code{model}.
-\code{supported_families} returns the families supported by \code{\link{fit_model}}.
-\code{supported_optimizers} returns the optimizers supported by \code{\link{fit_model}}.
-\code{suported_plots} returns the plots supported by argument \code{model}.}
+\alias{supported_optimizers}
+\alias{supported_families}
+\alias{supported_plots}
+\title{Miscellaneous information functions}
 \usage{
 supported_models()
 
-.get_model_parnames(model)
+supported_optimizers()
+
+supported_families()
+
+supported_plots(model = NULL)
 }
 \arguments{
 \item{model}{A string specifying a model. One from \code{supported_models()}}
 }
 \description{
 Miscellaneous information functions
+}
+\note{
 \code{supported_models} returns the models supported in the package.
 \code{supported_plots} returns the plots supported by argument \code{model}.
 \code{supported_families} returns the families supported by \code{\link{fit_model}}.

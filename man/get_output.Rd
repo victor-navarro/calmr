@@ -7,12 +7,12 @@
 get_output(object, type = NULL)
 }
 \arguments{
-\item{object}{An object of class \code{\link{CalmrFit-class}}.}
+\item{object}{An object of class \code{\link{CalmrExperiment-class}}.}
 
 \item{type}{The type of output}
 }
 \value{
-A numeric
+A data.frame with the model output
 }
 \description{
 Returns a tibble containing parsed outputs of CalmrExperiment

@@ -9,7 +9,10 @@ get_model_params(design, model = NULL)
 \arguments{
 \item{design}{An data.frame containing the experimental design.}
 
-\item{model}{A string specifying a model. One in supported_models()}
+\item{model}{A string specifying a model. One in \code{supported_models()}.}
+}
+\value{
+A data.frame with model parameters, depending on \code{model}.
 }
 \description{
 Obtain model parameters

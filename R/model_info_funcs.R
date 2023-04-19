@@ -1,27 +1,31 @@
 #' Miscellaneous information functions
+#' @param model A string specifying a model. One from `supported_models()`
+#' @note
 #' `supported_models` returns the models supported in the package.
 #' `supported_plots` returns the plots supported by argument `model`.
 #' `supported_families` returns the families supported by \code{\link{fit_model}}.
 #' `supported_optimizers` returns the optimizers supported by \code{\link{fit_model}}.
 #' `suported_plots` returns the plots supported by argument `model`.
-#' @param model A string specifying a model. One from `supported_models()`
-#' @rdname model_info_funcs
 
+#' @rdname model_info_funcs
 #' @export
 supported_models <- function(){
   c("HDI2020", "HD2022", "RW1972", "MAC1975", "PKH1982", "SM2007", "RAND")
 }
 
+#' @rdname model_info_funcs
 #' @export
 supported_optimizers <- function(){
   c("optim", "ga")
 }
 
+#' @rdname model_info_funcs
 #' @export
 supported_families <- function(){
   c("identity", "normal", "poisson", "OLS")
 }
 
+#' @rdname model_info_funcs
 #' @export
 supported_plots <- function(model = NULL){
   plot_info = list(
@@ -41,7 +45,6 @@ supported_plots <- function(model = NULL){
   }
 }
 
-#' @rdname model_info_funcs
 .get_model_parnames <- function(model){
   #check if model is supported
   .calmr_check(model, "supported_model")
@@ -49,7 +52,6 @@ supported_plots <- function(model = NULL){
                           model = model)
   names(pars)[-1]
 }
-
 
 .calmr_check <- function(type, given = NULL, necessary = NULL){
   switch(type,

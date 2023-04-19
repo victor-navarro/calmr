@@ -55,9 +55,20 @@ Go ahead and parse the design. Some new things will appear on the GUI.
 
 After parsing a valid design. The user can set up the parameters for the experiment (including all stimulus-related parameters). In this case, the Rescorla-Wagner model has 4 parameters per stimulus. The default values are fairly sensible, but the user can futher modify the parameters by hand, if desired.
 
-Note that after parsing, a new button, "Run Model" has appeared. A final click on that button will run the model and populate the "Results" and "Association Graphs" portions of the app. Go ahead and run the model.
+The parametrization of each model in calmr can sometimes differ from what appears in the literature. The following table contains links to the pages 
+
+| Citation                        | Name       | Model page              |
+|:-------------------------------:|:----------:|:-----------------------:|
+| Rescorla and Wagner (1972)      | RW1972     |[Link](RW1972_math.html) |
+| Mackintosh (1975)               | MAC1975    |[Link](MAC1975_math.html)|
+| Pearce, Kaye, and Hall (1982)   | PKH1982    |[Link](PKH1982_math.html)|
+| Stout and Miller (2007)         | SM2007     |[Link](SM2007_math.html) |
+| Honey, Dwyer and Illiescu (2020)| HDI2020    |[Link](heidi_math.html)  |
+| Honey and Dwyer (2022)          | HD2022     |[Link](heidi_math.html)  |
 
 ## Results
+
+Note that after parsing, a new button, "Run Model" has appeared. A final click on that button will run the model and populate the "Results" and "Association Graphs" portions of the app. Go ahead and run the model.
 
 ![The calmr app GUI after running the model](calmr_app_ran_app.png){width=600px}
 

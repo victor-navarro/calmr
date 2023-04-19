@@ -1,6 +1,7 @@
 #' Obtain model parameters
 #' @param design An data.frame containing the experimental design.
-#' @param model A string specifying a model. One in supported_models()
+#' @param model A string specifying a model. One in `supported_models()`.
+#' @return A data.frame with model parameters, depending on `model`.
 #' @seealso \code{\link{supported_models}}
 #' @export
 

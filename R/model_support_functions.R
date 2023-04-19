@@ -1,5 +1,4 @@
-#' Model support functions
-#' @description An assortment of functions to support models (mostly HeiDI)
+#An assortment of functions to support models
 
 #Generate a matrix with named columns and rows
 gen_ss_weights <- function(stims, default_val = 0){

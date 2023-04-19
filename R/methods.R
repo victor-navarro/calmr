@@ -47,9 +47,9 @@ setMethod("show", "CalmrRSATest", function(object){
 #'
 #' Returns a tibble containing parsed outputs of CalmrExperiment
 #'
-#' @param object An object of class \code{\link{CalmrFit-class}}.
+#' @param object An object of class \code{\link{CalmrExperiment-class}}.
 #' @param type The type of output
-#' @return A numeric
+#' @return A data.frame with the model output
 #' @export
 
 get_output <- function(object, type = NULL) NULL
@@ -216,15 +216,6 @@ setMethod("graph", "CalmrModel", function(x, ...){
     stop("The graph method requires a parsed model.")
   }
 })
-
-#' Graph model associations
-#'
-#' Creates a network graph of model associations
-#'
-#' @param x An object of class \code{\link{CalmrModel-class}} or \code{\link{CalmrExperiment-class}}.
-#' @param ... Additional parameters passed to the \code{\link{graph_weights}} function.
-#' @return A ggplot object
-#' @export
 setMethod("graph", "CalmrExperiment", function(x, ...){
   if (any(c("evs", "ivs") %in% names(x@parsed_results))){
     dat = x@parsed_results$evs

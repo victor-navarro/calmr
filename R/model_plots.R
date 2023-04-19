@@ -1,31 +1,3 @@
-#' Plotting functions for calmr models
-#' @description plot_vs, plot_acts, plot_rs, and plot_as plot weights, activations, r-values and alphas from a model.
-#' make_plots is a convenience function to generate all the above plots in one go.
-#' plot_common_scale rescales the y-axis of a group of plots, so they are all in the same scale.
-#' get_plot_opts returns plotting options.
-#' graph_weights creates a graph_weights of a model's weights on a given trial.
-#' get_graph_opts returns graphing options.
-#' make_graphs is a convenience function to create group graphs, given a model.
-#' patch_plots and patch_graphs return a composite of plots or graphs.
-#' @param vals A data.frame containing parsed values.
-#' @param bars A logical stipulating whether to summarize and use stacked bars, instead of points and lines.
-#' @param simple A logical stipulating whether to simplify the plot by collapsing across sources.
-#' @param parsed_results A parsed experiment, as returned by parse_experiment_results.
-#' @param plots A named list with plots
-#' @param selection A character vector with the selected plots
-#' @param type A string specifying the type of plots requested. One of `c("vs", "rs_simple", "rs_complex", "acts_learning", "acts_bar", "as")`
-#' @param plot_options A list with options
-#' @param common_scale A logical. Whether to plot the data in a common y-scale.
-#' @param weights A data.frame containing parsed weights, as returned by parse_experiment_results
-#' @param t An integer denoting the trial of the weights to be graphed. Defaults to the last trial in the data.
-#' @param limits A vector of length 2 specifying the range of weights. Defaults to the negative and positive maximum of absolute weights.
-#' @param graph_opts A list of options for graphing weights
-#' @param graph_size A string specifying the desired graph size, from c("large", "small"). Default is "large".
-#' @param graphs A list of graphs, as returned by make_graphs
-#' @seealso \code{\link{parse_experiment_results}}
-#' @importFrom ggplot2 .data
-
-#' @rdname model_plots
 plot_vs <- function(vals){
   vals %>%
     dplyr::mutate(trial = ceiling(.data$trial/.data$block_size)) %>%
@@ -94,7 +66,6 @@ plot_es <- function(vals, overall = T){
   }
 }
 
-#' @rdname model_plots
 plot_acts <- function(vals){
   group_cols = c("trial", "phase", "trial_type", "s1", "s2")
   if ("act_type" %in% names(vals)){
@@ -127,7 +98,6 @@ plot_acts <- function(vals){
     ggplot2::facet_grid(.data$s2~.data$phase+.data$trial_type, scales = 'free_x')
 }
 
-#' @rdname model_plots
 plot_rs <- function(vals, simple = F){
   summ = vals %>%
     dplyr::mutate(trial = ceiling(.data$trial/.data$block_size)) %>%
@@ -163,7 +133,6 @@ plot_rs <- function(vals, simple = F){
 }
 
 
-#' @rdname model_plots
 plot_as <- function(vals){
   vals %>%
     dplyr::mutate(trial = ceiling(.data$trial/.data$block_size)) %>%
@@ -179,7 +148,6 @@ plot_as <- function(vals){
     ggplot2::theme_bw()
 }
 
-#' @rdname model_plots
 plot_os <- function(vals){
   vals %>% dplyr::mutate(trial = ceiling(.data$trial/.data$block_size)) %>%
     dplyr::group_by(.data$trial, .data$phase, .data$s1, .data$comp, .data$s2) %>%
@@ -282,37 +250,6 @@ graph_weights <- function(weights, limits = NULL, colour_key = F,
   p
 }
 
-#' @export
-get_graph_opts <- function(graph_size = "small"){
-  if (graph_size == "large"){
-    arrow.gap = 0.16
-    arrow.curvature = 0.2
-    arrow.pt = 20
-    edge.size = 3
-    node.size = 40
-    node.stroke = 3
-    node.text.size = 15
-  }
-  if (graph_size == "small"){
-    arrow.gap = 0.10
-    arrow.curvature = 0.2
-    arrow.pt = 10
-    edge.size = 1.5
-    node.size = 20
-    node.stroke = 1.5
-    node.text.size = 7.5
-
-  }
-  return(list(arrow.gap = arrow.gap,
-              arrow.curvature = arrow.curvature,
-              arrow.pt = arrow.pt,
-              edge.size = edge.size,
-              node.size = node.size,
-              node.stroke = node.stroke,
-              node.text.size = node.text.size))
-
-}
-
 make_graphs <- function(parsed_experiment,
                         limits = NULL,
                         t = NULL,
@@ -387,4 +324,35 @@ patch_plots <- function(plots, selection = NULL, type = NULL, plot_options = get
     cow = cowplot::plot_grid(plotlist = plots)
   }
   cow
+}
+
+#' @export
+get_graph_opts <- function(graph_size = "small"){
+  if (graph_size == "large"){
+    arrow.gap = 0.16
+    arrow.curvature = 0.2
+    arrow.pt = 20
+    edge.size = 3
+    node.size = 40
+    node.stroke = 3
+    node.text.size = 15
+  }
+  if (graph_size == "small"){
+    arrow.gap = 0.10
+    arrow.curvature = 0.2
+    arrow.pt = 10
+    edge.size = 1.5
+    node.size = 20
+    node.stroke = 1.5
+    node.text.size = 7.5
+
+  }
+  return(list(arrow.gap = arrow.gap,
+              arrow.curvature = arrow.curvature,
+              arrow.pt = arrow.pt,
+              edge.size = edge.size,
+              node.size = node.size,
+              node.stroke = node.stroke,
+              node.text.size = node.text.size))
+
 }

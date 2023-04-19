@@ -1,6 +1,4 @@
-#' Model parsers
-#' @description An assorment of functions to help models
-
+#An assorment of functions to help parse models
 .parse <- function(mod, type){
   #check if mod has the type
   if (!(type %in% names(mod@model_results))) stop(sprintf("Model does not contain '%s' in model results.", type))
