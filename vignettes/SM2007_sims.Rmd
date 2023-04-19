@@ -18,11 +18,9 @@ knitr::opts_chunk$set(warning = F, message = F)
 
 
 ```{r}
-rm(list = ls(all =T))
-require(tidyverse)
-require(ggplot2)
-require(calmr)
-mod <- "SM2007"
+library(tidyverse)
+library(ggplot2)
+library(calmr)
 
 ```
 
@@ -31,7 +29,9 @@ mod <- "SM2007"
 In Witnauer et al (2012), they set the alphas of cues, contexts, and the US to 0.35, 0.15, and 0.50, respectively. The rate at which associations weaken (k1, here, omega) was set to be 0.22. The weight with which comparison stimuli compete (k2, here, gamma) was set to 0.56. The rate at which the operator switch is learned (k3, here, tau) was set to 0.46. Finally, the strength with which present stimuli are activated (k4, here, rho; see Eq. 4 in their paper) was set to 1.60.
 
 ## Acquisition ##
+
 ```{r}
+mod <- "SM2007"
 des <- data.frame(Group = "Acquisition",
                   P1 = "100(ctxa)A>(US)/300(ctxa)",
                   R1 = F,
@@ -73,6 +73,7 @@ m@parsed_results$relacts %>%
 ```
 
 ## Extinction ##
+
 ```{r}
 
 des <- data.frame(Group = "Extinction",
@@ -115,8 +116,8 @@ geom_col() + coord_cartesian(ylim = c(0, .4))
 
 ```
 
-
 ## Second order conditioning/Conditioned inhibition ##
+
 ```{r}
 
 des <- data.frame(Group = c("Few", "Many"),
@@ -147,9 +148,8 @@ geom_col(position = position_dodge())
 
 ```
 
-
-
 ## Blocking ##
+
 ```{r}
 des <- data.frame(Group = c("Elemental", "Overshadowing", "Blocking", "Recovery From Blocking"),
 P1 = "10(ctx)A>(US)/180(ctx)",
@@ -185,8 +185,8 @@ geom_col()
 #perhaps not enough information to do the simulation?
 ```
 
-
 ## Unequal associative changes ##
+
 ```{r}
 mod <- "SM2007"
 des <- data.frame(Group = "Unequal",
@@ -218,6 +218,7 @@ geom_point()
 ```
 
 ## CS Preexposure ##
+
 ```{r}
 des <- data.frame(Group = "CSPreexposure",
 P1 = "66(ctx)P/198(ctx)",
