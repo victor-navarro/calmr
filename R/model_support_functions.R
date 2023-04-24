@@ -175,6 +175,7 @@ gen_os_values <- function(stims, default_val = -1){
 #Carries out a comparison process in a recursive manner
 .comparator_proc <- function(act, i, j, K, O, gammas, order, debug = F){
   ks = setdiff(K, c(i,j))
+  if (!length(ks)) return(act[i, j]) #early exit if there are no comparators available
   if (order){ #order > 0
     val = act[i, j] -
       sum(gammas[ks] * O[i,ks,j] *
@@ -209,6 +210,7 @@ gen_os_values <- function(stims, default_val = -1){
 #Carries out a comparison process in a recursive manner, but dropping previous i from link 3
 .witnauer_comparator_proc <- function(act, i, j, K, O, gammas, order, debug = F){
   ks = setdiff(K, c(i,j))
+  if (!length(ks)) return(act[i, j]) #early exit if there are no comparators available
   if (order){ #order > 0
     val = act[i, j] -
       sum(gammas[ks] * O[i,ks,j] *

@@ -10,7 +10,6 @@
       tidyr::unnest("value") %>%
       dplyr::mutate(Var1 = as.character(.data$Var1),
                     Var2 = as.character(.data$Var2)) %>%
-      dplyr::filter(.data$Var1 != .data$Var2) %>%
       dplyr::rename("trial_type" = "tp", "s1" = "Var1", "s2" = "Var2", "value" = "Freq")
   }
   if (type %in% c("vs", "evs", "ivs")){
@@ -20,7 +19,6 @@
       tidyr::unnest("value") %>%
       dplyr::mutate(Var1 = as.character(.data$Var1),
                     Var2 = as.character(.data$Var2)) %>%
-      dplyr::filter(.data$Var1 != .data$Var2) %>%
       dplyr::rename("trial_type" = "tp", "s1" = "Var1", "s2" = "Var2", "value" = "Freq")
   }
   if (type == "acts"){
