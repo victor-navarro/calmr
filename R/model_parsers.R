@@ -176,7 +176,7 @@ aggregate_experiment_results <- function(parsed_experiment){
                     s1 = as.factor(.data$s1), phase = as.factor(.data$phase))
   }
   if (type == "acts"){
-    if ("act_type" %in% names(res$acts)){
+    if (any(res$model %in% c("HD2022", "HDI2020"))){
       dat = do.call("rbind", res$acts) %>%
         dplyr::group_by(.data$group, .data$trial, .data$phase, .data$trial_type,
                         .data$act_type, .data$s1, .data$s2, .data$block_size) %>%
