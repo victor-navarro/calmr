@@ -216,7 +216,7 @@ get_plot_opts <- function(common_scale = TRUE){
   return(list(common_scale = common_scale))
 }
 
-graph_weights <- function(weights, limits = NULL, colour_key = F,
+graph_weights <- function(weights, loops = TRUE, limits = NULL, colour_key = F,
                           t = max(weights$trial), graph_opts = get_graph_opts()){
   weights = weights %>% dplyr::filter(.data$trial == t) %>%
     dplyr::group_by(.data$s1, .data$s2) %>%
@@ -227,7 +227,7 @@ graph_weights <- function(weights, limits = NULL, colour_key = F,
   if (is.null(limits)){
     limits = max(abs(range(weights$weight)))*c(-1, 1)
   }
-  net = ggnetwork::ggnetwork(network::as.network(weights),
+  net = ggnetwork::ggnetwork(network::as.network(weights, loops = loops),
                              layout = "circle",
                              arrow.gap = graph_opts$arrow.gap)
   p = ggplot2::ggplot(net, ggplot2::aes(x = .data$x, y = .data$y,
