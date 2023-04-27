@@ -59,7 +59,6 @@ HDI2020 <- function(alphas,
                          fsnames = fsnames,
                          nomi2func = mapping$nomi2func,
                          db_trial = t)
-
     #Distribute R
     r = .distR(ralphas, combV, chainV, t)
 

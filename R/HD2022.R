@@ -63,7 +63,6 @@ HD2022 <- function(alphas,
                          pre_func = fprestims,
                          fsnames = fsnames,
                          nomi2func = mapping$nomi2func,
-                         absent_func = .absentalphas_complex,
                          db_trial = t)
 
     #Distribute R
