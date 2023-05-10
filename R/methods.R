@@ -274,7 +274,7 @@ setMethod("NLL", "CalmrFit", function(object){
 #' @export
 setMethod("AIC", "CalmrFit",
           function(object, ..., k = 2){
-            2*k - 2*-object@nloglik
+            k*length(object@best_pars) - 2*-object@nloglik
           })
 #' BIC of CalmrFit
 #'
