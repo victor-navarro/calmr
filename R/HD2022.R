@@ -68,6 +68,13 @@ HD2022 <- function(alphas,
     #Distribute R
     r = .distR(ralphas, combV, chainV, t)
 
+    #save data
+    vs[t, , ] = V
+    as[t, ] = ralphas
+    rs[t, , ] = r
+    combvs[[t]] = combV
+    chainvs[[t]] = chainV
+
     #learn if we need to
     if (!experience$is_test[t]){
       #make one-hot vector of pre functional stimuli (for learning)
@@ -86,13 +93,6 @@ HD2022 <- function(alphas,
       diag(d) = 0
       V = V+d
     }
-
-    #save data
-    vs[t, , ] = V
-    as[t, ] = ralphas
-    rs[t, , ] = r
-    combvs[[t]] = combV
-    chainvs[[t]] = chainV
   }
   mod@parameters = list(alphas = alphas)
   mod@model_results = list(vs = vs,
