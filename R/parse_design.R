@@ -9,25 +9,28 @@
 #' }
 #' }
 #' @examples
-#' df <- data.frame(Group = c('Group 1', 'Group 2'), P1 = c('10AB(US)', '10A(US)'), R1 = c(TRUE, TRUE))
+#' df <- data.frame(Group = c("Group 1", "Group 2"), P1 = c("10AB(US)", "10A(US)"), R1 = c(TRUE, TRUE))
 #' parse_design(df)
 #' @seealso \code{\link{trial_parser}}
 #' @export
-parse_design <- function(df){
-  #if already parsed, skip
-  if ("tbl" %in% class(df)) return(df)
+parse_design <- function(df) {
+  # if already parsed, skip
+  if ("tbl" %in% class(df)) {
+    return(df)
+  }
 
-  design_list = vector('list', nrow(df))
-  phases = colnames(df)
-  groups = df[, 1]
-  design = tibble::tibble()
-  for (g in 1:nrow(df)){
-    for (p in seq(2, ncol(df), 2)){
-      design = rbind(design, tibble::tibble(group = groups[g],
-                                            phase = phases[p],
-                                            parse_string = df[g, p],
-                                            randomize = df[g, p+1],
-                                            trial_info = list(trial_parser(df[g, p]))))
+  phases <- colnames(df)
+  groups <- df[, 1]
+  design <- tibble::tibble()
+  for (g in 1:nrow(df)) {
+    for (p in seq(2, ncol(df), 2)) {
+      design <- rbind(design, tibble::tibble(
+        group = groups[g],
+        phase = phases[p],
+        parse_string = df[g, p],
+        randomize = df[g, p + 1],
+        trial_info = list(trial_parser(df[g, p]))
+      ))
     }
   }
   design

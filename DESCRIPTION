@@ -20,6 +20,7 @@ Imports:
     methods,
     network,
     openxlsx,
+    purrr,
     rhandsontable,
     rlang,
     shiny,

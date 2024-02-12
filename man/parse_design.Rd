@@ -23,7 +23,7 @@ Each entry in even-numbered columns of df is a string formatted as per trial_par
 }
 }
 \examples{
-df <- data.frame(Group = c('Group 1', 'Group 2'), P1 = c('10AB(US)', '10A(US)'), R1 = c(TRUE, TRUE))
+df <- data.frame(Group = c("Group 1", "Group 2"), P1 = c("10AB(US)", "10A(US)"), R1 = c(TRUE, TRUE))
 parse_design(df)
 }
 \seealso{

@@ -16,163 +16,181 @@
 #'
 #' @export
 
-make_model_args <- function(design, pars = NULL, model = NULL, opts = get_exp_opts()){
-  parsed_design = parse_design(design)
+make_model_args <- function(
+    design, pars = NULL,
+    model = NULL, opts = get_exp_opts()) {
+  parsed_design <- parse_design(design)
 
-  #check model
-  if (is.null(model)){
-    model = .calmr_default("model_name")
-  }else{
+  # check model
+  if (is.null(model)) {
+    model <- .calmr_default("model_name")
+  } else {
     .calmr_check("supported_model", given = model)
   }
 
-  #check parameters
-  if (is.null(pars)){
-    pars = .calmr_default("model_params", design = design, model = model)
-  }else{
-    #check if the user-specified parameters match what the parser sees
-    auto_params = get_model_params(design = design, model = model)
+  # check parameters
+  if (is.null(pars)) {
+    pars <- .calmr_default("model_params", design = design, model = model)
+  } else {
+    # check if the user-specified parameters match what the parser sees
+    auto_params <- get_model_params(design = design, model = model)
     .calmr_check("params_OK", given = pars, necessary = auto_params)
   }
 
-  #Some early info
-  snames = pars$stimulus
+  # Some early info
+  snames <- pars$stimulus
 
-  #the only challenge here is to create a master list of trials (trials)
-  #and sample the training for each group (tps)
-  #create master lists of trials and trial_names
-  tinfo = parsed_design %>% tidyr::unnest_wider("trial_info") %>%
-    dplyr::select("trial_pre_functional",
-                  "trial_post_functional",
-                  "trial_pre_nominal",
-                  "trial_post_nominal",
-                  "trial_names")
+  # the only challenge here is to create a master list of trials (trials)
+  # and sample the training for each group (tps)
+  # create master lists of trials and trial_names
+  tinfo <- parsed_design %>%
+    tidyr::unnest_wider("trial_info") %>%
+    dplyr::select(
+      "trial_pre_functional",
+      "trial_post_functional",
+      "trial_pre_nominal",
+      "trial_post_nominal",
+      "trial_names"
+    )
 
-  master_trial_names = unlist(tinfo$trial_names)
+  master_trial_names <- unlist(tinfo$trial_names)
 
-  trial_pre_functional_list = unlist(tinfo$trial_pre_functional, recursive = F)
-  trial_post_functional_list = unlist(tinfo$trial_post_functional, recursive = F)
-  trial_pre_nominal_list = unlist(tinfo$trial_pre_nominal, recursive = F)
-  trial_post_nominal_list = unlist(tinfo$trial_post_nominal, recursive = F)
+  trial_pre_functional_list <- unlist(tinfo$trial_pre_functional, recursive = F)
+  trial_post_functional_list <- unlist(tinfo$trial_post_functional, recursive = F)
+  trial_pre_nominal_list <- unlist(tinfo$trial_pre_nominal, recursive = F)
+  trial_post_nominal_list <- unlist(tinfo$trial_post_nominal, recursive = F)
 
-  #reduce
-  trial_pre_functional_list = trial_pre_functional_list[!duplicated(master_trial_names)]
-  trial_post_functional_list = trial_post_functional_list[!duplicated(master_trial_names)]
-  trial_pre_nominal_list = trial_pre_nominal_list[!duplicated(master_trial_names)]
-  trial_post_nominal_list = trial_post_nominal_list[!duplicated(master_trial_names)]
+  # reduce
+  trial_pre_functional_list <- trial_pre_functional_list[!duplicated(master_trial_names)]
+  trial_post_functional_list <- trial_post_functional_list[!duplicated(master_trial_names)]
+  trial_pre_nominal_list <- trial_pre_nominal_list[!duplicated(master_trial_names)]
+  trial_post_nominal_list <- trial_post_nominal_list[!duplicated(master_trial_names)]
 
-  master_trial_names = master_trial_names[!duplicated(master_trial_names)]
+  master_trial_names <- master_trial_names[!duplicated(master_trial_names)]
 
-  #make stimulus mapping
-  map = parsed_design %>%
-    #this bit saves us having to crunch data about stimuli that are not present in a group but are present in another
+  # make stimulus mapping
+  map <- parsed_design %>%
+    # this bit saves us having to crunch data about stimuli that are not present in a group but are present in another
     tidyr::unnest_wider("trial_info") %>%
     dplyr::group_by(.data$group) %>%
-    dplyr::mutate(unique_nominal_stimuli = list(unique(unlist(.data$unique_nominal_stimuli))),
-                  unique_functional_stimuli = list(unique(unlist(.data$unique_functional_stimuli))),
-                  nomi2func = list({
-                    n2f = unlist(.data$nomi2func)
-                    n2f = n2f[!duplicated(names(n2f))]}),
-                  func2nomi = list({
-                    f2n = unlist(.data$func2nomi)
-                    f2n = f2n[!duplicated(names(f2n))]})) %>%
-    dplyr::select("group", "unique_functional_stimuli",
-                  "unique_nominal_stimuli", "nomi2func", "func2nomi") %>%
+    dplyr::mutate(
+      unique_nominal_stimuli = list(unique(unlist(.data$unique_nominal_stimuli))),
+      unique_functional_stimuli = list(unique(unlist(.data$unique_functional_stimuli))),
+      nomi2func = list({
+        n2f <- unlist(.data$nomi2func)
+        n2f <- n2f[!duplicated(names(n2f))]
+      }),
+      func2nomi = list({
+        f2n <- unlist(.data$func2nomi)
+        f2n <- f2n[!duplicated(names(f2n))]
+      })
+    ) %>%
+    dplyr::select(
+      "group", "unique_functional_stimuli",
+      "unique_nominal_stimuli", "nomi2func", "func2nomi"
+    ) %>%
     dplyr::distinct() %>%
-    #add the extra information above
+    # add the extra information above
     dplyr::rowwise() %>%
-    dplyr::mutate(trial_pre_func = list(trial_pre_functional_list),
-                  trial_post_func = list(trial_post_functional_list),
-                  trial_pre_nomi = list(trial_pre_nominal_list),
-                  trial_post_nomi = list(trial_post_nominal_list),
-                  trial_names = list(master_trial_names))
+    dplyr::mutate(
+      trial_pre_func = list(trial_pre_functional_list),
+      trial_post_func = list(trial_post_functional_list),
+      trial_pre_nomi = list(trial_pre_nominal_list),
+      trial_post_nomi = list(trial_post_nominal_list),
+      trial_names = list(master_trial_names)
+    )
 
-  #filter
-  map = do.call("rbind", apply(map, 1, function(x){
-    dat = x
+  # filter
+  map <- do.call("rbind", apply(map, 1, function(x) {
+    dat <- x
     tibble::tibble(group = dat[[1]], mapping = list(dat[-1]))
-  } ))
+  }))
 
-  #add stimulus parameters
-  map_par = .add_parameters(map, pars, model)
+  # add stimulus parameters
+  map_par <- .add_parameters(map, pars, model)
 
-  #we can sample now
-  #Dom, if you are reading this, I apologize for this bit
-  #It basically creates a tibble of iterations*groups*phases, with pointers for trials in the masterlist
-  exptb = parsed_design %>%
+  # we can sample now
+  # Dom, if you are reading this, I apologize for this bit
+  # It basically creates a tibble of iterations*groups*phases, with pointers for trials in the masterlist
+  exptb <- parsed_design %>%
     tidyr::unnest_wider("trial_info") %>%
     tidyr::expand_grid(iteration = 1:opts$iterations) %>%
     dplyr::rowwise() %>%
-    #the pointers are returned by the function .sample_trial
-    dplyr::mutate(samp = list(.sample_trials(.data$trial_names, .data$is_test, .data$trial_repeats,
-                                             .data$randomize, opts$miniblocks, master_trial_names))) %>%
-    dplyr::select(-"is_test") %>% #unfortunate naming
+    # the pointers are returned by the function .sample_trial
+    dplyr::mutate(samp = list(.sample_trials(
+      .data$trial_names, .data$is_test, .data$trial_repeats,
+      .data$randomize, opts$miniblocks, master_trial_names
+    ))) %>%
+    dplyr::select(-"is_test") %>% # unfortunate naming
     tidyr::unnest_wider("samp") %>%
     dplyr::rowwise() %>%
-    dplyr::mutate(phaselab = list(rep(.data$phase, length(.data$tps))),
-                  blocks = list(rep(.data$block_size, length(.data$tps)))) %>%
-    #one last manipulation to concatenate phases into single rows
+    dplyr::mutate(
+      phaselab = list(rep(.data$phase, length(.data$tps))),
+      blocks = list(rep(.data$block_size, length(.data$tps)))
+    ) %>%
+    # one last manipulation to concatenate phases into single rows
     dplyr::group_by(.data$iteration, .data$group) %>%
-    dplyr::summarize(tp = list(unlist(.data$tps)),
-                     is_test = list(unlist(.data$is_test)),
-                     phase = list(unlist(.data$phaselab)),
-                     block_size = list(unlist(.data$blocks)))
+    dplyr::summarize(
+      tp = list(unlist(.data$tps)),
+      is_test = list(unlist(.data$is_test)),
+      phase = list(unlist(.data$phaselab)),
+      block_size = list(unlist(.data$blocks))
+    )
 
-  #bundle into experiences
-  experience = apply(exptb[c(-1)], 1, function(x) do.call("cbind.data.frame", x))
+  # bundle into experiences
+  experience <- apply(exptb[c(-1)], 1, function(x) do.call("cbind.data.frame", x))
 
-  #return the tibble
-  tibble::tibble(model,
-                 exptb[, c("iteration", "group")],
-                 experience) %>%
+  # return the tibble
+  tibble::tibble(
+    model,
+    exptb[, c("iteration", "group")],
+    experience
+  ) %>%
     dplyr::left_join(map_par, by = "group")
 }
 
-.sample_trials <- function(names, test, repeats, randomize, miniblocks, masterlist){
-  block_size = 1
-  #do miniblocks if necessary
-  if (length(repeats) > 1 & miniblocks){
-    gcd = Reduce(.gcd, repeats)
-    per_block = repeats/gcd
-    block_size = sum(per_block)
-    tps = c() #note the redefining
-    tstps = c()
-    for (b in 1:gcd){
-      ts = unlist(sapply(seq_along(names), function(n) rep(which(masterlist %in% names[n]), per_block[n])))
-      tsts = unlist(sapply(seq_along(names), function(n) rep(test[n], per_block[n])))
-      #randomize if necessary
-      if (randomize){
-        ri = sample(length(ts))
-        ts = ts[ri]
-        tsts = tsts[ri]
+.sample_trials <- function(names, test, repeats, randomize, miniblocks, masterlist) {
+  block_size <- 1
+  # do miniblocks if necessary
+  if (length(repeats) > 1 & miniblocks) {
+    gcd <- Reduce(.gcd, repeats)
+    per_block <- repeats / gcd
+    block_size <- sum(per_block)
+    tps <- c() # note the redefining
+    tstps <- c()
+    for (b in 1:gcd) {
+      ts <- unlist(sapply(seq_along(names), function(n) rep(which(masterlist %in% names[n]), per_block[n])))
+      tsts <- unlist(sapply(seq_along(names), function(n) rep(test[n], per_block[n])))
+      # randomize if necessary
+      if (randomize) {
+        ri <- sample(length(ts))
+        ts <- ts[ri]
+        tsts <- tsts[ri]
       }
-      tps = c(tps, ts)
-      tstps = c(tstps, tsts)
+      tps <- c(tps, ts)
+      tstps <- c(tstps, tsts)
     }
-  }else{
-    tps = unlist(sapply(seq_along(names), function(n) rep(which(masterlist %in% names[n]), repeats[n])))
-    tstps = unlist(sapply(seq_along(names), function(n) rep(test[n], repeats[n])))
-    #randomize if necessary
-    if (randomize){
-      ri = sample(length(tps))
-      tps = tps[ri]
-      tstps = tstps[ri]
+  } else {
+    tps <- unlist(sapply(seq_along(names), function(n) rep(which(masterlist %in% names[n]), repeats[n])))
+    tstps <- unlist(sapply(seq_along(names), function(n) rep(test[n], repeats[n])))
+    # randomize if necessary
+    if (randomize) {
+      ri <- sample(length(tps))
+      tps <- tps[ri]
+      tstps <- tstps[ri]
     }
   }
   return(list(tps = tps, is_test = tstps, block_size = block_size))
 }
 
-#function to return the gcd
-.gcd <-  function(x,y) {
-  r <- x%%y;
+# function to return the gcd
+.gcd <- function(x, y) {
+  r <- x %% y
   return(ifelse(r, .gcd(y, r), y))
 }
 
-.add_parameters <- function(map, pars, model){
-  parnames = .get_model_parnames(model)
-  pars = sapply(parnames, function(p) lapply(map$mapping, function(x) stats::setNames(pars[[p]], pars$stimulus)[unlist(x$unique_nominal_stimuli)]), simplify = F)
+.add_parameters <- function(map, pars, model) {
+  parnames <- .get_model_parnames(model)
+  pars <- sapply(parnames, function(p) lapply(map$mapping, function(x) stats::setNames(pars[[p]], pars$stimulus)[unlist(x$unique_nominal_stimuli)]), simplify = F)
   tibble::tibble(map, tibble::as_tibble(pars))
 }
-
-
-
