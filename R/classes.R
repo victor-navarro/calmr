@@ -12,22 +12,22 @@ require(methods)
 #' @exportClass CalmrResult
 #' @import tibble
 
-methods::setClass("CalmrResult",
-  contains = "tbl",
+methods::setClass(
+  "CalmrResult",
   representation(
-    raw_results = "list",
-    is_parsed = "logical"
+    results = "tbl",
+    raw_results = "list"
   ),
   prototype(
-    raw_results = list(),
-    is_parsed = FALSE
+    results = NULL,
+    raw_results = NULL
   )
 )
 
 # Method to print results
 setMethod("show", "CalmrResult", function(object) {
-  if (object@is_parsed) {
-    print(object@.Data)
+  if (!is.null(object@results)) {
+    print(object@results)
   } else {
     print(object@raw_results)
   }
@@ -35,24 +35,6 @@ setMethod("show", "CalmrResult", function(object) {
 
 # TODO: Expand this class to specific
 # types of results (e.g., experiments, fits, comparisons)
-
-#' CalmrExperiment
-#' @description S4 classes for calmr experiments.
-#' @section Slots:
-#' \describe{
-#' \item{\code{.Data}:}{Inherited from tbl class}
-#' \item{\code{raw_results}:}{List. The raw results.}
-#' \item{\code{is_parsed}:}{Logical. Whether the model results have been parsed}
-#' }
-#' @name CalmrExperiment
-#' @rdname CalmrExperiment
-#' @exportClass CalmrExperiment
-
-methods::setClass("CalmrExperiment",
-  contains = "tbl",
-  representation(results = "CalmrResult"),
-  prototype(results = methods::new("CalmrResult"))
-)
 
 #' S4 class for Calmr designs
 #'
@@ -66,26 +48,44 @@ methods::setClass("CalmrExperiment",
 #' @exportClass CalmrDesign
 
 methods::setClass("CalmrDesign",
-  contains = "tbl",
   slots = c(
+    design = "tbl",
+    map = "list",
     raw_design = "data.frame"
   )
 )
 
-methods::setGeneric("trials", function(x) methods::standardGeneric("trials"))
-methods::setMethod("trials", "CalmrDesign", function(x) {
-  trial_dat <- data.frame()
-  for (r in seq_len(nrow(x))) {
-    td <- x$trial_info[[r]]
-    gdf <- data.frame(
-      group = x$group[r], phase = x$phase[r],
-      td[c("trial_names", "trial_repeats", "is_test")],
-      data.frame(lapply(td[c("trial_functional")], paste))
-    )
-    trial_dat <- rbind(trial_dat, gdf)
+methods::setMethod(
+  "show", "CalmrDesign",
+  function(object) print(object@design)
+)
+
+methods::setGeneric(
+  "trials",
+  function(x) methods::standardGeneric("trials")
+)
+methods::setMethod(
+  "trials",
+  "CalmrDesign", function(x) {
+    trial_dat <- data.frame()
+    for (r in seq_len(nrow(x))) {
+      td <- x$trial_info[[r]]
+      gdf <- data.frame(
+        group = x$group[r], phase = x$phase[r],
+        td[c("trial_names", "trial_repeats", "is_test")],
+        data.frame(lapply(td[c("trial_functional")], paste))
+      )
+      trial_dat <- rbind(trial_dat, gdf)
+    }
+    return(trial_dat)
   }
-  return(trial_dat)
+)
+
+methods::setGeneric("map", function(x) methods::standardGeneric("map"))
+methods::setMethod("map", "CalmrDesign", function(x) {
+  print(x@map)
 })
+
 
 #' S4 class for Calmr Comparisons
 #'

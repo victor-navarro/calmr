@@ -5,16 +5,12 @@
 #' @seealso \code{\link{supported_models}}
 #' @export
 
-get_model_params <- function(design, model = NULL) {
+get_parameters <- function(design, model = NULL) {
   model <- .calmr_assert("supported_model", model)
+  parsed_design <- .calmr_assert("parsed_design", design)
 
-  parsed_design <- parse_design(design)
-
-  stims <- parsed_design %>%
-    tidyr::unnest_wider("trial_info") %>%
-    dplyr::select("unique_nominal_stimuli") %>%
-    unlist() %>%
-    unique()
+  # Get stimulus names from design
+  stims <- parsed_design@map$unique_nominal_stimuli
 
   if (model %in% c("HDI2020", "HD2022", "RAND")) {
     df <- data.frame(

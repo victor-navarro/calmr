@@ -14,7 +14,7 @@ compare_models <- function(design, models, layers, params = NULL, options = get_
 
   if (is.null(params)) {
     warning("Parameters not provided. Using default parameters for all models.\n")
-    params <- sapply(models, function(m) get_model_params(design, model = m), simplify = F)
+    params <- sapply(models, function(m) get_parameters(design, model = m), simplify = F)
   }
 
   # make the arguments for all the models

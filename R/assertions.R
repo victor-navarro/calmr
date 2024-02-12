@@ -25,8 +25,17 @@
           call. = FALSE
         )
         return(default_pars)
+      } else {
+        # TODO: Implement parameter check
+        return(given)
       }
-      # TODO: Implement parameter check
+    },
+    "parsed_design" = {
+      if (is.null(given)) {
+        stop("Must provide a design data.frame or a parsed design.")
+      } else {
+        return(parse_design(given))
+      }
     },
     "experiment_options" = {
       if (is.null(given)) {

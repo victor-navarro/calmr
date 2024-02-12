@@ -57,8 +57,6 @@ Collate:
     'fit_model.R'
     'get_exp_opts.R'
     'get_model.R'
-    'get_model_params.R'
-    'make_model_args.R'
     'methods.R'
     'model_comparison_functions.R'
     'model_info.R'
