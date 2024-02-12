@@ -22,23 +22,10 @@ make_model_args <- function(
   parsed_design <- parse_design(design)
 
   # check model
-  if (is.null(model)) {
-    model <- .calmr_default("model_name")
-  } else {
-    .calmr_check("supported_model", given = model)
-  }
+  model <- .calmr_assert("supported_model", model)
 
   # check parameters
-  if (is.null(pars)) {
-    pars <- .calmr_default("model_params", design = design, model = model)
-  } else {
-    # check if the user-specified parameters match what the parser sees
-    auto_params <- get_model_params(design = design, model = model)
-    .calmr_check("params_OK", given = pars, necessary = auto_params)
-  }
-
-  # Some early info
-  snames <- pars$stimulus
+  pars <- .calmr_assert("parameters", pars)
 
   # the only challenge here is to create a master list of trials (trials)
   # and sample the training for each group (tps)

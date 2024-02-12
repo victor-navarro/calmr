@@ -4,10 +4,10 @@
 \alias{get_model}
 \title{Return a model function}
 \usage{
-get_model(model_name)
+get_model(model)
 }
 \arguments{
-\item{model_name}{A string specifying the model to be returned. One of \code{supported_models()}.}
+\item{model}{A string specifying the model to be returned. One of \code{supported_models()}.}
 }
 \description{
 Given a model string, returns a model function that can be used elsewhere in the package.

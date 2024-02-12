@@ -9,7 +9,8 @@
 \arguments{
 \item{x}{An object of class \code{\link{CalmrExperiment-class}}.}
 
-\item{type}{A string specifying the type of plot to create. See ??supported_plots.}
+\item{type}{A string specifying the type of plot to create.
+See ??supported_plots.}
 
 \item{...}{Additional parameters passed to the plotting function.}
 }

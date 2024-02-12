@@ -6,47 +6,54 @@
 #' @param options A list of options, as returned by get_exp_opts.
 #' @returns A CalmrComparison object.
 #' @export
-compare_models <- function(design, models, layers, params = NULL, options = get_exp_opts()){
-  supported_models = supported_models()
+compare_models <- function(design, models, layers, params = NULL, options = get_exp_opts()) {
+  supported_models <- supported_models()
   if (any(!(models %in% supported_models))) stop("One or more of the models provided are not supported.")
 
-  parsed_design = parse_design(design)
+  parsed_design <- parse_design(design)
 
-  if (is.null(params)){
+  if (is.null(params)) {
     warning("Parameters not provided. Using default parameters for all models.\n")
-    params = sapply(models, function(m) get_model_params(design, model = m), simplify = F)
+    params <- sapply(models, function(m) get_model_params(design, model = m), simplify = F)
   }
 
-  #make the arguments for all the models
-  args = sapply(1:length(models),
-                function(m){
-                  make_model_args(design = design, pars = params[[m]], model = models[m], opts = options)
-                }, simplify = F)
+  # make the arguments for all the models
+  args <- sapply(1:length(models),
+    function(m) {
+      make_model_args(design = design, pars = params[[m]], model = models[m], opts = options)
+    },
+    simplify = F
+  )
 
-  #now overwrite experience and mapping so all the models iterations have the same experience
-  args = lapply(args, function(x) {
-    x['experience'] = args[[1]]['experience']
-    x['mapping'] = args[[1]]['mapping']
+  # now overwrite experience and mapping so all the models iterations have the same experience
+  args <- lapply(args, function(x) {
+    x["experience"] <- args[[1]]["experience"]
+    x["mapping"] <- args[[1]]["mapping"]
     x
   })
 
-  #run models
-  exps = lapply(args, function(x) run_model(x))
+  # run models
+  exps <- lapply(args, function(x) run_model(x))
 
-  #filter layers and put the models together
-  tryCatch({
-    res = do.call("rbind",
-                  lapply(1:length(models), function(x){
-                    h = exps[[x]]@parsed_results[[layers[x]]]
-                    h$model = sprintf("%s (%s)", models[x], layers[x])
-                    h
-                  }))
-  },
-  error = function(e) stop("ERROR: Could not concatenate models using requested layers."))
+  # filter layers and put the models together
+  tryCatch(
+    {
+      res <- do.call(
+        "rbind",
+        lapply(1:length(models), function(x) {
+          h <- exps[[x]]@parsed_results[[layers[x]]]
+          h$model <- sprintf("%s (%s)", models[x], layers[x])
+          h
+        })
+      )
+    },
+    error = function(e) stop("ERROR: Could not concatenate models using requested layers.")
+  )
 
   methods::new("CalmrComparison",
-      results = res,
-      models = models,
-      layers = layers,
-      model_layer_names = sprintf("%s (%s)", models, layers))
+    results = res,
+    models = models,
+    layers = layers,
+    model_layer_names = sprintf("%s (%s)", models, layers)
+  )
 }

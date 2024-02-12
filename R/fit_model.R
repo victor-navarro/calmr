@@ -21,85 +21,105 @@
 #' @note See the calmr_fits vignette for examples
 #' @export
 #' @seealso \code{\link{get_optimizer_opts}}, \code{\link{make_model_args}}
-fit_model <- function(data, model_function, optimizer_options, file = NULL, ...){
-  #check if the user passed lower and upper limits
-  .calmr_check("limits")
-  #check if user wants to save the fit in a file
-  if (!is.null(file)) .calmr_check("filepath_OK", file)
+fit_model <- function(
+    data, model_function,
+    optimizer_options, file = NULL, ...) {
+  # check if the user passed lower and upper limits
+  .calmr_assert("limits", optimizer_options)
+  # check if user wants to save the fit in a file
+  if (!is.null(file)) .calmr_assert("filepath_OK", file)
 
-  #split the parameters
-  model_par_pointers = which(optimizer_options$all_pars %in% optimizer_options$model_pars)
-  link_par_pointers = which(optimizer_options$all_pars %in% optimizer_options$family_pars)
+  # split the parameters
+  model_par_pointers <- which(
+    optimizer_options$all_pars %in% optimizer_options$model_pars
+  )
+  link_par_pointers <- which(
+    optimizer_options$all_pars %in% optimizer_options$family_pars
+  )
 
-  #get link function
-  link_function = .get_calmr_link(optimizer_options$family)
-  #get the log likelihood function
-  ll_function = .get_calmr_loglikelihood(optimizer_options$family)
+  # get link function
+  link_function <- .get_calmr_link(optimizer_options$family)
+  # get the log likelihood function
+  ll_function <- .get_calmr_loglikelihood(optimizer_options$family)
 
-  #define the objective function
-  objective_function = function(pars, ...){
-    #generate model responses
-    model_responses = model_function(pars[model_par_pointers],
-                                     ...)
-    #apply link
-    model_responses = link_function(model_responses, pars[link_par_pointers])
-    #get the likelihood
-    model_likelihood = ll_function(data, model_responses)
-    #return the negative sum of log likehood
-    nll = -sum(model_likelihood)
-    if (optimizer_options$verbose) cat("Parameters", format(pars, digits = 3), "\n")
-    if (optimizer_options$verbose) cat("NLL:", nll, "\n")
+  # define the objective function
+  objective_function <- function(pars, ...) {
+    # generate model responses
+    model_responses <- model_function(
+      pars[model_par_pointers],
+      ...
+    )
+    # apply link
+    model_responses <- link_function(model_responses, pars[link_par_pointers])
+    # get the likelihood
+    model_likelihood <- ll_function(data, model_responses)
+    # return the negative sum of log likehood
+    nll <- -sum(model_likelihood)
+    if (optimizer_options$verbose) {
+      cat("Parameters", format(pars, digits = 3), "\n")
+    }
+    if (optimizer_options$verbose) {
+      cat("NLL:", nll, "\n")
+    }
     return(nll)
   }
 
-  #check if the model has been run and can be loaded
-  if (.check_fit_file(file)){
+  # check if the model has been run and can be loaded
+  if (.check_fit_file(file)) {
     return(readRDS(file))
   }
 
-  if (optimizer_options$optimizer == 'optim'){
-    #optimize
-    opt_res = stats::optim(par = optimizer_options$initial_pars,
-                           fn = objective_function,
-                           lower = optimizer_options$ll,
-                           upper = optimizer_options$ul,
-                           ...)
-    best_pars = opt_res$par
-    best_nloglik = opt_res$value
+  if (optimizer_options$optimizer == "optim") {
+    # optimize
+    opt_res <- stats::optim(
+      par = optimizer_options$initial_pars,
+      fn = objective_function,
+      lower = optimizer_options$ll,
+      upper = optimizer_options$ul,
+      ...
+    )
+    best_pars <- opt_res$par
+    best_nloglik <- opt_res$value
   }
 
-  if (optimizer_options$optimizer == "ga"){
-    nobjective_function = function(...) -1*objective_function(...) #ga maximises, so must work with loglik
-    opt_res = GA::ga(type = "real-valued",
-                     fitness = nobjective_function,
-                     lower = optimizer_options$ll,
-                     upper = optimizer_options$ul,
-                     ...)
-    best_pars = as.numeric(opt_res@solution)
-    best_nloglik = -1*opt_res@fitnessValue
-    if (!is.null(nrow(best_pars))){
-      warning("More than one solution yielded the best fit. Returning the first solution.")
-      best_pars = best_pars[1, ]
+  if (optimizer_options$optimizer == "ga") {
+    nobjective_function <- function(...) {
+      -1 * objective_function(...)
+    } # ga maximises, so must work with loglik
+    opt_res <- GA::ga(
+      type = "real-valued",
+      fitness = nobjective_function,
+      lower = optimizer_options$ll,
+      upper = optimizer_options$ul,
+      ...
+    )
+    best_pars <- as.numeric(opt_res@solution)
+    best_nloglik <- -1 * opt_res@fitnessValue
+    if (!is.null(nrow(best_pars))) {
+      warning("More than one solution yielded the best fit.
+      Returning the first solution.")
+      best_pars <- best_pars[1, ]
     }
-    names(best_pars) = unlist(optimizer_options[c('stim_names', 'family_pars')])
+    names(best_pars) <- unlist(
+      optimizer_options[c("stim_names", "family_pars")]
+    )
   }
 
   fit <- methods::new("CalmrFit",
-             nloglik = best_nloglik,
-             best_pars = stats::setNames(best_pars, optimizer_options$all_pars),
-             model_pars = best_pars[model_par_pointers],
-             link_pars = best_pars[link_par_pointers],
-             data = data,
-             model_function = model_function,
-             link_function = link_function,
-             ll_function = ll_function,
-             optimizer_options = optimizer_options,
-             extra_pars = list(...))
+    nloglik = best_nloglik,
+    best_pars = stats::setNames(best_pars, optimizer_options$all_pars),
+    model_pars = best_pars[model_par_pointers],
+    link_pars = best_pars[link_par_pointers],
+    data = data,
+    model_function = model_function,
+    link_function = link_function,
+    ll_function = ll_function,
+    optimizer_options = optimizer_options,
+    extra_pars = list(...)
+  )
 
-  if (!is.null(file)){
+  if (!is.null(file)) {
     saveRDS(fit, file)
   }
   fit
-
-
 }

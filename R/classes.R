@@ -10,6 +10,7 @@ require(methods)
 #' @name CalmrResult
 #' @rdname CalmrResult
 #' @exportClass CalmrResult
+#' @import tibble
 
 methods::setClass("CalmrResult",
   contains = "tbl",
@@ -18,7 +19,7 @@ methods::setClass("CalmrResult",
     is_parsed = "logical"
   ),
   prototype(
-    raw_results = NULL,
+    raw_results = list(),
     is_parsed = FALSE
   )
 )

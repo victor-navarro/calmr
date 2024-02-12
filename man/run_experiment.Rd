@@ -14,15 +14,18 @@ run_experiment(
 )
 }
 \arguments{
-\item{design}{A data.frame of dimensions G,2*P+1; where G is the number of groups and P is the number of phases.}
+\item{design}{A data.frame of dimensions G,2*P+1;
+where G is the number of groups and P is the number of phases.}
 
 \item{model}{A string specifying the model name. One of \code{supported_models()}}
 
-\item{param_df}{A data.frame of dimensions N,2; where N is the number of stimuli in the experimental design.}
+\item{param_df}{A data.frame of dimensions N,2; where N
+is the number of stimuli in the experimental design.}
 
 \item{options}{A list of options, as returned by \code{get_exp_opts}.}
 
-\item{parse}{A logical specifying whether the results should be parsed via \code{parse_experiment_results}. Default = TRUE.}
+\item{parse}{A logical specifying whether the results
+should be parsed via \code{parse_experiment_results}. Default = TRUE.}
 
 \item{...}{Extra parameters passed to the model call (e.g., debug)}
 }
