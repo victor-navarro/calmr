@@ -1,5 +1,4 @@
-# Go-to stop for assertions and default arguments
-
+#' Go-to stops for calmr assertions
 .calmr_assert <- function(what, given, ...) { # nolint: cyclocomp_linter.
   narg <- list(...)
   switch(what,

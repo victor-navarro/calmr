@@ -70,3 +70,4 @@ Collate:
     'run_model.R'
     'trial_parser.R'
     'utils-pipe.R'
+    'assertions.R'

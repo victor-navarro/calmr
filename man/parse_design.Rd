@@ -2,7 +2,7 @@
 % Please edit documentation in R/parse_design.R
 \name{parse_design}
 \alias{parse_design}
-\title{Parse each string in a design data.frame}
+\title{Parse design data.frame}
 \usage{
 parse_design(df)
 }
@@ -10,20 +10,24 @@ parse_design(df)
 \item{df}{A data.frame of dimensions Groups, 2*Phases+1}
 }
 \value{
-A tibble containing the parsed design in long format and the raw design.
+A CalmrDesign object
 }
 \description{
-Parse each string in a design data.frame
+Parse design data.frame
 }
 \note{
 \itemize{
 \item{
-Each entry in even-numbered columns of df is a string formatted as per trial_parser.
+Each entry in even-numbered columns of df is
+a string formatted as per trial_parser.
 }
 }
 }
 \examples{
-df <- data.frame(Group = c("Group 1", "Group 2"), P1 = c("10AB(US)", "10A(US)"), R1 = c(TRUE, TRUE))
+df <- data.frame(
+  Group = c("Group 1", "Group 2"),
+  P1 = c("10AB(US)", "10A(US)"), R1 = c(TRUE, TRUE)
+)
 parse_design(df)
 }
 \seealso{

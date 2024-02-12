@@ -5,6 +5,8 @@ setGeneric("graph", function(x, ...) standardGeneric("graph"))
 setGeneric("NLL", function(object, ...) standardGeneric("NLL"))
 setGeneric("get_output", function(object, ...) standardGeneric("get_output"))
 
+#### Methods ####
+
 #### Exposing methods ####
 setMethod("show", "CalmrModel", function(object) {
   cat(object@model, "run with:\n\n")
