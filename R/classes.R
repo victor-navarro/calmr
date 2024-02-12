@@ -1,50 +1,90 @@
 require(methods)
-#' S4 class for Calmr Models
+#' S4 class for  Calmr results
 #'
 #' @section Slots:
 #' \describe{
-#' \item{\code{model}:}{Character. The model name.}
-#' \item{\code{parameters}:}{List. The model parameters.}
-#' \item{\code{model_results }:}{List. The model results (layers)}
-#' \item{\code{experience}:}{Data.frame. The data.frame used to train the model.}
-#' \item{\code{mapping}:}{List. Contains mapping information (e.g., between functional and nominal stimuli)}
-#' \item{\code{is_parsed}:}{Logical. Whether the model results have been parsed.}
-#' }
-#' @name CalmrModel-class
-#' @rdname CalmrModel-class
-#' @exportClass CalmrModel
-
-setClass("CalmrModel",
-  slots = c(
-    model = "character",
-    parameters = "list",
-    model_results = "list",
-    experience = "data.frame",
-    mapping = "list",
-    is_parsed = "logical"
-  ),
-  prototype = list(is_parsed = F)
-)
-
-#' S4 class for Calmr Experiments
-#'
-#' @section Slots:
-#' \describe{
-#' \item{\code{results}:}{Data.frame. The unparsed model results}
+#' \item{\code{results}:}{Data.frame or List. The unparsed model results}
 #' \item{\code{parsed_results}:}{List. The parsed and aggregated model results}
 #' \item{\code{is_parsed}:}{Logical. Whether the model results have been parsed}
 #' }
-#' @name CalmrExperiment-class
-#' @rdname CalmrExperiment-class
-#' @exportClass CalmrExperiment
-setClass("CalmrExperiment",
-  slots = c(
-    results = "data.frame",
-    parsed_results = "list",
+#' @name CalmrResult
+#' @rdname CalmrResult
+#' @exportClass CalmrResult
+
+methods::setClass("CalmrResult",
+  contains = "tbl",
+  representation(
+    raw_results = "list",
     is_parsed = "logical"
   ),
-  prototype = list(is_parsed = FALSE)
+  prototype(
+    raw_results = NULL,
+    is_parsed = FALSE
+  )
 )
+
+# Method to print results
+setMethod("show", "CalmrResult", function(object) {
+  if (object@is_parsed) {
+    print(object@.Data)
+  } else {
+    print(object@raw_results)
+  }
+})
+
+# TODO: Expand this class to specific
+# types of results (e.g., experiments, fits, comparisons)
+
+#' CalmrExperiment
+#' @description S4 classes for calmr experiments.
+#' @section Slots:
+#' \describe{
+#' \item{\code{.Data}:}{Inherited from tbl class}
+#' \item{\code{raw_results}:}{List. The raw results.}
+#' \item{\code{is_parsed}:}{Logical. Whether the model results have been parsed}
+#' }
+#' @name CalmrExperiment
+#' @rdname CalmrExperiment
+#' @exportClass CalmrExperiment
+
+methods::setClass("CalmrExperiment",
+  contains = "tbl",
+  representation(results = "CalmrResult"),
+  prototype(results = methods::new("CalmrResult"))
+)
+
+#' S4 class for Calmr designs
+#'
+#' @description Inherits from the tbl class
+#' @section Methods:
+#' \describe{
+#' \item{\code{trials}:}{Prints trial information per group and phase}
+#' }
+#' @name CalmrDesign
+#' @rdname CalmrDesign
+#' @exportClass CalmrDesign
+
+methods::setClass("CalmrDesign",
+  contains = "tbl",
+  slots = c(
+    raw_design = "data.frame"
+  )
+)
+
+methods::setGeneric("trials", function(x) methods::standardGeneric("trials"))
+methods::setMethod("trials", "CalmrDesign", function(x) {
+  trial_dat <- data.frame()
+  for (r in seq_len(nrow(x))) {
+    td <- x$trial_info[[r]]
+    gdf <- data.frame(
+      group = x$group[r], phase = x$phase[r],
+      td[c("trial_names", "trial_repeats", "is_test")],
+      data.frame(lapply(td[c("trial_functional")], paste))
+    )
+    trial_dat <- rbind(trial_dat, gdf)
+  }
+  return(trial_dat)
+})
 
 #' S4 class for Calmr Comparisons
 #'
@@ -145,4 +185,32 @@ setClass("CalmrFit",
     optimizer_options = "list",
     extra_pars = "list"
   )
+)
+
+#### DEPRECATE ####
+#' S4 class for Calmr Models
+#'
+#' @section Slots:
+#' \describe{
+#' \item{\code{model}:}{Character. The model name.}
+#' \item{\code{parameters}:}{List. The model parameters.}
+#' \item{\code{model_results }:}{List. The model results (layers)}
+#' \item{\code{experience}:}{Data.frame. The data.frame used to train the model.}
+#' \item{\code{mapping}:}{List. Contains mapping information (e.g., between functional and nominal stimuli)}
+#' \item{\code{is_parsed}:}{Logical. Whether the model results have been parsed.}
+#' }
+#' @name CalmrModel-class
+#' @rdname CalmrModel-class
+#' @exportClass CalmrModel
+
+setClass("CalmrModel",
+  slots = c(
+    model = "character",
+    parameters = "list",
+    model_results = "list",
+    experience = "data.frame",
+    mapping = "list",
+    is_parsed = "logical"
+  ),
+  prototype = list(is_parsed = FALSE)
 )
