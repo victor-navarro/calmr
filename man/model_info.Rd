@@ -7,6 +7,7 @@
 \alias{supported_families}
 \alias{supported_plots}
 \alias{get_model}
+\alias{model_outputs}
 \title{Miscellaneous information functions}
 \usage{
 supported_models()
@@ -18,6 +19,8 @@ supported_families()
 supported_plots(model = NULL)
 
 get_model(model)
+
+model_outputs(model = NULL)
 }
 \arguments{
 \item{model}{A string specifying a model. One from \code{supported_models()}}
@@ -25,7 +28,7 @@ get_model(model)
 \description{
 \describe{
 \item{\code{supported_models}}{Returns the models supported in the package.}
-\item{\code{supported_plots}}{Returns the plots
+\item{\code{supported_plots, model_outputs}}{Returns the plots, outputs
 supported by argument \code{model}.}
 \item{\code{supported_families}}{Returns the families supported by
 \code{\link{fit_model}}.}

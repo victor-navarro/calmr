@@ -3,7 +3,7 @@
 #' @description
 #' \describe{
 #' \item{\code{supported_models}}{Returns the models supported in the package.}
-#' \item{\code{supported_plots}}{Returns the plots
+#' \item{\code{supported_plots, model_outputs}}{Returns the plots, outputs
 #' supported by argument `model`.}
 #' \item{\code{supported_families}}{Returns the families supported by
 #' \code{\link{fit_model}}.}
@@ -124,5 +124,26 @@ parameter_info <- function(model = NULL) {
     return(parameter_map)
   } else {
     return(parameter_map[[model]])
+  }
+}
+
+#' @rdname model_info
+#' @export
+model_outputs <- function(model = NULL) {
+  output_info <- list(
+    "HDI2020" = c("as", "acts", "rs", "vs"),
+    "HD2022" = c("as", "acts", "rs", "vs"),
+    "RW1972" = c("es", "vs"),
+    "MAC1975" = c("as", "es", "vs"),
+    "SM2007" = c("acts", "relacts", "vs", "os"),
+    "PKH1982" = c("as", "es", "eivs"),
+    "ANCCR" = c("anccr", "da"),
+    "RAND" = c("es", "vs")
+  )
+  if (is.null(model)) {
+    output_info
+  } else {
+    model <- .calmr_assert("supported_model", model)
+    output_info[[model]]
   }
 }

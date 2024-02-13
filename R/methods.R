@@ -8,9 +8,6 @@ setGeneric("get_output", function(object, ...) standardGeneric("get_output"))
 #### Methods ####
 
 #### Exposing methods ####
-
-
-
 setMethod("show", "CalmrFit", function(object) {
   cat(
     "Calmr model fit: \n ",

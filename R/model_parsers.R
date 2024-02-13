@@ -1,234 +1,253 @@
-#An assorment of functions to help parse models
-.parse <- function(mod, type){
-  #check if mod has the type
-  if (!(type %in% names(mod@model_results))) stop(sprintf("Model does not contain '%s' in model results.", type))
-  dat = NULL
-  if (type == "es"){
-    dat = tibble::enframe(apply(mod@model_results$es, 1, function(x) as.data.frame(as.table(x))), name = "trial") %>%
-      dplyr::bind_cols(mod@experience) %>%
-      dplyr::mutate(tp = mod@mapping$trial_names[mod@experience$tp]) %>%
-      tidyr::unnest("value") %>%
-      dplyr::mutate(Var1 = as.character(.data$Var1),
-                    Var2 = as.character(.data$Var2)) %>%
-      dplyr::rename("trial_type" = "tp", "s1" = "Var1", "s2" = "Var2", "value" = "Freq")
-  }
-  if (type %in% c("vs", "evs", "ivs")){
-    dat = tibble::enframe(apply(mod@model_results[[type]], 1, function(x) as.data.frame(as.table(x))), name = "trial") %>%
-      dplyr::bind_cols(mod@experience) %>%
-      dplyr::mutate(tp = mod@mapping$trial_names[mod@experience$tp]) %>%
-      tidyr::unnest("value") %>%
-      dplyr::mutate(Var1 = as.character(.data$Var1),
-                    Var2 = as.character(.data$Var2)) %>%
-      dplyr::rename("trial_type" = "tp", "s1" = "Var1", "s2" = "Var2", "value" = "Freq")
-  }
-  if (type == "acts"){
-    #switch depending on the model
-    if (mod@model == "SM2007"){
-      dat = tibble::enframe(apply(mod@model_results$acts, 1, function(x) as.data.frame(as.table(x))), name = "trial") %>%
-        dplyr::bind_cols(mod@experience) %>%
-        dplyr::mutate(tp = mod@mapping$trial_names[mod@experience$tp]) %>%
-        tidyr::unnest("value") %>% dplyr::mutate(Var1 = as.character(.data$Var1),
-                                                 Var2 = as.character(.data$Var2)) %>%
-        dplyr::rename("trial_type" = "tp", "s1" = "Var1", "s2" = "Var2", "value" = "Freq")
+#' An assorment of functions to help parse models
+
+# experiment is a CalmrExperiment
+# returns a list
+.parse_experiment <- function(experiment) {
+  n <- length(experiment)
+  sapply(seq_len(n), function(r) {
+    model <- experiment@arguments$model[r]
+    outputs <- model_outputs(model)
+    sapply(outputs, function(o) {
+      raw <- experiment@results@raw_results[[r]][[o]]
+      .parse_raw(raw, type = o, args = experiment@arguments[r, ])
+    }, simplify = FALSE)
+  }, simplify = FALSE)
+}
+
+# raw is a list
+# type is the type of list (depends on model)
+# args is a tbl with the arguments (make_experiment)
+.parse_raw <- function(raw, type, args) {
+  full_dat <- NULL
+  # get general data
+  gen_dat <- args$experience[[1]]
+  gen_dat$trial <- seq_len(nrow(gen_dat))
+  gen_dat$trial_type <- args$mapping[[1]]$trial_names[gen_dat$tp]
+  gen_dat <- dplyr::select(gen_dat, -"tp")
+  need_enframe <- c(
+    "es", "vs", "evs", "ivs",
+    "acts", "relacts", "rs", "os"
+  )
+
+  dat <- NULL
+  # arrays that need to be enframed
+  if (type %in% need_enframe) {
+    # special treatment for HeiDI acts (ugly)
+    if (args$model %in% c("HDI2020", "HD2022") && type == "acts") {
+      combs <- tibble::enframe(lapply(raw$combvs, function(x) {
+        as.data.frame(as.table(x), stringsAsFactors = FALSE)
+      }), name = "trial")
+      combs$act_type <- "comb"
+      chains <- tibble::enframe(lapply(raw$chain, function(x) {
+        as.data.frame(as.table(x), stringsAsFactors = FALSE)
+      }), name = "trial")
+      chains$act_type <- "chain"
+      full_dat <- dplyr::bind_rows(
+        dplyr::left_join(gen_dat, combs, by = "trial"),
+        dplyr::left_join(gen_dat, chains, by = "trial")
+      )
+    } else {
+      dat <- tibble::enframe(apply(raw, 1, function(x) {
+        as.data.frame(as.table(x), stringsAsFactors = FALSE)
+      }), name = "trial")
+      # adding general data
+      full_dat <- dplyr::left_join(gen_dat, dat, by = "trial")
     }
-    if (mod@model %in% c("HDI2020", "HD2022")){
-      combs = tibble::enframe(lapply(mod@model_results$acts$combvs, function(x) as.data.frame(as.table(x))), name = 'trial') %>%
-        dplyr::bind_cols(mod@experience) %>%
-        dplyr::mutate(tp = mod@mapping$trial_names[mod@experience$tp]) %>%
-        tidyr::unnest("value") %>% dplyr::mutate(Var1 = as.character(.data$Var1),
-                                                 Var2 = as.character(.data$Var2)) %>%
-        dplyr::rename("trial_type" = "tp", "s1" = "Var1", "s2" = "Var2", "value" = "Freq") %>% dplyr::mutate(act_type = 'comb')
+    # unnest
+    full_dat <- tidyr::unnest(full_dat, cols = "value")
 
-      chains = tibble::enframe(lapply(mod@model_results$acts$chainvs, function(x) as.data.frame(as.table(x))), name = 'trial') %>%
-        dplyr::bind_cols(mod@experience) %>%
-        dplyr::mutate(tp = mod@mapping$trial_names[mod@experience$tp]) %>%
-        tidyr::unnest("value") %>% dplyr::mutate(Var1 = as.character(.data$Var1),
-                                                 Var2 = as.character(.data$Var2)) %>%
-        dplyr::rename("trial_type" = "tp", "s1" = "Var1", "s2" = "Var2", "value" = "Freq") %>%
-        dplyr::mutate(act_type = 'chain')
-      dat = rbind(combs, chains)
+    # rename
+    if (type %in% c("os")) {
+      # the only model output that does not follow Var1 = s1, Var2 = s2
+      full_dat <- dplyr::rename(full_dat,
+        "s1" = "Var1", "comp" = "Var2", "s2" = "Var3", "value" = "Freq"
+      )
+    } else {
+      full_dat <- dplyr::rename(full_dat,
+        "s1" = "Var1", "s2" = "Var2", "value" = "Freq"
+      )
     }
   }
-  if (type == "relacts"){
-    dat = tibble::enframe(apply(mod@model_results$relacts, 1, function(x) as.data.frame(as.table(x))), name = "trial") %>%
-      dplyr::bind_cols(mod@experience) %>%
-      dplyr::mutate(tp = mod@mapping$trial_names[mod@experience$tp]) %>%
-      tidyr::unnest("value") %>% dplyr::mutate(Var1 = as.character(.data$Var1),
-                                               Var2 = as.character(.data$Var2)) %>%
-      dplyr::rename("trial_type" = "tp", "s1" = "Var1", "s2" = "Var2", "value" = "Freq")
+  if (type %in% c("as")) {
+    dat <- as.data.frame(raw)
+    long_cols <- names(dat)
+    full_dat <- cbind(gen_dat, dat)
+    full_dat <- tidyr::pivot_longer(full_dat,
+      cols = long_cols, names_to = "s1"
+    )
   }
-
-  if (type == "as"){
-    dat = as.data.frame(mod@model_results$as) %>%
-      dplyr::mutate(trial = 1:dplyr::n()) %>%
-      dplyr::bind_cols(mod@experience) %>%
-      dplyr::mutate(tp = mod@mapping$trial_names[mod@experience$tp]) %>%
-      tidyr::pivot_longer(cols = -c("trial", "group", "is_test", "tp",
-                                    "phase", "block_size"), names_to = "s1") %>%
-      dplyr::rename("trial_type" = "tp")
-  }
-  if (type == "rs"){
-    dat = tibble::enframe(apply(mod@model_results$rs, 1, function(x) as.data.frame(as.table(x))), name = "trial") %>%
-      dplyr::bind_cols(mod@experience) %>%
-      dplyr::mutate(tp = mod@mapping$trial_names[mod@experience$tp]) %>%
-      tidyr::unnest("value") %>% dplyr::mutate(Var1 = as.character(.data$Var1),
-                                               Var2 = as.character(.data$Var2)) %>%
-      dplyr::rename("trial_type" = "tp", "s1" = "Var1", "s2" = "Var2", "value" = "Freq")
-  }
-  if (type == "os"){
-    dat = tibble::enframe(apply(mod@model_results$os, 1, function(x) as.data.frame(as.table(x))), name = "trial") %>%
-      dplyr::bind_cols(mod@experience) %>%
-      dplyr::mutate(tp = mod@mapping$trial_names[mod@experience$tp]) %>%
-      tidyr::unnest("value") %>% dplyr::mutate(Var1 = as.character(.data$Var1),
-                                               Var2 = as.character(.data$Var2),
-                                               Var3 = as.character(.data$Var3)) %>%
-      dplyr::rename("trial_type" = "tp", "s1" = "Var1", "comp" = "Var2", "s2" = "Var3", "value" = "Freq")
-  }
-  dat
+  full_dat
 }
 
-parse_model <- function(model){
-  toparse = names(model@model_results)
-  for (p in toparse){
-    model@model_results[[p]] = .parse(model, p)
+# experiment is a CalmrExperiment
+# returns a list of tibbles
+.aggregate_experiment <- function(experiment) {
+  # Aggregation is done on a model by model basis
+  models <- unique(experiment@arguments$model)
+  agg_dat <- list()
+  for (m in models) {
+    outputs <- model_outputs(m)
+    mod_dat <- experiment@results@parsed_results[
+      experiment@arguments$model == m
+    ]
+    agg_dat[m] <- sapply(outputs, function(o) {
+      # put data together
+      big_dat <- do.call(rbind, lapply(mod_dat, function(x) x[[o]]))
+      # aggregate
+      .aggregate_results(big_dat, type = o)
+    }, simplify = FALSE)
   }
-  model
+  agg_dat
 }
 
-parse_experiment_results <- function(experiment, aggregate = T){
-  #expects a CalmrExperiment
-  #puts in it a list with all the relevant data for exporting (and plotting)
-  if (!experiment@is_parsed){
-    experiment@results = experiment@results %>% dplyr::rowwise() %>%
-      dplyr::mutate(parsed_mod_responses = list(parse_model(.data$mod_data)@model_results))
-    experiment@is_parsed = TRUE
-  }
-
-  if (aggregate){
-    experiment@parsed_results = aggregate_experiment_results(experiment)
-  }
-  experiment
+# dat is a tbl
+# type is the type of data
+.aggregate_results <- function(dat, type) {
+  # WORKING HERE
+  browser()
 }
 
-aggregate_experiment_results <- function(parsed_experiment){
-  agg = list()
-  vars = names(parsed_experiment@results$parsed_mod_responses[[1]])
-  dat = parsed_experiment@results %>%
-    tidyr::unnest_wider("parsed_mod_responses") %>%
-    dplyr::ungroup()
-  #check for Konorskian models
-  if (all(c("evs", "ivs") %in% vars)){
-    vars = vars[!(vars %in% c("evs", "ivs"))]
-    vars = c(vars, "eivs")
-  }
-  for (t in vars){
-    agg[[t]] = .aggregate_results(dat, t)
-  }
-  agg
-}
-
-.aggregate_results <- function(res, type){
-  dat = NULL
-  if (type == "es"){
-    dat = do.call("rbind", res$es) %>%
-      dplyr::group_by(.data$group, .data$trial, .data$trial_type, .data$phase,
-                      .data$s1, .data$s2, .data$block_size) %>% #summarize
+.agg <- function(res, type) {
+  dat <- NULL
+  if (type == "es") {
+    dat <- do.call("rbind", res$es) %>%
+      dplyr::group_by(
+        .data$group, .data$trial, .data$trial_type, .data$phase,
+        .data$s1, .data$s2, .data$block_size
+      ) %>% # summarize
       dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
-      dplyr::mutate(group = as.factor(.data$group), s1 = as.factor(.data$s1),
-                    s2 = as.factor(.data$s2), trial_type = as.factor(.data$trial_type),
-                    phase = as.factor(.data$phase))
+      dplyr::mutate(
+        group = as.factor(.data$group), s1 = as.factor(.data$s1),
+        s2 = as.factor(.data$s2), trial_type = as.factor(.data$trial_type),
+        phase = as.factor(.data$phase)
+      )
   }
-  if (type == "vs"){
-    dat = do.call("rbind", res[[type]]) %>%
-      dplyr::group_by(.data$group, .data$trial, .data$trial_type, .data$phase,
-                      .data$s1, .data$s2, .data$block_size) %>% #summarize
+  if (type == "vs") {
+    dat <- do.call("rbind", res[[type]]) %>%
+      dplyr::group_by(
+        .data$group, .data$trial, .data$trial_type, .data$phase,
+        .data$s1, .data$s2, .data$block_size
+      ) %>% # summarize
       dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
-      dplyr::mutate(group = as.factor(.data$group), s1 = as.factor(.data$s1),
-                    s2 = as.factor(.data$s2), trial_type = as.factor(.data$trial_type),
-                    phase = as.factor(.data$phase))
+      dplyr::mutate(
+        group = as.factor(.data$group), s1 = as.factor(.data$s1),
+        s2 = as.factor(.data$s2), trial_type = as.factor(.data$trial_type),
+        phase = as.factor(.data$phase)
+      )
   }
-  if (type == "eivs"){
-    ev = do.call("rbind", res$evs) %>%
-      dplyr::group_by(.data$group, .data$trial, .data$trial_type, .data$phase,
-                      .data$s1, .data$s2, .data$block_size) %>% #summarize
+  if (type == "eivs") {
+    ev <- do.call("rbind", res$evs) %>%
+      dplyr::group_by(
+        .data$group, .data$trial, .data$trial_type, .data$phase,
+        .data$s1, .data$s2, .data$block_size
+      ) %>% # summarize
       dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
-      dplyr::mutate(group = as.factor(.data$group), s1 = as.factor(.data$s1),
-                    s2 = as.factor(.data$s2), trial_type = as.factor(.data$trial_type),
-                    phase = as.factor(.data$phase), assoc_type = "Excitatory")
-    iv = do.call("rbind", res$ivs) %>%
-      dplyr::group_by(.data$group, .data$trial, .data$trial_type, .data$phase,
-                      .data$s1, .data$s2, .data$block_size) %>% #summarize
+      dplyr::mutate(
+        group = as.factor(.data$group), s1 = as.factor(.data$s1),
+        s2 = as.factor(.data$s2), trial_type = as.factor(.data$trial_type),
+        phase = as.factor(.data$phase), assoc_type = "Excitatory"
+      )
+    iv <- do.call("rbind", res$ivs) %>%
+      dplyr::group_by(
+        .data$group, .data$trial, .data$trial_type, .data$phase,
+        .data$s1, .data$s2, .data$block_size
+      ) %>% # summarize
       dplyr::summarise(value = -mean(.data$value), .groups = "drop") %>%
-      dplyr::mutate(group = as.factor(.data$group), s1 = as.factor(.data$s1),
-                    s2 = as.factor(.data$s2), trial_type = as.factor(.data$trial_type),
-                    phase = as.factor(.data$phase), assoc_type = "Inhibitory")
-    net = ev
-    net$value = net$value+iv$value
-    net$assoc_type = "Net"
-    dat = rbind(ev, iv, net)
+      dplyr::mutate(
+        group = as.factor(.data$group), s1 = as.factor(.data$s1),
+        s2 = as.factor(.data$s2), trial_type = as.factor(.data$trial_type),
+        phase = as.factor(.data$phase), assoc_type = "Inhibitory"
+      )
+    net <- ev
+    net$value <- net$value + iv$value
+    net$assoc_type <- "Net"
+    dat <- rbind(ev, iv, net)
   }
-  if (type == "as"){
-    dat = do.call("rbind", res$as) %>%
-      dplyr::group_by(.data$group, .data$trial, .data$phase,
-                      .data$trial_type, .data$s1, .data$block_size) %>% #summarize
+  if (type == "as") {
+    dat <- do.call("rbind", res$as) %>%
+      dplyr::group_by(
+        .data$group, .data$trial, .data$phase,
+        .data$trial_type, .data$s1, .data$block_size
+      ) %>% # summarize
       dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
-      dplyr::mutate(group = as.factor(.data$group), trial_type = as.factor(.data$trial_type),
-                    s1 = as.factor(.data$s1), phase = as.factor(.data$phase))
+      dplyr::mutate(
+        group = as.factor(.data$group), trial_type = as.factor(.data$trial_type),
+        s1 = as.factor(.data$s1), phase = as.factor(.data$phase)
+      )
   }
-  if (type == "acts"){
-    if (any(res$model %in% c("HD2022", "HDI2020"))){
-      dat = do.call("rbind", res$acts) %>%
-        dplyr::group_by(.data$group, .data$trial, .data$phase, .data$trial_type,
-                        .data$act_type, .data$s1, .data$s2, .data$block_size) %>%
+  if (type == "acts") {
+    if (any(res$model %in% c("HD2022", "HDI2020"))) {
+      dat <- do.call("rbind", res$acts) %>%
+        dplyr::group_by(
+          .data$group, .data$trial, .data$phase, .data$trial_type,
+          .data$act_type, .data$s1, .data$s2, .data$block_size
+        ) %>%
         dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
-        dplyr::mutate(group = as.factor(.data$group), trial_type = as.factor(.data$trial_type),
-                      act_type = as.factor(.data$act_type), s1 = as.factor(.data$s1),
-                      s2 = as.factor(.data$s2), phase = as.factor(.data$phase))
-    }else{
-      dat = do.call("rbind", res$acts) %>%
-        dplyr::group_by(.data$group, .data$trial, .data$phase, .data$trial_type,
-                        .data$s1, .data$s2, .data$block_size) %>%
+        dplyr::mutate(
+          group = as.factor(.data$group), trial_type = as.factor(.data$trial_type),
+          act_type = as.factor(.data$act_type), s1 = as.factor(.data$s1),
+          s2 = as.factor(.data$s2), phase = as.factor(.data$phase)
+        )
+    } else {
+      dat <- do.call("rbind", res$acts) %>%
+        dplyr::group_by(
+          .data$group, .data$trial, .data$phase, .data$trial_type,
+          .data$s1, .data$s2, .data$block_size
+        ) %>%
         dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
-        dplyr::mutate(group = as.factor(.data$group), trial_type = as.factor(.data$trial_type),
-                      s1 = as.factor(.data$s1),
-                      s2 = as.factor(.data$s2), phase = as.factor(.data$phase))
+        dplyr::mutate(
+          group = as.factor(.data$group), trial_type = as.factor(.data$trial_type),
+          s1 = as.factor(.data$s1),
+          s2 = as.factor(.data$s2), phase = as.factor(.data$phase)
+        )
     }
   }
-  if (type == "relacts"){
-    dat = do.call("rbind", res$relacts) %>%
-      dplyr::group_by(.data$group, .data$trial, .data$phase, .data$trial_type,
-                      .data$s1, .data$s2, .data$block_size) %>%
+  if (type == "relacts") {
+    dat <- do.call("rbind", res$relacts) %>%
+      dplyr::group_by(
+        .data$group, .data$trial, .data$phase, .data$trial_type,
+        .data$s1, .data$s2, .data$block_size
+      ) %>%
       dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
-      dplyr::mutate(group = as.factor(.data$group), trial_type = as.factor(.data$trial_type),
-                    s1 = as.factor(.data$s1),
-                    s2 = as.factor(.data$s2), phase = as.factor(.data$phase))
+      dplyr::mutate(
+        group = as.factor(.data$group), trial_type = as.factor(.data$trial_type),
+        s1 = as.factor(.data$s1),
+        s2 = as.factor(.data$s2), phase = as.factor(.data$phase)
+      )
   }
-  if (type == "rs"){
-    dat = do.call("rbind", res$rs) %>%
-      dplyr::group_by(.data$group, .data$trial, .data$phase, .data$trial_type,
-                      .data$s1, .data$s2, .data$block_size) %>% #summarize
+  if (type == "rs") {
+    dat <- do.call("rbind", res$rs) %>%
+      dplyr::group_by(
+        .data$group, .data$trial, .data$phase, .data$trial_type,
+        .data$s1, .data$s2, .data$block_size
+      ) %>% # summarize
       dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
-      dplyr::mutate(group = as.factor(.data$group), trial_type = as.factor(.data$trial_type),
-                    s1 = as.factor(.data$s1), s2 = as.factor(.data$s2),
-                    phase = as.factor(.data$phase))
+      dplyr::mutate(
+        group = as.factor(.data$group), trial_type = as.factor(.data$trial_type),
+        s1 = as.factor(.data$s1), s2 = as.factor(.data$s2),
+        phase = as.factor(.data$phase)
+      )
   }
-  if (type == "os"){
-    dat = do.call("rbind", res$os) %>%
-      dplyr::group_by(.data$group, .data$trial, .data$phase, .data$trial_type,
-                      .data$s1, .data$comp, .data$s2, .data$block_size) %>%
+  if (type == "os") {
+    dat <- do.call("rbind", res$os) %>%
+      dplyr::group_by(
+        .data$group, .data$trial, .data$phase, .data$trial_type,
+        .data$s1, .data$comp, .data$s2, .data$block_size
+      ) %>%
       dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
-      dplyr::mutate(group = as.factor(.data$group), trial_type = as.factor(.data$trial_type),
-                    s1 = as.factor(.data$s1),
-                    comp = as.factor(.data$comp),
-                    s2 = as.factor(.data$s2), phase = as.factor(.data$phase))
+      dplyr::mutate(
+        group = as.factor(.data$group), trial_type = as.factor(.data$trial_type),
+        s1 = as.factor(.data$s1),
+        comp = as.factor(.data$comp),
+        s2 = as.factor(.data$s2), phase = as.factor(.data$phase)
+      )
   }
   dat
 }
 
-filter_calmr_results <- function(parsed_experiment, filters){
-  if (!is.null(parsed_experiment)){
-    parsed_experiment@parsed_results = lapply(parsed_experiment@parsed_results, function(x) x %>% dplyr::filter(.data$phase %in% filters$phase & .data$trial_type %in% filters$trial_type))
+filter_calmr_results <- function(parsed_experiment, filters) {
+  if (!is.null(parsed_experiment)) {
+    parsed_experiment@parsed_results <- lapply(parsed_experiment@parsed_results, function(x) x %>% dplyr::filter(.data$phase %in% filters$phase & .data$trial_type %in% filters$trial_type))
   }
   parsed_experiment
 }
-

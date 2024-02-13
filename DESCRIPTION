@@ -68,6 +68,7 @@ Collate:
     'make_experiment.R'
     'assertions.R'
     'design_class.R'
+    'result_class.R'
     'experiment_class.R'
     'get_parameters.R'
     'heidi_support.R'

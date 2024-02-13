@@ -1,8 +1,10 @@
 #' @title Run experiment
 #' @description Runs an experiment with minimal parameters.
 #' @param x A CalmrExperiment or design data.frame
-#' @param parse A logical specifying whether the results
+#' @param parse A logical specifying whether the raw results
 #' should be parsed. Default = TRUE.
+#' @param aggregate A logical specifying whether the parsed results
+#' should be aggregated. Default = TRUE.
 #' @param ... Arguments to make the experiment
 #' (in case x is a design data.frame)
 #' or arguments for the model call (e.g., debug)
@@ -32,7 +34,7 @@
 #' @export
 
 run_experiment <- function(
-    x, parse = TRUE, ...) {
+    x, parse = TRUE, aggregate = TRUE, ...) {
   if (!is_experiment(x)) {
     # parse design
     parsed_design <- parse_design(x)
@@ -49,6 +51,15 @@ run_experiment <- function(
     do.call(get_model(i$model), i)
   }, simplify = FALSE)
 
-  experiment@resuls@raw_results <- results
+  experiment@results@raw_results <- results
+
+  if (parse) {
+    experiment <- parse(experiment)
+  }
+
+  if (aggregate) {
+    experiment <- aggregate(experiment)
+  }
+
   return(experiment)
 }

@@ -4,13 +4,16 @@
 \alias{run_experiment}
 \title{Run experiment}
 \usage{
-run_experiment(x, parse = TRUE, ...)
+run_experiment(x, parse = TRUE, aggregate = TRUE, ...)
 }
 \arguments{
 \item{x}{A CalmrExperiment or design data.frame}
 
-\item{parse}{A logical specifying whether the results
+\item{parse}{A logical specifying whether the raw results
 should be parsed. Default = TRUE.}
+
+\item{aggregate}{A logical specifying whether the parsed results
+should be aggregated. Default = TRUE.}
 
 \item{...}{Arguments to make the experiment
 (in case x is a design data.frame)

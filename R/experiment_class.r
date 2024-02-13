@@ -14,7 +14,7 @@ methods::setClass(
   representation(
     arguments = "tbl",
     design = "CalmrDesign",
-    results = "CalmrResult"
+    results = "CalmrExperimentResult"
   )
 )
 
@@ -30,6 +30,41 @@ setGeneric("design", function(x) methods::standardGeneric("design"))
 setMethod("design", "CalmrExperiment", function(x) {
   x@design
 })
+
+setMethod("length", "CalmrExperiment", function(x) {
+  if (!is.null(x@arguments)) {
+    nrow(x@arguments)
+  } else {
+    NULL
+  }
+})
+
+setGeneric("parse", function(object) methods::standardGeneric("parse"))
+methods::setMethod(
+  "parse", "CalmrExperiment",
+  function(object) {
+    if (!is.null(object@results@raw_results)) {
+      # we gotta parse
+      object@results@parsed_results <- .parse_experiment(object)
+    } else {
+      stop("Found no raw_results to parse.")
+    }
+    object
+  }
+)
+
+setGeneric("aggregate", function(object) methods::standardGeneric("parse"))
+methods::setMethod(
+  "aggregate", "CalmrExperiment",
+  function(object) {
+    if (!is.null(object@results@parsed_results)) {
+      object@results@aggregated_results <-
+        .aggregate_experiment(object)
+    } else {
+      stop("Found no parsed_results to aggregate.")
+    }
+  }
+)
 
 #' Summarise CalmrExperiment
 #'

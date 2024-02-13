@@ -10,11 +10,13 @@ pars <- data.frame(
   alphas = c(0.1, 0.2, 0.2, 0.3)
 )
 
-run_experiment(
+x <- run_experiment(
   df,
   model = "HD2022", options = get_exp_opts()
 )
-asdf
+
+x@results@parsed_results
+
 test_that("run_experiment asserts correctly", {
   # warning for not passing parameters
   expect_warning(run_experiment(
