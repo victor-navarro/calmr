@@ -1,4 +1,3 @@
-require(methods)
 #' S4 class for  Calmr results
 #'
 #' @section Slots:
@@ -35,57 +34,6 @@ setMethod("show", "CalmrResult", function(object) {
 
 # TODO: Expand this class to specific
 # types of results (e.g., experiments, fits, comparisons)
-
-#' S4 class for Calmr designs
-#'
-#' @description Inherits from the tbl class
-#' @section Methods:
-#' \describe{
-#' \item{\code{trials}:}{Prints trial information per group and phase}
-#' }
-#' @name CalmrDesign
-#' @rdname CalmrDesign
-#' @exportClass CalmrDesign
-
-methods::setClass("CalmrDesign",
-  slots = c(
-    design = "tbl",
-    map = "list",
-    raw_design = "data.frame"
-  )
-)
-
-methods::setMethod(
-  "show", "CalmrDesign",
-  function(object) print(object@design)
-)
-
-methods::setGeneric(
-  "trials",
-  function(x) methods::standardGeneric("trials")
-)
-methods::setMethod(
-  "trials",
-  "CalmrDesign", function(x) {
-    trial_dat <- data.frame()
-    for (r in seq_len(nrow(x))) {
-      td <- x$trial_info[[r]]
-      gdf <- data.frame(
-        group = x$group[r], phase = x$phase[r],
-        td[c("trial_names", "trial_repeats", "is_test")],
-        data.frame(lapply(td[c("trial_functional")], paste))
-      )
-      trial_dat <- rbind(trial_dat, gdf)
-    }
-    return(trial_dat)
-  }
-)
-
-methods::setGeneric("map", function(x) methods::standardGeneric("map"))
-methods::setMethod("map", "CalmrDesign", function(x) {
-  print(x@map)
-})
-
 
 #' S4 class for Calmr Comparisons
 #'
@@ -186,32 +134,4 @@ setClass("CalmrFit",
     optimizer_options = "list",
     extra_pars = "list"
   )
-)
-
-#### DEPRECATE ####
-#' S4 class for Calmr Models
-#'
-#' @section Slots:
-#' \describe{
-#' \item{\code{model}:}{Character. The model name.}
-#' \item{\code{parameters}:}{List. The model parameters.}
-#' \item{\code{model_results }:}{List. The model results (layers)}
-#' \item{\code{experience}:}{Data.frame. The data.frame used to train the model.}
-#' \item{\code{mapping}:}{List. Contains mapping information (e.g., between functional and nominal stimuli)}
-#' \item{\code{is_parsed}:}{Logical. Whether the model results have been parsed.}
-#' }
-#' @name CalmrModel-class
-#' @rdname CalmrModel-class
-#' @exportClass CalmrModel
-
-setClass("CalmrModel",
-  slots = c(
-    model = "character",
-    parameters = "list",
-    model_results = "list",
-    experience = "data.frame",
-    mapping = "list",
-    is_parsed = "logical"
-  ),
-  prototype = list(is_parsed = FALSE)
 )

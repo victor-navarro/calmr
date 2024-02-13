@@ -1,7 +1,7 @@
 #' Obtain model parameters
 #' @param design An data.frame containing the experimental design.
 #' @param model A string specifying a model. One in `supported_models()`.
-#' @return A data.frame with model parameters, depending on `model`.
+#' @return A list with model parameters depending on model
 #' @seealso \code{\link{supported_models}}
 #' @export
 
@@ -10,60 +10,15 @@ get_parameters <- function(design, model = NULL) {
   parsed_design <- .calmr_assert("parsed_design", design)
 
   # Get stimulus names from design
-  stims <- parsed_design@map$unique_nominal_stimuli
+  stimuli <- parsed_design@mapping$unique_nominal_stimuli
+  do.call(.named_pars, c(parameter_info(model), list(stimuli)))
+}
 
-  if (model %in% c("HDI2020", "HD2022", "RAND")) {
-    df <- data.frame(
-      stimulus = stims,
-      alphas = 0.4
-    )
+.named_pars <- function(name, default_value, stimuli) {
+  pars <- list()
+  n <- length(stimuli)
+  for (i in seq_along(name)) {
+    pars[[name[i]]] <- stats::setNames(rep(default_value[i], n), stimuli)
   }
-  if (model %in% c("RW1972")) {
-    df <- data.frame(
-      stimulus = stims,
-      alphas = 0.4,
-      betas_on = 0.4,
-      betas_off = 0.4,
-      lambdas = 1
-    )
-  }
-  if (model %in% c("MAC1975")) {
-    df <- data.frame(
-      stimulus = stims,
-      alphas = 0.4,
-      min_alphas = 0.1,
-      max_alphas = 1.0,
-      betas_on = 0.4,
-      betas_off = 0.4,
-      lambdas = 1,
-      thetas = .2,
-      gammas = 1 / length(stims)
-    )
-  }
-  if (model %in% c("PKH1982")) {
-    df <- data.frame(
-      stimulus = stims,
-      alphas = 0.4,
-      min_alphas = 0.1,
-      max_alphas = 1.0,
-      betas_ex = .4,
-      betas_in = .3,
-      lambdas = 1,
-      thetas = 1,
-      gammas = 1 / length(stims)
-    )
-  }
-  if (model %in% c("SM2007")) {
-    df <- data.frame(
-      stimulus = stims,
-      alphas = 0.4,
-      lambdas = 1,
-      omegas = 0.2,
-      rhos = 1,
-      gammas = 1,
-      taus = 0.2,
-      orders = 1
-    )
-  }
-  df
+  pars
 }

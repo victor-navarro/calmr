@@ -10,38 +10,19 @@ df <- data.frame(
 parsed_df <- parse_design(df)
 parameters <- get_parameters(df, model = "HD2022")
 
-no_minib_args <- make_experiment(parsed_df, parameters,
-  model = "HD2022", options = get_exp_opts(miniblocks = FALSE, iterations = 2)
-)
+test_that("trials are generated in blocks", {
+  blocks <- rep(1:20, each = 3)
+  tps <- minib_args@arguments$experience[[1]]$tp
+  # should generate 20 blocks for group X
+  # pointers within block sum to 6 (1+2+3)
+  expect_true(all(tapply(tps, blocks, sum) == 6))
 
-# WORKING HERE
-
-minib_args <- make_model_args(parsed_df, parameters,
-  model = "HD2022",
-  options = get_exp_opts(miniblocks = TRUE)
-)
-
-test_that("make_experiment works", {
-  # should generate 10 blocks for group X,
-  # each containing one of each trial type
-  expect_true(all(sapply(1:3, function(x) {
-    sum(ceiling(which(minib_args$experience[[1]]$tp == x) / 3)) == sum(1:10)
-  })))
-  # should generate 2 blocks for group Y,
-  # each containing 1 of each AB and #AB trials, and 3 each of A and B trials
-  expect_true(all(sapply(4:5, function(x) {
-    sum(ceiling(which(minib_args$experience[[2]]$tp == x) / 8))
-  }) == sum(1:2)))
-  expect_true(all(sapply(c(1, 3), function(x) {
-    sum(ceiling(which(minib_args$experience[[2]]$tp == x) / 8))
-  }) == sum(rep(1:2, 3))))
-  # should generate 10 blocks for group X,
-  # in repeating order (1, 2, 3, 1, 2, 3, etc.)
-  expect_equal(minib_args$experience[[1]]$tp, rep(1:3, 10))
-  # should generate 2 blocks for group Y,
-  # in repeating order (4, 1, 1, 1, 3, 3, 5, and so on)
-  expect_equal(
-    minib_args$experience[[2]]$tp,
-    rep(c(4, 1, 1, 1, 3, 3, 3, 5), 2)
-  )
+  # should generate 4 blocks for group Y
+  # pointers within block sum to 28 (4+3+15+6)
+  blocks <- rep(1:4, each = 8)
+  tps <- minib_args@arguments$experience[[2]]$tp
+  expect_true(all(tapply(tps, blocks, sum) == 28))
+  #
 })
+
+# TODO: Write more tests (unique sampling per iteration, master list)

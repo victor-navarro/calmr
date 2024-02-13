@@ -14,8 +14,11 @@
 #' @examples
 #' des <- data.frame(Group = "G1", P1 = "10A>(US)", R1 = TRUE)
 #' ps <- get_parameters(des, model = "HD2022")
-#' op <- get_exp_opts(iterations = 1)
-#' make_experiment(design = des, parameters = ps, model = "HD2022", options = op)
+#' op <- get_exp_opts(miniblocks = TRUE, iterations = 2)
+#' make_experiment(
+#'   design = des, parameters = ps,
+#'   model = "HD2022", options = op
+#' )
 #'
 #' @export
 
@@ -24,13 +27,14 @@ make_experiment <- function(
     model = NULL, options = get_exp_opts()) {
   design <- parse_design(design)
 
-  # check model
+  # assert model
   model <- .calmr_assert("supported_model", model)
-
-  # check parameters
+  # assert parameters
   parameters <- .calmr_assert("parameters", parameters,
     design = design, model = model
   )
+  # assert options
+  options <- .calmr_assert("experiment_options", options)
 
   # sample trials
   exptb <- design@design |>
@@ -41,7 +45,7 @@ make_experiment <- function(
       .sample_trials,
       c(x$trial_info, list(
         randomize = x$randomize,
-        masterlist = design@map$trial_names,
+        masterlist = design@mapping$trial_names,
         miniblocks = options$miniblocks
       ))
     )
@@ -73,9 +77,12 @@ make_experiment <- function(
     model,
     exptb[, c("iteration", "group")],
     experience,
-    parameters = list(parameters)
+    parameters = list(parameters),
+    mapping = list(design@mapping)
   )
-  return(methods::new("CalmrExperiment", arguments = arguments))
+  return(methods::new("CalmrExperiment",
+    arguments = arguments, design = design
+  ))
 }
 
 .sample_trials <- function(

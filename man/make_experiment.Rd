@@ -31,8 +31,11 @@ the arguments necessary to run models
 \examples{
 des <- data.frame(Group = "G1", P1 = "10A>(US)", R1 = TRUE)
 ps <- get_parameters(des, model = "HD2022")
-op <- get_exp_opts(iterations = 1)
-make_experiment(design = des, parameters = ps, model = "HD2022", options = op)
+op <- get_exp_opts(miniblocks = TRUE, iterations = 2)
+make_experiment(
+  design = des, parameters = ps,
+  model = "HD2022", options = op
+)
 
 }
 \seealso{

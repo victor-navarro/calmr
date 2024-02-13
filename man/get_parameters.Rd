@@ -12,7 +12,7 @@ get_parameters(design, model = NULL)
 \item{model}{A string specifying a model. One in \code{supported_models()}.}
 }
 \value{
-A data.frame with model parameters, depending on \code{model}.
+A list with model parameters depending on model
 }
 \description{
 Obtain model parameters

@@ -8,10 +8,6 @@ setGeneric("get_output", function(object, ...) standardGeneric("get_output"))
 #### Methods ####
 
 #### Exposing methods ####
-setMethod("show", "CalmrModel", function(object) {
-  cat(object@model, "run with:\n\n")
-  print(object@parameters)
-})
 
 
 
@@ -138,29 +134,7 @@ setMethod(
   }
 )
 
-#' Graph model associations
-#'
-#' Creates a network graph of model associations
-#'
-#' @param x An object of class \code{\link{CalmrModel-class}} or \code{\link{CalmrExperiment-class}}.
-#' @param ... Additional parameters passed to the \code{\link{graph_weights}} function.
-#' @return A ggplot object
-#' @export
-graph <- function(x, ...) NULL
-setMethod("graph", "CalmrModel", function(x, ...) {
-  if (x@is_parsed) {
-    if (any(c("evs", "ivs") %in% names(x@model_results))) {
-      dat <- x@model_results$evs
-      dat$value <- dat$value - x@model_results$ivs$value
-      graph_weights(dat, ...)
-    } else {
-      graph_weights(x@model_results$vs, ...)
-    }
-  } else {
-    # TODO: Implement this for unparsed models
-    stop("The graph method requires a parsed model.")
-  }
-})
+
 
 #### Predict methods ####
 #' Predict from CalmrFit

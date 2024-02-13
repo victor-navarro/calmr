@@ -90,11 +90,11 @@ parse_design <- function(df) {
 
         # done
         return(methods::new("CalmrDesign",
-          design = design, map = map, raw_design = df
+          design = design, mapping = map, raw_design = df
         ))
       },
       error = function(e) {
-        stop("Could not parse design. Please see examples in ??parse_design")
+        stop(e)
       }
     )
   }

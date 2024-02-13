@@ -13,12 +13,22 @@ methods::setClass(
   "CalmrExperiment",
   representation(
     arguments = "tbl",
+    design = "CalmrDesign",
     results = "CalmrResult"
   )
 )
 
 setMethod("show", "CalmrExperiment", function(object) {
-  summary(object)
+  if (is.null(object@results@raw_results)) {
+    print(object@arguments)
+  } else {
+    print(object@results)
+  }
+})
+
+setGeneric("design", function(x) methods::standardGeneric("design"))
+setMethod("design", "CalmrExperiment", function(x) {
+  x@design
 })
 
 #' Summarise CalmrExperiment

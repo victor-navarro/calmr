@@ -4,29 +4,23 @@
 \alias{HD2022}
 \title{Train the HD2022 model}
 \usage{
-HD2022(alphas, V = NULL, experience, mapping)
+HD2022(v = NULL, parameters, experience, mapping, ...)
 }
 \arguments{
-\item{alphas}{A named vector with stimulus saliences.}
+\item{v}{(optional) A named matrix of dimensions S,S;
+where S is the number of stimuli.}
 
-\item{V}{(optional) A named matrix of dimensions S,S; where S is the number of stimuli.}
+\item{parameters}{A list containing "alphas".}
 
-\item{experience}{A data.frame specifying trials as rows, as returned by \code{make_model_args}}
+\item{experience}{A data.frame specifying trials as rows,
+as returned by \code{make_experiment}}
 
-\item{mapping}{A named list specifying trial and stimulus mapping, as returned by \code{make_model_args}}
+\item{mapping}{A named list specifying trial and stimulus mapping,
+as returned by \code{make_experiment}}
 }
 \value{
-A list with
-\itemize{
-\item{vs, rs - Arrays of dimensions P,S,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment. Respectively, vs and rs contain the stimulus weights and the stimulus-specific responses.}
-\item{as - Arrays of dimensions P,1,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment. Respectively, vs and rs contain the stimulus weights and the stimulus-specific responses.}
-\item{combs, chains - Lists of length P with combined and chained activation values.}
-\item{experience, mapping - As passed in arguments; carryover arguments further processing.}
-}
+A list with raw results
 }
 \description{
 Train the HD2022 model
-}
-\note{
-The array V contains the associations for all stimuli involved in the experiment. Entry i,j specifies the associative strength between stimulus i to stimulus j. Entry j,i specifies the opposite direction.
 }

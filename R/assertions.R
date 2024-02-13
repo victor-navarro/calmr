@@ -1,10 +1,19 @@
+#' Check if object is Calmr experiment
+#' @param object The object to be checked
+#' @returns A logical
+#' @export
+is_experiment <- function(object) {
+  inherits(object, "CalmrExperiment")
+}
+
+
 #' Go-to stops for calmr assertions
 .calmr_assert <- function(what, given, ...) { # nolint: cyclocomp_linter.
   narg <- list(...)
   switch(what,
     "supported_model" = {
       if (is.null(given)) {
-        warning("No time model passed. Using RW1972.",
+        warning("No model passed. Using RW1972.",
           call. = FALSE
         )
         return("RW1972")
@@ -48,6 +57,8 @@
           stop("Did not supply proper options. Please see ?get_exp_opts",
             call. = FALSE
           )
+        } else {
+          return(given)
         }
       }
     },
@@ -117,7 +128,7 @@
     },
     "good_experiment" = {
       if (any(unlist(lapply(
-        given$mapping,
+        given@arguments$mapping,
         function(x) length(x$unique_nominal_stimuli)
       )) == 1)) {
         stop("Experiment is too simple to run for one or more groups.
