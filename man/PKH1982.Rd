@@ -4,54 +4,26 @@
 \alias{PKH1982}
 \title{Train the PKH1982 model}
 \usage{
-PKH1982(
-  alphas,
-  min_alphas,
-  max_alphas,
-  betas_ex,
-  betas_in,
-  lambdas,
-  thetas,
-  gammas,
-  EV = NULL,
-  IV = NULL,
-  experience,
-  mapping
-)
+PKH1982(ev = NULL, iv = NULL, parameters, experience, mapping, ...)
 }
 \arguments{
-\item{alphas}{A named vector with stimulus saliences.}
+\item{ev}{(optional) A named matrix of dimensions S,S;
+where S is the number of stimuli.}
 
-\item{min_alphas}{A named vector with minimum stimulus saliences.}
+\item{iv}{(optional) A named matrix of dimensions S,S;
+where S is the number of stimuli.}
 
-\item{max_alphas}{A named vector with maximum stimulus saliences.}
+\item{parameters}{A list containing the model parameters,
+as returned by parameter_info().}
 
-\item{betas_ex}{A named vector with stimulus excitatory learning rates.}
+\item{experience}{A data.frame specifying trials as rows,
+as returned by \code{make_experiment}}
 
-\item{betas_in}{A named vector with stimulus inhibitory learning rates.}
-
-\item{lambdas}{A named vector with stimulus asymptotes.}
-
-\item{thetas}{A named vector with stimulus attentional learning recency bias.}
-
-\item{gammas}{A named vector with stimulus contributions to attentional learning rules.}
-
-\item{EV}{(optional) A named matrix of dimensions S,S; where S is the number of stimuli. Used for excitatory associations.}
-
-\item{IV}{(optional) A named matrix of dimensions S,S; where S is the number of stimuli. Used for inhibitory associations.}
-
-\item{experience}{A data.frame specifying trials as rows, as returned by \code{make_model_args}}
-
-\item{mapping}{A named list specifying trial and stimulus mapping, as returned by \code{make_model_args}}
+\item{mapping}{A named list specifying trial and stimulus mapping,
+as returned by \code{make_experiment}}
 }
 \value{
-A list with
-\itemize{
-\item{vs, Array of dimensions P,S,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment. Respectively, vs and rs contain the stimulus weights and the stimulus-specific responses.}
-\item{alphas, lambdas - Named vectors as above.}
-\item{combs, chains - Lists of length P with combined and chained activation values.}
-\item{experience, mapping - As passed in arguments; carryover arguments further processing.}
-}
+A list with raw results
 }
 \description{
 Train the PKH1982 model

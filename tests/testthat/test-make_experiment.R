@@ -9,6 +9,10 @@ df <- data.frame(
 
 parsed_df <- parse_design(df)
 parameters <- get_parameters(df, model = "HD2022")
+minib_args <- make_experiment(parsed_df,
+  parameters = parameters,
+  model = "HD2022", options = get_exp_opts()
+)
 
 test_that("trials are generated in blocks", {
   blocks <- rep(1:20, each = 3)
@@ -24,5 +28,23 @@ test_that("trials are generated in blocks", {
   expect_true(all(tapply(tps, blocks, sum) == 28))
   #
 })
+
+# More tests
+df <- data.frame(
+  Group = c("A", "B"),
+  P1 = c("2A>(US)", "2B>(US)"),
+  R1 = c(TRUE, TRUE),
+  P2 = c("2AX>(US)", "2AX>(US)"),
+  R2 = c(TRUE, TRUE)
+)
+df <- parse_design(df)
+opts <- get_exp_opts()
+pars <- get_parameters(df, model = m)
+
+test_that("function works with even trials per row", {
+  args <- make_experiment(df, parameters = pars, model = m, options = opts)
+  expect_named(args@arguments)
+})
+
 
 # TODO: Write more tests (unique sampling per iteration, master list)

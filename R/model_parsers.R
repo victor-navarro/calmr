@@ -25,27 +25,27 @@
   gen_dat$trial_type <- args$mapping[[1]]$trial_names[gen_dat$tp]
   gen_dat <- dplyr::select(gen_dat, -"tp")
   need_enframe <- c(
-    "es", "vs", "evs", "ivs",
+    "es", "vs", "eivs",
     "acts", "relacts", "rs", "os"
   )
 
   dat <- NULL
   # arrays that need to be enframed
   if (type %in% need_enframe) {
-    # special treatment for HeiDI acts (ugly)
-    if (args$model %in% c("HDI2020", "HD2022") && type == "acts") {
-      combs <- tibble::enframe(lapply(raw$combvs, function(x) {
-        as.data.frame(as.table(x), stringsAsFactors = FALSE)
-      }), name = "trial")
-      combs$act_type <- "comb"
-      chains <- tibble::enframe(lapply(raw$chain, function(x) {
-        as.data.frame(as.table(x), stringsAsFactors = FALSE)
-      }), name = "trial")
-      chains$act_type <- "chain"
-      full_dat <- dplyr::bind_rows(
-        dplyr::left_join(gen_dat, combs, by = "trial"),
-        dplyr::left_join(gen_dat, chains, by = "trial")
-      )
+    # special treatment for HeiDI acts (ugly) and Konorskian models
+    # that return an output as a list
+    if (
+      (args$model %in% c("HDI2020", "HD2022") && type == "acts") ||
+        type == "eivs"
+    ) {
+      raw_typed <- lapply(names(raw), function(r) {
+        hold <- tibble::enframe(lapply(raw[[r]], function(x) {
+          as.data.frame(as.table(x), stringsAsFactors = FALSE)
+        }), name = "trial")
+        hold$type <- r
+        dplyr::left_join(gen_dat, hold, by = "trial")
+      })
+      full_dat <- dplyr::bind_rows(raw_typed)
     } else {
       dat <- tibble::enframe(apply(raw, 1, function(x) {
         as.data.frame(as.table(x), stringsAsFactors = FALSE)
@@ -76,6 +76,13 @@
       cols = long_cols, names_to = "s1"
     )
   }
+  # labelling for Konorskian models
+  if (type %in% c("eivs")) {
+    full_dat$assoc_type <- ifelse(full_dat$type == "evs",
+      "excitatory", "inhibitory"
+    )
+  }
+
   full_dat
 }
 
@@ -90,7 +97,7 @@
     mod_dat <- experiment@results@parsed_results[
       experiment@arguments$model == m
     ]
-    agg_dat[m] <- sapply(outputs, function(o) {
+    agg_dat[[m]] <- sapply(outputs, function(o) {
       # put data together
       big_dat <- do.call(rbind, lapply(mod_dat, function(x) x[[o]]))
       # aggregate
@@ -103,146 +110,22 @@
 # dat is a tbl
 # type is the type of data
 .aggregate_results <- function(dat, type) {
-  # WORKING HERE
-  browser()
-}
-
-.agg <- function(res, type) {
-  dat <- NULL
-  if (type == "es") {
-    dat <- do.call("rbind", res$es) %>%
-      dplyr::group_by(
-        .data$group, .data$trial, .data$trial_type, .data$phase,
-        .data$s1, .data$s2, .data$block_size
-      ) %>% # summarize
-      dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
-      dplyr::mutate(
-        group = as.factor(.data$group), s1 = as.factor(.data$s1),
-        s2 = as.factor(.data$s2), trial_type = as.factor(.data$trial_type),
-        phase = as.factor(.data$phase)
-      )
+  # define base terms for aggregation formula
+  terms <- c(
+    "group", "trial", "trial_type",
+    "phase", "s1", "s2", "block_size"
+  )
+  if (type %in% c("as")) {
+    terms <- terms[!(terms == "s2")]
   }
-  if (type == "vs") {
-    dat <- do.call("rbind", res[[type]]) %>%
-      dplyr::group_by(
-        .data$group, .data$trial, .data$trial_type, .data$phase,
-        .data$s1, .data$s2, .data$block_size
-      ) %>% # summarize
-      dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
-      dplyr::mutate(
-        group = as.factor(.data$group), s1 = as.factor(.data$s1),
-        s2 = as.factor(.data$s2), trial_type = as.factor(.data$trial_type),
-        phase = as.factor(.data$phase)
-      )
+  if ("type" %in% names(dat)) {
+    terms <- c(terms, "type")
   }
-  if (type == "eivs") {
-    ev <- do.call("rbind", res$evs) %>%
-      dplyr::group_by(
-        .data$group, .data$trial, .data$trial_type, .data$phase,
-        .data$s1, .data$s2, .data$block_size
-      ) %>% # summarize
-      dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
-      dplyr::mutate(
-        group = as.factor(.data$group), s1 = as.factor(.data$s1),
-        s2 = as.factor(.data$s2), trial_type = as.factor(.data$trial_type),
-        phase = as.factor(.data$phase), assoc_type = "Excitatory"
-      )
-    iv <- do.call("rbind", res$ivs) %>%
-      dplyr::group_by(
-        .data$group, .data$trial, .data$trial_type, .data$phase,
-        .data$s1, .data$s2, .data$block_size
-      ) %>% # summarize
-      dplyr::summarise(value = -mean(.data$value), .groups = "drop") %>%
-      dplyr::mutate(
-        group = as.factor(.data$group), s1 = as.factor(.data$s1),
-        s2 = as.factor(.data$s2), trial_type = as.factor(.data$trial_type),
-        phase = as.factor(.data$phase), assoc_type = "Inhibitory"
-      )
-    net <- ev
-    net$value <- net$value + iv$value
-    net$assoc_type <- "Net"
-    dat <- rbind(ev, iv, net)
+  if (type %in% c("os")) {
+    terms <- c(terms, "comp")
   }
-  if (type == "as") {
-    dat <- do.call("rbind", res$as) %>%
-      dplyr::group_by(
-        .data$group, .data$trial, .data$phase,
-        .data$trial_type, .data$s1, .data$block_size
-      ) %>% # summarize
-      dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
-      dplyr::mutate(
-        group = as.factor(.data$group), trial_type = as.factor(.data$trial_type),
-        s1 = as.factor(.data$s1), phase = as.factor(.data$phase)
-      )
-  }
-  if (type == "acts") {
-    if (any(res$model %in% c("HD2022", "HDI2020"))) {
-      dat <- do.call("rbind", res$acts) %>%
-        dplyr::group_by(
-          .data$group, .data$trial, .data$phase, .data$trial_type,
-          .data$act_type, .data$s1, .data$s2, .data$block_size
-        ) %>%
-        dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
-        dplyr::mutate(
-          group = as.factor(.data$group), trial_type = as.factor(.data$trial_type),
-          act_type = as.factor(.data$act_type), s1 = as.factor(.data$s1),
-          s2 = as.factor(.data$s2), phase = as.factor(.data$phase)
-        )
-    } else {
-      dat <- do.call("rbind", res$acts) %>%
-        dplyr::group_by(
-          .data$group, .data$trial, .data$phase, .data$trial_type,
-          .data$s1, .data$s2, .data$block_size
-        ) %>%
-        dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
-        dplyr::mutate(
-          group = as.factor(.data$group), trial_type = as.factor(.data$trial_type),
-          s1 = as.factor(.data$s1),
-          s2 = as.factor(.data$s2), phase = as.factor(.data$phase)
-        )
-    }
-  }
-  if (type == "relacts") {
-    dat <- do.call("rbind", res$relacts) %>%
-      dplyr::group_by(
-        .data$group, .data$trial, .data$phase, .data$trial_type,
-        .data$s1, .data$s2, .data$block_size
-      ) %>%
-      dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
-      dplyr::mutate(
-        group = as.factor(.data$group), trial_type = as.factor(.data$trial_type),
-        s1 = as.factor(.data$s1),
-        s2 = as.factor(.data$s2), phase = as.factor(.data$phase)
-      )
-  }
-  if (type == "rs") {
-    dat <- do.call("rbind", res$rs) %>%
-      dplyr::group_by(
-        .data$group, .data$trial, .data$phase, .data$trial_type,
-        .data$s1, .data$s2, .data$block_size
-      ) %>% # summarize
-      dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
-      dplyr::mutate(
-        group = as.factor(.data$group), trial_type = as.factor(.data$trial_type),
-        s1 = as.factor(.data$s1), s2 = as.factor(.data$s2),
-        phase = as.factor(.data$phase)
-      )
-  }
-  if (type == "os") {
-    dat <- do.call("rbind", res$os) %>%
-      dplyr::group_by(
-        .data$group, .data$trial, .data$phase, .data$trial_type,
-        .data$s1, .data$comp, .data$s2, .data$block_size
-      ) %>%
-      dplyr::summarise(value = mean(.data$value), .groups = "drop") %>%
-      dplyr::mutate(
-        group = as.factor(.data$group), trial_type = as.factor(.data$trial_type),
-        s1 = as.factor(.data$s1),
-        comp = as.factor(.data$comp),
-        s2 = as.factor(.data$s2), phase = as.factor(.data$phase)
-      )
-  }
-  dat
+  form <- formula(paste0("value~", paste0(terms, collapse = "+")))
+  aggregate(form, dat, mean)
 }
 
 filter_calmr_results <- function(parsed_experiment, filters) {

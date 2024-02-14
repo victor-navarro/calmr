@@ -4,31 +4,23 @@
 \alias{RW1972}
 \title{Train the RW1972 model}
 \usage{
-RW1972(alphas, betas_on, betas_off, lambdas, V = NULL, experience, mapping)
+RW1972(v = NULL, parameters, experience, mapping, ...)
 }
 \arguments{
-\item{alphas}{A named vector with stimulus saliences.}
+\item{v}{(optional) A named matrix of dimensions S,S;
+where S is the number of stimuli.}
 
-\item{betas_on}{A named vector with stimulus associabilities for present stimuli.}
+\item{parameters}{A list containing the model parameters,
+as returned by parameter_info().}
 
-\item{betas_off}{A named vector with stimulus associabilities for absent stimuli.}
+\item{experience}{A data.frame specifying trials as rows,
+as returned by \code{make_experiment}}
 
-\item{lambdas}{A named vector with stimulus asymptotes.}
-
-\item{V}{(optional) A named matrix of dimensions S,S; where S is the number of stimuli.}
-
-\item{experience}{A data.frame specifying trials as rows, as returned by \code{make_model_args}}
-
-\item{mapping}{A named list specifying trial and stimulus mapping, as returned by \code{make_model_args}}
+\item{mapping}{A named list specifying trial and stimulus mapping,
+as returned by \code{make_experiment}}
 }
 \value{
-A list with
-\itemize{
-\item{vs, Array of dimensions P,S,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment. Respectively, vs and rs contain the stimulus weights and the stimulus-specific responses.}
-\item{alphas, lambdas - Named vectors as above.}
-\item{combs, chains - Lists of length P with combined and chained activation values.}
-\item{experience, mapping - As passed in arguments; carryover arguments further processing.}
-}
+A list with raw results
 }
 \description{
 Train the RW1972 model

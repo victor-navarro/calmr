@@ -20,14 +20,14 @@ gen_os_values <- function(stims, default_val = -1) {
 
 
 # Carries out a comparison process in a recursive manner
-.comparator_proc <- function(act, i, j, K, O, gammas, order, debug = FALSE) {
+.comparator_proc <- function(act, i, j, K, o, gammas, order, debug = FALSE) {
   ks <- setdiff(K, c(i, j))
   if (!length(ks)) {
     return(act[i, j])
   } # early exit if there are no comparators available
   if (order) { # order > 0
     val <- act[i, j] -
-      sum(gammas[ks] * O[i, ks, j] *
+      sum(gammas[ks] * o[i, ks, j] *
         # recursion from i to k (link 2)
         sapply(ks, function(x) {
           .comparator_proc(
@@ -35,7 +35,7 @@ gen_os_values <- function(stims, default_val = -1) {
             i = i,
             j = x,
             K = K,
-            O = O,
+            o = o,
             gammas = gammas,
             order = order - 1,
             debug = debug
@@ -48,7 +48,7 @@ gen_os_values <- function(stims, default_val = -1) {
             i = x,
             j = j,
             K = K,
-            O = O,
+            o = o,
             gammas = gammas,
             order = order - 1,
             debug = debug
@@ -57,7 +57,7 @@ gen_os_values <- function(stims, default_val = -1) {
   } else {
     # order 0; recursion stops here
     val <- act[i, j] -
-      sum(gammas[ks] * O[i, ks, j] * act[i, ks] * act[ks, j])
+      sum(gammas[ks] * o[i, ks, j] * act[i, ks] * act[ks, j])
   }
   if (debug) cat("Order:", order, "\n", "To", j, "via", i, "against", ks, "\n")
   if (debug) cat("Link value:", val, "\n")
@@ -68,7 +68,7 @@ gen_os_values <- function(stims, default_val = -1) {
 # Carries out a comparison process in a recursive manner,
 # but dropping previous i from link 3
 .witnauer_comparator_proc <- function(
-    act, i, j, K, O,
+    act, i, j, K, o,
     gammas, order, debug = FALSE) {
   ks <- setdiff(K, c(i, j))
   if (!length(ks)) {
@@ -76,7 +76,7 @@ gen_os_values <- function(stims, default_val = -1) {
   } # early exit if there are no comparators available
   if (order) { # order > 0
     val <- act[i, j] -
-      sum(gammas[ks] * O[i, ks, j] *
+      sum(gammas[ks] * o[i, ks, j] *
         # recursion from i to k (link 2)
         sapply(ks, function(x) {
           .comparator_proc(
@@ -84,7 +84,7 @@ gen_os_values <- function(stims, default_val = -1) {
             i = i,
             j = x,
             K = K,
-            O = O,
+            o = o,
             gammas = gammas,
             order = order - 1,
             debug = debug
@@ -97,7 +97,7 @@ gen_os_values <- function(stims, default_val = -1) {
             i = x,
             j = j,
             K = setdiff(K, i),
-            O = O,
+            o = o,
             gammas = gammas,
             order = order - 1,
             debug = debug
@@ -106,7 +106,7 @@ gen_os_values <- function(stims, default_val = -1) {
   } else {
     # order 0; recursion stops here
     val <- act[i, j] -
-      sum(gammas[ks] * O[i, ks, j] * act[i, ks] * act[ks, j])
+      sum(gammas[ks] * o[i, ks, j] * act[i, ks] * act[ks, j])
   }
   if (debug) cat("Order:", order, "\n", "To", j, "via", i, "against", ks, "\n")
   if (debug) cat("Link value:", val, "\n")

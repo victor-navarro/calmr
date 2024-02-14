@@ -5,17 +5,7 @@ df <- data.frame(
   P2 = c("1A", "1A"),
   R2 = c(TRUE, TRUE)
 )
-pars <- data.frame(
-  stimulus = c("A", "B", "C", "US"),
-  alphas = c(0.1, 0.2, 0.2, 0.3)
-)
-
-x <- run_experiment(
-  df,
-  model = "HD2022", options = get_exp_opts()
-)
-
-x@results@parsed_results
+pars <- get_parameters(df, model = "HD2022")
 
 test_that("run_experiment asserts correctly", {
   # warning for not passing parameters
@@ -25,40 +15,64 @@ test_that("run_experiment asserts correctly", {
   ))
   # error for not passing enough parameters
   expect_error(run_experiment(df,
-    param_df = pars[1, ],
+    parameters = pars[1, ],
     model = "HD2022", options = get_exp_opts()
   ))
   # error for passing bad options
   expect_error(run_experiment(df,
-    param_df = pars,
+    parameters = pars,
     model = "HD2022", options = list(mybadOption = TRUE)
   ))
 })
 
-test_that("run_experiment works", {
-  # test for a case in which there is only one type of trial per cell (thanks Dom)
+test_that("run_experiment runs with split args", {
+  res <- run_experiment(df,
+    parameters = pars,
+    model = "HD2022", options = get_exp_opts()
+  )
+  expect_named(
+    res@results@aggregated_results[[1]]
+  )
+})
+
+test_that("run_experiment runs with bundled args", {
+  args <- make_experiment(df,
+    parameters = pars,
+    model = "HD2022", options = get_exp_opts()
+  )
+  res <- run_experiment(args)
+  expect_named(
+    res@results@aggregated_results[[1]]
+  )
+})
+
+test_that("run_experiment works with simple cells", {
+  # test for a case in which there is only one
+  # type of trial per cell (thanks Dom)
   simple_df <- data.frame(
     Group = c("Over", "Ctrl"),
-    P1 = c("10AB(US)", "10A(US)"),
+    P1 = c("1AB(US)", "1A(US)"),
     R1 = c(TRUE, TRUE),
     P2 = c("1A", "1A"),
     R2 = c(TRUE, TRUE)
   )
-  simple_pars <- data.frame(stimulus = c("A", "B", "US"), alphas = c(0.1, 0.2, 0.3))
-  expect_named(run_experiment(
+  simple_pars <- get_parameters(simple_df, model = "HD2022")
+  res <- run_experiment(
     simple_df,
-    param_df = simple_pars, model = "HD2022",
+    parameters = simple_pars, model = "HD2022",
     options = get_exp_opts()
-  )@parsed_results, c("vs", "rs", "as", "acts"))
+  )
+  expect_named(
+    res@results@aggregated_results[[1]]
+  )
 })
 
 test_that("run_experiment stops overly minimal experiments", {
-  df <- data.frame(group = "A", p1 = "1A", r1 = T)
-  model <- "HD2022"
+  df <- data.frame(group = "A", p1 = "1A", r1 = TRUE)
   expect_error(run_experiment(
     df,
-    model = model,
-    param_df = get_parameters(df, model = model),
+    model = "HD2022",
+    parameters = get_parameters(df, model = "HD2022"),
     options = get_exp_opts()
   ))
 })

@@ -5,64 +5,49 @@
 \title{Train the SM2007 model}
 \usage{
 SM2007(
-  alphas,
-  lambdas,
-  omegas,
-  rhos,
-  gammas,
-  taus,
-  orders,
-  V = NULL,
-  O = NULL,
+  v = NULL,
+  o = NULL,
+  parameters,
   experience,
   mapping,
-  debug = F,
+  debug = FALSE,
   comparator_func = .witnauer_comparator_proc,
   ...
 )
 }
 \arguments{
-\item{alphas}{A named vector with stimulus saliences.}
+\item{v}{(optional) A named matrix of dimensions S,S;
+where S is the number of stimuli.}
 
-\item{lambdas}{A named vector with learning asymptotes.}
+\item{o}{(optional) A named matrix of dimensions S,S,S
+(the operator switches).}
 
-\item{omegas}{A named vector with weakening rates (extinction).}
+\item{parameters}{A list containing the model parameters,
+as returned by parameter_info().}
 
-\item{rhos}{A named vector with weights for activation of present stimuli.}
+\item{experience}{A data.frame specifying trials as rows,
+as returned by \code{make_experiment}}
 
-\item{gammas}{A named vector with weights for contribution of each stimulus in comparison processes.}
+\item{mapping}{A named list specifying trial and stimulus mapping,
+as returned by \code{make_experiment}}
 
-\item{taus}{A named vector with stimulus-specific rates for operator switch.}
+\item{debug}{A logical specifying whether to print
+information for the comparison process. Defaults to FALSE.}
 
-\item{orders}{An integer specifying the order of the comparison process. Defaults to 1.}
-
-\item{V}{(optional) A named matrix of dimensions S,S (the associative strengths); where S is the number of stimuli.}
-
-\item{O}{(optional) A named matrix of dimensions S,S,S (the operator switches).}
-
-\item{experience}{A data.frame specifying trials as rows, as returned by \code{make_model_args}}
-
-\item{mapping}{A named list specifying trial and stimulus mapping, as returned by \code{make_model_args}}
-
-\item{debug}{A logical specifying whether to print information for the comparison process. Defaults to FALSE.}
-
-\item{comparator_func}{A function to be used in the comparison process. Either \code{.witnauer_comparator_func}or \code{.comparator_func}.}
+\item{comparator_func}{A function to be used in the comparison
+process. Either \code{.witnauer_comparator_func}or \code{.comparator_func}.}
 }
 \value{
-A list with
-\itemize{
-\item{vs, Array of dimensions P,S,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment. Contains stimulus association strengths.}
-\item{acts} As above but with stimulus activations.
-\item{relacts} As above but with (relative) stimulus activations after comparison process.
-\item{os} Array of dimensions P,S,S,S, with the state of the operator switches. See notes related to \code{O} parameter.
-\item{other, Carryover arguments used for further processing by other functions}
-}
+A list with raw results
 }
 \description{
 Train the SM2007 model
 }
 \note{
-Correct usage of the V and O parameters requires the matrices to adhere to a specific format.
-For V, entry i,j represents the association from stimulus i to stimulus j.
-For O, entry i,k,j represents the operator switch between stimulus i and comparator k with respect to stimulus j.
+Correct usage of the v and o parameters requires the
+matrices to adhere to a specific format.
+For v, entry i,j represents the association from
+stimulus i to stimulus j.
+For o, entry i,k,j represents the operator switch
+between stimulus i and comparator k with respect to stimulus j.
 }

@@ -22,7 +22,7 @@
 supported_models <- function() {
   c(
     "HDI2020", "HD2022", "RW1972", "MAC1975",
-    "PKH1982", "SM2007", "ANCCR", "RAND"
+    "PKH1982", "SM2007", "RAND"
   )
 }
 
@@ -44,12 +44,12 @@ supported_plots <- function(model = NULL) {
   plot_info <- list(
     "HDI2020" = c("as", "acts", "rs", "vs"),
     "HD2022" = c("as", "acts", "rs", "vs"),
-    "RW1972" = c("es", "vs"),
-    "MAC1975" = c("as", "es", "vs"),
+    "RW1972" = c("rs", "vs"),
+    "MAC1975" = c("as", "rs", "vs"),
     "SM2007" = c("acts", "relacts", "vs", "os"),
-    "PKH1982" = c("as", "es", "eivs"),
+    "PKH1982" = c("as", "rs", "eivs"),
     "ANCCR" = c("anccr", "da"),
-    "RAND" = c("es", "vs")
+    "RAND" = c("rs", "vs")
   )
   if (is.null(model)) {
     plot_info
@@ -133,12 +133,12 @@ model_outputs <- function(model = NULL) {
   output_info <- list(
     "HDI2020" = c("as", "acts", "rs", "vs"),
     "HD2022" = c("as", "acts", "rs", "vs"),
-    "RW1972" = c("es", "vs"),
-    "MAC1975" = c("as", "es", "vs"),
+    "RW1972" = c("rs", "vs"),
+    "MAC1975" = c("as", "rs", "vs"),
     "SM2007" = c("acts", "relacts", "vs", "os"),
-    "PKH1982" = c("as", "es", "eivs"),
+    "PKH1982" = c("as", "rs", "eivs"),
     "ANCCR" = c("anccr", "da"),
-    "RAND" = c("es", "vs")
+    "RAND" = c("rs", "vs")
   )
   if (is.null(model)) {
     output_info

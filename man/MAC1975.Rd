@@ -4,51 +4,23 @@
 \alias{MAC1975}
 \title{Train the MAC1975 model}
 \usage{
-MAC1975(
-  alphas,
-  min_alphas,
-  max_alphas,
-  betas_on,
-  betas_off,
-  lambdas,
-  thetas,
-  gammas,
-  V = NULL,
-  experience,
-  mapping
-)
+MAC1975(v = NULL, parameters, experience, mapping, ...)
 }
 \arguments{
-\item{alphas}{A named vector with stimulus saliences.}
+\item{v}{(optional) A named matrix of dimensions S,S;
+where S is the number of stimuli.}
 
-\item{min_alphas}{A named vector with minimum stimulus saliences.}
+\item{parameters}{A list containing the model parameters,
+as returned by parameter_info().}
 
-\item{max_alphas}{A named vector with maximum stimulus saliences.}
+\item{experience}{A data.frame specifying trials as rows,
+as returned by \code{make_experiment}}
 
-\item{betas_on}{A named vector with stimulus associabilities for present stimuli.}
-
-\item{betas_off}{A named vector with stimulus associabilities for absent stimuli.}
-
-\item{lambdas}{A named vector with stimulus asymptotes.}
-
-\item{thetas}{A named vector with stimulus attentional learning rates.}
-
-\item{gammas}{A named vector with stimulus contributions to attentional learning rules}
-
-\item{V}{(optional) A named matrix of dimensions S,S; where S is the number of stimuli.}
-
-\item{experience}{A data.frame specifying trials as rows, as returned by \code{make_model_args}}
-
-\item{mapping}{A named list specifying trial and stimulus mapping, as returned by \code{make_model_args}}
+\item{mapping}{A named list specifying trial and stimulus mapping,
+as returned by \code{make_experiment}}
 }
 \value{
-A list with
-\itemize{
-\item{vs, Array of dimensions P,S,S; where P is the number of trials used to train the model and S is the number of stimuli involved in the experiment. Respectively, vs and rs contain the stimulus weights and the stimulus-specific responses.}
-\item{alphas, lambdas - Named vectors as above.}
-\item{combs, chains - Lists of length P with combined and chained activation values.}
-\item{experience, mapping - As passed in arguments; carryover arguments further processing.}
-}
+A list with raw results
 }
 \description{
 Train the MAC1975 model

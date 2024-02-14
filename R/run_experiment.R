@@ -42,6 +42,8 @@ run_experiment <- function(
     experiment <- make_experiment(
       design = parsed_design, ...
     )
+  } else {
+    experiment <- x
   }
   # check if experiment needs (can) to be run
   .calmr_assert("good_experiment", given = experiment)
@@ -55,10 +57,9 @@ run_experiment <- function(
 
   if (parse) {
     experiment <- parse(experiment)
-  }
-
-  if (aggregate) {
-    experiment <- aggregate(experiment)
+    if (aggregate) {
+      experiment <- aggregate(experiment)
+    }
   }
 
   return(experiment)

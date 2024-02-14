@@ -26,12 +26,32 @@ setMethod("show", "CalmrExperiment", function(object) {
   }
 })
 
-setGeneric("design", function(x) methods::standardGeneric("design"))
-setMethod("design", "CalmrExperiment", function(x) {
+methods::setGeneric("design", function(x) methods::standardGeneric("design"))
+methods::setMethod("design", "CalmrExperiment", function(x) {
   x@design
 })
 
-setMethod("length", "CalmrExperiment", function(x) {
+methods::setGeneric("get_results", function(object) {
+  methods::standardGeneric("get_results")
+})
+setMethod("get_results", "CalmrExperiment", function(object) {
+  # Returns aggregated results in tbl form
+  res <- object@results@aggregated_results
+  if (!is.null(res)) {
+    # Goes beyond current use case by allowing many models (and their outputs)\
+    do.call(
+      dplyr::bind_rows,
+      sapply(names(res), function(m) {
+        tibble::tibble(model = m, tibble::as_tibble(lapply(res[[m]], list)))
+      }, simplify = FALSE)
+    )
+  } else {
+    stop("Experiment does not have aggregated results.
+    Did you run with aggregate = FALSE?")
+  }
+})
+
+methods::setMethod("length", "CalmrExperiment", function(x) {
   if (!is.null(x@arguments)) {
     nrow(x@arguments)
   } else {
@@ -39,6 +59,7 @@ setMethod("length", "CalmrExperiment", function(x) {
   }
 })
 
+# I think this will break the parse
 setGeneric("parse", function(object) methods::standardGeneric("parse"))
 methods::setMethod(
   "parse", "CalmrExperiment",
@@ -53,35 +74,18 @@ methods::setMethod(
   }
 )
 
-setGeneric("aggregate", function(object) methods::standardGeneric("parse"))
 methods::setMethod(
   "aggregate", "CalmrExperiment",
-  function(object) {
-    if (!is.null(object@results@parsed_results)) {
-      object@results@aggregated_results <-
-        .aggregate_experiment(object)
+  function(x, ...) {
+    if (!is.null(x@results@parsed_results)) {
+      x@results@aggregated_results <-
+        .aggregate_experiment(x)
     } else {
       stop("Found no parsed_results to aggregate.")
     }
+    x
   }
 )
-
-#' Summarise CalmrExperiment
-#'
-#' Shows a summary for a CalmrExperiment
-#'
-#' @param object An object of class \code{\link{CalmrExperiment}}.
-#' @param ... Additional parameters passed to the summary function.
-#' @return A
-#' @export
-setMethod("summary", "CalmrExperiment", function(object, ...) {
-  print("TODO")
-  # print(object@results$mod_data[[1]])
-  # outputs <- names(object@results$mod_data[[1]]@model_results) # works for parsed and non-parsed objects
-  # cat("Available model outputs:\n")
-  # cat(outputs, "\n\n")
-  # cat(sprintf("Use `get_output(model, type)` to access the outputs (e.g., `get_output(%s, '%s')`)", as.character(substitute(object)), outputs[1]), "\n")
-})
 
 #' Plot CalmrExperiment
 #'

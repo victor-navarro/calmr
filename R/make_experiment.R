@@ -53,8 +53,12 @@ make_experiment <- function(
 
   # add phaselab and block information
   exptb <- tidyr::unnest_wider(exptb, "samples")
-  exptb$phaselab <- apply(exptb, 1, function(x) rep(x$phase, length(x$tps)))
-  exptb$blocks <- apply(exptb, 1, function(x) rep(x$block_size, length(x$tps)))
+  exptb$phaselab <- apply(exptb, 1, function(x) rep(x$phase, length(x$tps)),
+    simplify = FALSE
+  )
+  exptb$blocks <- apply(exptb, 1, function(x) rep(x$block_size, length(x$tps)),
+    simplify = FALSE
+  )
 
   # one last manipulation to concatenate phases into single rows
   exptb <- exptb %>%
