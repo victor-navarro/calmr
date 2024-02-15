@@ -31,7 +31,7 @@ test_that("run_experiment runs with split args", {
     model = "HD2022", options = get_exp_opts()
   )
   expect_named(
-    res@results@aggregated_results[[1]]
+    results(res)
   )
 })
 
@@ -42,7 +42,7 @@ test_that("run_experiment runs with bundled args", {
   )
   res <- run_experiment(args)
   expect_named(
-    res@results@aggregated_results[[1]]
+    results(res)
   )
 })
 
@@ -63,7 +63,7 @@ test_that("run_experiment works with simple cells", {
     options = get_exp_opts()
   )
   expect_named(
-    res@results@aggregated_results[[1]]
+    results(res)
   )
 })
 

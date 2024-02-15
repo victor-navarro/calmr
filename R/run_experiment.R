@@ -33,6 +33,8 @@
 #' @seealso \code{\link{get_exp_opts}}, \code{\link{parse_experiment_results}}
 #' @export
 
+# TODO: Implement running multiple models automatically
+
 run_experiment <- function(
     x, parse = TRUE, aggregate = TRUE, ...) {
   if (!is_experiment(x)) {

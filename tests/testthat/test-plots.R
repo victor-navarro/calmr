@@ -1,21 +1,28 @@
 df <- data.frame(
   Group = "X",
-  P1 = "1AB(US)",
+  P1 = "2AB(US)",
   R1 = TRUE
 )
-
+df <- parse_design(df)
 models <- supported_models()
+
+# Test plots for every model
 for (m in models) {
   ps <- supported_plots(m)
-  mod <- run_experiment(
-    design = df,
+  res <- run_experiment(
+    df,
     model = m,
-    param_df = get_parameters(design = df, model = m),
+    parameters = get_parameters(design = df, model = m),
     options = get_exp_opts()
   )
-  for (p in ps) {
-    test_that(paste("plot", p, "for model", m, "works"), {
-      expect_type(plot(mod, type = p), "list")
-    })
-  }
+  test_that(sprintf("all plots for model %s", m), {
+    plots <- plot(res)
+    expect_named(plots)
+  })
+  test_that(sprintf("specific plot for model %s", m), {
+    p <- plot(res, type = sample(ps, 1))
+    expect_true(length(p[[1]]) == 1)
+  })
 }
+
+# TODO: Test graphs

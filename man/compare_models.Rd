@@ -4,21 +4,31 @@
 \alias{compare_models}
 \title{Run models given a set of parameters}
 \usage{
-compare_models(design, models, layers, params = NULL, options = get_exp_opts())
+compare_models(
+  design,
+  models,
+  layers,
+  parameters = NULL,
+  options = get_exp_opts()
+)
 }
 \arguments{
-\item{design}{A data.frame of dimensions G,2*P+1; where G is the number of groups and P is the number of phases.}
+\item{design}{A design data.frame}
 
 \item{models}{A character vector specifying the models to run.}
 
-\item{layers}{A character vector of length M (the length of \code{models}), specifying the layer in each model that will be used for layers.}
+\item{layers}{A character vector of length M (the length of \code{models}),
+specifying the layers to compare
+specifying the layer in each model that will be used for layers.}
 
-\item{params}{A list of length M, each entry containing a data.frame of dimensions N,2; where N is the number of stimuli in the experimental design.}
+\item{parameters}{A list of length M,
+each containing a list with model parameters,
+as returned by `get_parameters``}
 
 \item{options}{A list of options, as returned by get_exp_opts.}
 }
 \value{
-A CalmrComparison object.
+A CalmrComparison object.f
 }
 \description{
 Run models given a set of parameters

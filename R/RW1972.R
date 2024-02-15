@@ -8,7 +8,7 @@
 #' as returned by `make_experiment`
 #' @param mapping A named list specifying trial and stimulus mapping,
 #' as returned by `make_experiment`
-#' @returns A CalmrModel class and some results
+#' @returns A CalmrModel class and some results <-
 
 RW1972 <- function(v = NULL, # nolint: object_name_linter.
                    parameters,

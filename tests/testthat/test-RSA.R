@@ -1,9 +1,11 @@
-exp <- data.frame(Group = c("A", "B"),
-                  P1 = c("10(A_a)>(US)/5B>(US)", "5(A_b)>(US)/10B>(US)"),
-                  R1 = T)
+exp <- data.frame(
+  Group = c("A", "B"),
+  P1 = c("10(A_a)>(US)/5B>(US)", "5(A_b)>(US)/10B>(US)"),
+  R1 = TRUE
+)
 models <- c("HD2022", "HDI2020", "RW1972")
 comparison <- c("rs", "rs", "vs")
-comp <- suppressWarnings(compare_models(exp, models, comparison))
+comp <- compare_models(exp, models, comparison)
 rsa <- RSA(comp)@corr_mat
 rsatest <- RSATest(comp, n_samples = 2)
 

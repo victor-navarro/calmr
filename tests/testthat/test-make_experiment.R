@@ -39,12 +39,19 @@ df <- data.frame(
 )
 df <- parse_design(df)
 opts <- get_exp_opts()
-pars <- get_parameters(df, model = m)
+parameters <- get_parameters(df, "RW1972")
 
 test_that("function works with even trials per row", {
-  args <- make_experiment(df, parameters = pars, model = m, options = opts)
+  args <- make_experiment(df,
+    parameters = parameters, model = "RW1972", options = opts
+  )
   expect_named(args@arguments)
 })
 
-
+test_that("make_experiment fails with too many models", {
+  expect_error(make_experimendt(df,
+    parameters = parameters,
+    model = c("RW1972", "MAC1975"), options = opts
+  ))
+})
 # TODO: Write more tests (unique sampling per iteration, master list)

@@ -21,14 +21,18 @@
 #' )
 #'
 #' @export
+#' @importFrom rlang .data
 
 make_experiment <- function(
     design, parameters = NULL,
     model = NULL, options = get_exp_opts()) {
   design <- parse_design(design)
 
+  .calmr_assert("length", 1, model = model)
+
   # assert model
   model <- .calmr_assert("supported_model", model)
+
   # assert parameters
   parameters <- .calmr_assert("parameters", parameters,
     design = design, model = model
@@ -62,12 +66,12 @@ make_experiment <- function(
 
   # one last manipulation to concatenate phases into single rows
   exptb <- exptb %>%
-    dplyr::group_by(iteration, group) |>
+    dplyr::group_by(.data$iteration, .data$group) |>
     dplyr::summarise(
-      tp = list(unlist(tps)),
-      is_test = list(unlist(is_test)),
-      phase = list(unlist(phaselab)),
-      block_size = list(unlist(blocks))
+      tp = list(unlist(.data$tps)),
+      is_test = list(unlist(.data$is_test)),
+      phase = list(unlist(.data$phaselab)),
+      block_size = list(unlist(.data$blocks))
     )
 
   # bundle into experiences

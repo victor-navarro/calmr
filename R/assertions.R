@@ -9,7 +9,7 @@ is_experiment <- function(object) {
 
 #' Go-to stops for calmr assertions
 .calmr_assert <- function(what, given, ...) { # nolint: cyclocomp_linter.
-  narg <- list(...)
+  nargs <- list(...)
   switch(what,
     "supported_model" = {
       if (is.null(given)) {
@@ -119,7 +119,7 @@ is_experiment <- function(object) {
       }
     },
     "supported_plot" = {
-      if (!(given %in% narg$supported)) {
+      if (!(given %in% nargs$supported)) {
         stop(sprintf("Plot not supported. The model does
         not contain '%s' in model results.", given),
           call. = FALSE
@@ -142,6 +142,14 @@ is_experiment <- function(object) {
         stop("Multiple orders for comparison process are
         not currently supported. Please make sure the
         orders column only contains one value.")
+      }
+    },
+    "length" = {
+      if (!all(lapply(nargs, length) == given)) {
+        stop(sprintf(
+          "Function requires %s arguments to be equal to %d",
+          paste0(names(nargs), collapse = ","), given
+        ))
       }
     }
   )

@@ -20,7 +20,7 @@ as returned by \code{make_experiment}}
 as returned by \code{make_experiment}}
 }
 \value{
-A list with raw results
+A CalmrModel class and some results <-
 }
 \description{
 Train the RW1972 model

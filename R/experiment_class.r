@@ -31,24 +31,38 @@ methods::setMethod("design", "CalmrExperiment", function(x) {
   x@design
 })
 
-methods::setGeneric("get_results", function(object) {
-  methods::standardGeneric("get_results")
-})
-setMethod("get_results", "CalmrExperiment", function(object) {
-  # Returns aggregated results in tbl form
-  res <- object@results@aggregated_results
-  if (!is.null(res)) {
-    # Goes beyond current use case by allowing many models (and their outputs)\
-    do.call(
-      dplyr::bind_rows,
-      sapply(names(res), function(m) {
-        tibble::tibble(model = m, tibble::as_tibble(lapply(res[[m]], list)))
-      }, simplify = FALSE)
+
+# A method to concatenate experiments
+# TODO: Implement a concatenation methods for CalmrDesign
+# This currently deletes some design information if the designs
+# are not the same across experiments
+methods::setMethod("c", "CalmrExperiment", function(x, ..., recursive = FALSE) {
+  allexps <- list(x, ...)
+  if (length(allexps) > 1) {
+    methods::new("CalmrExperiment",
+      arguments = dplyr::bind_rows(lapply(allexps, function(e) e@arguments)),
+      design = allexps[[1]]@design,
+      results = do.call(c, lapply(allexps, function(e) e@results))
     )
   } else {
-    stop("Experiment does not have aggregated results.
-    Did you run with aggregate = FALSE?")
+    stop("Cannot concatenate with less than 2 experiments.")
   }
+})
+
+methods::setGeneric("results", function(object) {
+  methods::standardGeneric("results")
+})
+
+#' Extract aggregated results from CalmrExperiment
+#'
+#' @param object An object of class \clode{\link{CalmrExperiment}}
+#' @return A tbl containing models (rows) and model outputs (columns)
+#' @export
+#' @rdname results
+
+setMethod("results", "CalmrExperiment", function(object) {
+  # Returns aggregated results
+  object@results@aggregated_results
 })
 
 methods::setMethod("length", "CalmrExperiment", function(x) {
@@ -77,63 +91,73 @@ methods::setMethod(
 methods::setMethod(
   "aggregate", "CalmrExperiment",
   function(x, ...) {
-    if (!is.null(x@results@parsed_results)) {
-      x@results@aggregated_results <-
-        .aggregate_experiment(x)
-    } else {
-      stop("Found no parsed_results to aggregate.")
+    if (is.null(x@results@parsed_results)) {
+      x <- parse(x)
     }
+    res <- .aggregate_experiment(x)
+    x@results@aggregated_results <- do.call(
+      dplyr::bind_rows,
+      sapply(names(res), function(m) {
+        tibble::tibble(model = m, tibble::as_tibble(lapply(res[[m]], list)))
+      }, simplify = FALSE)
+    )
     x
   }
 )
 
 #' Plot CalmrExperiment
 #'
-#' Creates a plot depicting results from CalmrExperiment
+#' Creates plots (or plot) with aggregated results in CalmrExperiment
 #'
-#' @param x An object of class \code{\link{CalmrExperiment-class}}.
-#' @param type A string specifying the type of plot to create.
-#' See ??supported_plots.
-#' @param ... Additional parameters passed to the plotting function.
+#' @param x An object of class \code{\link{CalmrExperiment}}.
+#' @param type character vector specifying the types of plots to create.
+#' See ??supported_plots. Defaults to NULL.
 #' @return A ggplot object
+#' @note With type = NULL, all supported plots are returned.
 #' @export
 #' @rdname plot
+#'
+#'
+setGeneric("plot", function(x, y, ...) methods::standardGeneric("plot"))
 
 setMethod(
   "plot", "CalmrExperiment",
-  function(x, type = NULL, y = NULL, ...) {
-    if (is.null(type)) {
-      type <- "vs"
+  function(x, type = NULL, ...) {
+    if (is.null(x@results@aggregated_results)) {
+      stop("Experiment does not contain aggregated results.
+      Please parse and aggregate results beforehand.")
     }
-    # parse if model has not been parsed
-    if (!x@is_parsed) {
-      x <- parse_experiment_results(x)
+    # get aggregated results
+    res <- results(x)
+    plots <- list()
+    models <- unique(res$model)
+    # Go through each row
+    for (m in models) {
+      mdat <- res[res$model == m, ]
+      model_plots <- supported_plots(m)
+      if (!is.null(type)) {
+        sapply(type, .calmr_assert, supported = model_plots)
+        model_plots <- type
+      }
+      row_plots <- list()
+      for (p in model_plots) {
+        pdat <- mdat[[p]][[1]]
+        groups <- unique(pdat$group)
+        for (g in groups) {
+          plot_name <- sprintf("%s - %s (%s)", g, .get_prettyname(p), m)
+          row_plots[[plot_name]] <- calmr_model_plot(pdat[pdat$group == g, ],
+            type = p
+          )
+        }
+      }
+      plots[[m]] <- row_plots
     }
-
-    .calmr_assert("supported_plot", type,
-      supported = names(x@parsed_results)
-    )
-    plotinfo <- .get_plot_functions(type)
-
-    plotf <- plotinfo[[type]]$fun
-    if (type %in% c("evs", "ivs")) {
-      dat <- rbind(
-        data.frame(x@parsed_results[["evs"]], assoc_type = "Excitatory"),
-        data.frame(x@parsed_results[["ivs"]], assoc_type = "Inhibitory")
-      )
-    } else {
-      dat <- x@parsed_results[[type]]
-    }
-
-    groups <- unique(dat$group)
-    ps <- sapply(groups, function(g) {
-      plotf(dat[dat$group == g, ], ...) +
-        ggplot2::labs(title = sprintf("Group = %s", g))
-    }, simplify = F)
-    names(ps) <- groups
-    ps
+    plots
   }
 )
+
+
+
 
 # #' Get output from CalmrExperiment
 # #'
