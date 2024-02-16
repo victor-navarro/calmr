@@ -102,16 +102,16 @@ calmr_model_plot <- function(dat, type) {
 .calmr_scales <- function(which, ...) {
   switch(which,
     "colour_d" = {
-      list(ggplot2::scale_colour_viridis_d(begin = .1, end = .9, ...))
+      ggplot2::scale_colour_viridis_d(begin = .1, end = .9, ...)
     },
     "fill_d" = {
-      list(ggplot2::scale_fill_viridis_d(begin = .1, end = .9, ...))
+      ggplot2::scale_fill_viridis_d(begin = .1, end = .9, ...)
     },
     "colour_c" = {
-      list(ggplot2::scale_colour_viridis_c(begin = .1, end = .9, ...))
+      ggplot2::scale_colour_viridis_c(begin = .1, end = .9, ...)
     },
     "fill_c" = {
-      list(ggplot2::scale_fill_viridis_c(begin = .1, end = .9, ...))
+      ggplot2::scale_fill_viridis_c(begin = .1, end = .9, ...)
     }
   )
 }

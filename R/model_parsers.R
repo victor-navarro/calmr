@@ -73,7 +73,7 @@
     long_cols <- names(dat)
     full_dat <- cbind(gen_dat, dat)
     full_dat <- tidyr::pivot_longer(full_dat,
-      cols = long_cols, names_to = "s1"
+      cols = tidyr::all_of(long_cols), names_to = "s1"
     )
   }
   # labelling for Konorskian models
