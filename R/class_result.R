@@ -42,29 +42,25 @@ methods::setMethod(
   "c", "CalmrExperimentResult",
   function(x, ..., recursive = FALSE) {
     allres <- list(x, ...)
-    if (length(allres) > 1) {
-      aggs <- dplyr::bind_rows(lapply(
-        allres, function(e) e@aggregated_results
-      ))
-      pars <- do.call(c, lapply(
-        allres, function(e) e@parsed_results
-      ))
-      raws <- do.call(c, lapply(
-        allres, function(e) e@raw_results
-      ))
-      h <- methods::new("CalmrExperimentResult")
-      if (!is.null(aggs)) {
-        h@aggregated_results <- aggs
-      }
-      if (!is.null(pars)) {
-        h@parsed_results <- pars
-      }
-      if (!is.null(raws)) {
-        h@raw_results <- raws
-      }
-      return(h)
-    } else {
-      stop("Cannot concatenate with less than 2 experiments.")
+    aggs <- dplyr::bind_rows(lapply(
+      allres, function(e) e@aggregated_results
+    ))
+    pars <- do.call(c, lapply(
+      allres, function(e) e@parsed_results
+    ))
+    raws <- do.call(c, lapply(
+      allres, function(e) e@raw_results
+    ))
+    h <- methods::new("CalmrExperimentResult")
+    if (!is.null(aggs)) {
+      h@aggregated_results <- aggs
     }
+    if (!is.null(pars)) {
+      h@parsed_results <- pars
+    }
+    if (!is.null(raws)) {
+      h@raw_results <- raws
+    }
+    return(h)
   }
 )

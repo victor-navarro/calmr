@@ -4,32 +4,33 @@
 \alias{compare_models}
 \title{Run models given a set of parameters}
 \usage{
-compare_models(
-  design,
-  models,
-  layers,
-  parameters = NULL,
-  options = get_exp_opts()
-)
+compare_models(design, models, parameters = NULL, options = NULL)
 }
 \arguments{
-\item{design}{A design data.frame}
+\item{design}{A design data.frame or CalmrDesign}
 
-\item{models}{A character vector specifying the models to run.}
+\item{models}{A character vector of length m, specifying the models to run.}
 
-\item{layers}{A character vector of length M (the length of \code{models}),
-specifying the layers to compare
-specifying the layer in each model that will be used for layers.}
-
-\item{parameters}{A list of length M,
-each containing a list with model parameters,
-as returned by `get_parameters``}
+\item{parameters}{A list of length m,
+with each entry containing a list with model parameters,
+as returned by \code{get_parameters}}
 
 \item{options}{A list of options, as returned by get_exp_opts.}
 }
 \value{
-A CalmrComparison object.f
+A CalmrExperiment object
 }
 \description{
 Run models given a set of parameters
+}
+\examples{
+exp <- data.frame(
+  Group = c("A", "B"),
+  P1 = c("10(A)>(US)/5B>(US)", "5(A)>(US)/10B>(US)"),
+  R1 = TRUE
+)
+exp <- parse_design(exp)
+models <- c("HD2022", "RW1972", "PKH1982")
+parameters <- sapply(models, get_parameters, design = exp)
+comp <- compare_models(exp, models = models, parameters = parameters)
 }

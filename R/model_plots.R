@@ -58,7 +58,10 @@ calmr_model_plot <- function(dat, type) {
   }
 
   # Assemble scales
-  scales <- .calmr_scales(c("colour_d", "fill_d"))
+  scales <- c(
+    .calmr_scales("colour_d"),
+    .calmr_scales("fill_d")
+  )
   if (type %in% c("vs")) {
     scales <- c(scales, ggplot2::scale_x_continuous(breaks = NULL))
   }
@@ -96,12 +99,21 @@ calmr_model_plot <- function(dat, type) {
 }
 
 # internal function to define and make scales available
-.calmr_scales <- function(which) {
-  scales <- list(
-    colour_d = ggplot2::scale_colour_viridis_d(begin = .1, end = .9),
-    fill_d = ggplot2::scale_fill_viridis_d(begin = .1, end = .9)
+.calmr_scales <- function(which, ...) {
+  switch(which,
+    "colour_d" = {
+      list(ggplot2::scale_colour_viridis_d(begin = .1, end = .9, ...))
+    },
+    "fill_d" = {
+      list(ggplot2::scale_fill_viridis_d(begin = .1, end = .9, ...))
+    },
+    "colour_c" = {
+      list(ggplot2::scale_colour_viridis_c(begin = .1, end = .9, ...))
+    },
+    "fill_c" = {
+      list(ggplot2::scale_fill_viridis_c(begin = .1, end = .9, ...))
+    }
   )
-  scales[which]
 }
 
 

@@ -19,31 +19,8 @@ setMethod("show", "CalmrFit", function(object) {
     "nLogLik: \n", object@nloglik, "\n"
   )
 })
-setMethod("show", "CalmrComparison", function(object) {
-  if (object@is_parsed) {
-    print(object@parsed_results)
-  } else {
-    print(object@results)
-  }
-})
-setMethod("show", "CalmrRSA", function(object) {
-  cat(
-    "Representational Similarity Analysis\n\n",
-    sprintf("Distance metric: %s\n", object@dist_method),
-    sprintf("Correlation method: %s\n\n", object@corr_method),
-    "Correlation matrix:\n\n"
-  )
-  print(object@corr_mat)
-})
-setMethod("show", "CalmrRSATest", function(object) {
-  methods::show(object@RSA)
-  cat("\nSignificance matrix:\n\n")
-  print(object@sig_mat)
-  cat(sprintf(
-    "\n%d permutation samples, two-tailed test with alpha = %1.2f.\n",
-    object@n_samples, 1 - object@p
-  ))
-})
+
+
 
 
 # setMethod(
@@ -80,56 +57,6 @@ setMethod("show", "CalmrRSATest", function(object) {
 #
 # })
 
-#' Plot RSA
-#'
-#' Plot a correlogram from RSA results
-#'
-#' @param x An object of class \code{\link{CalmrRSA-class}}.
-#' @param ... Additional parameters passed to the plotting function.
-#' @return A ggplot object
-#' @export
-setMethod(
-  "plot", "CalmrRSA",
-  function(x, ...) {
-    corrmat <- x@corr_mat
-    corrmat[lower.tri(corrmat)] <- NA
-    dat <- data.frame(as.table(corrmat))
-    dat$label <- round(dat$Freq, 2)
-    dat %>% ggplot2::ggplot(ggplot2::aes(
-      x = .data$Var1, y = .data$Var2,
-      fill = .data$Freq, label = .data$label
-    )) +
-      ggplot2::geom_tile(na.rm = T) +
-      ggplot2::geom_text(na.rm = T) +
-      ggplot2::scale_fill_gradient2(limits = c(-1, 1), na.value = "white") +
-      ggplot2::theme(
-        axis.title = ggplot2::element_blank(),
-        panel.background = ggplot2::element_blank()
-      ) +
-      ggplot2::labs(fill = "Correlation") +
-      ggplot2::scale_x_discrete(position = "top")
-  }
-)
-
-#' Plot RSA test
-#'
-#' Plot a correlogram from RSA test results
-#'
-#' @param x An object of class \code{\link{CalmrRSATest-class}}.
-#' @param ... Additional parameters passed to the plotting function.
-#' @return A ggplot object
-#' @export
-setMethod(
-  "plot", "CalmrRSATest",
-  function(x, ...) {
-    p <- plot(x@RSA)
-    sigmat <- x@sig_mat
-    sigmat[lower.tri(sigmat)] <- NA
-    dat <- p$data
-    dat$sig <- data.frame(as.table(sigmat))$Freq
-    p + ggplot2::geom_label(data = stats::na.omit(dat[dat$sig, ]), fill = "white")
-  }
-)
 
 
 

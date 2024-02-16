@@ -31,26 +31,17 @@ methods::setMethod("design", "CalmrExperiment", function(x) {
   x@design
 })
 
-
 # A method to concatenate experiments
 # TODO: Implement a concatenation methods for CalmrDesign
 # This currently deletes some design information if the designs
 # are not the same across experiments
 methods::setMethod("c", "CalmrExperiment", function(x, ..., recursive = FALSE) {
   allexps <- list(x, ...)
-  if (length(allexps) > 1) {
-    methods::new("CalmrExperiment",
-      arguments = dplyr::bind_rows(lapply(allexps, function(e) e@arguments)),
-      design = allexps[[1]]@design,
-      results = do.call(c, lapply(allexps, function(e) e@results))
-    )
-  } else {
-    stop("Cannot concatenate with less than 2 experiments.")
-  }
-})
-
-methods::setGeneric("results", function(object) {
-  methods::standardGeneric("results")
+  methods::new("CalmrExperiment",
+    arguments = dplyr::bind_rows(lapply(allexps, function(e) e@arguments)),
+    design = allexps[[1]]@design,
+    results = do.call(c, lapply(allexps, function(e) e@results))
+  )
 })
 
 #' Extract aggregated results from CalmrExperiment
@@ -59,7 +50,9 @@ methods::setGeneric("results", function(object) {
 #' @return A tbl containing models (rows) and model outputs (columns)
 #' @export
 #' @rdname results
-
+methods::setGeneric("results", function(object) {
+  methods::standardGeneric("results")
+})
 setMethod("results", "CalmrExperiment", function(object) {
   # Returns aggregated results
   object@results@aggregated_results
@@ -119,7 +112,6 @@ methods::setMethod(
 #'
 #'
 setGeneric("plot", function(x, y, ...) methods::standardGeneric("plot"))
-
 setMethod(
   "plot", "CalmrExperiment",
   function(x, type = NULL, ...) {
@@ -156,45 +148,81 @@ setMethod(
   }
 )
 
-
-
-
-# #' Get output from CalmrExperiment
-# #'
-# #' Returns a tibble containing parsed outputs of CalmrExperiment
-# #'
-# #' @param object An object of class \code{\link{CalmrExperiment-class}}.
-# #' @param type The type of output
-# #' @return A data.frame with the model output
-# #' @export
-
-# get_output <- function(object, type = NULL) NULL
-# setMethod("get_output", "CalmrExperiment", function(object, type = NULL) {
-#   if (is.null(type)) {
-#     outputs <- names(object@results$mod_data[[1]]@model_results) # works for parsed and non-parsed objects
-#     cat("Available model outputs:\n")
-#     cat(outputs, "\n\n")
-#     cat(sprintf("Use `get_output(model, type)` to access the outputs (e.g., `get_output(%s, '%s')`)", as.character(substitute(object)), outputs[1]), "\n")
-#   } else {
-#     if (!object@is_parsed) {
-#       object <- parse_experiment_results(object)
-#     }
-#     object@parsed_results[[type]]
-#   }
-# })
-
-setMethod("graph", "CalmrExperiment", function(x, ...) {
-  if (any(c("evs", "ivs") %in% names(x@parsed_results))) {
-    dat <- x@parsed_results$evs
-    dat$value <- dat$value - x@parsed_results$ivs$value
-  } else {
-    dat <- x@parsed_results$vs
-  }
-  groups <- unique(dat$group)
-  ps <- sapply(groups, function(g) {
-    graph_weights(dat[dat$group == g, ], ...) +
-      ggplot2::labs(title = sprintf("Group = %s", g))
-  }, simplify = F)
-  names(ps) <- groups
-  ps
+#' Extract aggregated results from CalmrExperiment
+#'
+#' @param object An object of class \clode{\link{CalmrExperiment}}
+#' @return A tbl containing models (rows) and model outputs (columns)
+#' @export
+#' @rdname results
+methods::setGeneric("results", function(object) {
+  methods::standardGeneric("results")
 })
+methods::setMethod("results", "CalmrExperiment", function(object) {
+  # Returns aggregated results
+  object@results@aggregated_results
+})
+
+
+
+
+
+# setMethod("graph", "CalmrExperiment", function(x, ...) {
+#   if (any(c("evs", "ivs") %in% names(x@parsed_results))) {
+#     dat <- x@parsed_results$evs
+#     dat$value <- dat$value - x@parsed_results$ivs$value
+#   } else {
+#     dat <- x@parsed_results$vs
+#   }
+#   groups <- unique(dat$group)
+#   ps <- sapply(groups, function(g) {
+#     graph_weights(dat[dat$group == g, ], ...) +
+#       ggplot2::labs(title = sprintf("Group = %s", g))
+#   }, simplify = F)
+#   names(ps) <- groups
+#   ps
+# })
+# Set generic here for rsa function (see rsa.R)
+methods::setGeneric("rsa", function(x, layers, ...) standardGeneric("rsa"))
+
+#' Perform representational similarity analysis on CalmrExperiment
+#'
+#' @param x A tbl of m by o (models by outputs) with aggregated results.
+#' @param comparisons A model-named list containing the model
+#' outputs to compare.
+#' For example, `list("RW1972" = c("vs", "rs"), "HDI2020" = c("as", "vs"))`.
+#' @param test Whether to test the RSA via permutation test. Defaults = FALSE.
+#' @param ... Additional parameters passed to `stats::dist`
+#' and `stats::cor`
+#' @returns A CalmrRSA object
+#' @note The object returned by this function
+#' can be later tested via its own `test` method.
+#' @rdname rsa
+#' @export
+#' @examples
+#' # Comparing the associations in three models
+#' exp <- data.frame(
+#'   Group = c("A", "B"),
+#'   P1 = c("2(A)>(US)/1B>(US)", "1(A)>(US)/2B>(US)"),
+#'   R1 = TRUE
+#' )
+#' exp <- parse_design(exp)
+#' models <- c("HD2022", "RW1972", "PKH1982")
+#' parameters <- sapply(models, get_parameters, design = exp)
+#' options <- get_exp_opts()
+#' exp_res <- compare_models(exp,
+#'   models = models,
+#'   parameters = parameters, options = options
+#' )
+#' comparisons <- list(
+#'   "HD2022" = c("vs"),
+#'   "RW1972" = c("vs"),
+#'   "PKH1982" = c("eivs")
+#' )
+#' res <- rsa(exp_res, comparisons = comparisons)
+#' test(res)
+methods::setMethod(
+  "rsa", "CalmrExperiment",
+  function(x, comparisons, test = FALSE, ...) {
+    .rsa(results(x), comparisons = comparisons, .test = test, ...)
+  }
+)
