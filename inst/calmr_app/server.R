@@ -10,12 +10,12 @@ base_plot_options <- list(common_scale = TRUE)
 base_sim_options <- list(iterations = 1, miniblocks = TRUE)
 
 # Define server logic required to draw a histogram
-shiny::shinyServer(function(input, output) {
+shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
   #### Reactive values ####
 
   design_df <- shiny::reactiveVal(base_df)
   parsed_design <- shiny::reactiveVal()
-  param_df <- shiny::reactiveVal()
+  current_parameters <- shiny::reactiveVal()
   plots <- shiny::reactiveVal()
   graphs <- shiny::reactiveVal()
   selected_plots <- shiny::reactiveVal()
@@ -29,38 +29,6 @@ shiny::shinyServer(function(input, output) {
   model_parameters <- shiny::reactiveVal()
 
   #### Input Logic ####
-  shiny::observeEvent(input$loaddesign, {
-    dsg <- readRDS(input$loaddesign$datapath)
-    design_df(dsg$design_df)
-    parsed_design(dsg$parsed_design)
-    param_df(dsg$param_df)
-    plots(dsg$plots)
-    graphs(dsg$graphs)
-    selected_plots(dsg$selected_plots)
-    sim_options(dsg$sim_options)
-    plot_filters(dsg$plot_filters)
-
-    # set some of the options/selections
-    shiny::updateSelectInput(inputId = "plot_selection", selected = selected_plots(), choices = names(plots))
-    shiny::updateSliderInput(inputId = "iterations", value = sim_options()$iterations)
-    shiny::updateCheckboxInput(inputId = "miniblocks", value = sim_options()$miniblocks)
-    plot_options(dsg$plot_options)
-    shiny::updateCheckboxInput(inputId = "common_scale", value = plot_options()$common_scale)
-    shiny::updateSelectInput(inputId = "phase_selection", selected = dsg$plot_filters$phase, choices = parsed_design()$phase)
-    shiny::updateSelectInput(inputId = "trial_type_selection", selected = dsg$plot_filters$trial_type, choices = parsed_design() %>%
-      filter(phase %in% dsg$plot_filters$phase) %>%
-      unnest_wider("trial_info") %>%
-      select("trial_names") %>%
-      unlist() %>%
-      unique())
-
-    # set some of the internal states
-    parsed(dsg$parsed)
-    ran(dsg$ran)
-    raw_results(dsg$raw_results)
-    parsed_experiment(dsg$parsed_experiment)
-  })
-
   shiny::observeEvent(input$groupadd, {
     df <- rhandsontable::hot_to_r(input$design_tbl)
     df[nrow(df) + 1, ] <- df[nrow(df), ]
@@ -108,18 +76,25 @@ shiny::shinyServer(function(input, output) {
 
   shiny::observeEvent(input$parse_design, {
     design_df(rhandsontable::hot_to_r(input$design_tbl))
-    parsed_design(parse_design(design_df()))
+    parsed_design(calmr::parse_design(design_df()))
     # get parameters
     # but, keep parameters if there are compatible parameters already
-    new_params <- get_parameters(
+    new_params <- calmr::get_parameters(
       design = parsed_design(),
       model = input$model_selection
     )
-    old_params <- param_df()
-    if (setequal(new_params$stimulus, old_params$stimulus) & setequal(names(new_params), names(old_params))) {
-      param_df(old_params)
+    browser()
+    old_params <- current_parameters()
+    if (setequal(
+      new_params$stimulus,
+      old_params$stimulus
+    ) & setequal(
+      names(new_params),
+      names(old_params)
+    )) {
+      current_parameters(old_params)
     } else {
-      param_df(new_params)
+      current_parameters(new_params)
     }
     parsed(TRUE)
   })
@@ -127,10 +102,11 @@ shiny::shinyServer(function(input, output) {
   shiny::observeEvent(input$runmodel, {
     tryCatch(
       {
-        # use design_df and param_df to create a tibble containing all necessary arguments for calmr
+        # use design_df and current_parameters to create a
+        # tibble containing all necessary arguments for calmr
         calmr_args <- calmr::make_model_args(
           design = parsed_design(),
-          pars = param_df(),
+          pars = current_parameters(),
           model = input$model_selection,
           opts = sim_options()
         )
@@ -140,7 +116,6 @@ shiny::shinyServer(function(input, output) {
         shiny::withProgress(message = "Simulating...", value = 0, {
           res <- calmr::run_model(calmr_args, parse = FALSE)
           shiny::incProgress(1)
-          #' TODO: Create rbind method for CalmrExperiment so we can have a proper progress bar
         })
         raw_results(res)
         # parse results
@@ -149,7 +124,9 @@ shiny::shinyServer(function(input, output) {
           shiny::setProgress(1)
         })
         shiny::withProgress(message = "Making plots...", value = 0, {
-          plots(calmr:::make_plots(calmr:::filter_calmr_results(parsed_experiment(), plot_filters())))
+          plots(calmr:::make_plots(
+            calmr:::filter_calmr_results(parsed_experiment(), plot_filters())
+          ))
           graphs(calmr:::make_graphs(parsed_experiment()))
           shiny::setProgress(1)
         })
@@ -158,8 +135,11 @@ shiny::shinyServer(function(input, output) {
       error = function(x) {
         print(x)
         shinyalert::shinyalert(
-          title = "Error!", text = "Something went wrong. Please check your parameters.", size = "s", closeOnEsc = TRUE, closeOnClickOutside = TRUE, html = FALSE,
-          type = "error", showConfirmButton = TRUE, showCancelButton = FALSE, confirmButtonText = "OK", confirmButtonCol = "#AEDEF4"
+          title = "Error!",
+          text = "Something went wrong. Please check your parameters.",
+          size = "s", closeOnEsc = TRUE, closeOnClickOutside = TRUE, html = FALSE,
+          type = "error", showConfirmButton = TRUE, showCancelButton = FALSE,
+          confirmButtonText = "OK", confirmButtonCol = "#AEDEF4"
         )
       }
     )
@@ -215,7 +195,10 @@ shiny::shinyServer(function(input, output) {
         select("trial_names") %>%
         unlist() %>%
         unique()
-      shiny::updateSelectInput(inputId = "trial_type_selection", choices = t_choices, selected = t_choices)
+      shiny::updateSelectInput(
+        inputId = "trial_type_selection",
+        choices = t_choices, selected = t_choices
+      )
     }
   })
 
@@ -246,13 +229,16 @@ shiny::shinyServer(function(input, output) {
         selection <- selected_plots()
       }
     }
-    shiny::updateSelectInput(inputId = "plot_selection", choices = plot_names, selected = selection)
+    shiny::updateSelectInput(
+      inputId = "plot_selection",
+      choices = plot_names, selected = selection
+    )
   })
 
   shiny::observeEvent(input$parameter_tbl$changes$changes, {
     df <- rhandsontable::hot_to_r(input$parameter_tbl)
     names(df) <- stringr::str_to_lower(names(df))
-    param_df(df)
+    current_parameters(df)
     ran(FALSE)
   })
 
@@ -271,7 +257,10 @@ shiny::shinyServer(function(input, output) {
     filters$phase <- input$phase_selection
     plot_filters(filters)
     shiny::withProgress(message = "Making plots...", value = 0, {
-      plots(calmr:::make_plots(calmr:::filter_calmr_results(parsed_experiment(), plot_filters())))
+      plots(calmr:::make_plots(calmr:::filter_calmr_results(
+        parsed_experiment(),
+        plot_filters()
+      )))
       shiny::setProgress(1)
     })
   })
@@ -281,7 +270,10 @@ shiny::shinyServer(function(input, output) {
     filters$trial_type <- input$trial_type_selection
     plot_filters(filters)
     shiny::withProgress(message = "Making plots...", value = 0, {
-      plots(calmr:::make_plots(calmr:::filter_calmr_results(parsed_experiment(), plot_filters())))
+      plots(calmr:::make_plots(calmr:::filter_calmr_results(
+        parsed_experiment(),
+        plot_filters()
+      )))
       shiny::setProgress(1)
     })
   })
@@ -300,8 +292,8 @@ shiny::shinyServer(function(input, output) {
   })
 
   output$parameter_tbl <- rhandsontable::renderRHandsontable({
-    if (!is.null(param_df())) {
-      par_df <- param_df()
+    if (!is.null(current_parameters())) {
+      par_df <- current_parameters()
       names(par_df) <- stringr::str_to_title(names(par_df))
       rhandsontable::rhandsontable(par_df, rowHeaders = F) %>%
         rhandsontable::hot_col("Stimulus", readOnly = T)
@@ -324,7 +316,11 @@ shiny::shinyServer(function(input, output) {
 
   output$plot <- shiny::renderPlot({
     if (!is.null(plots())) {
-      calmr:::patch_plots(plots = plots(), selection = selected_plots(), plot_options = plot_options())
+      calmr:::patch_plots(
+        plots = plots(),
+        selection = selected_plots(),
+        plot_options = plot_options()
+      )
     }
   })
 
@@ -334,32 +330,14 @@ shiny::shinyServer(function(input, output) {
     }
   })
 
-  output$savedesign <- shiny::downloadHandler(
-    filename = "my_design.rds",
-    content = function(fpath) {
-      saveRDS(list(
-        design_df = design_df(),
-        parsed_design = parsed_design(),
-        param_df = param_df(),
-        plots = plots(),
-        graphs = graphs(),
-        selected_plots = selected_plots(),
-        sim_options = sim_options(),
-        plot_options = plot_options(),
-        plot_filters = plot_filters(),
-        parsed = parsed(),
-        ran = ran(),
-        raw_results = raw_results(),
-        parsed_experiment = parsed_experiment()
-      ), fpath)
-    }
-  )
-
   output$exportresults <- shiny::downloadHandler(
     filename = "my_simulation_results.xlsx",
     content = function(filename) {
       data <- c(
-        list(design = design_df(), parameters = data.frame(model = input$model_selection, param_df())),
+        list(
+          design = design_df(),
+          parameters = data.frame(model = input$model_selection, current_parameters())
+        ),
         parsed_experiment()@parsed_results
       )
       openxlsx::write.xlsx(data, file = filename, overwrite = TRUE)

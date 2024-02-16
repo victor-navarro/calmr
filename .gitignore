@@ -5,7 +5,6 @@ inst/doc
 .httr-oauth
 .DS_Store
 /inst/calmr_app/rsconnect/
-/inst/calmr_app/calmr_app_deployment.R
 /doc/
 /Meta/
 -Victor’s MacBook Air.Rhistory
