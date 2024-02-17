@@ -103,7 +103,7 @@ parameter_info <- function(model = NULL) {
     "SM2007" = list(
       name = c(
         "alphas", "lambdas", "omegas", "rhos",
-        "gammas", "taus", "orders"
+        "gammas", "taus", "order"
       ),
       default_value = c(0.4, 1, 0.2, 1, 1, 0.2, 1)
     ),
@@ -125,6 +125,12 @@ parameter_info <- function(model = NULL) {
   } else {
     return(parameter_map[[model]])
   }
+}
+
+# Returns whether a parameter name is stimulus-specific or global
+.is_global_parameter <- function(parameter, model) {
+  globals <- list("SM2007" = c("order"))
+  parameter %in% globals[[model]]
 }
 
 #' @rdname model_info

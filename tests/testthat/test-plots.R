@@ -25,4 +25,22 @@ for (m in models) {
   })
 }
 
-# TODO: Test graphs
+# Test that patch plot works
+plots <- plot(res)
+pnames <- unlist(unname(lapply(plots, names)))
+test_that("patch_plot works with names", {
+  expect_named(patch_plots(plots, pnames))
+})
+test_that("patch_plot works with numbers", {
+  expect_named(patch_plots(plots, c(1, 1)))
+})
+test_that("patch_plot works with singles", {
+  expect_named(patch_plots(plots, pnames[1]))
+  expect_named(patch_plots(plots, 2))
+})
+test_that("patch_plot throws error with bad names", {
+  expect_error(patch_plots(plots, c("bad_name", "my_plot")))
+})
+test_that("patch_plot throws error with bad numbers", {
+  expect_error(patch_plots(plots, -3:-2))
+})

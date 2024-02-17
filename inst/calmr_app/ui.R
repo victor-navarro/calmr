@@ -10,6 +10,7 @@ library(rhandsontable)
 library(stringr)
 library(tibble)
 library(calmr)
+source("support.R")
 
 supported_models <- calmr::supported_models()
 
@@ -35,7 +36,7 @@ ui <- shinydashboard::dashboardPage(
         fluidRow(
           shinydashboard::box(
             width = 12,
-            title = "Home",
+            title = "Design",
             htmltools::div(
               style = "float:left",
               shiny::actionButton(
@@ -63,8 +64,17 @@ ui <- shinydashboard::dashboardPage(
                 shiny::conditionalPanel(
                   "output.parsed",
                   shiny::actionButton(
-                    inputId = "runmodel",
-                    label = "Run Model", class = "btn-s"
+                    inputId = "run_experiment",
+                    label = "Run Experiment", class = "btn-s"
+                  )
+                )
+              ),
+              htmltools::div(
+                style = "display:inline-block;",
+                shiny::conditionalPanel(
+                  "output.ran",
+                  shiny::downloadButton("exportresults", "Save Data",
+                    icon = shiny::icon("file-download"), class = "btn-s"
                   )
                 )
               )
@@ -84,8 +94,23 @@ ui <- shinydashboard::dashboardPage(
             ),
             shiny::conditionalPanel(
               "output.parsed",
+              h5("Stimulus-specific parameters")
+            ),
+            shiny::conditionalPanel(
+              "output.parsed",
               rhandsontable::rHandsontableOutput(
-                "parameter_tbl",
+                "stim_par_tbl",
+                width = "100%"
+              )
+            ),
+            shiny::conditionalPanel(
+              "output.parsed && output.needs_globals",
+              h5("Global parameters")
+            ),
+            shiny::conditionalPanel(
+              "output.parsed && output.needs_globals",
+              rhandsontable::rHandsontableOutput(
+                "glob_par_tbl",
                 width = "100%"
               )
             )
@@ -136,12 +161,6 @@ ui <- shinydashboard::dashboardPage(
               inputId = "miniblocks",
               label = "Create trial blocks",
               value = TRUE
-            ),
-            shiny::conditionalPanel(
-              "output.ran",
-              shiny::downloadButton("exportresults", "Save Data",
-                icon = shiny::icon("file-download"), class = "btn-s"
-              )
             )
           ),
           shinydashboard::box(
@@ -151,19 +170,6 @@ ui <- shinydashboard::dashboardPage(
             shiny::checkboxInput(
               inputId = "common_scale",
               label = "Plot in common scale", value = TRUE
-            ),
-            shiny::conditionalPanel(
-              "output.parsed", shiny::selectInput(
-                inputId = "phase_selection",
-                label = "Phase selection", choices = NULL, multiple = TRUE
-              )
-            ),
-            shiny::conditionalPanel(
-              "output.parsed",
-              shiny::selectInput(
-                inputId = "trial_type_selection",
-                label = "Trial type selection", choices = NULL, multiple = TRUE
-              )
             )
           )
         )

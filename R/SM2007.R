@@ -38,10 +38,9 @@ SM2007 <- function(v = NULL, # nolint
   rhos <- parameters$rhos
   gammas <- parameters$gammas
   taus <- parameters$taus
-  orders <- parameters$orders
+  order <- parameters$order
 
   # checks
-  .calmr_assert("comparator_order", orders)
   .calmr_assert("no_functional_stimuli", mapping)
 
   # data initialization
@@ -53,7 +52,6 @@ SM2007 <- function(v = NULL, # nolint
     o <- gen_os_values(mapping$unique_functional_stimuli)
   } # operator switches
   do <- o # deltas for o
-  order <- unique(orders)
   fsnames <- rownames(v)
 
   vs <- array(NA,

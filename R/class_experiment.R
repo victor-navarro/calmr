@@ -163,24 +163,57 @@ methods::setMethod("results", "CalmrExperiment", function(object) {
 })
 
 
+#' @export
+#' @rdname graph
+setMethod("graph", "CalmrExperiment", function(x, ...) {
+  if (is.null(x@results@aggregated_results)) {
+    stop("Experiment does not contain aggregated results.
+      Please parse and aggregate results beforehand.")
+  }
+  browser()
+  # get aggregated results
+  res <- results(x)
+  plots <- list()
+  models <- unique(res$model)
+  # Go through each row
+  for (m in models) {
+    mdat <- res[res$model == m, ]
+    model_plots <- supported_plots(m)
+    if (!is.null(type)) {
+      sapply(type, .calmr_assert, supported = model_plots)
+      model_plots <- type
+    }
+    row_plots <- list()
+    for (p in model_plots) {
+      pdat <- mdat[[p]][[1]]
+      groups <- unique(pdat$group)
+      for (g in groups) {
+        plot_name <- sprintf("%s - %s (%s)", g, .get_prettyname(p), m)
+        row_plots[[plot_name]] <- calmr_model_plot(pdat[pdat$group == g, ],
+          type = p
+        )
+      }
+    }
+    plots[[m]] <- row_plots
+  }
+  plots
+
+  if (any(c("evs", "ivs") %in% names(x@parsed_results))) {
+    dat <- x@parsed_results$evs
+    dat$value <- dat$value - x@parsed_results$ivs$value
+  } else {
+    dat <- x@parsed_results$vs
+  }
+  groups <- unique(dat$group)
+  ps <- sapply(groups, function(g) {
+    graph_weights(dat[dat$group == g, ], ...) +
+      ggplot2::labs(title = sprintf("Group = %s", g))
+  }, simplify = F)
+  names(ps) <- groups
+  ps
+})
 
 
-
-# setMethod("graph", "CalmrExperiment", function(x, ...) {
-#   if (any(c("evs", "ivs") %in% names(x@parsed_results))) {
-#     dat <- x@parsed_results$evs
-#     dat$value <- dat$value - x@parsed_results$ivs$value
-#   } else {
-#     dat <- x@parsed_results$vs
-#   }
-#   groups <- unique(dat$group)
-#   ps <- sapply(groups, function(g) {
-#     graph_weights(dat[dat$group == g, ], ...) +
-#       ggplot2::labs(title = sprintf("Group = %s", g))
-#   }, simplify = F)
-#   names(ps) <- groups
-#   ps
-# })
 # Set generic here for rsa function (see rsa.R)
 methods::setGeneric("rsa", function(x, layers, ...) standardGeneric("rsa"))
 
