@@ -7,7 +7,7 @@
 methods::setClass(
   "CalmrResult",
   representation(
-    aggregated_results = "tbl",
+    aggregated_results = "list",
     parsed_results = "list",
     raw_results = "list"
   ),
@@ -31,28 +31,34 @@ methods::setClass("CalmrExperimentResult",
   contains = "CalmrResult"
 )
 
+# could be better
 methods::setMethod(
   "c", "CalmrExperimentResult",
   function(x, ..., recursive = FALSE) {
     allres <- list(x, ...)
-    aggs <- dplyr::bind_rows(lapply(
-      allres, function(e) e@aggregated_results
-    ))
-    pars <- do.call(c, lapply(
-      allres, function(e) e@parsed_results
-    ))
+    h <- methods::new("CalmrExperimentResult")
     raws <- do.call(c, lapply(
       allres, function(e) e@raw_results
     ))
-    h <- methods::new("CalmrExperimentResult")
-    if (!is.null(aggs)) {
-      h@aggregated_results <- aggs
+    if (!is.null(raws)) {
+      h@raw_results <- raws
     }
+    pars <- do.call(c, lapply(
+      allres, function(e) e@parsed_results
+    ))
     if (!is.null(pars)) {
       h@parsed_results <- pars
     }
-    if (!is.null(raws)) {
-      h@raw_results <- raws
+    if (!is.null(x@aggregated_results)) {
+      allouts <- unique(unlist(lapply(
+        allres, function(e) names(e@aggregated_results)
+      )))
+      aggs <- sapply(allouts, function(o) {
+        dplyr::bind_rows(lapply(allres, function(r) {
+          r@aggregated_results[[o]]
+        }))
+      }, simplify = FALSE)
+      h@aggregated_results <- aggs
     }
     return(h)
   }

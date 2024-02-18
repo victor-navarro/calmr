@@ -20,19 +20,25 @@ experiments <- sapply(
   simplify = FALSE, USE.NAMES = FALSE
 )
 
-ran_experiments <- lapply(experiments, run_experiment)
-
 concat <- do.call(c, experiments)
+
 # Concatenation tests
 test_that("c method works with make_experiment", {
   expect_named(concat@arguments)
 })
 
+test_that("run_experiment works with a concatenated experiment", {
+  expect_named(results(run_experiment(concat)))
+})
+
+ran_experiments <- lapply(experiments, run_experiment)
 concat <- do.call(c, ran_experiments)
+
 test_that("c concatenates aggregated_results", {
   base_length <- length(ran_experiments[[1]]@results@aggregated_results)
   expect_true(length(concat@results@aggregated_results) > base_length)
 })
+
 test_that("c concatenates parsed_results", {
   base_length <- length(ran_experiments[[1]]@results@parsed_results)
   expect_true(length(concat@results@parsed_results) > base_length)

@@ -223,7 +223,7 @@ shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
     if (!is.null(experiment())) {
       if (debug) print("populating graph slider after experiment run")
       last_trial <- max(
-        results(experiment())[[2]][[1]]$trial
+        results(experiment())[[1]]$trial
       )
       shiny::updateSliderInput(
         inputId = "graph_trial",
@@ -244,7 +244,7 @@ shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
   # change plot choices upon change in available plots
   shiny::observeEvent(plots(), {
     if (debug) print("populating plots choices due to plot changes")
-    plot_names <- names(plots()[[1]])
+    plot_names <- names(plots())
     # remember selection
     selection <- plot_names[1]
     if (!is.null(selected_plots())) {
@@ -395,7 +395,7 @@ shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
       }
       data <- c(
         data,
-        unlist(results(experiment()), recursive = FALSE)[-1]
+        results(experiment())
       )
       openxlsx::write.xlsx(data, file = filename, overwrite = TRUE)
     }

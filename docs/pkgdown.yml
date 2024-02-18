@@ -7,12 +7,12 @@ articles:
   calmr_fits: calmr_fits.html
   heidi_math: heidi_math.html
   heidi_similarity: heidi_similarity.html
-  MAC1975_math: MAC1975_math.html
+  mac1975_math: mac1975_math.html
   PKH1982_math: PKH1982_math.html
   RW1972_math: RW1972_math.html
   SM2007_math: SM2007_math.html
   SM2007_sims: SM2007_sims.html
-last_built: 2024-02-18T16:52Z
+last_built: 2024-02-18T21:46Z
 urls:
   reference: https://victornavarro.org/calmr/reference
   article: https://victornavarro.org/calmr/articles

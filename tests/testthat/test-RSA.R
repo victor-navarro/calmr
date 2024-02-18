@@ -16,6 +16,7 @@ comparisons <- list(
   "RW1972" = c("vs"),
   "PKH1982" = c("eivs")
 )
+
 res <- rsa(exp_res, comparisons = comparisons)
 res
 
