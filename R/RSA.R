@@ -1,5 +1,6 @@
 # x is a tbl (aggregated_results from CalmrExperiment@results)
 # comparisons is a model-named list with model outputs
+# triggering a commit for name
 .rsa <- function(x, comparisons, .test = FALSE, ...) {
   # Assert the comparisons list is named
   modnames <- names(comparisons)
