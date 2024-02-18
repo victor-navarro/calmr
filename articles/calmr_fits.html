@@ -218,23 +218,82 @@ good idea to see what results <code>run_experiment</code> returns.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">exp_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_experiment.html">run_experiment</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/results.html">results</a></span><span class="op">(</span><span class="va">exp_res</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 5</span></span></span>
-<span><span class="co">#&gt;   model  as             acts           rs               vs              </span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> HD2022 <span style="color: #949494;">&lt;df [352 × 7]&gt;</span> <span style="color: #949494;">&lt;df [704 × 9]&gt;</span> <span style="color: #949494;">&lt;df [1,408 × 8]&gt;</span> <span style="color: #949494;">&lt;df [1,408 × 8]&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt; $as</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 352 × 8</span></span></span>
+<span><span class="co">#&gt;    model  group trial trial_type phase    s1    block_size value</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> HD2022 CB1       1 L&gt;(Pellet) training L              2   0.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> HD2022 CB1       2 L&gt;(Pellet) training L              2   0.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> HD2022 CB1       3 L&gt;(Pellet) training L              2   0.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> HD2022 CB1       4 L&gt;(Pellet) training L              2   0.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> HD2022 CB1       5 L&gt;(Pellet) training L              2   0.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> HD2022 CB1       6 L&gt;(Pellet) training L              2   0.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> HD2022 CB1       7 L&gt;(Pellet) training L              2   0.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> HD2022 CB1       8 L&gt;(Pellet) training L              2   0.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> HD2022 CB1       9 L&gt;(Pellet) training L              2   0.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> HD2022 CB1      10 L&gt;(Pellet) training L              2   0.4</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 342 more rows</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $acts</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 704 × 10</span></span></span>
+<span><span class="co">#&gt;    model  group trial trial_type phase    s1    s2    block_size type    value</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> HD2022 CB1       1 L&gt;(Pellet) training L     L              2 chainvs     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> HD2022 CB1       2 L&gt;(Pellet) training L     L              2 chainvs     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> HD2022 CB1       3 L&gt;(Pellet) training L     L              2 chainvs     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> HD2022 CB1       4 L&gt;(Pellet) training L     L              2 chainvs     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> HD2022 CB1       5 L&gt;(Pellet) training L     L              2 chainvs     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> HD2022 CB1       6 L&gt;(Pellet) training L     L              2 chainvs     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> HD2022 CB1       7 L&gt;(Pellet) training L     L              2 chainvs     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> HD2022 CB1       8 L&gt;(Pellet) training L     L              2 chainvs     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> HD2022 CB1       9 L&gt;(Pellet) training L     L              2 chainvs     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> HD2022 CB1      10 L&gt;(Pellet) training L     L              2 chainvs     0</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 694 more rows</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $rs</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,408 × 9</span></span></span>
+<span><span class="co">#&gt;    model  group trial trial_type phase    s1    s2    block_size value</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> HD2022 CB1       1 L&gt;(Pellet) training L     L              2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> HD2022 CB1       2 L&gt;(Pellet) training L     L              2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> HD2022 CB1       3 L&gt;(Pellet) training L     L              2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> HD2022 CB1       4 L&gt;(Pellet) training L     L              2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> HD2022 CB1       5 L&gt;(Pellet) training L     L              2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> HD2022 CB1       6 L&gt;(Pellet) training L     L              2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> HD2022 CB1       7 L&gt;(Pellet) training L     L              2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> HD2022 CB1       8 L&gt;(Pellet) training L     L              2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> HD2022 CB1       9 L&gt;(Pellet) training L     L              2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> HD2022 CB1      10 L&gt;(Pellet) training L     L              2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,398 more rows</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $vs</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,408 × 9</span></span></span>
+<span><span class="co">#&gt;    model  group trial trial_type phase    s1    s2    block_size value</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> HD2022 CB1       1 L&gt;(Pellet) training L     L              2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> HD2022 CB1       2 L&gt;(Pellet) training L     L              2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> HD2022 CB1       3 L&gt;(Pellet) training L     L              2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> HD2022 CB1       4 L&gt;(Pellet) training L     L              2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> HD2022 CB1       5 L&gt;(Pellet) training L     L              2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> HD2022 CB1       6 L&gt;(Pellet) training L     L              2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> HD2022 CB1       7 L&gt;(Pellet) training L     L              2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> HD2022 CB1       8 L&gt;(Pellet) training L     L              2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> HD2022 CB1       9 L&gt;(Pellet) training L     L              2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> HD2022 CB1      10 L&gt;(Pellet) training L     L              2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,398 more rows</span></span></span></code></pre></div>
 <p>Although the <code>run_experiment</code> function returns an S4 class
 with many things, we only care about one of them: <code>rs</code> (the
 model responses). With them, we can write our model function.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_model_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">parameters</span>, <span class="va">experiment</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># manipulating parameters</span></span>
-<span>  <span class="va">new_parameters</span> <span class="op">&lt;-</span> <span class="va">experiment</span><span class="op">@</span><span class="va">arguments</span><span class="op">$</span><span class="va">parameters</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span>  <span class="va">new_parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/parameters.html">parameters</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span>  <span class="va">new_parameters</span><span class="op">$</span><span class="va">alphas</span><span class="op">[</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">parameters</span></span>
 <span>  <span class="fu"><a href="../reference/parameters.html">parameters</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">new_parameters</span> <span class="co"># note parameters method</span></span>
 <span>  <span class="co"># running the model and selecting rs</span></span>
 <span>  <span class="va">exp_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_experiment.html">run_experiment</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span></span>
 <span>  <span class="co"># summarizing the model</span></span>
-<span>  <span class="va">rs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/results.html">results</a></span><span class="op">(</span><span class="va">exp_res</span><span class="op">)</span><span class="op">$</span><span class="va">rs</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="va">rs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/results.html">results</a></span><span class="op">(</span><span class="va">exp_res</span><span class="op">)</span><span class="op">$</span><span class="va">rs</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">s2</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pellet"</span>, <span class="st">"Sucrose"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>      response <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">s1</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pellet"</span>, <span class="st">"Sucrose"</span><span class="op">)</span>, <span class="st">"np"</span>, <span class="st">"lp"</span><span class="op">)</span>,</span>

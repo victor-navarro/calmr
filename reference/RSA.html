@@ -148,9 +148,23 @@ can be later tested via its own <code>test</code> method.</p>
 <span class="r-in"><span>  <span class="st">"PKH1982"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"eivs"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">rsa</span><span class="op">(</span><span class="va">exp_res</span>, comparisons <span class="op">=</span> <span class="va">comparisons</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in .rsa(results(x), comparisons = comparisons, .test = test, ...):</span> could not find function ".rsa"</span>
 <span class="r-in"><span><span class="fu">test</span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'object' in selecting a method for function 'test': object 'res' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CalmrRSA object</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Correlation matrix:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              HD2022.vs RW1972.vs PKH1982.eivs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> HD2022.vs          1.0       1.0         -0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RW1972.vs          1.0       1.0         -0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> PKH1982.eivs      -0.5      -0.5          1.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Significance matrix:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              HD2022.vs RW1972.vs PKH1982.eivs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> HD2022.vs        FALSE     FALSE        FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RW1972.vs        FALSE     FALSE        FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> PKH1982.eivs     FALSE     FALSE        FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1000 permutation samples, two-tailed test with alpha = 0.05.</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

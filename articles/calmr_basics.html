@@ -267,10 +267,37 @@ them accordingly.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> RW1972         5 Exp     <span style="color: #949494;">&lt;df [22 × 5]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span> <span style="color: #949494;">&lt;named list [9]&gt;</span></span></span>
 <span><span class="co"># access results</span></span>
 <span><span class="fu"><a href="../reference/results.html">results</a></span><span class="op">(</span><span class="va">my_experiment</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 3</span></span></span>
-<span><span class="co">#&gt;   model  rs             vs            </span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> RW1972 <span style="color: #949494;">&lt;df [704 × 8]&gt;</span> <span style="color: #949494;">&lt;df [704 × 8]&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt; $rs</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 704 × 9</span></span></span>
+<span><span class="co">#&gt;    model  group trial trial_type phase  s1    s2    block_size value</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> RW1972 Exp       1 A&gt;(US)     Phase1 A     A              1     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> RW1972 Exp       2 A&gt;(US)     Phase1 A     A              1     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> RW1972 Exp       3 A&gt;(US)     Phase1 A     A              1     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> RW1972 Exp       4 A&gt;(US)     Phase1 A     A              1     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> RW1972 Exp       5 A&gt;(US)     Phase1 A     A              1     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> RW1972 Exp       6 A&gt;(US)     Phase1 A     A              1     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> RW1972 Exp       7 A&gt;(US)     Phase1 A     A              1     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> RW1972 Exp       8 A&gt;(US)     Phase1 A     A              1     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> RW1972 Exp       9 A&gt;(US)     Phase1 A     A              1     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> RW1972 Exp      10 A&gt;(US)     Phase1 A     A              1     0</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 694 more rows</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $vs</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 704 × 9</span></span></span>
+<span><span class="co">#&gt;    model  group trial trial_type phase  s1    s2    block_size value</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> RW1972 Exp       1 A&gt;(US)     Phase1 A     A              1     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> RW1972 Exp       2 A&gt;(US)     Phase1 A     A              1     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> RW1972 Exp       3 A&gt;(US)     Phase1 A     A              1     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> RW1972 Exp       4 A&gt;(US)     Phase1 A     A              1     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> RW1972 Exp       5 A&gt;(US)     Phase1 A     A              1     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> RW1972 Exp       6 A&gt;(US)     Phase1 A     A              1     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> RW1972 Exp       7 A&gt;(US)     Phase1 A     A              1     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> RW1972 Exp       8 A&gt;(US)     Phase1 A     A              1     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> RW1972 Exp       9 A&gt;(US)     Phase1 A     A              1     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> RW1972 Exp      10 A&gt;(US)     Phase1 A     A              1     0</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 694 more rows</span></span></span></code></pre></div>
 <p>The run_experiment returns a lot of information. The <code>str</code>
 function will be your best friend, and there is plenty of documentation
 to go about.</p>
@@ -290,15 +317,11 @@ produce (e.g., associations, responses, saliences, etc.)</p>
 <code class="sourceCode R"><span><span class="co"># get all the plots for the experiment</span></span>
 <span><span class="va">plots</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">my_experiment</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">plots</span><span class="op">$</span><span class="va">RW1972</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Exp - Response Strength (RW1972)"       </span></span>
-<span><span class="co">#&gt; [2] "Control - Response Strength (RW1972)"   </span></span>
-<span><span class="co">#&gt; [3] "Exp - Association Strength (RW1972)"    </span></span>
-<span><span class="co">#&gt; [4] "Control - Association Strength (RW1972)"</span></span>
+<span><span class="co">#&gt; NULL</span></span>
 <span><span class="co"># or get a specific type of plot</span></span>
 <span><span class="va">specific_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">my_experiment</span>, type <span class="op">=</span> <span class="st">"vs"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">specific_plot</span><span class="op">$</span><span class="va">RW1972</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Exp - Association Strength (RW1972)"    </span></span>
-<span><span class="co">#&gt; [2] "Control - Association Strength (RW1972)"</span></span>
+<span><span class="co">#&gt; NULL</span></span>
 <span><span class="co"># show which plots are supported by the model we are using</span></span>
 <span><span class="fu"><a href="../reference/model_info.html">supported_plots</a></span><span class="op">(</span><span class="st">"RW1972"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "rs" "vs"</span></span></code></pre></div>
@@ -312,11 +335,10 @@ the source of the association. The colors within each panel determine
 the target of the association.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">my_experiment</span>, type <span class="op">=</span> <span class="st">"vs"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $RW1972</span></span>
-<span><span class="co">#&gt; $RW1972$`Exp - Association Strength (RW1972)`</span></span></code></pre></div>
+<span><span class="co">#&gt; $`Exp - Association Strength (RW1972)`</span></span></code></pre></div>
 <p><img src="calmr_basics_files/figure-html/unnamed-chunk-10-1.png" width="384"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $RW1972$`Control - Association Strength (RW1972)`</span></span></code></pre>
+<span><span class="co">#&gt; $`Control - Association Strength (RW1972)`</span></span></code></pre>
 <p><img src="calmr_basics_files/figure-html/unnamed-chunk-10-2.png" width="384"></p>
 </div>
 <div class="section level4">
@@ -326,11 +348,10 @@ the target of the association.</p>
 of the stimuli presented on a trial.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">my_experiment</span>, type <span class="op">=</span> <span class="st">"rs"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $RW1972</span></span>
-<span><span class="co">#&gt; $RW1972$`Exp - Response Strength (RW1972)`</span></span></code></pre></div>
+<span><span class="co">#&gt; $`Exp - Response Strength (RW1972)`</span></span></code></pre></div>
 <p><img src="calmr_basics_files/figure-html/unnamed-chunk-11-1.png" width="384"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $RW1972$`Control - Response Strength (RW1972)`</span></span></code></pre>
+<span><span class="co">#&gt; $`Control - Response Strength (RW1972)`</span></span></code></pre>
 <p><img src="calmr_basics_files/figure-html/unnamed-chunk-11-2.png" width="384"></p>
 </div>
 </div>
