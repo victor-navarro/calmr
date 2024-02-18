@@ -41,3 +41,22 @@ test_that("c concatenates raw_results", {
   base_length <- length(ran_experiments[[1]]@results@raw_results)
   expect_true(length(concat@results@raw_results) > base_length)
 })
+
+exper <- experiments[[1]]
+
+test_that("parameters retrieves the parameters", {
+  expect_named(parameters(exper)[[1]])
+})
+
+test_that("parameters<- sets the parameters", {
+  oldpars <- parameters(exper)[[1]]
+  pars <- get_parameters(df, model = "RW1972")
+  pars$betas_on["US"] <- 0.7
+  parameters(exper) <- pars
+  newpars <- parameters(exper)[[1]]
+  expect_true(newpars$betas_on["US"] != oldpars$betas_on["US"])
+})
+
+test_that("parameters<- throws error with weird list length", {
+  expect_error(parameters(exper) <- rep(parameters(exper), 2))
+})

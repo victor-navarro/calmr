@@ -74,6 +74,8 @@ is_experiment <- function(object) {
           returned by supported_optimizers()",
             call. = FALSE
           )
+        } else {
+          return(given)
         }
       }
     },
@@ -84,11 +86,13 @@ is_experiment <- function(object) {
         )
         return("identity")
       } else {
-        if (!given %in% supported_families()) {
+        if (!(given %in% supported_families())) {
           stop("Family is not supported. Must be one
           returned by supported_families()",
             call. = FALSE
           )
+        } else {
+          return(given)
         }
       }
     },

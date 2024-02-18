@@ -5,8 +5,7 @@ Authors@R:
     person("Victor", "Navarro", , "navarrov@cardiff.ac.uk", role = c("aut", "cre"))
 Description: Tools to simulate associative learning models.
 License: GPL (>= 3)
-URL: https://github.com/victor-navarro/calmr,
-    http://victornavarro.org/calmr/
+URL: https://github.com/victor-navarro/calmr, http://victornavarro.org/calmr/, https://victornavarro.org/calmr/
 BugReports: https://github.com/victor-navarro/calmr/issues
 Imports: 
     cowplot,

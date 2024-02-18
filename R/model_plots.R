@@ -60,11 +60,9 @@ calmr_model_plot <- function(dat, type) {
   # Assemble scales
   scales <- c(
     .calmr_scales("colour_d"),
-    .calmr_scales("fill_d")
+    .calmr_scales("fill_d"),
+    ggplot2::scale_x_continuous(breaks = NULL)
   )
-  if (type %in% c("vs")) {
-    scales <- c(scales, ggplot2::scale_x_continuous(breaks = NULL))
-  }
 
   # Define grid
   grid <- list()

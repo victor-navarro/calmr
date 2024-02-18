@@ -1,3 +1,4 @@
+# welcome design
 base_df <- data.frame(
   Group = c("Blocking", "Control"),
   P1 = c("10N>(US)", ""),
@@ -6,12 +7,12 @@ base_df <- data.frame(
   R2 = FALSE
 )
 
-debug <- TRUE
+# whether to print debugging messages
+debug <- FALSE
 
 base_plot_options <- list(common_scale = TRUE)
 base_sim_options <- list(iterations = 1, miniblocks = TRUE)
 
-# Define server logic required to draw a histogram
 shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
   #### Reactive values ####
   design_df <- shiny::reactiveVal(base_df)

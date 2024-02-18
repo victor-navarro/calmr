@@ -1,12 +1,5 @@
 #' S4 class for  Calmr parsed_results
 #'
-#' @section Slots:
-#' \describe{
-#' \item{\code{parsed_results}:}{Data.frame or List. The unparsed model parsed_results}
-#' \item{\code{parsed_results}:}{List. The parsed and aggregated model parsed_results}
-#' \item{\code{is_parsed}:}{Logical. Whether the model parsed_results have been parsed}
-#' }
-#' @name CalmrResult
 #' @rdname CalmrResult
 #' @exportClass CalmrResult
 #' @import tibble

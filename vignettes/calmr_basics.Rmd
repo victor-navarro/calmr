@@ -8,9 +8,9 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{R, include = FALSE}
 knitr::opts_chunk$set(
-  fig.width = 7,
+  fig.width = 4,
   collapse = TRUE,
   comment = "#>",
   message = F,
@@ -18,156 +18,203 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+
+```{R}
 library(calmr)
 ```
 
 # Using calmr in R
 
-## Ingredients
+## Your first simulation
 
-To successfully simulate you only need a data.frame specifying the groups, phases, and trials of the experiment, and (optionally) a data.frame with salience parameters for all the stimuli in the experiment.
+To perform your first simulation you will need:
+
+1. A data.frame specifiying the experiment design, and
+2. A list with the parameters for the model you'll be using.
 
 ## The design data.frame
 
-In the design data.frame, we specify our experimental design. A few rules about the this data.frame:
-
-1. Each row represents a group.
-2. Its first column contains the group labels.
-3. The remaining columns are organized in pairs. The first column in each pair specifies the trials to give in the phase, whereas the second column in each pair specifies whether the trials within that phase should be randomized.
-
-Let's build a design matrix for a blocking experiment.
+We will use a data.frame to specify our experimental design. 
+Let's specify a blocking design.
 
 ```{r}
-
-my_blocking <- data.frame(Group = c("Exp", "Control"),
-                          Phase1 = c("10A>(US)", "10C>(US)"),
-                          R1 = c(FALSE, FALSE),
-                          Phase2 = c("10AB>(US)", "10AB>(US)"),
-                          R2 = c(FALSE, FALSE),
-                          Test = c("1A#/1B#", "1A#/1B#"),
-                          R3 = c(FALSE, FALSE))
+my_blocking <- data.frame(
+  Group = c("Exp", "Control"),
+  Phase1 = c("10A>(US)", "10C>(US)"),
+  R1 = c(FALSE, FALSE),
+  Phase2 = c("10AB>(US)", "10AB>(US)"),
+  R2 = c(FALSE, FALSE),
+  Test = c("1A#/1B#", "1A#/1B#"),
+  R3 = c(FALSE, FALSE)
+)
 my_blocking
 ```
 
-A few observations about the trial notation:
 
-1. Trials are preceded by a number. That number represents the number of times that trial will be given in each phase. "10A>(US)" means that the "A>(US)" trial will be given 10 times.
-2. The presence and absence of the unconditioned stimulus is not denoted with the traditional "+" and "-" symbols. Instead, here we use parenthesis to denote "complex" stimuli. These can be thought of as an element with a complex name (i.e., with more than one character). As such, "(US)" specifies a single element to represent the US.
-3. In the same vein, multiple characters with no parentheses denote individual elements. For example, "AB" implies the presence of two stimuli, A and B.
-4. The ">" character is used as a separator of the "expectations" and "correction" steps within the trial. "10A>(US)" means that the model generates an expectation with A only, but learns from the co-occurence of A and the US.
-5. The "/" character is used as a trial separator (it does not imply randomization by itself). Thus, "1A/1B" specifies that a single "A" trial and a single "B" trial will be given during that phase. Recall that randomization of trials within a phase is specified by the column after it (above, R1, R2, and R3).
-6. The "#" character is used to denote probe trials. In contrast to real life, probe trials here entail no update of the model's associations. As such, probe trials can be used to track the development of key associations, with no repercussion to what the model learns on normal training trials.
+A few rules about the design data.frame:
 
-If you want to check if your trials string will work with the simulator, you can use `trial_parser`. Check `??trial_parser` for more information. The function returns a list with a lot of information, so let's print only some of the fields.
+1. Each row represents a group.
+2. Its first column contains the group labels.
+3. The remaining columns are organized in pairs (trials in a phase, and whether to randomize them)
+
+The trials in each phase column are specified using a very rigid notation. A few observations about it:
+
+1. Trials are preceded by a number. That number represents 
+the number of times that trial will be given in each phase. 
+"10A>(US)" means that the "A>(US)" trial will be given 10 times.
+2. The presence and absence of the unconditioned stimulus is 
+not denoted with the traditional "+" and "-" symbols. Instead, 
+here we use parenthesis to denote "complex" stimuli. These can 
+be thought of as an element with a complex name (i.e., with 
+more than one character). As such, "(US)" specifies a single 
+element to represent the US.
+3. In the same vein, multiple characters with no parentheses 
+denote individual elements.
+For example, "AB" implies the presence of two stimuli, A and B.
+4. The ">" character is used as a separator 
+of the "expectations" and "correction" steps within the trial. 
+"10A>(US)" means that the model generates an expectation 
+with A only, but learns from the co-occurence of A and the US.
+5. The "/" character is used as a trial separator 
+(it does not imply randomization by itself). 
+Thus, "1A/1B" specifies that a single "A" trial 
+and a single "B" trial will be given during that phase. 
+Recall that randomization of trials within a phase is 
+specified by the column after it (above, R1, R2, and R3).
+6. The "#" character is used to denote probe trials. 
+In contrast to real life, probe trials here entail no 
+update of the model's associations. As such, 
+probe trials can be used to track the development 
+of key associations, with no repercussion to what 
+the model learns on normal training trials.
+
+If you want to check whether your trial string will work with the simulator, 
+you can use `trial_parser`.
+The function returns a list with a lot of information, 
+so let's print only some of the fields.
 
 ```{r}
-trial <- trial_parser("AB/10AC")  #not specifying a number of AB trials. Bad practice!
+# not specifying a number of AB trials. Bad practice!
+trial <- trial_parser("AB/10AC")
 trial[c("trial_names", "trial_repeats")]
-trial <- trial_parser("10AB(AB)(US)") #considering a configural cue for elements AB
+# considering a configural cue for elements AB
+trial <- trial_parser("10AB(AB)(US)")
 trial[c("unique_nominal_stimuli")]
-
 ```
 
 
-## Picking a model and the parameters data.frame
+## The parameters list
 
-You can run a simulation with only a design data.frame (the simulation function will use default salience values for the stimuli and even the model!). However, you might want to run a model other than the default. To get the models currently supported, you can call `supported_models()`. After choosing a model, we can set specific salience values for the stimuli in our experiment in parameters data.frame. Just like the design data.frame, the parameters data.frame has to follow a specific format. We can get a data.frame with default values via `get_model_params`, and then modify specific values by hand.
+Now we need to pick a model and its parameters.
+
+To get the models currently supported in `calmr`, you can call `supported_models()`.
 
 ```{r}
 supported_models()
+```
 
-my_pars <- get_model_params(my_blocking, model = "HD2022")
-my_pars$alphas[my_pars$stimulus == "US"] <- .4
+After picking a model, you can get default parameters for your design with `get_parameters`.
+```{r}
+my_pars <- get_parameters(my_blocking, model = "RW1972")
+# Increasing the beta parameter for US presentations
+my_pars$betas_on["US"] <- .6
 my_pars
 ```
 
-### Additional options
 
-The final ingredient is a list with simulation options. We can get a default one with `get_exp_opts`, and modify them accordingly.
+### The (optional) additional options
+
+If you opt to, you can also pass a list with simulation options. 
+Simulation options are entirely optional, and if you don't pass them you will just get a warning.
+
+We can get a default one with `get_exp_opts`, and modify them accordingly.
+
 
 ```{r}
 my_opts <- get_exp_opts()
-my_opts$iterations <- 3
+# Increase number of simulations to average out randomization effects
+my_opts$iterations <- 5
 my_opts
-
 ```
 
 ### Simulating
 
-And we can finally simulate the model with `run_experiment``. By default, the function returns a list with aggregated data. Let's see.
+With all of the above, we can run our simulation using the `run_experiment` function.
 
 ```{r}
-my_sim <- run_experiment(design = my_blocking,
-                    param_df = my_pars,
-                    options = my_opts,
-                    model = "HD2022")
-my_sim
-
+my_experiment <- run_experiment(
+  my_blocking,
+  model = "RW1972",
+  parameters = my_pars,
+  options = my_opts,
+)
+slotNames(my_experiment)
+# access arguments (see how many iterations we ran?)
+my_experiment@arguments
+# access results
+results(my_experiment)
 ```
+
+The run_experiment returns a lot of information.
+The `str` function will be your best friend, 
+and there is plenty of documentation to go about.
+
+Of course, if you are an advanced R user you will be able to dig into the data straight away.
+
+However, the package also includes some methods to get a quick look at the results.
 
 ## Plotting
 
-But, we rarely want the raw data. If you are like me, you will want to see some plots. Let's use `plot` function with the different plots that the package (and the model) supports by default. We can get the supported plots via `supported_plots(model)`, where model is the string of the model we used.
+Let's use `plot` method to create some plots.
+Each model supports different types of plots according to the results they can produce
+(e.g., associations, responses, saliences, etc.)
 
 ```{r}
-supported_plots("HD2022")
+# get all the plots for the experiment
+plots <- plot(my_experiment)
+names(plots$RW1972)
+# or get a specific type of plot
+specific_plot <- plot(my_experiment, type = "vs")
+names(specific_plot$RW1972)
+# show which plots are supported by the model we are using
+supported_plots("RW1972")
 ```
 
+In this case, the RW model supports both associations and responses.
 
-Here they are, paired side by side:
+### Stimulus associations
 
-### stimulus-specific responding (simple)
-
-The plots below show responding across phases (left to right panels, and trials within). Note, these show the sum of R values (i.e., overall level of responding) per stimulus (absent or present). They do not identify the sources of that responding (i.e., whether A or B is producing the responding); for that, we must look at complex plots.
+The columns below are the phases of the design and the rows denote 
+the source of the association.
+The colors within each panel determine the target of the association.
 
 ```{r}
-plot(my_sim, type = "rs", simple = T)
+plot(my_experiment, type = "vs")
 ```
 
-### stimulus-specific responding (complex)
+### Responding
 
-These are those complex plots. Here, the parsing changes a little bit, in order to allow comparison among the sources of responding. Now, each stimulus source is shown as a different color, and the vertical panels show different target stimuli.
-
-```{r}
-plot(my_sim, type = "rs", simple = F)
-```
-
-
-### stimulus activations
-
-Similar to above, but now the x-axis shows trial number, and the trial_types are embedded across horizontal panels.
-
+Fairly similar to the above, but this time responding is a function of 
+the stimuli presented on a trial.
 
 ```{r}
-plot(my_sim, type = "acts")
-```
-
-### stimulus associations
-
-Going even deeper now. These are the stimulus-stimulus associations that HeiDI uses to generate activations in the first place. Each vertical panel denotes a stimulus source. THe different colours, the target of the association.
-
-```{r}
-plot(my_sim, type = "vs")
-```
-
-### stimulus salience at expression
-
-Venture here only if you're ready. The plots below show the stimulus saliencies at the moment of expression.
-
-```{r}
-plot(my_sim, type = "as")
+plot(my_experiment, type = "rs")
 ```
 
 ## Graphing
 
-You can also take a look at the state of the model's associations at any point during training, using the function `make_graphs`.
+You can also take a look at the state of the model's associations at any 
+point during training, using the `graph` method on your experiment.
 
 ```{r}
 my_graph_opts <- get_graph_opts("small")
-graph(my_sim, t = 10, graph_opts = my_graph_opts)
+graph(my_experiment, t = 20, graph_opts = my_graph_opts)
 ```
 
 ## Final thoughts
 
-The `calmr` package was designed to simulate quickly; write your design and get a glance of the model predictions. However, the package also has some features for more advanced users, so make sure to check more advanced vignettes when you are ready.
+The `calmr` package was designed to simulate quickly: 
+write your design and get a glance model predictions. 
+That said, the package also has some features for advanced R users, 
+so make sure to check more advanced vignettes when you are ready.
+

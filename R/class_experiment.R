@@ -44,6 +44,41 @@ methods::setMethod("c", "CalmrExperiment", function(x, ..., recursive = FALSE) {
   )
 })
 
+#' Retrieve/set parameters from/in CalmrExperiment
+#' @param x A CalmrExperiment object
+#' @param value A list of parameters
+#' @note If passing a list of parameters (as returned by `get_parameters`),
+#' the set method will overwrite all rows in the experiment.
+#' Passing a list of lists will replace on a row-by-row basis.
+#' @export
+#' @rdname parameters
+methods::setGeneric("parameters", function(x) standardGeneric("parameters"))
+#' @export
+#' @rdname parameters
+methods::setGeneric(
+  "parameters<-",
+  function(x, value) standardGeneric("parameters<-")
+)
+methods::setMethod(
+  "parameters", "CalmrExperiment",
+  function(x) x@arguments$parameters
+)
+methods::setMethod("parameters<-", "CalmrExperiment", function(x, value) {
+  if (length(names(value))) {
+    # If there are names in the parameters,
+    # this is meant to be a single list
+    value <- list(value)
+  } else {
+    if (length(value) != length(x)) {
+      stop(sprintf("Length of parameters list
+      must be equal to the length of the experiment (%s)", length(x)))
+    }
+  }
+  x@arguments$parameters <- value
+  x
+})
+
+
 #' Extract aggregated results from CalmrExperiment
 #'
 #' @param object An object of class \clode{\link{CalmrExperiment}}
@@ -66,7 +101,6 @@ methods::setMethod("length", "CalmrExperiment", function(x) {
   }
 })
 
-# mdat think this will break the parse
 setGeneric("parse", function(object) methods::standardGeneric("parse"))
 methods::setMethod(
   "parse", "CalmrExperiment",

@@ -14,21 +14,30 @@ get_optimizer_opts(
 )
 }
 \arguments{
-\item{model_pars}{A character vector specifying the name of the parameters to fit.}
+\item{model_pars}{A character vector specifying the name of
+the parameters to fit.}
 
-\item{initial_pars}{A numeric vector specifying the initial parameter values to evaluate the model at (required by \code{optim}). Defaults to 0 for each parameter.}
+\item{initial_pars}{A numeric vector specifying the initial
+parameter values to #' evaluate the model at (required by \code{optim}).
+Defaults to 0 for each parameter.}
 
-\item{ll, ul}{A numeric vector specifying the lower and upper limits of the parameters to fit, respectively}
+\item{ll, ul}{A numeric vector specifying the lower and upper
+limits of the parameters to fit, respectively}
 
-\item{optimizer}{A string specifying the optimizer to use. One from \code{c("optim", "ga")}}
+\item{optimizer}{A string specifying the optimizer to use.
+One from \code{c("optim", "ga")}}
 
-\item{family}{A string specifying the family function to generate responses (and calculate the likelihood function with). One from \code{c("identity", "normal", "poisson")}.}
+\item{family}{A string specifying the family function to
+generate responses (and calculate the likelihood function with).
+One from \code{c("identity", "normal", "poisson")}.}
 }
 \description{
 An assortment of functions to help fit models
 }
 \note{
-Whenever a family function other than the identity is used, the family-specific parameters will always be appended to the end of the relevant lists.
+Whenever a family function other than the identity is used,
+the family-specific parameters will always be appended to
+the end of the relevant lists.
 }
 \seealso{
 \code{\link{fit_model}}, \code{\link{make_model_args}}

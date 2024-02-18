@@ -1,5 +1,5 @@
-pandoc: 2.19.2
-pkgdown: 2.0.6
+pandoc: 3.1.12.1
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   calmr_app: calmr_app.html
@@ -12,8 +12,8 @@ articles:
   RW1972_math: RW1972_math.html
   SM2007_math: SM2007_math.html
   SM2007_sims: SM2007_sims.html
-last_built: 2023-04-19T14:38Z
+last_built: 2024-02-18T16:18Z
 urls:
-  reference: http://victornavarro.org/calmr/reference
-  article: http://victornavarro.org/calmr/articles
+  reference: https://victornavarro.org/calmr/reference
+  article: https://victornavarro.org/calmr/articles
 
