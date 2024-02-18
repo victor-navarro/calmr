@@ -7,7 +7,6 @@ df <- data.frame(
 df <- parse_design(df)
 models <- supported_models()
 
-
 test_that("calmr_model_graph works", {
   res <- run_experiment(
     df,
@@ -15,7 +14,7 @@ test_that("calmr_model_graph works", {
     parameters = get_parameters(design = df, model = models[1]),
     options = get_exp_opts()
   )
-  g <- calmr_model_graph(results(res)$vs[[1]])
+  g <- calmr_model_graph(results(res)$vs)
   expect_named(g)
 })
 
@@ -26,7 +25,7 @@ test_that("calmr_model_graph takes a trial", {
     parameters = get_parameters(design = df, model = models[1]),
     options = get_exp_opts()
   )
-  g <- calmr_model_graph(results(res)$vs[[1]], t = 1)
+  g <- calmr_model_graph(results(res)$vs, t = 1)
   expect_named(g)
 })
 

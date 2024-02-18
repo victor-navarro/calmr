@@ -45,7 +45,7 @@ Collate:
     'MAC1975.R'
     'PKH1982.R'
     'RAND.R'
-    'rsa.R'
+    'rsa_functions.R'
     'RW1972.R'
     'SM2007.R'
     'calmr_app.R'

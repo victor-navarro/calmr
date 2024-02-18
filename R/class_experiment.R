@@ -122,12 +122,17 @@ methods::setMethod(
       x <- parse(x)
     }
     res <- .aggregate_experiment(x)
-    x@results@aggregated_results <- do.call(
+    tbl <- do.call(
       dplyr::bind_rows,
       sapply(names(res), function(m) {
         tibble::tibble(model = m, tibble::as_tibble(lapply(res[[m]], list)))
       }, simplify = FALSE)
     )
+    x@results@aggregated_results <- sapply(names(tbl)[-1], function(o) {
+      dat <- tbl[, c("model", o)]
+      tidyr::unnest(dat, tidyselect::all_of(o))
+    }, simplify = FALSE)
+
     x
   }
 )
@@ -156,27 +161,25 @@ setMethod(
     # get aggregated results
     res <- results(x)
     plots <- list()
-    models <- unique(res$model)
+    models <- unique(x@arguments$model)
     # Go through each row
     for (m in models) {
-      mdat <- res[res$model == m, ]
       model_plots <- supported_plots(m)
       if (!is.null(type)) {
         sapply(type, .calmr_assert, supported = model_plots)
         model_plots <- type
       }
-      row_plots <- list()
       for (p in model_plots) {
-        pdat <- mdat[[p]][[1]]
+        odat <- res[[p]]
+        pdat <- odat[odat$model == m, ]
         groups <- unique(pdat$group)
         for (g in groups) {
           plot_name <- sprintf("%s - %s (%s)", g, .get_prettyname(p), m)
-          row_plots[[plot_name]] <- calmr_model_plot(pdat[pdat$group == g, ],
+          plots[[plot_name]] <- calmr_model_plot(pdat[pdat$group == g, ],
             type = p
           )
         }
       }
-      plots[[m]] <- row_plots
     }
     plots
   }
@@ -207,11 +210,11 @@ setMethod("graph", "CalmrExperiment", function(x, ...) {
   # get aggregated results
   res <- results(x)
   graphs <- list()
-  models <- unique(res$model)
+  models <- unique(x@arguments$model)
   for (m in models) {
-    mdat <- res[res$model == m, ]
-    assoc_output <- .model_associations(mdat$model)
-    weights <- mdat[[assoc_output]][[1]]
+    assoc_output <- .model_associations(m)
+    odat <- res[[assoc_output]]
+    weights <- odat[odat$model == m, ]
     if (assoc_output == c("eivs")) {
       evs <- weights[weights$type == "evs", ]
       ivs <- weights[weights$type == "ivs", ]

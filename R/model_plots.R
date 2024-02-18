@@ -158,13 +158,7 @@ patch_plots <- function(
     plots, selection = NULL,
     plot_options = get_plot_opts()) {
   # unlist plots
-  pnames <- unlist(unname(lapply(plots, names)))
-  plots <- stats::setNames(
-    unlist(plots,
-      recursive = FALSE,
-      use.names = FALSE
-    ), pnames
-  )
+  pnames <- names(plots)
 
   if (is.null(selection)) {
     selection <- pnames

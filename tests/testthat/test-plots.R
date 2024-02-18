@@ -21,13 +21,13 @@ for (m in models) {
   })
   test_that(sprintf("specific plot for model %s", m), {
     p <- plot(res, type = sample(ps, 1))
-    expect_true(length(p[[1]]) == 1)
+    expect_true(length(p) == 1)
   })
 }
 
 # Test that patch plot works
 plots <- plot(res)
-pnames <- unlist(unname(lapply(plots, names)))
+pnames <- names(plots)
 test_that("patch_plot works with names", {
   expect_named(patch_plots(plots, pnames))
 })
