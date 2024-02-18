@@ -81,7 +81,7 @@ methods::setMethod("parameters<-", "CalmrExperiment", function(x, value) {
 
 #' Extract aggregated results from CalmrExperiment
 #'
-#' @param object An object of class \clode{\link{CalmrExperiment}}
+#' @param object An object of class \code{\link{CalmrExperiment}}
 #' @return A tbl containing models (rows) and model outputs (columns)
 #' @export
 #' @rdname results
@@ -187,7 +187,7 @@ setMethod(
 
 #' Extract aggregated results from CalmrExperiment
 #'
-#' @param object An object of class \clode{\link{CalmrExperiment}}
+#' @param object An object of class \code{\link{CalmrExperiment}}
 #' @return A tbl containing models (rows) and model outputs (columns)
 #' @export
 #' @rdname results

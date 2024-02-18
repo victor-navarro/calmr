@@ -139,13 +139,13 @@ With them, we can write our model function.
 ```{r}
 my_model_function <- function(parameters, experiment) {
   # manipulating parameters
-  new_parameters <- experiment@arguments$parameters[[1]]
+  new_parameters <- parameters(experiment)[[1]]
   new_parameters$alphas[] <- parameters
   parameters(experiment) <- new_parameters # note parameters method
   # running the model and selecting rs
   exp_res <- run_experiment(experiment)
   # summarizing the model
-  rs <- results(exp_res)$rs[[1]] %>%
+  rs <- results(exp_res)$rs %>%
     filter(s2 %in% c("Pellet", "Sucrose")) %>%
     mutate(
       response = ifelse(s1 %in% c("Pellet", "Sucrose"), "np", "lp"),

@@ -65,7 +65,7 @@ m <- run_experiment(des,
 )
 
 # Fig 2 A
-results(m)$relacts[[1]] %>%
+results(m)$relacts %>%
   filter(s2 == "US" & trial_type == "(ctxa)A>(US)" & phase == "P1") %>%
   mutate(trial = ceiling(trial / block_size)) %>%
   group_by(trial) %>%
@@ -77,7 +77,7 @@ results(m)$relacts[[1]] %>%
 # overall responding levels are higher for calmr
 
 # Fig 2 B
-results(m)$relacts[[1]] %>%
+results(m)$relacts %>%
   filter(s2 == "US" & phase == "P2") %>%
   group_by(trial_type) %>%
   summarise(value = sum(value)) %>%
@@ -118,7 +118,7 @@ m <- run_experiment(des,
 )
 
 # Fig 4 A
-results(m)$relacts[[1]] %>%
+results(m)$relacts %>%
   filter(s2 == "US" & trial_type == "(ctxb)A" & phase == "P2") %>%
   mutate(trial = ceiling(trial / block_size)) %>%
   group_by(trial) %>%
@@ -128,7 +128,7 @@ results(m)$relacts[[1]] %>%
   geom_point()
 
 # responding at the beginning of extinction is higher
-results(m)$relacts[[1]] %>%
+results(m)$relacts %>%
   filter(s2 == "US" & phase == "P3") %>%
   group_by(trial_type) %>%
   summarise(value = sum(value)) %>%
@@ -168,7 +168,7 @@ m <- run_experiment(des,
 )
 # Fig 6
 
-results(m)$relacts[[1]] %>%
+results(m)$relacts %>%
   filter(s2 == "US" & phase == "P2") %>%
   group_by(group, trial_type) %>%
   summarise(value = sum(value)) %>%
@@ -218,7 +218,7 @@ m <- run_experiment(des,
 )
 
 # Fig 10
-results(m)$relacts[[1]] %>%
+results(m)$relacts %>%
   filter(s2 == "US" & phase == "P4") %>%
   group_by(group) %>%
   summarise(value = sum(value)) %>%
@@ -255,7 +255,7 @@ m <- run_experiment(des,
 ) # takes a bit
 
 # Fig 14
-results(m)$relacts[[1]] %>%
+results(m)$relacts %>%
   filter(s2 == "US" & phase == "P3") %>%
   mutate(trial_type = ifelse(grepl("AD", trial_type), "Test AD", "Test BC")) %>%
   group_by(trial_type) %>%
@@ -290,7 +290,7 @@ m <- run_experiment(des,
 )
 
 # Fig 14
-results(m)$relacts[[1]] %>%
+results(m)$relacts %>%
   filter(s2 == "US" & phase == "P2" & trial_type != "(ctx)") %>%
   mutate(trial = ceiling(trial / block_size)) %>%
   mutate(trial_type = ifelse(grepl("P", trial_type), "Preexposed", "Novel")) %>%

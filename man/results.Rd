@@ -9,7 +9,7 @@ results(object)
 results(object)
 }
 \arguments{
-\item{object}{An object of class \clode{\link{CalmrExperiment}}}
+\item{object}{An object of class \code{\link{CalmrExperiment}}}
 }
 \value{
 A tbl containing models (rows) and model outputs (columns)
