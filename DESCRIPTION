@@ -74,3 +74,5 @@ Collate:
     'class_result.R'
     'class_experiment.R'
     'class_rsa.R'
+Depends: 
+    R (>= 3.5)
