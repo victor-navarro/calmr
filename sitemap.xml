@@ -1,171 +1,177 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://victornavarro.org/calmr/404.html</loc>
+    <loc>https://victornavarro.org/calmr/404.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/LICENSE.html</loc>
+    <loc>https://victornavarro.org/calmr/LICENSE.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/articles/PKH1982_math.html</loc>
+    <loc>https://victornavarro.org/calmr/articles/PKH1982_math.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/articles/RW1972_math.html</loc>
+    <loc>https://victornavarro.org/calmr/articles/RW1972_math.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/articles/SM2007_math.html</loc>
+    <loc>https://victornavarro.org/calmr/articles/SM2007_math.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/articles/SM2007_sims.html</loc>
+    <loc>https://victornavarro.org/calmr/articles/SM2007_sims.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/articles/calmr_app.html</loc>
+    <loc>https://victornavarro.org/calmr/articles/calmr_app.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/articles/calmr_basics.html</loc>
+    <loc>https://victornavarro.org/calmr/articles/calmr_basics.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/articles/calmr_fits.html</loc>
+    <loc>https://victornavarro.org/calmr/articles/calmr_fits.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/articles/heidi_math.html</loc>
+    <loc>https://victornavarro.org/calmr/articles/heidi_math.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/articles/heidi_similarity.html</loc>
+    <loc>https://victornavarro.org/calmr/articles/heidi_similarity.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/articles/index.html</loc>
+    <loc>https://victornavarro.org/calmr/articles/index.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/articles/mac1975_math.html</loc>
+    <loc>https://victornavarro.org/calmr/articles/mac1975_math.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/authors.html</loc>
+    <loc>https://victornavarro.org/calmr/authors.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/index.html</loc>
+    <loc>https://victornavarro.org/calmr/index.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/news/index.html</loc>
+    <loc>https://victornavarro.org/calmr/news/index.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/AIC-CalmrFit-method.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/AIC-CalmrFit-method.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/BIC-CalmrFit-method.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/BIC-CalmrFit-method.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/CalmrComparison-class.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/CalmrDesign.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/CalmrExperiment-class.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/CalmrExperiment.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/CalmrFit-class.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/CalmrFit-class.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/CalmrModel-class.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/CalmrModel-class.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/CalmrRSA-class.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/CalmrRSA.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/CalmrRSATest-class.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/CalmrResult.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/HD2022.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/HD2022.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/HDI2020.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/HDI2020.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/MAC1975.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/MAC1975.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/NLL.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/NLL.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/PKH1982.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/PKH1982.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/RAND.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/RAND.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/RSA.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/RSA.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/RW1972.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/RW1972.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/SM2007.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/SM2007.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/calmr_app.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/app.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/compare_models.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/calmr_model_plot.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/fit_helpers.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/compare_models.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/fit_model.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/dot-calmr_assert.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/get_exp_opts.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/dot-parse_experiment.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/get_model.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/fit_helpers.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/get_model_params.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/fit_model.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/get_output.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/get_exp_opts.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/graph.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/get_parameters.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/index.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/graph.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/make_model_args.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/index.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/model_info_funcs.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/is_experiment.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/parse_design.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/make_experiment.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/pati.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/model_info.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/pipe.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/parameters.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/plot-CalmrRSA-method.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/parse_design.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/plot-CalmrRSATest-method.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/patch_graphs.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/plot.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/patch_plots.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/predict-CalmrFit-method.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/pati.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/run_experiment.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/pipe.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/run_model.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/plot.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/summary-CalmrExperiment-method.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/predict-CalmrFit-method.html</loc>
   </url>
   <url>
-    <loc>http://victornavarro.org/calmr/reference/trial_parser.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/results.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calmr/reference/run_experiment.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calmr/reference/trial_parser.html</loc>
   </url>
 </urlset>
