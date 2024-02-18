@@ -8,24 +8,38 @@ df <- parse_design(df)
 models <- supported_models()
 
 
-test_that("calmr_model-graph works", {
+test_that("calmr_model_graph works", {
   res <- run_experiment(
     df,
     model = models[1],
-    parameters = get_parameters(design = df, model = m),
+    parameters = get_parameters(design = df, model = models[1]),
     options = get_exp_opts()
   )
   g <- calmr_model_graph(results(res)$vs[[1]])
   expect_named(g)
 })
 
-# Test plots for every model
-for (m in models) {
+test_that("calmr_model_graph takes a trial", {
   res <- run_experiment(
     df,
-    model = m,
-    parameters = get_parameters(design = df, model = m),
+    model = models[1],
+    parameters = get_parameters(design = df, model = models[1]),
     options = get_exp_opts()
   )
-  g <- graph(res)
+  g <- calmr_model_graph(results(res)$vs[[1]], t = 1)
+  expect_named(g)
+})
+
+# Test graphs for every model
+for (m in models) {
+  test_that(sprintf("graphs for model %s", m), {
+    res <- run_experiment(
+      df,
+      model = m,
+      parameters = get_parameters(design = df, model = m),
+      options = get_exp_opts()
+    )
+    g <- graph(res)
+    expect_named(g)
+  })
 }

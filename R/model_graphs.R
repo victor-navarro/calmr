@@ -17,13 +17,21 @@
 calmr_model_graph <- function(
     x, loops = TRUE,
     limits = max(abs(x$value)) * c(-1, 1), colour_key = FALSE,
-    t = max(x$trial), options = get_graph_opts(), ...) {
-  x <- stats::aggregate(value ~ s1 + s2, mean, data = x)
+    t = max(x$trial),
+    options = get_graph_opts(), ...) {
+  # check if trial is valid
+  if (t > max(x$trial)) {
+    warning("Requested trial exceeds that found in data. Using last trial.")
+    t <- max(x$trial)
+  }
+  # aggregate data
+  x <- stats::aggregate(value ~ s1 + s2, mean, data = x[x$trial == t, ])
   x <- dplyr::rename(x, "from" = "s1", "to" = "s2")
-
+  # determine limits
   if (is.null(limits)) {
     limits <- max(abs(x$value)) * c(-1, 1)
   }
+
   net <- ggnetwork::ggnetwork(network::as.network(x, loops = loops),
     layout = "circle",
     arrow.gap = options$arrow.gap
@@ -36,7 +44,7 @@ calmr_model_graph <- function(
   )) +
     ggnetwork::geom_edges(
       curvature = options$arrow.curvature,
-      size = options$edge.size,
+      linewidth = options$edge.size,
       arrow = grid::arrow(
         length = grid::unit(options$arrow.pt, "pt"),
         type = "closed"
@@ -63,48 +71,22 @@ calmr_model_graph <- function(
   p
 }
 
-make_graphs <- function(parsed_experiment,
-                        limits = NULL,
-                        t = NULL,
-                        options = get_graph_opts()) {
-  plotlist <- list()
-  if ("eivs" %in% names(parsed_experiment@parsed_results)) {
-    vs <- parsed_experiment@parsed_results$eivs %>%
-      filter(assoc_type == "Net")
-  } else {
-    vs <- parsed_experiment@parsed_results$vs
-  }
-  if (is.null(t)) {
-    t <- max(vs$trial)
-  }
-  if (is.null(limits)) {
-    limits <- max(abs(range(vs$value))) * c(-1, 1)
-  }
-
-  for (g in unique(vs$group)) {
-    gdat <- vs[vs$group == g, ]
-    gtmax <- max(gdat$trial)
-    plot_t <- t
-    if (t > gtmax) {
-      warning(sprintf(
-        "Requested trial (%d) exceeds the maximum of
-        trials (%d) for group %s, plotting the last trial.",
-        t, gtmax, g
-      ))
-      plot_t <- gtmax
-    }
-    plotlist[[sprintf("Group %s: (Trial %d)", g, t)]] <- graph_weights(gdat,
-      t = plot_t,
-      limits = limits,
-      options = options
-    ) +
-      ggplot2::labs(title = sprintf("%s (Trial %d)", g, plot_t))
-  }
-  plotlist
-}
+#' Patch Calmr graphs
+#'
+#' @description Convenience function to patch graphs with cowplot
+#' @param graphs A list of named graphs, as returned by `calmr::graph`
+#' @param selection A character or numeric vector determining the plots to patch
+#' @export
 
 patch_graphs <- function(graphs, selection = names(graphs)) {
-  # expects a list of graphs via make_graphs/graph_weights
+  # unlist graphs
+  gnames <- unlist(unname(lapply(graphs, names)))
+  graphs <- stats::setNames(
+    unlist(graphs,
+      recursive = FALSE,
+      use.names = FALSE
+    ), gnames
+  )
   graphs <- graphs[selection]
   cow <- cowplot::plot_grid(plotlist = graphs)
   cow

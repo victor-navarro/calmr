@@ -15,16 +15,22 @@ source("support.R")
 supported_models <- calmr::supported_models()
 
 ui <- shinydashboard::dashboardPage(
-  title = "Calmr Simulator",
   skin = "red",
   dashboardHeader(
-    title = "Calmr Simulator"
+    title = "Calmr Simulator",
+    tags$li(
+      a("Help",
+        href = "https://victornavarro.org/calmr/articles/calmr_app.html",
+        target = "_blank",
+        title = "Help"
+      ),
+      class = "dropdown"
+    )
   ),
   dashboardSidebar(
     sidebarMenu(
       menuItem("Home", tabName = "home"),
       menuItem("Options", tabName = "options"),
-      menuItem("Help", tabName = "help"),
       menuItem("About", tabName = "about")
     )
   ),
@@ -171,15 +177,6 @@ ui <- shinydashboard::dashboardPage(
               inputId = "common_scale",
               label = "Plot in common scale", value = TRUE
             )
-          )
-        )
-      ),
-      tabItem(
-        tabName = "help",
-        fluidPage(
-          p("Follow the rabbit"),
-          a("Link",
-            href = "https://victornavarro.org/calmr/articles/calmr_app.html"
           )
         )
       ),

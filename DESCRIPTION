@@ -59,6 +59,7 @@ Collate:
     'methods.R'
     'model_parsers.R'
     'model_plots.R'
+    'model_graphs.R'
     'model_support_functions.R'
     'parse_design.R'
     'run_experiment.R'

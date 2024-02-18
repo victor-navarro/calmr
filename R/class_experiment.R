@@ -66,7 +66,7 @@ methods::setMethod("length", "CalmrExperiment", function(x) {
   }
 })
 
-# I think this will break the parse
+# mdat think this will break the parse
 setGeneric("parse", function(object) methods::standardGeneric("parse"))
 methods::setMethod(
   "parse", "CalmrExperiment",
@@ -170,47 +170,31 @@ setMethod("graph", "CalmrExperiment", function(x, ...) {
     stop("Experiment does not contain aggregated results.
       Please parse and aggregate results beforehand.")
   }
-  browser()
   # get aggregated results
   res <- results(x)
-  plots <- list()
+  graphs <- list()
   models <- unique(res$model)
-  # Go through each row
   for (m in models) {
     mdat <- res[res$model == m, ]
-    model_plots <- supported_plots(m)
-    if (!is.null(type)) {
-      sapply(type, .calmr_assert, supported = model_plots)
-      model_plots <- type
+    assoc_output <- .model_associations(mdat$model)
+    weights <- mdat[[assoc_output]][[1]]
+    if (assoc_output == c("eivs")) {
+      evs <- weights[weights$type == "evs", ]
+      ivs <- weights[weights$type == "ivs", ]
+      weights <- evs
+      weights$value <- weights$value - ivs$value
     }
-    row_plots <- list()
-    for (p in model_plots) {
-      pdat <- mdat[[p]][[1]]
-      groups <- unique(pdat$group)
-      for (g in groups) {
-        plot_name <- sprintf("%s - %s (%s)", g, .get_prettyname(p), m)
-        row_plots[[plot_name]] <- calmr_model_plot(pdat[pdat$group == g, ],
-          type = p
-        )
-      }
+    groups <- unique(weights$group)
+    mgraphs <- list()
+    for (g in groups) {
+      graph_name <- sprintf("%s - Associations (%s)", g, m)
+      mgraphs[[graph_name]] <- calmr_model_graph(
+        weights[weights$group == g, ], ...
+      ) + ggplot2::labs(title = graph_name)
     }
-    plots[[m]] <- row_plots
+    graphs[[m]] <- mgraphs
   }
-  plots
-
-  if (any(c("evs", "ivs") %in% names(x@parsed_results))) {
-    dat <- x@parsed_results$evs
-    dat$value <- dat$value - x@parsed_results$ivs$value
-  } else {
-    dat <- x@parsed_results$vs
-  }
-  groups <- unique(dat$group)
-  ps <- sapply(groups, function(g) {
-    graph_weights(dat[dat$group == g, ], ...) +
-      ggplot2::labs(title = sprintf("Group = %s", g))
-  }, simplify = F)
-  names(ps) <- groups
-  ps
+  graphs
 })
 
 

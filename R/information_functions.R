@@ -153,3 +153,18 @@ model_outputs <- function(model = NULL) {
     output_info[[model]]
   }
 }
+
+# defining where the associations are in each model
+.model_associations <- function(model) {
+  assoc_map <- c(
+    "HDI2020" = "vs",
+    "HD2022" = "vs",
+    "RW1972" = "vs",
+    "MAC1975" = "vs",
+    "SM2007" = "vs",
+    "PKH1982" = "eivs",
+    "ANCCR" = "vs",
+    "RAND" = "vs"
+  )
+  assoc_map[model]
+}

@@ -28,7 +28,7 @@ shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
   ran <- shiny::reactiveVal(FALSE)
   experiment <- shiny::reactiveVal()
   raw_results <- shiny::reactiveVal()
-  parsed_experiment <- shiny::reactiveVal()
+  experiment <- shiny::reactiveVal()
   plot_filters <- shiny::reactiveVal()
 
   #### Input Logic ####
@@ -139,7 +139,7 @@ shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
         experiment(experiment)
         shiny::withProgress(message = "Making plots...", value = 0, {
           plots(calmr::plot(experiment))
-          # graphs(calmr::graph(experiment))
+          graphs(calmr::graph(experiment))
           shiny::setProgress(1)
         })
         ran(TRUE)
@@ -218,21 +218,25 @@ shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
   })
 
   # populating the slider for graph_trial selection
-  shiny::observeEvent(parsed_experiment(), {
-    if (debug) print("populating graph slider after experiment run")
-    last_trial <- max(parsed_experiment()@parsed_results[[1]]$trial)
-    shiny::updateSliderInput(
-      inputId = "graph_trial",
-      value = last_trial,
-      max = last_trial
-    )
+  shiny::observeEvent(experiment(), {
+    if (!is.null(experiment())) {
+      if (debug) print("populating graph slider after experiment run")
+      last_trial <- max(
+        results(experiment())[[2]][[1]]$trial
+      )
+      shiny::updateSliderInput(
+        inputId = "graph_trial",
+        value = last_trial,
+        max = last_trial
+      )
+    }
   })
 
   # remaking the graphs on graph_trial change
   shiny::observeEvent(input$graph_trial, {
     if (debug) print("remaking graphs due to slider change")
-    if (!is.null(parsed_experiment())) {
-      graphs(calmr:::make_graphs(parsed_experiment(), t = input$graph_trial))
+    if (!is.null(experiment())) {
+      graphs(calmr:::graph(experiment(), t = input$graph_trial))
     }
   })
 
@@ -371,17 +375,26 @@ shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
   })
 
   output$exportresults <- shiny::downloadHandler(
-    filename = "my_simulation_results.xlsx",
+    filename = sprintf(
+      "calmr_simulation_%s.xlsx",
+      input$model_selection
+    ),
     content = function(filename) {
+      data <- list(
+        design = design_df(),
+        model = input$model_selection,
+        stimulus_parameters = rhandsontable::hot_to_r(input$stim_par_tbl)
+      )
+
+      if (needs_globals()) {
+        data <- c(
+          data,
+          list(global_parameters = rhandsontable::hot_to_r(input$glob_par_tbl))
+        )
+      }
       data <- c(
-        list(
-          design_df = design_df(),
-          parameters = data.frame(
-            model = input$model_selection,
-            current_parameters()
-          )
-        ),
-        parsed_experiment()@parsed_results
+        data,
+        unlist(results(experiment()), recursive = FALSE)[-1]
       )
       openxlsx::write.xlsx(data, file = filename, overwrite = TRUE)
     }
