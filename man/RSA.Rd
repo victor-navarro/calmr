@@ -3,25 +3,27 @@
 \name{rsa,CalmrExperiment-method}
 \alias{rsa,CalmrExperiment-method}
 \alias{test,CalmrRSA-method}
+\alias{plot,CalmrRSA-method}
 \title{Perform representational similarity analysis on CalmrExperiment}
 \usage{
 \S4method{rsa}{CalmrExperiment}(x, comparisons, test = FALSE, ...)
 
 \S4method{test}{CalmrRSA}(object, n_samples = 1000, p = 0.95)
+
+\S4method{plot}{CalmrRSA}(x, y, ...)
 }
 \arguments{
 \item{x}{A tbl of m by o (models by outputs) with aggregated results.}
 
 \item{comparisons}{A model-named list containing the model
-outputs to compare.
-For example, \code{list("RW1972" = c("vs", "rs"), "HDI2020" = c("as", "vs"))}.}
+outputs to compare.}
 
-\item{test}{Whether to test the RSA via permutation test. Defaults = FALSE.}
+\item{test}{Whether to test the RSA via permutation test. Default = FALSE.}
 
 \item{...}{Additional parameters passed to \code{stats::dist}
 and \code{stats::cor}}
 
-\item{object}{The CalmrRSA object to test}
+\item{object}{The CalmrRSA object}
 
 \item{n_samples}{The number of samples for the permutation test
 (default = 1e3)}
@@ -64,5 +66,5 @@ comparisons <- list(
   "PKH1982" = c("eivs")
 )
 res <- rsa(exp_res, comparisons = comparisons)
-test(res)
+test(res, n_samples = 100)
 }

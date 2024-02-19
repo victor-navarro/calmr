@@ -1,5 +1,3 @@
-#' An assorment of functions to help parse models
-
 # experiment is a CalmrExperiment
 # returns a list
 .parse_experiment <- function(experiment) {

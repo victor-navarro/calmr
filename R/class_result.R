@@ -1,9 +1,14 @@
-#' S4 class for  Calmr parsed_results
-#'
+#' S4 class for Calmr Results
 #' @rdname CalmrResult
+#' @section Slots:
+#' \describe{
+#' \item{aggregated_results}{A list with fully aggregated results.}
+#' \item{parsed_results}{A list with parsed results, i.e., fn(model_output).}
+#' \item{raw_results}{A list with model outputs.}
+#' }
 #' @exportClass CalmrResult
+#' @seealso CalmrResults-methods
 #' @import tibble
-
 methods::setClass(
   "CalmrResult",
   representation(
@@ -18,7 +23,13 @@ methods::setClass(
   )
 )
 
-# Method to print parsed_results
+methods::setClass("CalmrExperimentResult",
+  contains = "CalmrResult"
+)
+
+#' Methods for CalmrResult
+#' @rdname CalmrResult-methods
+#' @export
 methods::setMethod("show", "CalmrResult", function(object) {
   if (!is.null(object@aggregated_results)) {
     print(object@aggregated_results)
@@ -27,11 +38,8 @@ methods::setMethod("show", "CalmrResult", function(object) {
   }
 })
 
-methods::setClass("CalmrExperimentResult",
-  contains = "CalmrResult"
-)
-
-# could be better
+#' @rdname CalmrResult-methods
+#' @export
 methods::setMethod(
   "c", "CalmrExperimentResult",
   function(x, ..., recursive = FALSE) {

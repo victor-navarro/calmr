@@ -1,4 +1,4 @@
-#' An assortment of functions to help fit models
+#' Get optimizer options
 #' @param model_pars A character vector specifying the name of
 #' the parameters to fit.
 #' @param initial_pars A numeric vector specifying the initial
@@ -14,7 +14,7 @@
 #' @note Whenever a family function other than the identity is used,
 #' the family-specific parameters will always be appended to
 #' the end of the relevant lists.
-#' @rdname fit_helpers
+#' @rdname options
 #' @seealso \code{\link{fit_model}}, \code{\link{make_model_args}}
 #' @export
 get_optimizer_opts <- function(model_pars,

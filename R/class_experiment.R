@@ -1,13 +1,13 @@
-#' CalmrExperiment
-#' @description S4 classes for calmr experiments.
+#' S4 class for calmr experiments.
 #' @section Slots:
 #' \describe{
-#' \item{\code{.Data}:}{Inherited from tbl class}
-#' \item{\code{raw_results}:}{List. The raw results.}
+#' \item{\code{arguments}:}{A tbl containing arguments to run models.}
+#' \item{\code{design}:}{A CalmrDesign object.}
+#' \item{\code{design}:}{A CalmrExperimentResult object.}
 #' }
-#' @name CalmrExperiment
 #' @rdname CalmrExperiment
 #' @exportClass CalmrExperiment
+#' @seealso CalmrExperiment-methods
 
 methods::setClass(
   "CalmrExperiment",
@@ -18,6 +18,9 @@ methods::setClass(
   )
 )
 
+#' @title CalmrExperiment methods
+#' @rdname CalmrExperiment-methods
+#' @export
 setMethod("show", "CalmrExperiment", function(object) {
   if (is.null(object@results@raw_results)) {
     print(object@arguments)
@@ -27,14 +30,26 @@ setMethod("show", "CalmrExperiment", function(object) {
 })
 
 methods::setGeneric("design", function(x) methods::standardGeneric("design"))
+#' @export
+#' @aliases design
+#' @rdname CalmrExperiment-methods
 methods::setMethod("design", "CalmrExperiment", function(x) {
   x@design
 })
 
-# A method to concatenate experiments
-# TODO: Implement a concatenation methods for CalmrDesign
-# This currently deletes some design information if the designs
-# are not the same across experiments
+#' @export
+#' @rdname CalmrExperiment-methods
+#' @examples
+#' # Concatenate designs
+#' df <- get_design("basic_blocking")
+#' pars1 <- get_parameters(df, model = "RW1972")
+#' pars2 <- get_parameters(df, model = "MAC1975")
+#' ex1 <- make_experiment(df, model = "RW1972")
+#' ex2 <- make_experiment(df, model = "MAC1975")
+#' c(ex1, ex2)
+#'
+#' # Concatenate results
+#' lapply(c(ex1, ex2), run_experiment)
 methods::setMethod("c", "CalmrExperiment", function(x, ..., recursive = FALSE) {
   allexps <- list(x, ...)
   methods::new("CalmrExperiment",
@@ -44,25 +59,21 @@ methods::setMethod("c", "CalmrExperiment", function(x, ..., recursive = FALSE) {
   )
 })
 
-#' Retrieve/set parameters from/in CalmrExperiment
-#' @param x A CalmrExperiment object
-#' @param value A list of parameters
-#' @note If passing a list of parameters (as returned by `get_parameters`),
-#' the set method will overwrite all rows in the experiment.
-#' Passing a list of lists will replace on a row-by-row basis.
-#' @export
-#' @rdname parameters
+
 methods::setGeneric("parameters", function(x) standardGeneric("parameters"))
-#' @export
-#' @rdname parameters
 methods::setGeneric(
   "parameters<-",
   function(x, value) standardGeneric("parameters<-")
 )
+#' @rdname CalmrExperiment-methods
+#' @aliases parameters
+#' @export
 methods::setMethod(
   "parameters", "CalmrExperiment",
   function(x) x@arguments$parameters
 )
+#' @rdname CalmrExperiment-methods
+#' @export
 methods::setMethod("parameters<-", "CalmrExperiment", function(x, value) {
   if (length(names(value))) {
     # If there are names in the parameters,
@@ -79,20 +90,20 @@ methods::setMethod("parameters<-", "CalmrExperiment", function(x, value) {
 })
 
 
-#' Extract aggregated results from CalmrExperiment
-#'
-#' @param object An object of class \code{\link{CalmrExperiment}}
-#' @return A tbl containing models (rows) and model outputs (columns)
+methods::setGeneric(
+  "results",
+  function(object) methods::standardGeneric("results")
+)
+#' @rdname CalmrExperiment-methods
+#' @aliases results
 #' @export
-#' @rdname results
-methods::setGeneric("results", function(object) {
-  methods::standardGeneric("results")
-})
-setMethod("results", "CalmrExperiment", function(object) {
+methods::setMethod("results", "CalmrExperiment", function(object) {
   # Returns aggregated results
   object@results@aggregated_results
 })
 
+#' @rdname CalmrExperiment-methods
+#' @export
 methods::setMethod("length", "CalmrExperiment", function(x) {
   if (!is.null(x@arguments)) {
     nrow(x@arguments)
@@ -102,6 +113,8 @@ methods::setMethod("length", "CalmrExperiment", function(x) {
 })
 
 setGeneric("parse", function(object) methods::standardGeneric("parse"))
+#' @rdname CalmrExperiment-methods
+#' @export
 methods::setMethod(
   "parse", "CalmrExperiment",
   function(object) {
@@ -115,6 +128,8 @@ methods::setMethod(
   }
 )
 
+#' @rdname CalmrExperiment-methods
+#' @export
 methods::setMethod(
   "aggregate", "CalmrExperiment",
   function(x, ...) {
@@ -148,8 +163,6 @@ methods::setMethod(
 #' @note With type = NULL, all supported plots are returned.
 #' @export
 #' @rdname plot
-#'
-#'
 setGeneric("plot", function(x, y, ...) methods::standardGeneric("plot"))
 setMethod(
   "plot", "CalmrExperiment",
@@ -185,21 +198,7 @@ setMethod(
   }
 )
 
-#' Extract aggregated results from CalmrExperiment
-#'
-#' @param object An object of class \code{\link{CalmrExperiment}}
-#' @return A tbl containing models (rows) and model outputs (columns)
-#' @export
-#' @rdname results
-methods::setGeneric("results", function(object) {
-  methods::standardGeneric("results")
-})
-methods::setMethod("results", "CalmrExperiment", function(object) {
-  # Returns aggregated results
-  object@results@aggregated_results
-})
-
-
+setGeneric("graph", function(x, ...) standardGeneric("graph"))
 #' @export
 #' @rdname graph
 setMethod("graph", "CalmrExperiment", function(x, ...) {
@@ -243,8 +242,7 @@ methods::setGeneric("rsa", function(x, layers, ...) standardGeneric("rsa"))
 #' @param x A tbl of m by o (models by outputs) with aggregated results.
 #' @param comparisons A model-named list containing the model
 #' outputs to compare.
-#' For example, `list("RW1972" = c("vs", "rs"), "HDI2020" = c("as", "vs"))`.
-#' @param test Whether to test the RSA via permutation test. Defaults = FALSE.
+#' @param test Whether to test the RSA via permutation test. Default = FALSE.
 #' @param ... Additional parameters passed to `stats::dist`
 #' and `stats::cor`
 #' @returns A CalmrRSA object
@@ -273,7 +271,7 @@ methods::setGeneric("rsa", function(x, layers, ...) standardGeneric("rsa"))
 #'   "PKH1982" = c("eivs")
 #' )
 #' res <- rsa(exp_res, comparisons = comparisons)
-#' test(res)
+#' test(res, n_samples = 100)
 methods::setMethod(
   "rsa", "CalmrExperiment",
   function(x, comparisons, test = FALSE, ...) {

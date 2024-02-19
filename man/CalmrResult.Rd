@@ -3,7 +3,19 @@
 \docType{class}
 \name{CalmrResult-class}
 \alias{CalmrResult-class}
-\title{S4 class for  Calmr parsed_results}
+\title{S4 class for Calmr Results}
 \description{
-S4 class for  Calmr parsed_results
+S4 class for Calmr Results
+}
+\section{Slots}{
+
+\describe{
+\item{aggregated_results}{A list with fully aggregated results.}
+\item{parsed_results}{A list with parsed results, i.e., fn(model_output).}
+\item{raw_results}{A list with model outputs.}
+}
+}
+
+\seealso{
+CalmrResults-methods
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/calmr_app.R
 \name{app}
 \alias{app}
-\title{Run the calmr GUI}
+\title{Run the calmr shiny application}
 \usage{
 app(browser = getOption("shiny.launch.browser", interactive()))
 }
@@ -10,5 +10,5 @@ app(browser = getOption("shiny.launch.browser", interactive()))
 \item{browser}{If TRUE, the app is launched in a browser.}
 }
 \description{
-Starts a shiny application
+Run the calmr shiny application
 }

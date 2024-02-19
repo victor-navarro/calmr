@@ -79,19 +79,34 @@
     <loc>https://victornavarro.org/calmr/reference/CalmrExperiment-class.html</loc>
   </url>
   <url>
+    <loc>https://victornavarro.org/calmr/reference/CalmrExperiment-methods.html</loc>
+  </url>
+  <url>
     <loc>https://victornavarro.org/calmr/reference/CalmrExperiment.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/CalmrFit-class.html</loc>
   </url>
   <url>
+    <loc>https://victornavarro.org/calmr/reference/CalmrFit-methods.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calmr/reference/CalmrFit.html</loc>
+  </url>
+  <url>
     <loc>https://victornavarro.org/calmr/reference/CalmrModel-class.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calmr/reference/CalmrResult-methods.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/CalmrResult.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/CalmrRSA-class.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calmr/reference/CalmrRSA-methods.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/CalmrRSA.html</loc>
@@ -131,6 +146,9 @@
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/gen_ss_weights.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calmr/reference/get_design.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/get_exp_opts.html</loc>
@@ -209,6 +227,9 @@
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/NLL.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calmr/reference/options.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/parameters.html</loc>

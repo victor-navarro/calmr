@@ -1,5 +1,4 @@
-#' Run the calmr GUI
-#' @description Starts a shiny application
+#' Run the calmr shiny application
 #' @param browser If TRUE, the app is launched in a browser.
 #' @export
 
@@ -13,4 +12,3 @@ app <- function(
   }
   shiny::runApp(app_dir, display.mode = "normal")
 }
-

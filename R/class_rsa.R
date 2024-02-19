@@ -21,6 +21,9 @@ setClass(
   )
 )
 
+#' CalmrRSA Methods
+#' @export
+#' @rdname CalmrRSA-methods
 setMethod("show", "CalmrRSA", function(object) {
   cat("CalmrRSA object\n")
   cat("---------------\n")
@@ -36,14 +39,14 @@ setMethod("show", "CalmrRSA", function(object) {
   }
 })
 
-# test method
+
 methods::setGeneric(
   "test",
   function(object, n_samples = 1e3, p = .95) standardGeneric("test")
 )
 #' Test CalmrRSA object via permutation test
 #'
-#' @param object The CalmrRSA object to test
+#' @param object The CalmrRSA object
 #' @param n_samples The number of samples for the permutation test
 #' (default = 1e3)
 #' @param p The critical threshold level for the permutation test
@@ -56,6 +59,7 @@ methods::setMethod("test", "CalmrRSA", function(
   .rsa_test(object, n_samples = n_samples, p = p)
 })
 
+#' @rdname rsa
 #' @export
 setMethod(
   "plot", "CalmrRSA",

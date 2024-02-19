@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_parameters.R
 \name{get_parameters}
 \alias{get_parameters}
-\title{Obtain model parameters}
+\title{Get model parameters}
 \usage{
 get_parameters(design, model = NULL)
 }
@@ -15,7 +15,11 @@ get_parameters(design, model = NULL)
 A list with model parameters depending on model
 }
 \description{
-Obtain model parameters
+Get model parameters
+}
+\examples{
+block <- get_design("blocking")
+get_parameters(block, model = "SM2007")
 }
 \seealso{
 \code{\link{supported_models}}

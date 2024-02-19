@@ -26,26 +26,24 @@ A CalmrExperiment with results.
 Runs an experiment with minimal parameters.
 }
 \examples{
-# Using a data.frame only
-df <- data.frame(
-  Group = c("True", "Pseudo"),
-  P1 = c("10AB(US)/10AC", "5AB(US)/5AB/5AC(US)/5AC"),
-  R1 = c(TRUE, TRUE),
-  P2 = c("1A", "1A"),
-  R2 = c(TRUE, TRUE)
-)
-run_experiment(df)
-run_experiment(model = "MAC1975")
+# Using a data.frame only (throws warning)
+df <- get_design("relative_validity")
+run_experiment(df, model = "RW1972")
 
-# Using a CalmrExperiment with modified parameters
-df <- data.frame(
-  Group = c("Weak", "Strong"),
-  P1 = c("10AB(US)", "10AC(US)"),
-  R1 = FALSE
+# Using custom parameters
+df <- get_design("relative_validity")
+pars <- get_parameters(df, model = "HD2022")
+pars$alphas["US"] <- 0.6
+run_experiment(df, parameters = pars, model = "HD2022")
+
+# Using CalmrExperiment, for more iterations
+df <- get_design("blocking")
+pars <- get_parameters(df, model = "SM2007")
+exper <- make_experiment(df,
+  parameters = pars, model = "SM2007",
+  options = get_exp_opts(iterations = 4)
 )
-pars <- get_parameters(model = "HD2022")
-exp <- make_experiment(df, parameters = pars)
-run_experiment(exp)
+run_experiment(exper)
 }
 \seealso{
 \code{\link{get_exp_opts}}, \code{\link{parse_experiment_results}}

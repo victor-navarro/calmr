@@ -1,13 +1,3 @@
-#' Check if object is Calmr experiment
-#' @param object The object to be checked
-#' @returns A logical
-#' @export
-is_experiment <- function(object) {
-  inherits(object, "CalmrExperiment")
-}
-
-
-#' Go-to stops for calmr assertions
 .calmr_assert <- function(what, given, ...) { # nolint: cyclocomp_linter.
   nargs <- list(...)
   switch(what,
@@ -157,4 +147,8 @@ is_experiment <- function(object) {
       }
     }
   )
+}
+
+is_experiment <- function(object) {
+  inherits(object, "CalmrExperiment")
 }

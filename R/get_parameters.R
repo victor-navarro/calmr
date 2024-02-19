@@ -1,10 +1,12 @@
-#' Obtain model parameters
+#' Get model parameters
 #' @param design An data.frame containing the experimental design.
 #' @param model A string specifying a model. One in `supported_models()`.
 #' @return A list with model parameters depending on model
 #' @seealso \code{\link{supported_models}}
 #' @export
-
+#' @examples
+#' block <- get_design("blocking")
+#' get_parameters(block, model = "SM2007")
 get_parameters <- function(design, model = NULL) {
   model <- .calmr_assert("supported_model", model)
   parsed_design <- .calmr_assert("parsed_design", design)
