@@ -71,27 +71,27 @@
 
       <dl><dt>
           
-          <code><a href="AIC-CalmrFit-method.html">AIC(<i>&lt;CalmrFit&gt;</i>)</a></code> 
-        </dt>
-        <dd>AIC of CalmrFit</dd>
-      </dl><dl><dt>
-          
-          <code><a href="BIC-CalmrFit-method.html">BIC(<i>&lt;CalmrFit&gt;</i>)</a></code> 
-        </dt>
-        <dd>BIC of CalmrFit</dd>
-      </dl><dl><dt>
-          
           <code><a href="CalmrDesign.html">CalmrDesign</a></code> 
         </dt>
         <dd>S4 class for Calmr designs</dd>
       </dl><dl><dt>
           
-          <code><a href="CalmrExperiment.html">CalmrExperiment</a></code> 
+          <code><a href="CalmrExperiment-methods.html">show(<i>&lt;CalmrExperiment&gt;</i>)</a></code> <code><a href="CalmrExperiment-methods.html">design(<i>&lt;CalmrExperiment&gt;</i>)</a></code> <code><a href="CalmrExperiment-methods.html">c(<i>&lt;CalmrExperiment&gt;</i>)</a></code> <code><a href="CalmrExperiment-methods.html">parameters(<i>&lt;CalmrExperiment&gt;</i>)</a></code> <code><a href="CalmrExperiment-methods.html">`parameters&lt;-`(<i>&lt;CalmrExperiment&gt;</i>)</a></code> <code><a href="CalmrExperiment-methods.html">results(<i>&lt;CalmrExperiment&gt;</i>)</a></code> <code><a href="CalmrExperiment-methods.html">length(<i>&lt;CalmrExperiment&gt;</i>)</a></code> <code><a href="CalmrExperiment-methods.html">parse(<i>&lt;CalmrExperiment&gt;</i>)</a></code> <code><a href="CalmrExperiment-methods.html">aggregate(<i>&lt;CalmrExperiment&gt;</i>)</a></code> 
         </dt>
-        <dd>CalmrExperiment</dd>
+        <dd>CalmrExperiment methods</dd>
       </dl><dl><dt>
           
-          <code><a href="CalmrFit-class.html">CalmrFit-class</a></code> 
+          <code><a href="CalmrExperiment.html">CalmrExperiment-class</a></code> 
+        </dt>
+        <dd>S4 class for calmr experiments.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="CalmrFit-methods.html">show(<i>&lt;CalmrFit&gt;</i>)</a></code> <code><a href="CalmrFit-methods.html">predict(<i>&lt;CalmrFit&gt;</i>)</a></code> <code><a href="CalmrFit-methods.html">NLL(<i>&lt;CalmrFit&gt;</i>)</a></code> <code><a href="CalmrFit-methods.html">AIC(<i>&lt;CalmrFit&gt;</i>)</a></code> <code><a href="CalmrFit-methods.html">BIC(<i>&lt;CalmrFit&gt;</i>)</a></code> 
+        </dt>
+        <dd>CalmrFit Methods</dd>
+      </dl><dl><dt>
+          
+          <code><a href="CalmrFit.html">CalmrFit</a></code> 
         </dt>
         <dd>S4 class for Calmr Fit</dd>
       </dl><dl><dt>
@@ -101,14 +101,24 @@
         <dd>S4 class for Calmr Models</dd>
       </dl><dl><dt>
           
+          <code><a href="CalmrRSA-methods.html">show(<i>&lt;CalmrRSA&gt;</i>)</a></code> 
+        </dt>
+        <dd>CalmrRSA Methods</dd>
+      </dl><dl><dt>
+          
           <code><a href="CalmrRSA.html">CalmrRSA</a></code> 
         </dt>
         <dd>S4 class for Calmr representational similarity analysis</dd>
       </dl><dl><dt>
           
+          <code><a href="CalmrResult-methods.html">show(<i>&lt;CalmrResult&gt;</i>)</a></code> <code><a href="CalmrResult-methods.html">c(<i>&lt;CalmrExperimentResult&gt;</i>)</a></code> 
+        </dt>
+        <dd>Methods for CalmrResult</dd>
+      </dl><dl><dt>
+          
           <code><a href="CalmrResult.html">CalmrResult-class</a></code> 
         </dt>
-        <dd>S4 class for  Calmr parsed_results</dd>
+        <dd>S4 class for Calmr Results</dd>
       </dl><dl><dt>
           
           <code><a href="HD2022.html">HD2022()</a></code> 
@@ -126,11 +136,6 @@
         <dd>Train the MAC1975 model</dd>
       </dl><dl><dt>
           
-          <code><a href="NLL.html">NLL()</a></code> 
-        </dt>
-        <dd>NLL of CalmrFit</dd>
-      </dl><dl><dt>
-          
           <code><a href="PKH1982.html">PKH1982()</a></code> 
         </dt>
         <dd>Train the PKH1982 model</dd>
@@ -141,7 +146,7 @@
         <dd>Train the RAND model</dd>
       </dl><dl><dt>
           
-          <code><a href="RSA.html">rsa(<i>&lt;CalmrExperiment&gt;</i>)</a></code> <code><a href="RSA.html">test(<i>&lt;CalmrRSA&gt;</i>)</a></code> 
+          <code><a href="RSA.html">rsa(<i>&lt;CalmrExperiment&gt;</i>)</a></code> <code><a href="RSA.html">test(<i>&lt;CalmrRSA&gt;</i>)</a></code> <code><a href="RSA.html">plot(<i>&lt;CalmrRSA&gt;</i>)</a></code> 
         </dt>
         <dd>Perform representational similarity analysis on CalmrExperiment</dd>
       </dl><dl><dt>
@@ -158,7 +163,7 @@
           
           <code><a href="app.html">app()</a></code> 
         </dt>
-        <dd>Run the calmr GUI</dd>
+        <dd>Run the calmr shiny application</dd>
       </dl><dl><dt>
           
           <code><a href="calmr_model_plot.html">calmr_model_plot()</a></code> 
@@ -171,24 +176,14 @@
         <dd>Run models given a set of parameters</dd>
       </dl><dl><dt>
           
-          <code><a href="dot-calmr_assert.html">.calmr_assert()</a></code> 
-        </dt>
-        <dd>Go-to stops for calmr assertions</dd>
-      </dl><dl><dt>
-          
-          <code><a href="dot-parse_experiment.html">.parse_experiment()</a></code> 
-        </dt>
-        <dd>An assorment of functions to help parse models</dd>
-      </dl><dl><dt>
-          
-          <code><a href="fit_helpers.html">get_optimizer_opts()</a></code> 
-        </dt>
-        <dd>An assortment of functions to help fit models</dd>
-      </dl><dl><dt>
-          
           <code><a href="fit_model.html">fit_model()</a></code> 
         </dt>
         <dd>Fit model to data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_design.html">get_design()</a></code> 
+        </dt>
+        <dd>Get basic designs</dd>
       </dl><dl><dt>
           
           <code><a href="get_exp_opts.html">get_exp_opts()</a></code> 
@@ -198,17 +193,12 @@
           
           <code><a href="get_parameters.html">get_parameters()</a></code> 
         </dt>
-        <dd>Obtain model parameters</dd>
+        <dd>Get model parameters</dd>
       </dl><dl><dt>
           
           <code><a href="graph.html">calmr_model_graph()</a></code> <code><a href="graph.html">graph(<i>&lt;CalmrExperiment&gt;</i>)</a></code> 
         </dt>
         <dd>Create a graph with calmr data</dd>
-      </dl><dl><dt>
-          
-          <code><a href="is_experiment.html">is_experiment()</a></code> 
-        </dt>
-        <dd>Check if object is Calmr experiment</dd>
       </dl><dl><dt>
           
           <code><a href="make_experiment.html">make_experiment()</a></code> 
@@ -221,9 +211,9 @@
         <dd>Miscellaneous information functions</dd>
       </dl><dl><dt>
           
-          <code><a href="parameters.html">parameters()</a></code> <code><a href="parameters.html">`parameters&lt;-`()</a></code> 
+          <code><a href="options.html">get_optimizer_opts()</a></code> 
         </dt>
-        <dd>Retrieve/set parameters from/in CalmrExperiment</dd>
+        <dd>Get optimizer options</dd>
       </dl><dl><dt>
           
           <code><a href="parse_design.html">parse_design()</a></code> 
@@ -249,16 +239,6 @@
           <code><a href="plot.html">plot()</a></code> 
         </dt>
         <dd>Plot CalmrExperiment</dd>
-      </dl><dl><dt>
-          
-          <code><a href="predict-CalmrFit-method.html">predict(<i>&lt;CalmrFit&gt;</i>)</a></code> 
-        </dt>
-        <dd>Predict from CalmrFit</dd>
-      </dl><dl><dt>
-          
-          <code><a href="results.html">results()</a></code> <code><a href="results.html">results()</a></code> 
-        </dt>
-        <dd>Extract aggregated results from CalmrExperiment</dd>
       </dl><dl><dt>
           
           <code><a href="run_experiment.html">run_experiment()</a></code> 

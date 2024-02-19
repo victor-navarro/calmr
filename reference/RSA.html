@@ -73,7 +73,10 @@ Test CalmrRSA object via permutation test"><meta property="og:image" content="ht
 <span><span class="fu">rsa</span><span class="op">(</span><span class="va">x</span>, <span class="va">comparisons</span>, test <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for CalmrRSA</span></span>
-<span><span class="fu">test</span><span class="op">(</span><span class="va">object</span>, n_samples <span class="op">=</span> <span class="fl">1000</span>, p <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">test</span><span class="op">(</span><span class="va">object</span>, n_samples <span class="op">=</span> <span class="fl">1000</span>, p <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for CalmrRSA</span></span>
+<span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -84,12 +87,11 @@ Test CalmrRSA object via permutation test"><meta property="og:image" content="ht
 
 <dt>comparisons</dt>
 <dd><p>A model-named list containing the model
-outputs to compare.
-For example, <code>list("RW1972" = c("vs", "rs"), "HDI2020" = c("as", "vs"))</code>.</p></dd>
+outputs to compare.</p></dd>
 
 
 <dt>test</dt>
-<dd><p>Whether to test the RSA via permutation test. Defaults = FALSE.</p></dd>
+<dd><p>Whether to test the RSA via permutation test. Default = FALSE.</p></dd>
 
 
 <dt>...</dt>
@@ -98,7 +100,7 @@ and <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">stats
 
 
 <dt>object</dt>
-<dd><p>The CalmrRSA object to test</p></dd>
+<dd><p>The CalmrRSA object</p></dd>
 
 
 <dt>n_samples</dt>
@@ -148,7 +150,7 @@ can be later tested via its own <code>test</code> method.</p>
 <span class="r-in"><span>  <span class="st">"PKH1982"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"eivs"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">rsa</span><span class="op">(</span><span class="va">exp_res</span>, comparisons <span class="op">=</span> <span class="va">comparisons</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">test</span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">test</span><span class="op">(</span><span class="va">res</span>, n_samples <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CalmrRSA object</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Correlation matrix:</span>
@@ -164,7 +166,7 @@ can be later tested via its own <code>test</code> method.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RW1972.vs        FALSE     FALSE        FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> PKH1982.eivs     FALSE     FALSE        FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1000 permutation samples, two-tailed test with alpha = 0.05.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100 permutation samples, two-tailed test with alpha = 0.05.</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

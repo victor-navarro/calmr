@@ -217,7 +217,7 @@ one of the levers being less salient than the other.</p>
 good idea to see what results <code>run_experiment</code> returns.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">exp_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_experiment.html">run_experiment</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/results.html">results</a></span><span class="op">(</span><span class="va">exp_res</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">results</a></span><span class="op">(</span><span class="va">exp_res</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $as</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 352 × 8</span></span></span>
 <span><span class="co">#&gt;    model  group trial trial_type phase    s1    block_size value</span></span>
@@ -287,13 +287,13 @@ model responses). With them, we can write our model function.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_model_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">parameters</span>, <span class="va">experiment</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># manipulating parameters</span></span>
-<span>  <span class="va">new_parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/parameters.html">parameters</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span>  <span class="va">new_parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CalmrExperiment-methods.html">parameters</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span>  <span class="va">new_parameters</span><span class="op">$</span><span class="va">alphas</span><span class="op">[</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">parameters</span></span>
-<span>  <span class="fu"><a href="../reference/parameters.html">parameters</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">new_parameters</span> <span class="co"># note parameters method</span></span>
+<span>  <span class="fu"><a href="../reference/CalmrExperiment-methods.html">parameters</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">new_parameters</span> <span class="co"># note parameters method</span></span>
 <span>  <span class="co"># running the model and selecting rs</span></span>
 <span>  <span class="va">exp_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_experiment.html">run_experiment</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span></span>
 <span>  <span class="co"># summarizing the model</span></span>
-<span>  <span class="va">rs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/results.html">results</a></span><span class="op">(</span><span class="va">exp_res</span><span class="op">)</span><span class="op">$</span><span class="va">rs</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="va">rs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CalmrExperiment-methods.html">results</a></span><span class="op">(</span><span class="va">exp_res</span><span class="op">)</span><span class="op">$</span><span class="va">rs</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">s2</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pellet"</span>, <span class="st">"Sucrose"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>      response <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">s1</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pellet"</span>, <span class="st">"Sucrose"</span><span class="op">)</span>, <span class="st">"np"</span>, <span class="st">"lp"</span><span class="op">)</span>,</span>
@@ -349,7 +349,7 @@ function requires 4 arguments:</p>
 <p>We have done a great job taking care of the first three, so let’s
 tackle the last.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">my_optimizer_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_helpers.html">get_optimizer_opts</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">my_optimizer_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/options.html">get_optimizer_opts</a></span><span class="op">(</span></span>
 <span>  model_pars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">parameters</span><span class="op">$</span><span class="va">alphas</span><span class="op">)</span>,</span>
 <span>  optimizer <span class="op">=</span> <span class="st">"ga"</span>,</span>
 <span>  ll <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,</span>
