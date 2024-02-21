@@ -1,6 +1,6 @@
 exp_df <- data.frame(
   group = c("g1", "g2"),
-  p1 = c("10A>(US)", "10A"), r1 = FALSE
+  p1 = c("10A>(US)/10A", "10A/10B"), r1 = FALSE
 )
 parsed <- parse_design(exp_df)
 

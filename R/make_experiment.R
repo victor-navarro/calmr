@@ -7,7 +7,7 @@
 #' returned by `get_parameters`
 #' @param model A string specifying the model name. One of `supported_models()`
 #' @param options A list with options as returned by `get_exp_opts`
-#' @param ...
+#' @param ... Extra parameters passed to other functions
 #' @return A CalmrExperiment object
 #' @seealso \code{\link{parse_design}},
 #' \code{\link{get_parameters}}, \code{\link{get_exp_opts}}
@@ -26,7 +26,10 @@
 make_experiment <- function(
     design, parameters = NULL,
     model = NULL, options = get_exp_opts(), ...) {
-  design <- parse_design(design)
+  # parse design
+  design <- parse_design(design,
+    model = model, ...
+  )
 
   .calmr_assert("length", 1, model = model)
 
@@ -41,9 +44,11 @@ make_experiment <- function(
   options <- .calmr_assert("experiment_options", options)
 
   # build the experiment
-  arguments <- .build_experiment(
+  arguments <- .build_arguments(
     design = design,
-    options = options, model = model
+    model = model,
+    options = options,
+    ...
   )
   # add mapping
   arguments$mapping <- list(design@mapping)
@@ -104,14 +109,19 @@ make_experiment <- function(
   return(list(tps = tps, is_test = tstps, block_size = block_size))
 }
 
-# function to return the gcd
-.gcd <- function(x, y) {
-  r <- x %% y
-  return(ifelse(r, .gcd(y, r), y))
+.build_arguments <- function(design, options, model, ...) {
+  args <- .build_experiment(
+    design = design,
+    model = model, options = options
+  )
+  if (model %in% c("ANCCR")) {
+    args <- .anccrize_arguments(args, ...)
+  }
+  args
 }
 
 # general function to build experiment
-.build_experiment <- function(design, options, model) {
+.build_experiment <- function(design, model, options) {
   # sample trials
   exptb <- design@design |>
     tidyr::expand_grid(iteration = 1:options$iterations)
@@ -157,4 +167,19 @@ make_experiment <- function(
     exptb[, c("iteration", "group")],
     experience
   )
+}
+
+# function to return the gcd
+.gcd <- function(x, y) {
+  r <- x %% y
+  return(ifelse(r, .gcd(y, r), y))
+}
+
+# Aguments design depending on the model
+augment_design <- function(design, model, ...) {
+  if (model %in% c("ANCCR")) {
+    # creates eventlogs
+    design <- .anccrize_design(design, ...)
+  }
+  design
 }

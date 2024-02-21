@@ -1,6 +1,7 @@
 #' Parse design data.frame
 #' @param df A data.frame of dimensions Groups, 2*Phases+1
-#'
+#' @param model An optional model to augment the design. See ??augment design
+#' @param ... Other arguments passed to augment_design
 #' @return A CalmrDesign object
 #' @note
 #' \itemize{
@@ -18,84 +19,79 @@
 #' @seealso \code{\link{trial_parser}}
 #' @export
 
-parse_design <- function(df) {
+parse_design <- function(df, model = NULL, ...) {
   # if already parsed, skip
   if ("CalmrDesign" %in% class(df)) {
-    return(df)
+    design_obj <- df
+    # augment if it hasn't been augmented
+    if (!is.null(model) && !df@augmented) {
+      design_obj <- augment_design(design_obj, ...)
+    }
   } else {
-    design <- tryCatch(
-      {
-        phases <- colnames(df)
-        groups <- df[, 1]
-        design <- tibble::tibble()
-        for (g in seq_len(nrow(df))) {
-          for (p in seq(2, ncol(df), 2)) {
-            design <- rbind(design, tibble::tibble(
-              group = groups[g],
-              phase = phases[p],
-              parse_string = df[g, p],
-              randomize = df[g, p + 1],
-              trial_info = list(trial_parser(df[g, p]))
-            ))
-          }
-        }
-        # That's the easy part
-
-        # The hard part is to create the mapping for the experiment
-        tinfo <- tidyr::unnest_wider(design, "trial_info")
-        tinfo <- tinfo[, c(
-          "trial_pre_functional",
-          "trial_post_functional",
-          "trial_pre_nominal",
-          "trial_post_nominal",
-          "trial_names",
-          "nomi2func",
-          "func2nomi"
-        )]
-
-        # gather
-        tpref <- unlist(tinfo$trial_pre_functional, recursive = FALSE)
-        tpostf <- unlist(tinfo$trial_post_functional, recursive = FALSE)
-        tpren <- unlist(tinfo$trial_pre_nominal, recursive = FALSE)
-        tpostn <- unlist(tinfo$trial_post_nominal, recursive = FALSE)
-        mastert <- unlist(tinfo$trial_names)
-
-        # reduce
-        tnames <- mastert[!duplicated(mastert)]
-        tpref <- setNames(tpref[!duplicated(mastert)], tnames)
-        tpostf <- setNames(tpostf[!duplicated(mastert)], tnames)
-        tpren <- setNames(tpren[!duplicated(mastert)], tnames)
-        tpostn <- setNames(tpostn[!duplicated(mastert)], tnames)
-        mastert <- mastert[!duplicated(mastert)]
-
-        # make stimulus mapping
-        uni_fun <- unique(unlist(c(tpref, tpostf)))
-        uni_nom <- unique(unlist(c(tpren, tpostn)))
-        n2f <- unlist(tinfo$nomi2func)
-        n2f <- n2f[!duplicated(names(n2f))]
-        f2n <- unlist(tinfo$func2nomi)
-        f2n <- f2n[!duplicated(names(f2n))]
-
-        map <- list(
-          trial_names = mastert,
-          unique_functional_stimuli = uni_fun,
-          unique_nominal_stimuli = uni_nom,
-          trial_pre_func = tpref,
-          trial_post_func = tpostf,
-          trial_pre_nomi = tpren,
-          trial_post_nomi = tpostn,
-          nomi2func = n2f,
-          func2nomi = f2n
-        )
-
-        # done
-        return(methods::new("CalmrDesign",
-          design = design, mapping = map, raw_design = df
+    phases <- colnames(df)
+    groups <- df[, 1]
+    design <- tibble::tibble()
+    for (g in seq_len(nrow(df))) {
+      for (p in seq(2, ncol(df), 2)) {
+        design <- rbind(design, tibble::tibble(
+          group = groups[g],
+          phase = phases[p],
+          parse_string = df[g, p],
+          randomize = df[g, p + 1],
+          phase_info = list(phase_parser(df[g, p]))
         ))
-      },
-      error = function(e) {
-        stop(e)
       }
+    }
+    # That's the easy part
+    # The hard part is to create the mapping for the experiment
+    map <- .get_mapping(design)
+
+    # create design object
+    design_obj <- methods::new("CalmrDesign",
+      design = design, mapping = map, raw_design = df
     )
+    # augment design if required
+    if (!is.null(model)) {
+      design_obj <- augment_design(design_obj, model = model)
+    }
   }
+  design_obj
+}
+
+.get_mapping <- function(design) {
+  # trial names
+  tinfo <- lapply(design$phase_info, "[[", "trial_info")
+  ginfo <- lapply(design$phase_info, "[[", "general_info")
+
+  # gather
+  mastert <- unlist(lapply(ginfo, "[[", "trial_names"))
+  funcs <- unlist(lapply(tinfo, function(r) {
+    lapply(r, "[[", "functionals")
+  }), recursive = FALSE)
+  nomis <- unlist(lapply(tinfo, function(r) {
+    lapply(r, "[[", "nominals")
+  }), recursive = FALSE)
+  # reduce
+  uniqs <- !duplicated(mastert)
+  tnames <- mastert[uniqs]
+  funcs <- setNames(funcs[uniqs], tnames)
+  nomis <- setNames(nomis[uniqs], tnames)
+  uni_fun <- unique(unlist(funcs))
+  uni_nom <- unique(unlist(nomis))
+
+  # make stimulus mapping
+  n2f <- unlist(lapply(ginfo, "[[", "nomi2func"))
+  n2f <- n2f[!duplicated(names(n2f))]
+  f2n <- unlist(lapply(ginfo, "[[", "func2nomi"))
+  f2n <- f2n[!duplicated(names(f2n))]
+
+  list(
+    trial_names = tnames,
+    unique_functional_stimuli = uni_fun,
+    unique_nominal_stimuli = uni_nom,
+    trial_functionals = funcs,
+    trial_nominals = nomis,
+    nomi2func = n2f,
+    func2nomi = f2n
+  )
 }

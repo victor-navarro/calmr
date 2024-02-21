@@ -13,7 +13,8 @@ methods::setClass("CalmrDesign",
   slots = c(
     design = "tbl",
     mapping = "list",
-    raw_design = "data.frame"
+    raw_design = "data.frame",
+    augmented = "logical"
   )
 )
 methods::setMethod(
@@ -30,21 +31,25 @@ methods::setMethod(
   function(x) x@mapping
 )
 
-
-methods::setGeneric("trials", function(x) {
-  methods::standardGeneric("trials")
-})
+methods::setGeneric(
+  "trials",
+  function(x) methods::standardGeneric("trials")
+)
 methods::setMethod(
   "trials", "CalmrDesign",
   function(x) {
     des <- x@design
     trial_dat <- data.frame()
     for (r in seq_len(nrow(des))) {
-      td <- des$trial_info[[r]]
+      td <- des$phase_info[[r]]
       gdf <- data.frame(
-        group = des$group[r], phase = des$phase[r],
-        td[c("trial_names", "trial_repeats", "is_test")],
-        data.frame(lapply(td[c("trial_functional")], paste))
+        group = des$group[r],
+        phase = des$phase[r],
+        td$general_info[c("trial_names", "trial_repeats", "is_test")]
+      )
+      gdf$stimuli <- lapply(
+        x@mapping$trial_nominals[gdf$trial_names],
+        function(x) paste(x, collapse = ";")
       )
       trial_dat <- rbind(trial_dat, gdf)
     }

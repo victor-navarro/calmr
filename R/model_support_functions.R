@@ -18,7 +18,6 @@ gen_os_values <- function(stims, default_val = -1) {
   return(as.numeric(stimnames %in% s))
 }
 
-
 # Carries out a comparison process in a recursive manner
 .comparator_proc <- function(act, i, j, K, o, gammas, order, debug = FALSE) {
   ks <- setdiff(K, c(i, j))
@@ -113,7 +112,6 @@ gen_os_values <- function(stims, default_val = -1) {
 
   val
 }
-
 
 #### Unused ####
 # Softmax function

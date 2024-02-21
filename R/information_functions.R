@@ -22,7 +22,7 @@
 supported_models <- function() {
   c(
     "HDI2020", "HD2022", "RW1972", "MAC1975",
-    "PKH1982", "SM2007", "RAND"
+    "PKH1982", "SM2007", "RAND", "ANCCR"
   )
 }
 
@@ -114,7 +114,15 @@ parameter_info <- function(model = NULL) {
       ),
       default_value = c(0.4, 0.1, 1.0, 0.4, 0.3, 1, 1, 0.3)
     ),
-    "ANCCR" = list(name = c("Dunno"), default_value = c(1)),
+    "ANCCR" = list(
+      name = c(
+        "cue_reward_delay", "post_reward_delay",
+        "mean_ITI", "max_ITI", "reward_magnitude",
+        "exact_mean",
+        "alpha_exponent", "alpha_init", "alpha_min"
+      ),
+      default_value = c(1, 1, 30, 90, 1, 1, 1, 1, 0)
+    ),
     "RAND" = list(
       name = c("alphas"),
       default_value = c(0.4)

@@ -4,10 +4,14 @@
 \alias{parse_design}
 \title{Parse design data.frame}
 \usage{
-parse_design(df)
+parse_design(df, model = NULL, ...)
 }
 \arguments{
 \item{df}{A data.frame of dimensions Groups, 2*Phases+1}
+
+\item{model}{An optional model to augment the design. See ??augment design}
+
+\item{...}{Other arguments passed to augment_design}
 }
 \value{
 A CalmrDesign object
