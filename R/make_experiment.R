@@ -7,7 +7,7 @@
 #' returned by `get_parameters`
 #' @param model A string specifying the model name. One of `supported_models()`
 #' @param options A list with options as returned by `get_exp_opts`
-#'
+#' @param ...
 #' @return A CalmrExperiment object
 #' @seealso \code{\link{parse_design}},
 #' \code{\link{get_parameters}}, \code{\link{get_exp_opts}}
@@ -25,7 +25,7 @@
 
 make_experiment <- function(
     design, parameters = NULL,
-    model = NULL, options = get_exp_opts()) {
+    model = NULL, options = get_exp_opts(), ...) {
   design <- parse_design(design)
 
   .calmr_assert("length", 1, model = model)
@@ -40,54 +40,16 @@ make_experiment <- function(
   # assert options
   options <- .calmr_assert("experiment_options", options)
 
-  # sample trials
-  exptb <- design@design |>
-    tidyr::expand_grid(iteration = 1:options$iterations)
-
-  exptb$samples <- apply(exptb, 1, function(x) {
-    do.call(
-      .sample_trials,
-      c(x$trial_info, list(
-        randomize = x$randomize,
-        masterlist = design@mapping$trial_names,
-        miniblocks = options$miniblocks
-      ))
-    )
-  })
-
-  # add phaselab and block information
-  exptb <- tidyr::unnest_wider(exptb, "samples")
-  exptb$phaselab <- apply(exptb, 1, function(x) rep(x$phase, length(x$tps)),
-    simplify = FALSE
+  # build the experiment
+  arguments <- .build_experiment(
+    design = design,
+    options = options, model = model
   )
-  exptb$blocks <- apply(exptb, 1, function(x) rep(x$block_size, length(x$tps)),
-    simplify = FALSE
-  )
+  # add mapping
+  arguments$mapping <- list(design@mapping)
+  # add parameters
+  arguments$parameters <- list(parameters)
 
-  # one last manipulation to concatenate phases into single rows
-  exptb <- exptb %>%
-    dplyr::group_by(.data$iteration, .data$group) |>
-    dplyr::summarise(
-      tp = list(unlist(.data$tps)),
-      is_test = list(unlist(.data$is_test)),
-      phase = list(unlist(.data$phaselab)),
-      block_size = list(unlist(.data$blocks))
-    )
-
-  # bundle into experiences
-  experience <- apply(
-    exptb[c(-1)], 1,
-    function(x) do.call("cbind.data.frame", x)
-  )
-
-  # gather into tibble
-  arguments <- tibble::tibble(
-    model,
-    exptb[, c("iteration", "group")],
-    experience,
-    parameters = list(parameters),
-    mapping = list(design@mapping)
-  )
   return(methods::new("CalmrExperiment",
     arguments = arguments, design = design
   ))
@@ -146,4 +108,53 @@ make_experiment <- function(
 .gcd <- function(x, y) {
   r <- x %% y
   return(ifelse(r, .gcd(y, r), y))
+}
+
+# general function to build experiment
+.build_experiment <- function(design, options, model) {
+  # sample trials
+  exptb <- design@design |>
+    tidyr::expand_grid(iteration = 1:options$iterations)
+
+  exptb$samples <- apply(exptb, 1, function(x) {
+    do.call(
+      .sample_trials,
+      c(x$trial_info, list(
+        randomize = x$randomize,
+        masterlist = design@mapping$trial_names,
+        miniblocks = options$miniblocks
+      ))
+    )
+  })
+
+  # add phaselab and block information
+  exptb <- tidyr::unnest_wider(exptb, "samples")
+  exptb$phaselab <- apply(exptb, 1, function(x) rep(x$phase, length(x$tps)),
+    simplify = FALSE
+  )
+  exptb$blocks <- apply(exptb, 1, function(x) rep(x$block_size, length(x$tps)),
+    simplify = FALSE
+  )
+
+  # one last manipulation to concatenate phases into single rows
+  exptb <- exptb %>%
+    dplyr::group_by(.data$iteration, .data$group) |>
+    dplyr::summarise(
+      tp = list(unlist(.data$tps)),
+      is_test = list(unlist(.data$is_test)),
+      phase = list(unlist(.data$phaselab)),
+      block_size = list(unlist(.data$blocks))
+    )
+
+  # bundle into experiences
+  experience <- apply(
+    exptb[c(-1)], 1,
+    function(x) do.call("cbind.data.frame", x)
+  )
+
+  tibble::tibble(
+    model,
+    exptb[, c("iteration", "group")],
+    experience
+  )
 }
