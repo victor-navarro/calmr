@@ -89,17 +89,17 @@ of key associations, with no repercussion to what
 the model learns on normal training trials.
 
 If you want to check whether your trial string will work with the simulator, 
-you can use `trial_parser`.
+you can use `phase_parser`.
 The function returns a list with a lot of information, 
 so let's print only some of the fields.
 
 ```{r}
 # not specifying a number of AB trials. Bad practice!
-trial <- trial_parser("AB/10AC")
-trial[c("trial_names", "trial_repeats")]
+trial <- phase_parser("AB/10AC")
+trial$general_info[c("trial_names", "trial_repeats")]
 # considering a configural cue for elements AB
-trial <- trial_parser("10AB(AB)(US)")
-trial[c("unique_nominal_stimuli")]
+trial <- phase_parser("10AB(AB)(US)")
+trial$general_info[c("func2nomi")]
 ```
 
 
