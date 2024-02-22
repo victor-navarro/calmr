@@ -1,11 +1,11 @@
 ---
-title: "RW1972_math"
+title: "RW1972"
 author: "Victor Navarro"
 output: rmarkdown::html_vignette
 bibliography: references.bib
 csl: apa.csl
 vignette: >
-  %\VignetteIndexEntry{RW1972_math}
+  %\VignetteIndexEntry{RW1972}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

@@ -46,7 +46,7 @@ CalmrExperiment methods
 }
 \examples{
 # Concatenate designs
-df <- get_design("basic_blocking")
+df <- get_design("blocking")
 pars1 <- get_parameters(df, model = "RW1972")
 pars2 <- get_parameters(df, model = "MAC1975")
 ex1 <- make_experiment(df, model = "RW1972")

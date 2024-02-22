@@ -1,9 +1,9 @@
 # welcome design
 base_df <- data.frame(
   Group = c("Blocking", "Control"),
-  P1 = c("10N>(US)", ""),
+  P1 = c("10N(US)", ""),
   R1 = FALSE,
-  P2 = c("10NL>(US)/#10L", "10NL>(US)/#10L"),
+  P2 = c("10NL(US)/10#L", "10NL(US)/10#L"),
   R2 = FALSE
 )
 

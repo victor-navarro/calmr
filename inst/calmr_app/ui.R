@@ -40,6 +40,8 @@ ui <- shinydashboard::dashboardPage(
       tabItem(
         tabName = "home",
         fluidRow(
+          # only tracks shinyapps website
+          tags$head(includeHTML("google_analytics.html")),
           shinydashboard::box(
             width = 12,
             title = "Design",
@@ -127,9 +129,10 @@ ui <- shinydashboard::dashboardPage(
             title = "Results",
             shiny::conditionalPanel(
               "output.ran",
+              align = "center",
               shiny::selectInput(
                 inputId = "plot_selection",
-                label = NULL, choices = NA, multiple = T
+                label = NULL, choices = NA, multiple = TRUE
               ),
               shiny::plotOutput("plot")
             )

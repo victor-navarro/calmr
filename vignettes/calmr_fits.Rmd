@@ -279,7 +279,6 @@ This vignette was pre-generated, as I don't want the user to fit the
 model at the time of installation. I will try to keep up with it as the 
 package develops, but if you spot any inconsistencies, please drop me a line.
 
-### Footnotes
 [^1]: Within this step, we also filter all output nodes that are not related to expecting one of the USs, 
 we classify responses as being nosepokes (produced by the US) or 
 lever presses (produced by the levers), and calculate the mean across blocks of trials. 

@@ -24,16 +24,18 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/calmr_app.html">calmr_app</a>
+    <h6 class="dropdown-header" data-toc-skip>Model reference</h6>
+    <a class="dropdown-item" href="../articles/RW1972.html">RW1972</a>
+    <a class="dropdown-item" href="../articles/MAC1975.html">MAC1975</a>
+    <a class="dropdown-item" href="../articles/PKH1982.html">PKH1982</a>
+    <a class="dropdown-item" href="../articles/SM2007.html">SM2007</a>
+    <a class="dropdown-item" href="../articles/HD2022.html">HD2022</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Demos</h6>
     <a class="dropdown-item" href="../articles/calmr_basics.html">calmr_basics</a>
+    <a class="dropdown-item" href="../articles/calmr_app.html">calmr_app</a>
     <a class="dropdown-item" href="../articles/calmr_fits.html">calmr_fits</a>
-    <a class="dropdown-item" href="../articles/heidi_math.html">heidi_math</a>
     <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
-    <a class="dropdown-item" href="../articles/mac1975_math.html">MAC1975_math</a>
-    <a class="dropdown-item" href="../articles/PKH1982_math.html">PKH1982_math</a>
-    <a class="dropdown-item" href="../articles/RW1972_math.html">RW1972_math</a>
-    <a class="dropdown-item" href="../articles/SM2007_math.html">SM2007_math</a>
-    <a class="dropdown-item" href="../articles/SM2007_sims.html">SM2007_sims</a>
   </div>
 </li>
 <li class="nav-item">
@@ -106,32 +108,183 @@ or arguments for the model call (e.g., debug)</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Using a data.frame only (throws warning)</span></span></span>
 <span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_design.html">get_design</a></span><span class="op">(</span><span class="st">"relative_validity"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in get_design("relative_validity"):</span> could not find function "get_design"</span>
 <span class="r-in"><span><span class="fu">run_experiment</span><span class="op">(</span><span class="va">df</span>, model <span class="op">=</span> <span class="st">"RW1972"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in df[, 1]:</span> object of type 'closure' is not subsettable</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>No parameters were passed. Getting default values</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $rs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,050 × 9</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    model  group  trial trial_type phase s1    s2    block_size value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> RW1972 Pseudo    21 #1A        P2    1     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> RW1972 True      21 #1A        P2    1     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> RW1972 Pseudo    21 #1A        P2    A     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> RW1972 True      21 #1A        P2    A     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> RW1972 Pseudo    21 #1A        P2    B     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> RW1972 True      21 #1A        P2    B     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> RW1972 Pseudo    21 #1A        P2    C     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> RW1972 True      21 #1A        P2    C     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> RW1972 Pseudo    21 #1A        P2    US    1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> RW1972 True      21 #1A        P2    US    1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1,040 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $vs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,050 × 9</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    model  group  trial trial_type phase s1    s2    block_size value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> RW1972 Pseudo    21 #1A        P2    1     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> RW1972 True      21 #1A        P2    1     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> RW1972 Pseudo    21 #1A        P2    A     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> RW1972 True      21 #1A        P2    A     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> RW1972 Pseudo    21 #1A        P2    B     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> RW1972 True      21 #1A        P2    B     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> RW1972 Pseudo    21 #1A        P2    C     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> RW1972 True      21 #1A        P2    C     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> RW1972 Pseudo    21 #1A        P2    US    1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> RW1972 True      21 #1A        P2    US    1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1,040 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Using custom parameters</span></span></span>
 <span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_design.html">get_design</a></span><span class="op">(</span><span class="st">"relative_validity"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in get_design("relative_validity"):</span> could not find function "get_design"</span>
 <span class="r-in"><span><span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_parameters.html">get_parameters</a></span><span class="op">(</span><span class="va">df</span>, model <span class="op">=</span> <span class="st">"HD2022"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in df[, 1]:</span> object of type 'closure' is not subsettable</span>
 <span class="r-in"><span><span class="va">pars</span><span class="op">$</span><span class="va">alphas</span><span class="op">[</span><span class="st">"US"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0.6</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in pars$alphas["US"] &lt;- 0.6:</span> object 'pars' not found</span>
 <span class="r-in"><span><span class="fu">run_experiment</span><span class="op">(</span><span class="va">df</span>, parameters <span class="op">=</span> <span class="va">pars</span>, model <span class="op">=</span> <span class="st">"HD2022"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in df[, 1]:</span> object of type 'closure' is not subsettable</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $as</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 210 × 8</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    model  group  trial trial_type phase s1    block_size value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> HD2022 Pseudo    21 #1A        P2    1              1 0.4  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> HD2022 True      21 #1A        P2    1              1 0.4  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> HD2022 Pseudo    21 #1A        P2    A              1 0.4  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> HD2022 True      21 #1A        P2    A              1 0.4  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> HD2022 Pseudo    21 #1A        P2    B              1 0.298</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> HD2022 True      21 #1A        P2    B              1 0.100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> HD2022 Pseudo    21 #1A        P2    C              1 0.370</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> HD2022 True      21 #1A        P2    C              1 0.387</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> HD2022 Pseudo    21 #1A        P2    US             1 0.273</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> HD2022 True      21 #1A        P2    US             1 0.200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 200 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $acts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 730 × 10</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    model  group  trial trial_type phase s1    s2    block_size type    value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> HD2022 Pseudo    21 #1A        P2    1     1              1 chainvs     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> HD2022 True      21 #1A        P2    1     1              1 chainvs     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> HD2022 Pseudo    21 #1A        P2    A     1              1 chainvs     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> HD2022 True      21 #1A        P2    A     1              1 chainvs     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> HD2022 Pseudo    21 #1A        P2    1     A              1 chainvs     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> HD2022 True      21 #1A        P2    1     A              1 chainvs     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> HD2022 Pseudo    21 #1A        P2    A     A              1 chainvs     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> HD2022 True      21 #1A        P2    A     A              1 chainvs     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> HD2022 Pseudo    21 #1A        P2    1     B              1 chainvs     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> HD2022 True      21 #1A        P2    1     B              1 chainvs     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 720 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $rs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,050 × 9</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    model  group  trial trial_type phase s1    s2    block_size value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> HD2022 Pseudo    21 #1A        P2    1     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> HD2022 True      21 #1A        P2    1     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> HD2022 Pseudo    21 #1A        P2    A     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> HD2022 True      21 #1A        P2    A     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> HD2022 Pseudo    21 #1A        P2    B     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> HD2022 True      21 #1A        P2    B     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> HD2022 Pseudo    21 #1A        P2    C     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> HD2022 True      21 #1A        P2    C     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> HD2022 Pseudo    21 #1A        P2    US    1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> HD2022 True      21 #1A        P2    US    1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1,040 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $vs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,050 × 9</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    model  group  trial trial_type phase s1    s2    block_size value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> HD2022 Pseudo    21 #1A        P2    1     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> HD2022 True      21 #1A        P2    1     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> HD2022 Pseudo    21 #1A        P2    A     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> HD2022 True      21 #1A        P2    A     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> HD2022 Pseudo    21 #1A        P2    B     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> HD2022 True      21 #1A        P2    B     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> HD2022 Pseudo    21 #1A        P2    C     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> HD2022 True      21 #1A        P2    C     1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> HD2022 Pseudo    21 #1A        P2    US    1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> HD2022 True      21 #1A        P2    US    1              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1,040 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Using CalmrExperiment, for more iterations</span></span></span>
 <span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_design.html">get_design</a></span><span class="op">(</span><span class="st">"blocking"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in get_design("blocking"):</span> could not find function "get_design"</span>
 <span class="r-in"><span><span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_parameters.html">get_parameters</a></span><span class="op">(</span><span class="va">df</span>, model <span class="op">=</span> <span class="st">"SM2007"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in df[, 1]:</span> object of type 'closure' is not subsettable</span>
 <span class="r-in"><span><span class="va">exper</span> <span class="op">&lt;-</span> <span class="fu"><a href="make_experiment.html">make_experiment</a></span><span class="op">(</span><span class="va">df</span>,</span></span>
 <span class="r-in"><span>  parameters <span class="op">=</span> <span class="va">pars</span>, model <span class="op">=</span> <span class="st">"SM2007"</span>,</span></span>
 <span class="r-in"><span>  options <span class="op">=</span> <span class="fu"><a href="get_exp_opts.html">get_exp_opts</a></span><span class="op">(</span>iterations <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in df[, 1]:</span> object of type 'closure' is not subsettable</span>
 <span class="r-in"><span><span class="fu">run_experiment</span><span class="op">(</span><span class="va">exper</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in is_experiment(x):</span> object 'exper' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $acts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 800 × 9</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    model  group    trial trial_type phase s1    s2    block_size value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> SM2007 Blocking     1 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> SM2007 Blocking     2 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> SM2007 Blocking     3 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> SM2007 Blocking     4 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> SM2007 Blocking     5 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> SM2007 Blocking     6 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> SM2007 Blocking     7 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> SM2007 Blocking     8 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> SM2007 Blocking     9 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> SM2007 Blocking    10 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 790 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $relacts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 800 × 9</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    model  group    trial trial_type phase s1    s2    block_size value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> SM2007 Blocking     1 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> SM2007 Blocking     2 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> SM2007 Blocking     3 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> SM2007 Blocking     4 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> SM2007 Blocking     5 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> SM2007 Blocking     6 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> SM2007 Blocking     7 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> SM2007 Blocking     8 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> SM2007 Blocking     9 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> SM2007 Blocking    10 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 790 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $vs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 800 × 9</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    model  group    trial trial_type phase s1    s2    block_size value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> SM2007 Blocking     1 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> SM2007 Blocking     2 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> SM2007 Blocking     3 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> SM2007 Blocking     4 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> SM2007 Blocking     5 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> SM2007 Blocking     6 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> SM2007 Blocking     7 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> SM2007 Blocking     8 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> SM2007 Blocking     9 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> SM2007 Blocking    10 N&gt;(US)     P1    0     0              1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 790 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $os</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4,000 × 10</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    model  group    trial trial_type phase s1    s2    block_size comp  value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> SM2007 Blocking     1 N&gt;(US)     P1    0     0              1 0        -<span style="color: #BB0000;">1</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> SM2007 Blocking     2 N&gt;(US)     P1    0     0              1 0        -<span style="color: #BB0000;">1</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> SM2007 Blocking     3 N&gt;(US)     P1    0     0              1 0        -<span style="color: #BB0000;">1</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> SM2007 Blocking     4 N&gt;(US)     P1    0     0              1 0        -<span style="color: #BB0000;">1</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> SM2007 Blocking     5 N&gt;(US)     P1    0     0              1 0        -<span style="color: #BB0000;">1</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> SM2007 Blocking     6 N&gt;(US)     P1    0     0              1 0        -<span style="color: #BB0000;">1</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> SM2007 Blocking     7 N&gt;(US)     P1    0     0              1 0        -<span style="color: #BB0000;">1</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> SM2007 Blocking     8 N&gt;(US)     P1    0     0              1 0        -<span style="color: #BB0000;">1</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> SM2007 Blocking     9 N&gt;(US)     P1    0     0              1 0        -<span style="color: #BB0000;">1</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> SM2007 Blocking    10 N&gt;(US)     P1    0     0              1 0        -<span style="color: #BB0000;">1</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 3,990 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

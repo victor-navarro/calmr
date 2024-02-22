@@ -18,13 +18,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-
-```{R}
-library(calmr)
-```
-
-# Using calmr in R
-
 ## Your first simulation
 
 To perform your first simulation you will need:
@@ -38,6 +31,8 @@ We will use a data.frame to specify our experimental design.
 Let's specify a blocking design.
 
 ```{r}
+library(calmr)
+
 my_blocking <- data.frame(
   Group = c("Exp", "Control"),
   Phase1 = c("10A>(US)", "10C>(US)"),
@@ -172,10 +167,10 @@ Each model supports different types of plots according to the results they can p
 ```{r}
 # get all the plots for the experiment
 plots <- plot(my_experiment)
-names(plots$RW1972)
+names(plots)
 # or get a specific type of plot
 specific_plot <- plot(my_experiment, type = "vs")
-names(specific_plot$RW1972)
+names(specific_plot)
 # show which plots are supported by the model we are using
 supported_plots("RW1972")
 ```
