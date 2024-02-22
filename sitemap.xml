@@ -7,16 +7,19 @@
     <loc>https://victornavarro.org/calmr/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://victornavarro.org/calmr/articles/PKH1982_math.html</loc>
+    <loc>https://victornavarro.org/calmr/articles/HD2022.html</loc>
   </url>
   <url>
-    <loc>https://victornavarro.org/calmr/articles/RW1972_math.html</loc>
+    <loc>https://victornavarro.org/calmr/articles/MAC1975.html</loc>
   </url>
   <url>
-    <loc>https://victornavarro.org/calmr/articles/SM2007_math.html</loc>
+    <loc>https://victornavarro.org/calmr/articles/PKH1982.html</loc>
   </url>
   <url>
-    <loc>https://victornavarro.org/calmr/articles/SM2007_sims.html</loc>
+    <loc>https://victornavarro.org/calmr/articles/RW1972.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calmr/articles/SM2007.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/articles/calmr_app.html</loc>
@@ -28,16 +31,10 @@
     <loc>https://victornavarro.org/calmr/articles/calmr_fits.html</loc>
   </url>
   <url>
-    <loc>https://victornavarro.org/calmr/articles/heidi_math.html</loc>
-  </url>
-  <url>
     <loc>https://victornavarro.org/calmr/articles/heidi_similarity.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://victornavarro.org/calmr/articles/mac1975_math.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/authors.html</loc>
@@ -151,6 +148,9 @@
     <loc>https://victornavarro.org/calmr/reference/pati.html</loc>
   </url>
   <url>
+    <loc>https://victornavarro.org/calmr/reference/phase_parser.html</loc>
+  </url>
+  <url>
     <loc>https://victornavarro.org/calmr/reference/pipe.html</loc>
   </url>
   <url>
@@ -158,8 +158,5 @@
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/run_experiment.html</loc>
-  </url>
-  <url>
-    <loc>https://victornavarro.org/calmr/reference/trial_parser.html</loc>
   </url>
 </urlset>

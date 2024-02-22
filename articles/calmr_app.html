@@ -48,16 +48,18 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/PKH1982_math.html">PKH1982_math</a>
-    <a class="dropdown-item" href="../articles/RW1972_math.html">RW1972_math</a>
-    <a class="dropdown-item" href="../articles/SM2007_math.html">SM2007_math</a>
-    <a class="dropdown-item" href="../articles/SM2007_sims.html">SM2007_sims</a>
-    <a class="dropdown-item" href="../articles/calmr_app.html">calmr_app</a>
+    <h6 class="dropdown-header" data-toc-skip>Model reference</h6>
+    <a class="dropdown-item" href="../articles/RW1972.html">RW1972</a>
+    <a class="dropdown-item" href="../articles/MAC1975.html">MAC1975</a>
+    <a class="dropdown-item" href="../articles/PKH1982.html">PKH1982</a>
+    <a class="dropdown-item" href="../articles/SM2007.html">SM2007</a>
+    <a class="dropdown-item" href="../articles/HD2022.html">HD2022</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>Demos</h6>
     <a class="dropdown-item" href="../articles/calmr_basics.html">calmr_basics</a>
+    <a class="dropdown-item" href="../articles/calmr_app.html">calmr_app</a>
     <a class="dropdown-item" href="../articles/calmr_fits.html">calmr_fits</a>
-    <a class="dropdown-item" href="../articles/heidi_math.html">heidi_math</a>
     <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
-    <a class="dropdown-item" href="../articles/mac1975_math.html">MAC1975_math</a>
   </div>
 </li>
 <li class="nav-item">
@@ -104,9 +106,9 @@ Navarro</h4>
 <p>If you are a beginner useR or simply want to simulate an experimental
 design to see what a model does, you might be interested in using the
 calmr application.</p>
-<p>The calmr application offers a GUI that allows the user to simulate
-experiments without any code. If you want to use the online app, you can
-find it at: <a href="https://victor-navarro.shinyapps.io/calmr_app/" class="external-link">https://victor-navarro.shinyapps.io/calmr_app/</a>.
+<p>The calmr application offers a GUI that allows you to simulate
+experiments without writing any code. If you want to use the online app,
+you can find it at: <a href="https://victor-navarro.shinyapps.io/calmr_app/" class="external-link">https://victor-navarro.shinyapps.io/calmr_app/</a>.
 Alternatively, if you have installed the calmr package, you can launch
 the app via <code>calmr::calmr_app()</code>. The rest of the tutorial
 assumes that you have the app open and ready to run. Let’s break down
@@ -121,44 +123,41 @@ the GUI.</p>
 <div class="section level3">
 <h3 id="design-table">Design Table<a class="anchor" aria-label="anchor" href="#design-table"></a>
 </h3>
-<p>The design table is where the user specifies the experimental design
-to run. Using the Group- and Group+, we can remove or add groups from
-the design. Using the Phase- and Phase+, we can remove or add phases
-from the design. The Parse Design button is used to parse the design,
-which is a required step to run the simulation. But, let’s save that for
-later.</p>
-<p>The P1 and P2 columns above specify the phases in the experiments,
-they are simulated from left to right. Each row in those columns
-specifies the trials given to its corresponding group (G1 or G2, in this
-case). There is a specific syntax to be used here (see <a href="calmr_basics.html">calmr_basics</a> for additional information),
-but for now, it will suffice to say that:</p>
+<p>The design table is where you specify the experimental design to run.
+Using the Group- and Group+, you can remove or add groups from the
+design. Using the Phase- and Phase+, you can remove or add phases from
+the design. The Parse Design button is used to parse the design, which
+is a required step to run the simulation. More on that later.</p>
+<p>The P1 and P2 columns above specify the phases in the experiment and
+are simulated from left to right. Each entry in those columns specifies
+the trials given to the corresponding groups (G1 or G2, in this case).
+These entries must obey a special syntax (see <a href="calmr_basics.html">calmr_basics</a> for additional information).
+For now, it will suffice to say that:</p>
 <ul>
-<li>The number of trials is specified via the digits to the left. For
-example, 10A&gt;(US) specifies ten “A&gt;(US)” trials.</li>
+<li>The number of trials is specified via digits to the left of each
+trial. For example, 10A(US) specifies ten “A(US)” trials.</li>
 <li>Stimuli (or their elements) are specified with letters. For example,
-10AB&gt;(US) specifies a trial in which elements A and B are followed by
-element US (see last point).</li>
-<li>Multiple trials per phase are separated via forward slash (/).</li>
-<li>The “delays” between the presentation of the stimuli are specified
-via the greater-than sign (&gt;). For example, 10A&gt;(US) implies that
-A is presented, before, but never overlapping with US, and</li>
+10AB(US) specifies with elements A and B and US.</li>
 <li>Named stimuli are specified within parentheses. For example, (US)
 implies that there is an element named “US” instead of a compound
 containing the elements “U” and “S”.</li>
+<li>Multiple trials per phase are separated via forward slash (/).</li>
 </ul>
 <p>Additionally, one can choose to randomize the trials within each
 phase by ticking the boxes in the R1 and R2 columns. It is important to
-note that whatever the user sets up here will interact with the
-“Randomize trials in miniblocks” option in the Sim Preferences portion
-of the app (see ahead). Here’s the full breakdown of the behaviour:</p>
+note that whatever the user sets up here will interact with the “Create
+trial blocks” option in the <em>Options</em> tab in the sidebar (see
+ahead). Here’s the full breakdown of combinations and their
+behaviour:</p>
 <ul>
 <li>Table checked and preferences checked: Trials will be shuffled
-within miniblocks if possible. For example, 2A/2B gets shuffled into 2
-blocks each containing one A and one B trial, but 2A/1B gets shuffled
-into 1 block containign two A trials and one B trial.</li>
-<li>Table unchecked and preferences checked: Trials will be intermixed
-within miniblocks if possible. For example, 2A/2B gets shuffled into 2
-blocks, resulting in the sequence ABAB.</li>
+within blocks if possible (based on the greater common factor). For
+example, 2A/2B gets shuffled into 2 blocks each containing one A and one
+B trial, but 2A/1B gets shuffled into 1 block containign two A trials
+and one B trial.</li>
+<li>Table unchecked and preferences checked: Trials will be
+deterministically intermixed within blocks if possible. For example,
+2A/2B gets shuffled into 2 blocks, resulting in the sequence ABAB.</li>
 <li>Table checked and preferences unchecked: Trials will be shuffled
 completely at random.</li>
 <li>Table unchecked and preferences unchecked: Trials will be given in
@@ -175,13 +174,14 @@ GUI.</p>
 <img src="calmr_app_parsed_app.png" width="600" alt=""><p class="caption">The calmr app GUI after parsing</p>
 </div>
 <p>After parsing a valid design. The user can set up the parameters for
-the experiment (including all stimulus-related parameters). In this
-case, the Rescorla-Wagner model has 4 parameters per stimulus. The
-default values are fairly sensible, but the user can futher modify the
-parameters by hand, if desired.</p>
+the experiment (including all stimulus-related and global parameters).
+In this case, the Rescorla-Wagner model has 4 parameters per stimulus.
+The default values are fairly sensible, but you can modify each
+parameter by hand as you would in your favorite spreadsheet
+software.</p>
 <p>The parametrization of each model in calmr can sometimes differ from
 what appears in the literature. The following table contains links to
-the pages</p>
+the documentation pages for each model.</p>
 <table class="table">
 <colgroup>
 <col width="47%">
@@ -197,32 +197,32 @@ the pages</p>
 <tr class="odd">
 <td align="center">Rescorla and Wagner (1972)</td>
 <td align="center">RW1972</td>
-<td align="center"><a href="RW1972_math.html">Link</a></td>
+<td align="center"><a href="RW1972.html">Link</a></td>
 </tr>
 <tr class="even">
 <td align="center">Mackintosh (1975)</td>
 <td align="center">MAC1975</td>
-<td align="center"><a href="MAC1975_math.html">Link</a></td>
+<td align="center"><a href="MAC1975.html">Link</a></td>
 </tr>
 <tr class="odd">
 <td align="center">Pearce, Kaye, and Hall (1982)</td>
 <td align="center">PKH1982</td>
-<td align="center"><a href="PKH1982_math.html">Link</a></td>
+<td align="center"><a href="PKH1982.html">Link</a></td>
 </tr>
 <tr class="even">
 <td align="center">Stout and Miller (2007)</td>
 <td align="center">SM2007</td>
-<td align="center"><a href="SM2007_math.html">Link</a></td>
+<td align="center"><a href="SM2007.html">Link</a></td>
 </tr>
 <tr class="odd">
 <td align="center">Honey, Dwyer and Illiescu (2020)</td>
 <td align="center">HDI2020</td>
-<td align="center"><a href="heidi_math.html">Link</a></td>
+<td align="center"><a href="HD2022.html">Link</a></td>
 </tr>
 <tr class="even">
 <td align="center">Honey and Dwyer (2022)</td>
 <td align="center">HD2022</td>
-<td align="center"><a href="heidi_math.html">Link</a></td>
+<td align="center"><a href="HD2022.html">Link</a></td>
 </tr>
 </tbody>
 </table>
@@ -230,22 +230,23 @@ the pages</p>
 <div class="section level3">
 <h3 id="results">Results<a class="anchor" aria-label="anchor" href="#results"></a>
 </h3>
-<p>Note that after parsing, a new button, “Run Model” has appeared. A
-final click on that button will run the model and populate the “Results”
-and “Association Graphs” portions of the app. Go ahead and run the
-model.</p>
+<p>A new button appears after parsing an experiment. A final click on
+that button will run the model and populate the “Results” and
+“Association Graphs” portions of the app. Go ahead and run the
+experiment. After you do, a new button will appear, allowing you to
+download the results as a spreadsheet.</p>
 <div class="figure">
 <img src="calmr_app_ran_app.png" width="600" alt=""><p class="caption">The calmr app GUI after running the model</p>
 </div>
 <p>In the calmr app, the results are shown visually. Clicking the bar
-above the graph (the one containing “G1: Associations” above) will show
-all the plots available. The first portion of each plot’s name denotes
-the group’s name. In this case, the “Associations” plots show the
+above the graph (the one containing “Blocking - Response Strength …”
+above) will show you all the plots available. The first portion of each
+plot’s name denotes the group’s name. In the above, the plot shows the
 strength of the associations among all stimuli in the experiment across
-trials (or miniblocks), faceted with phases as columns, and origin
-stimuli as rows. For example, the yellow lines above denote the strength
-that A and B have with the US. The top column corresponds to A (look at
-the label to the right) and the middle column corresponds to B.</p>
+trials (or blocks), faceted with phases as columns, and origin stimuli
+as rows. For example, the yellow lines above denote the strength that A
+and B have with the US. The top column corresponds to A (look at the
+label to the right) and the middle column corresponds to B.</p>
 <p>Go ahead and explore all available plots. These are usually self
 explanatory, but you should consult the documentation of the package in
 case something is unclear (specially when using more obscure
@@ -258,9 +259,9 @@ models).</p>
 strength of the associations in the model on a given trial, for all
 groups. Yellow denotes excitatory strength (i.e., positive values), gray
 denotes neutral strength (i.e., values close to zero), and purple (not
-shown above) shows inhibitory strength (i.e., negative values). Go ahead
-and move the “Trial” slider to explore how the associations in the model
-change across the experiment.</p>
+shown above) shows inhibitory strength (i.e., negative values). Move the
+“Trial” slider to explore how the associations in the model change
+across the experiment.</p>
 </div>
 <div class="section level3">
 <h3 id="other-bits">Other bits<a class="anchor" aria-label="anchor" href="#other-bits"></a>
@@ -269,19 +270,12 @@ change across the experiment.</p>
 calmr app. The following sections describe additional options
 convenience functions that I found useful.</p>
 <div class="section level4">
-<h4 id="sim-preferences">Sim Preferences<a class="anchor" aria-label="anchor" href="#sim-preferences"></a>
+<h4 id="options">Options<a class="anchor" aria-label="anchor" href="#options"></a>
 </h4>
-<p>Here we pick a model (by default, Rescorla &amp; Wagner, 1972), set
-the number of iterations to run the model for (important if model
-behaviour is sensitive to trial order effects), and whether we want to
-create miniblocks.</p>
-</div>
-<div class="section level4">
-<h4 id="plot-preferences">Plot Preferences<a class="anchor" aria-label="anchor" href="#plot-preferences"></a>
-</h4>
-<p>Here we can choose to plot in a common scale for the y-axis (active
-by default), or filter out results on the basis of phases or trial
-types, if we want to.</p>
+<p>Here we set the number of iterations to run the experiment for
+(important if model behaviour is sensitive to trial order effects), and
+whether we want to create trial blocks. Here we also set Here we can
+choose to plot in a common scale for the y-axis (active by default).</p>
 </div>
 </div>
 <div class="section level3">
