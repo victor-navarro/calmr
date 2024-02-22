@@ -7,7 +7,7 @@
 #' \itemize{
 #' \item{
 #' Each entry in even-numbered columns of df is
-#' a string formatted as per trial_parser.
+#' a string formatted as per phase_parser.
 #' }
 #' }
 #' @examples
@@ -16,7 +16,7 @@
 #'   P1 = c("10AB(US)", "10A(US)"), R1 = c(TRUE, TRUE)
 #' )
 #' parse_design(df)
-#' @seealso \code{\link{trial_parser}}
+#' @seealso \code{\link{phase_parser}}
 #' @export
 
 parse_design <- function(df, model = NULL, ...) {

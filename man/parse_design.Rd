@@ -23,7 +23,7 @@ Parse design data.frame
 \itemize{
 \item{
 Each entry in even-numbered columns of df is
-a string formatted as per trial_parser.
+a string formatted as per phase_parser.
 }
 }
 }
@@ -35,5 +35,5 @@ df <- data.frame(
 parse_design(df)
 }
 \seealso{
-\code{\link{trial_parser}}
+\code{\link{phase_parser}}
 }

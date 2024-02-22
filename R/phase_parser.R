@@ -8,6 +8,13 @@
 # trial_info: is a trial-named list of lists
 # general_info: includes general information glanced from the string
 phase_parser <- function(phase_string) {
+  # check for empty phase_strings
+  if (!nchar(phase_string)) {
+    dummy <- rapply(phase_parser("1A"), function(x) NULL, how = "replace")
+    dummy$general_info$trial_repeats <- 0
+    return(dummy)
+  }
+
   ts <- unlist(stringr::str_split(phase_string, "/"))
   # parse each trial separately
   tinfo <- sapply(ts, .parse_trial, simplify = FALSE)
