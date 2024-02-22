@@ -21,7 +21,11 @@ calmr_model_plot <- function(dat, type) {
 
   # Assemble aesthetics
   if (type %in% c("vs", "rs", "acts", "relacts")) {
-    .aes <- ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s2)
+    .aes <- ggplot2::aes(
+      x = .data$trial,
+      y = .data$value,
+      colour = .data$s2
+    )
   }
   if (type %in% c("as")) {
     .aes <- ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s1)
@@ -66,8 +70,11 @@ calmr_model_plot <- function(dat, type) {
 
   # Define grid
   grid <- list()
-  if (type %in% c("vs", "rs", "eivs")) {
-    grid <- ggplot2::facet_grid(.data$s1 ~ .data$phase, scales = "free_x")
+  if (type %in% c("vs", "eivs")) {
+    grid <- ggplot2::facet_grid(
+      .data$s1 ~ .data$phase,
+      scales = "free_x"
+    )
   }
   if (type %in% c("acts", "relacts")) {
     grid <- ggplot2::facet_grid(
@@ -79,6 +86,13 @@ calmr_model_plot <- function(dat, type) {
     grid <- ggplot2::facet_grid(
       .data$s1 ~ .data$s2 + .data$phase,
       scales = "free_x", switch = "y"
+    )
+  }
+  if (type %in% c("rs")) {
+    grid <- ggplot2::facet_grid(
+      .data$s1 ~ .data$phase +
+        .data$trial_type,
+      scales = "free_x"
     )
   }
   if (type %in% c("as")) {

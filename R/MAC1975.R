@@ -14,117 +14,86 @@ MAC1975 <- function(v = NULL, # nolint: object_name_linter.
                     parameters,
                     experience,
                     mapping, ...) {
-  # Assign parameters
-  alphas <- parameters$alphas
-  min_alphas <- parameters$min_alphas
-  max_alphas <- parameters$max_alphas
-  betas_on <- parameters$betas_on
-  betas_off <- parameters$betas_off
-  lambdas <- parameters$lambdas
-  thetas <- parameters$thetas
-  gammas <- parameters$gammas
-
-
   # No functional stimuli check
   .calmr_assert("no_functional_stimuli", mapping)
 
   # data initialization
   ntrials <- length(experience$tp)
-  snames <- names(alphas) # get functional stimuli names
-  nstim <- length(snames)
+  fsnames <- mapping$unique_functional_stimuli
 
   if (is.null(v)) {
-    v <- gen_ss_weights(snames)
+    v <- gen_ss_weights(fsnames)
   }
 
   vs <- rs <- array(NA,
     dim = c(ntrials, dim(v)),
-    dimnames = list(NULL, rownames(v), rownames(v))
+    dimnames = list(NULL, fsnames, fsnames)
   )
   as <- array(NA,
     dim = c(ntrials, nrow(v)),
-    dimnames = list(NULL, rownames(v))
+    dimnames = list(NULL, fsnames)
   )
 
   # make matrix for attentional learning
-  nsmat <- abs(diag(nstim) - 1)
+  nsmat <- abs(diag(length(fsnames)) - 1)
 
   for (t in 1:ntrials) {
-    # get pre functional stimuli
-    prestims <- mapping$trial_pre_func[[experience$tp[t]]]
+    # get pointers
+    tn <- experience$tn[t]
+    # get nominal, and onehot stimuli
+    oh_fstims <- mapping$trial_ohs[[tn]]
+    nstims <- mapping$trial_nominals[[tn]]
 
-    # get post functional stimuli
-    poststims <- mapping$trial_post_func[[experience$tp[t]]]
+    # generate expectation and response matrices
+    # note the local error
+    e <- v * oh_fstims
+    r <- e
 
-    # join
-    allstims <- c(prestims, poststims)
-
-    # make one-hot vector of functional stimuli
-    oh_stims <- .makeOH(allstims, snames)
-    oh_prestims <- .makeOH(prestims, snames)
-    oh_poststims <- .makeOH(poststims, snames)
-
-    # generate expectation matrices
-    r <- v * oh_prestims
-    post_emat <- v * oh_poststims
+    # save data
+    vs[t, , ] <- v
+    as[t, ] <- parameters$alphas
+    rs[t, , ] <- r
 
     # learn if we need to
     if (!experience$is_test[t]) {
-      # get alphas betas and lambdas for learning
-      talphas <- tbetas <- pre_tlambdas <-
-        post_tlambdas <- stats::setNames(rep(0, length(snames)), snames)
+      talphas <- tbetas <- tlambdas <-
+        stats::setNames(rep(0, length(fsnames)), fsnames)
       # populating vector with nominal stimuli
       # values as functional stimuli values
-      talphas[allstims] <- alphas[allstims]
+      talphas[nstims] <- parameters$alphas[nstims]
 
-      # betas and lambdas vectors are initialized as if all stimuli are absent
-      tbetas <- betas_off
-      tbetas[allstims] <- betas_on[allstims]
-
-      pre_tlambdas[allstims] <- lambdas[allstims]
-      post_tlambdas[poststims] <- lambdas[poststims]
+      # betas and lambdas vectors
+      # are initialized as if all stimuli are absent
+      tbetas <- parameters$betas_off
+      tbetas[nstims] <- parameters$betas_on[nstims]
+      tlambdas[nstims] <- parameters$lambdas[nstims]
 
       # Learn associations
-      # first error (includes all stimuli in the sequence)
-      err1 <- oh_stims * t(pre_tlambdas - t(r))
-      # second error (includes only the second half stimuli)
-      err2 <- oh_poststims * t(post_tlambdas - t(post_emat))
+      err <- oh_fstims * t(tlambdas - t(e))
+      d <- t(t(oh_fstims * talphas * err) * tbetas)
 
-      d1 <- t(t(oh_prestims * talphas * err1) * tbetas) # first delta
-      d2 <- t(t(oh_poststims * talphas * err2) * tbetas) # second delta
-
-      diag(d1) <- diag(d2) <- 0
-      v <- v + d1 + d2
+      diag(d) <- 0
+      v <- v + d
 
       # Learn alphas
       # note: the expressions below take the expectation matrix,
       # pools it twice (once for each predictor, once for all i
       # but the predictor) and sweeps each with the lambda for each j.
-      # we do it twice just like the associations above,
-      # to take care of the associations in a sequential design
-      alphasd1 <- thetas * oh_prestims *
+      alphasd <- parameters$thetas * oh_fstims *
         rowSums(
-          abs(t((pre_tlambdas - t(r) %*% nsmat) * gammas))
-          - abs(t((pre_tlambdas - t(r)) * gammas))
+          abs(t((tlambdas - t(r) %*% nsmat) * parameters$gammas))
+          - abs(t((tlambdas - t(r)) * parameters$gammas))
         )
-
-      alphasd2 <- thetas * oh_poststims *
-        rowSums(
-          abs(t((post_tlambdas - t(post_emat) %*% nsmat) * gammas))
-          - abs(t((post_tlambdas - t(post_emat)) * gammas))
-        )
-
-      alphas <- alphas + alphasd1 + alphasd2
-      # apply lower limit on alphas
-      alphas[] <- sapply(1:nstim, function(i) max(min_alphas[i], alphas[i]))
-      # apply upper limit on alphas
-      alphas[] <- sapply(1:nstim, function(i) min(max_alphas[i], alphas[i]))
+      parameters$alphas <- parameters$alphas + alphasd
+      # apply lower limit on parameters$alphas
+      parameters$alphas[] <- sapply(seq_len(length(fsnames)), function(i) {
+        max(parameters$min_alphas[i], parameters$alphas[i])
+      })
+      # apply upper limit on parameters$alphas
+      parameters$alphas[] <- sapply(seq_len(length(fsnames)), function(i) {
+        min(parameters$max_alphas[i], parameters$alphas[i])
+      })
     }
-
-    # save data
-    vs[t, , ] <- v
-    as[t, ] <- alphas
-    rs[t, , ] <- r
   }
   results <- list(
     vs = vs,

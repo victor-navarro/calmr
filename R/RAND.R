@@ -15,31 +15,29 @@ RAND <- function(v = NULL, # nolint: object_name_linter.
                  mapping, ...) {
   # data initialization
   ntrials <- length(experience$tp)
+  fsnames <- mapping$unique_functional_stimuli
+
   if (is.null(v)) {
-    v <- gen_ss_weights(mapping$unique_functional_stimuli)
+    v <- gen_ss_weights(fsnames)
   }
 
   vs <- rs <- array(NA,
     dim = c(ntrials, dim(v)),
-    dimnames = list(NULL, rownames(v), rownames(v))
+    dimnames = list(NULL, fsnames, fsnames)
   )
 
-  fsnames <- rownames(v) # get functional stimuli names
-
   for (t in 1:ntrials) {
-    # get pre functional and nominal stimuli
-    fprestims <- mapping$trial_pre_func[[experience$tp[t]]]
-    # get post nominal stimuli
-    fpoststims <- mapping$trial_post_func[[experience$tp[t]]]
+    # get pointers
+    tn <- experience$tn[t]
 
-    # make one-hot vector of functional stimuli (for learning)
-    oh_fstims <- .makeOH(c(fprestims, fpoststims), fsnames)
+    # get nominal, and onehot stimuli
+    oh_fstims <- mapping$trial_ohs[[tn]]
 
     # randomize weight matrix
     v[] <- matrix(stats::runif(length(v), min = -1, max = 1), dim(v))
 
-    # generate expectation matrix (only for data saving purposes)
-    r <- apply(v, 2, function(x) x * oh_fstims)
+    # generate response matrix
+    r <- v * oh_fstims
 
     # save data
     vs[t, , ] <- v

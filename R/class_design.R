@@ -9,13 +9,15 @@
 #' @rdname CalmrDesign
 #' @exportClass CalmrDesign
 
-methods::setClass("CalmrDesign",
-  slots = c(
+methods::setClass(
+  "CalmrDesign",
+  representation(
     design = "tbl",
     mapping = "list",
     raw_design = "data.frame",
     augmented = "logical"
-  )
+  ),
+  prototype(augmented = FALSE)
 )
 methods::setMethod(
   "show", "CalmrDesign",

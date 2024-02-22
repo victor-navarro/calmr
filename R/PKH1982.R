@@ -13,136 +13,98 @@
 #' @returns A list with raw results
 
 PKH1982 <- function(
+    # nolint: object_name_linter.
     ev = NULL,
     iv = NULL, parameters,
     experience, mapping, ...) {
-  # Assign parameters
-  alphas <- parameters$alphas
-  min_alphas <- parameters$min_alphas
-  max_alphas <- parameters$max_alphas
-  betas_ex <- parameters$betas_ex
-  betas_in <- parameters$betas_in
-  lambdas <- parameters$lambdas
-  thetas <- parameters$thetas
-  gammas <- parameters$gammas
-
   .calmr_assert("no_functional_stimuli", mapping)
 
   # data initialization
   ntrials <- length(experience$tp)
-  snames <- names(alphas) # get functional stimuli names
-  nstim <- length(snames)
+  fsnames <- mapping$unique_functional_stimuli
 
   if (is.null(ev)) {
-    ev <- gen_ss_weights(snames)
+    ev <- gen_ss_weights(fsnames)
   }
   if (is.null(iv)) {
-    iv <- gen_ss_weights(snames)
+    iv <- gen_ss_weights(fsnames)
   }
-
   rs <- array(NA,
     dim = c(ntrials, dim(ev)),
-    dimnames = list(NULL, rownames(ev), rownames(ev))
+    dimnames = list(NULL, fsnames, fsnames)
   )
   as <- array(NA,
     dim = c(ntrials, nrow(ev)),
-    dimnames = list(NULL, rownames(ev))
+    dimnames = list(NULL, fsnames)
   )
   evs <- ivs <- vector("list", ntrials)
 
   for (t in 1:ntrials) {
-    # get pre functional stimuli
-    prestims <- mapping$trial_pre_func[[experience$tp[t]]]
-
-    # get post functional stimuli
-    poststims <- mapping$trial_post_func[[experience$tp[t]]]
-
-    # join
-    allstims <- c(prestims, poststims)
-
-    # make one-hot vector of functional stimuli
-    oh_prestims <- .makeOH(prestims, snames)
-    oh_poststims <- .makeOH(poststims, snames)
+    # get pointers
+    tn <- experience$tn[t]
+    # get nominal, and onehot stimuli
+    oh_fstims <- mapping$trial_ohs[[tn]]
+    nstims <- mapping$trial_nominals[[tn]]
 
     # generate expectations
     # first expectation
-    ee1 <- oh_prestims %*% ev
-    ie1 <- oh_prestims %*% iv
-    ne1 <- ee1 - ie1 # net
+    ee <- oh_fstims %*% ev
+    ie <- oh_fstims %*% iv
+    ne <- ee - ie # net
 
-    # second expectation
-    ee2 <- oh_poststims %*% ev
-    ie2 <- oh_poststims %*% iv
-    ne2 <- ee2 - ie2 # net
-
-    # generate expectation matrices
-    r <- (ev * oh_prestims) - (iv * oh_prestims)
+    # generate responses
+    r <- (ev * oh_fstims) - (iv * oh_fstims)
 
     # save data
     evs[[t]] <- ev
     ivs[[t]] <- iv
-    as[t, ] <- alphas
+    as[t, ] <- parameters$alphas
     rs[t, , ] <- r
 
     # learn if we need to
     if (!experience$is_test[t]) {
       # get parameters for learning
-      pre_tlambdas <- post_tlambdas <-
-        stats::setNames(rep(0, length(snames)), snames)
-
-      pre_tlambdas[allstims] <- lambdas[allstims]
-      post_tlambdas[poststims] <- lambdas[poststims]
+      tlambdas <- stats::setNames(rep(0, length(fsnames)), fsnames)
+      tlambdas[nstims] <- parameters$lambdas[nstims]
 
       # association deltas
-      # first delta
       # excitatory
-      ed1 <- oh_prestims * alphas %*% t(pre_tlambdas * betas_ex)
+      ed <- oh_fstims * parameters$alphas %*% t(tlambdas * parameters$betas_ex)
       # only learn when expectation expectation is lower than lambda
-      ed1 <- t(t(ed1) * as.numeric(
-        (pre_tlambdas - ne1) > 0
+      ed <- t(t(ed) * as.numeric(
+        (tlambdas - ne) > 0
       ))
 
-      # inhibitory ; hack to collapse ne1 into a numeric
-      id1 <- oh_prestims * alphas %*% t(
-        (pre_tlambdas - as.numeric(ne1)) * betas_in
+      # inhibitory ; hack to collapse ne into a numeric
+      id <- oh_fstims * parameters$alphas %*% t(
+        (tlambdas - as.numeric(ne)) * parameters$betas_in
       )
       # only learn when expectation is higher than lambda
-      id1[id1 > 0] <- 0
-      id1 <- abs(id1)
+      id[id > 0] <- 0
+      id <- abs(id)
 
-      # second delta
-      ed2 <- oh_poststims * alphas %*% t(post_tlambdas * betas_ex)
-      # only learn when expectation expectation is lower than lambda
-      ed2 <- t(t(ed2) * as.numeric(
-        (post_tlambdas - ne2) > 0
-      ))
-
-      id2 <- oh_poststims * alphas %*% t(
-        (post_tlambdas - as.numeric(ne2)) * betas_in
-      )
-      # only learn when expectation is higher than lambda
-      id2[id2 > 0] <- 0
-      id2 <- abs(id2)
-      diag(ed1) <- diag(ed2) <- diag(id1) <- diag(id2) <- 0
+      diag(ed) <- diag(id) <- 0
 
       # alpha deltas
-      alphasd1 <- oh_prestims %*% abs(gammas * (pre_tlambdas - ne1))
-      alphasd2 <- oh_poststims %*% abs(gammas * (post_tlambdas - ne2))
-      diag(alphasd1) <- diag(alphasd2) <- 0
+      alphasd <- oh_fstims %*% abs(parameters$gammas * (tlambdas - ne))
+      diag(alphasd) <- 0
 
       # learn
-      ev <- ev + ed1 + ed2
-      iv <- iv + id1 + id2
+      ev <- ev + ed
+      iv <- iv + id
 
       # Need to be careful here, as there is no decay for absent stimuli
-      talphasd <- (1 - thetas) * alphas + thetas *
-        (rowSums(alphasd1) + rowSums(alphasd2))
-      alphas[allstims] <- talphasd[allstims]
-
-      # apply lower limit on alphas
-      alphas[] <- sapply(1:nstim, function(i) max(min_alphas[i], alphas[i]))
-      # apply upper limit on alphas
-      alphas[] <- sapply(1:nstim, function(i) min(max_alphas[i], alphas[i]))
+      talphasd <- (1 - parameters$thetas) *
+        parameters$alphas + parameters$thetas * rowSums(alphasd)
+      parameters$alphas[nstims] <- talphasd[nstims]
+      # apply lower limit on parameters$alphas
+      parameters$alphas[] <- sapply(seq_len(length(fsnames)), function(i) {
+        max(parameters$min_alphas[i], parameters$alphas[i])
+      })
+      # apply upper limit on parameters$alphas
+      parameters$alphas[] <- sapply(seq_len(length(fsnames)), function(i) {
+        min(parameters$max_alphas[i], parameters$alphas[i])
+      })
     }
   }
   results <- list(

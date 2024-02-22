@@ -22,7 +22,7 @@
 supported_models <- function() {
   c(
     "HDI2020", "HD2022", "RW1972", "MAC1975",
-    "PKH1982", "SM2007", "RAND", "ANCCR"
+    "PKH1982", "SM2007", "RAND"
   )
 }
 

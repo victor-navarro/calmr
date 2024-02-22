@@ -37,6 +37,18 @@ methods::setMethod("design", "CalmrExperiment", function(x) {
   x@design
 })
 
+
+methods::setGeneric(
+  "arguments",
+  function(x) methods::standardGeneric("arguments")
+)
+#' @export
+#' @aliases arguments
+#' @rdname CalmrExperiment-methods
+methods::setMethod("arguments", "CalmrExperiment", function(x) {
+  x@arguments
+})
+
 #' @export
 #' @rdname CalmrExperiment-methods
 #' @examples
@@ -100,6 +112,18 @@ methods::setGeneric(
 methods::setMethod("results", "CalmrExperiment", function(object) {
   # Returns aggregated results
   object@results@aggregated_results
+})
+
+methods::setGeneric(
+  "raw_results",
+  function(object) methods::standardGeneric("raw_results")
+)
+#' @rdname CalmrExperiment-methods
+#' @aliases raw_results
+#' @export
+methods::setMethod("raw_results", "CalmrExperiment", function(object) {
+  # Returns raw results
+  object@results@raw_results
 })
 
 #' @rdname CalmrExperiment-methods

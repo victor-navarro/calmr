@@ -106,7 +106,13 @@ make_experiment <- function(
       tstps <- tstps[ri]
     }
   }
-  return(list(tps = tps, is_test = tstps, block_size = block_size))
+
+  return(list(
+    tps = tps,
+    tns = masterlist[tps],
+    is_test = tstps,
+    block_size = block_size
+  ))
 }
 
 .build_arguments <- function(design, options, model, ...) {
@@ -129,7 +135,7 @@ make_experiment <- function(
   exptb$samples <- apply(exptb, 1, function(x) {
     do.call(
       .sample_trials,
-      c(x$trial_info, list(
+      c(x$phase_info$general_info, list(
         randomize = x$randomize,
         masterlist = design@mapping$trial_names,
         miniblocks = options$miniblocks
@@ -151,6 +157,7 @@ make_experiment <- function(
     dplyr::group_by(.data$iteration, .data$group) |>
     dplyr::summarise(
       tp = list(unlist(.data$tps)),
+      tn = list(unlist(.data$tns)),
       is_test = list(unlist(.data$is_test)),
       phase = list(unlist(.data$phaselab)),
       block_size = list(unlist(.data$blocks))

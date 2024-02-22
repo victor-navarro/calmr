@@ -14,59 +14,56 @@ HDI2020 <- function(v = NULL, # nolint: object_name_linter.
                     parameters,
                     experience,
                     mapping, ...) {
-  # Assign parameters
-  alphas <- parameters$alphas
-
   # data initialization
   ntrials <- length(experience$tp)
+  fsnames <- mapping$unique_functional_stimuli
   if (is.null(v)) {
-    v <- gen_ss_weights(mapping$unique_functional_stimuli)
+    v <- gen_ss_weights(fsnames)
   }
   vs <- array(NA,
     dim = c(ntrials, dim(v)),
-    dimnames = list(NULL, rownames(v), rownames(v))
+    dimnames = list(NULL, fsnames, fsnames)
   )
   rs <- vs
   as <- array(NA,
     dim = c(ntrials, nrow(v)),
-    dimnames = list(NULL, rownames(v))
+    dimnames = list(NULL, fsnames)
   )
   combvs <- chainvs <- vector("list", ntrials)
-  fsnames <- rownames(v) # get functional stimuli names
-  test_stims <- fsnames
 
   for (t in 1:ntrials) {
-    # get pre functional and nominal stimuli
-    fprestims <- mapping$trial_pre_func[[experience$tp[t]]]
-    nprestims <- mapping$trial_pre_nomi[[experience$tp[t]]]
-    # get post nominal stimuli
-    fpoststims <- mapping$trial_post_func[[experience$tp[t]]]
-    npoststims <- mapping$trial_post_nomi[[experience$tp[t]]]
+    # get pointers
+    tn <- experience$tn[t]
+
+    # get functional and nominal stimuli
+    fstims <- mapping$trial_functionals[[tn]]
+    nstims <- mapping$trial_nominals[[tn]]
 
     # compute combV for all stimuli
     combV <- .combV(
-      v = v, pre_func = fprestims,
-      post_func = test_stims, db_trial = t
+      v = v, pre_func = fstims,
+      post_func = fsnames, db_trial = t
     )
 
     # compute chainV for all stimuli without a similarity rule
     chainV <- .chainV(
       v = v,
-      pre_func = fprestims,
-      post_func = test_stims,
+      pre_func = fstims,
+      post_func = fsnames,
       db_trial = t
     )
 
     # identify absent stimuli and calculate their "retrieved" salience
     ralphas <- .getalphas(
       v = v,
-      alphas_nomi = alphas,
-      pre_nomi = nprestims,
-      pre_func = fprestims,
+      alphas_nomi = parameters$alphas,
+      pre_nomi = nstims,
+      pre_func = fstims,
       fsnames = fsnames,
       nomi2func = mapping$nomi2func,
       db_trial = t
     )
+
     # Distribute R
     r <- .distR(ralphas, combV, chainV, t)
 
@@ -79,13 +76,12 @@ HDI2020 <- function(v = NULL, # nolint: object_name_linter.
 
     # learn if we need to
     if (!experience$is_test[t]) {
-      # make one-hot vector of pre functional stimuli (for learning)
-      oh_fstims <- .makeOH(c(fprestims, fpoststims), fsnames)
+      # get one-hot vector of pre functional stimuli (for learning)
+      oh_fstims <- mapping$trial_ohs[[tn]]
 
       # get saliencies for learning
       lalphas <- stats::setNames(rep(0, length(fsnames)), fsnames)
-      lalphas[mapping$nomi2func[c(nprestims, npoststims)]] <-
-        alphas[c(nprestims, npoststims)]
+      lalphas[mapping$nomi2func[nstims]] <- parameters$alphas[nstims]
 
       # Learn
       e <- oh_fstims %*% v # expectation

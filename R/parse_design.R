@@ -25,7 +25,7 @@ parse_design <- function(df, model = NULL, ...) {
     design_obj <- df
     # augment if it hasn't been augmented
     if (!is.null(model) && !df@augmented) {
-      design_obj <- augment_design(design_obj, ...)
+      design_obj <- augment_design(design_obj, model = model, ...)
     }
   } else {
     phases <- colnames(df)
@@ -63,7 +63,7 @@ parse_design <- function(df, model = NULL, ...) {
   tinfo <- lapply(design$phase_info, "[[", "trial_info")
   ginfo <- lapply(design$phase_info, "[[", "general_info")
 
-  # gather
+  # gather at the period level
   mastert <- unlist(lapply(ginfo, "[[", "trial_names"))
   funcs <- unlist(lapply(tinfo, function(r) {
     lapply(r, "[[", "functionals")
@@ -76,8 +76,18 @@ parse_design <- function(df, model = NULL, ...) {
   tnames <- mastert[uniqs]
   funcs <- setNames(funcs[uniqs], tnames)
   nomis <- setNames(nomis[uniqs], tnames)
-  uni_fun <- unique(unlist(funcs))
-  uni_nom <- unique(unlist(nomis))
+
+  # make at the trial level
+  tfuncs <- lapply(funcs, function(t) {
+    unique(unlist(t, use.names = FALSE))
+  })
+  tnomis <- lapply(nomis, function(t) {
+    unique(unlist(t, use.names = FALSE))
+  })
+
+  # sort unique names
+  uni_fun <- sort(unique(unlist(funcs)))
+  uni_nom <- sort(unique(unlist(nomis)))
 
   # make stimulus mapping
   n2f <- unlist(lapply(ginfo, "[[", "nomi2func"))
@@ -85,13 +95,32 @@ parse_design <- function(df, model = NULL, ...) {
   f2n <- unlist(lapply(ginfo, "[[", "func2nomi"))
   f2n <- f2n[!duplicated(names(f2n))]
 
+  # make one-hot vectors
+  # period based
+  period_onehots <- lapply(funcs, function(t) {
+    lapply(t, one_hot, stimnames = uni_fun)
+  })
+  # trial based
+  trial_onehots <- lapply(funcs, function(t) {
+    one_hot(unique(unlist(t)), stimnames = uni_fun)
+  })
+
   list(
     trial_names = tnames,
     unique_functional_stimuli = uni_fun,
     unique_nominal_stimuli = uni_nom,
-    trial_functionals = funcs,
-    trial_nominals = nomis,
+    period_functionals = funcs,
+    trial_functionals = tfuncs,
+    period_nominals = nomis,
+    trial_nominals = tnomis,
+    period_ohs = period_onehots,
+    trial_ohs = trial_onehots,
     nomi2func = n2f,
     func2nomi = f2n
   )
+}
+
+# Makes a onehot representation of the stimulus vector, given all stimuli
+one_hot <- function(s, stimnames) {
+  return(stats::setNames(as.numeric(stimnames %in% s), stimnames))
 }

@@ -9,10 +9,9 @@ df <- parse_design(df)
 opts <- get_exp_opts()
 supported_mods <- supported_models()
 
-# test_that("get_model fails if model is not supported", {
-#   expect_error(get_model(model_name = "NAVARRO"))
-# })
-
+test_that("get_model fails if model is not supported", {
+  expect_error(get_model(model_name = "NAVARRO"))
+})
 
 for (m in supported_mods) {
   test_that(paste("model", m, "works"), {

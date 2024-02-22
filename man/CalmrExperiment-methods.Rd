@@ -4,12 +4,16 @@
 \alias{show,CalmrExperiment-method}
 \alias{design,CalmrExperiment-method}
 \alias{design}
+\alias{arguments,CalmrExperiment-method}
+\alias{arguments}
 \alias{c,CalmrExperiment-method}
 \alias{parameters,CalmrExperiment-method}
 \alias{parameters}
 \alias{parameters<-,CalmrExperiment-method}
 \alias{results,CalmrExperiment-method}
 \alias{results}
+\alias{raw_results,CalmrExperiment-method}
+\alias{raw_results}
 \alias{length,CalmrExperiment-method}
 \alias{parse,CalmrExperiment-method}
 \alias{aggregate,CalmrExperiment-method}
@@ -19,6 +23,8 @@
 
 \S4method{design}{CalmrExperiment}(x)
 
+\S4method{arguments}{CalmrExperiment}(x)
+
 \S4method{c}{CalmrExperiment}(x, ..., recursive = FALSE)
 
 \S4method{parameters}{CalmrExperiment}(x)
@@ -26,6 +32,8 @@
 \S4method{parameters}{CalmrExperiment}(x) <- value
 
 \S4method{results}{CalmrExperiment}(object)
+
+\S4method{raw_results}{CalmrExperiment}(object)
 
 \S4method{length}{CalmrExperiment}(x)
 

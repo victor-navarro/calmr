@@ -1,9 +1,9 @@
 # A basic experiment
 df <- data.frame(
   Group = c("X", "Y"),
-  P1 = c("10A/#10A/10B", "2AB/6A/6C/2#AB"),
+  P1 = c("10A/10#A/10B", "2AB/6A/6C/2#AB"),
   R1 = c(TRUE, TRUE),
-  P2 = c("10A/#10A/10B", "2AB/6A/6C/2#AB"),
+  P2 = c("10A/10#A/10B", "2AB/6A/6C/2#AB"),
   R2 = c(TRUE, TRUE)
 )
 
@@ -54,4 +54,5 @@ test_that("make_experiment fails with too many models", {
     model = c("RW1972", "MAC1975"), options = opts
   ))
 })
+
 # TODO: Write more tests (unique sampling per iteration, master list)

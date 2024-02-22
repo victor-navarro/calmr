@@ -1,3 +1,4 @@
+# Some functions to help the HeiDI model (HDI2020, HD2022)
 # Calculation of combined v
 .combV <- function(v, pre_func, post_func, db_trial = NA) {
   # v is a weight matrix,
