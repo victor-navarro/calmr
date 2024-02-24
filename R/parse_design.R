@@ -1,7 +1,7 @@
 #' Parse design data.frame
 #' @param df A data.frame of dimensions Groups, 2*Phases+1
 #' @param model An optional model to augment the design. See ??augment design
-#' @param ... Other arguments passed to augment_design
+#' @param ... Other arguments passed to augment
 #' @return A CalmrDesign object
 #' @note
 #' \itemize{
@@ -23,9 +23,9 @@ parse_design <- function(df, model = NULL, ...) {
   # if already parsed, skip
   if ("CalmrDesign" %in% class(df)) {
     design_obj <- df
-    # augment if it hasn't been augmented
+    # augment if design hasn't been augmented
     if (!is.null(model) && !df@augmented) {
-      design_obj <- augment_design(design_obj, model = model, ...)
+      design_obj <- augment(design_obj, model = model, ...)
     }
   } else {
     phases <- colnames(df)
@@ -52,7 +52,7 @@ parse_design <- function(df, model = NULL, ...) {
     )
     # augment design if required
     if (!is.null(model)) {
-      design_obj <- augment_design(design_obj, model = model)
+      design_obj <- augment(design_obj, model = model, ...)
     }
   }
   design_obj
@@ -76,6 +76,21 @@ parse_design <- function(df, model = NULL, ...) {
   tnames <- mastert[uniqs]
   funcs <- setNames(funcs[uniqs], tnames)
   nomis <- setNames(nomis[uniqs], tnames)
+
+  # get transition names (nested within trial)
+  transitions <- lapply(funcs, function(t) {
+    periods <- names(t)
+    nperiods <- length(periods)
+    if (nperiods > 1) {
+      sapply(
+        seq_len(nperiods - 1),
+        function(n) {
+          sprintf("%s>%s", periods[n], periods[n + 1])
+        }
+      )
+    }
+  })
+  transitions <- transitions[!unlist(lapply(transitions, is.null))]
 
   # make at the trial level
   tfuncs <- lapply(funcs, function(t) {
@@ -116,7 +131,8 @@ parse_design <- function(df, model = NULL, ...) {
     period_ohs = period_onehots,
     trial_ohs = trial_onehots,
     nomi2func = n2f,
-    func2nomi = f2n
+    func2nomi = f2n,
+    transitions = transitions
   )
 }
 

@@ -22,7 +22,7 @@
 supported_models <- function() {
   c(
     "HDI2020", "HD2022", "RW1972", "MAC1975",
-    "PKH1982", "SM2007", "RAND"
+    "PKH1982", "SM2007", "RAND", "ANCCR"
   )
 }
 
@@ -116,12 +116,19 @@ parameter_info <- function(model = NULL) {
     ),
     "ANCCR" = list(
       name = c(
-        "cue_reward_delay", "post_reward_delay",
+        "transition_delay", "post_trial_delay",
         "mean_ITI", "max_ITI", "reward_magnitude",
-        "exact_mean",
+        "betas", "thresholds", "w", "minimum_rate",
+        "use_exact_mean", "use_exponential", "t_ratio",
         "alpha_exponent", "alpha_init", "alpha_min"
       ),
-      default_value = c(1, 1, 30, 90, 1, 1, 1, 1, 0)
+      default_value = c(
+        1, 1,
+        30, 90, 1,
+        1, 0.6, 0.5, 1e-3,
+        TRUE, TRUE, 1.2,
+        1, 1, 0
+      )
     ),
     "RAND" = list(
       name = c("alphas"),
@@ -135,10 +142,38 @@ parameter_info <- function(model = NULL) {
   }
 }
 
-# Returns whether a parameter name is stimulus-specific or global
+# Returns whether a parameter is a global parameter
 .is_global_parameter <- function(parameter, model) {
-  globals <- list("SM2007" = c("order"))
-  parameter %in% globals[[model]]
+  global_pars <- list(
+    "SM2007" = c("order"),
+    "ANCCR" = c(
+      "w",
+      "minimum_rate", "use_exact_mean",
+      "use_exponential", "t_ratio"
+    )
+  )
+  parameter %in% global_pars[[model]]
+}
+
+# Returns whether a parameter is a trial parameter
+.is_trial_parameter <- function(parameter, model) {
+  trial_pars <- list(
+    "ANCCR" = c(
+      "post_trial_delay",
+      "mean_ITI", "max_ITI"
+    )
+  )
+  parameter %in% trial_pars[[model]]
+}
+
+# Returns wheter a parameter is a transition parameter
+.is_trans_parameter <- function(parameter, model) {
+  trans_pars <- list(
+    "ANCCR" = c(
+      "transition_delay"
+    )
+  )
+  parameter %in% trans_pars[[model]]
 }
 
 #' @rdname model_info

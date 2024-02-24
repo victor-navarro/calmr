@@ -1,10 +1,20 @@
-exp <- data.frame(
+rawdf <- data.frame(
   group = "G",
   p1 = c("10A>(US)/10B>(US)/10(US)"),
   r1 = TRUE
 )
 
-# can get parameters
-params <- get_parameters(exp, model = "ANCCR")
+augment_args <- list(reward_labels = "US")
+df <- parse_design(rawdf, model = "ANCCR", augment_args)
 
-run_time_experiment(exp)
+# can get parameters
+params <- get_parameters(df, model = "ANCCR")
+params <- set_reward_parameters(params, c("US"))
+
+# can get arguments
+ex <- make_experiment(df,
+  parameters = params, model = "ANCCR"
+)
+
+# can run
+run_experiment(ex)

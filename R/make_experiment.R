@@ -55,6 +55,9 @@ make_experiment <- function(
   # add parameters
   arguments$parameters <- list(parameters)
 
+  # augment arguments if necessary
+  arguments <- .augment_arguments(arguments, ...)
+
   return(methods::new("CalmrExperiment",
     arguments = arguments, design = design
   ))
@@ -115,14 +118,11 @@ make_experiment <- function(
   ))
 }
 
-.build_arguments <- function(design, options, model, ...) {
+.build_arguments <- function(design, options, model) {
   args <- .build_experiment(
     design = design,
     model = model, options = options
   )
-  if (model %in% c("ANCCR")) {
-    args <- .anccrize_arguments(args, ...)
-  }
   args
 }
 
@@ -176,17 +176,15 @@ make_experiment <- function(
   )
 }
 
+.augment_arguments <- function(args, ...) {
+  if (unique(args$model) == "ANCCR") {
+    args <- .anccrize_arguments(args, ...)
+  }
+  args
+}
+
 # function to return the gcd
 .gcd <- function(x, y) {
   r <- x %% y
   return(ifelse(r, .gcd(y, r), y))
-}
-
-# Aguments design depending on the model
-augment_design <- function(design, model, ...) {
-  if (model %in% c("ANCCR")) {
-    # creates eventlogs
-    design <- .anccrize_design(design, ...)
-  }
-  design
 }

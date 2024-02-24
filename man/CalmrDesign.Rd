@@ -7,10 +7,13 @@
 \description{
 Inherits from the tbl class
 }
-\section{Methods}{
+\section{Slots}{
 
 \describe{
-\item{\code{trials}:}{Prints trial information per group and phase}
+\item{\code{design}:}{A tbl containing the object.}
+\item{\code{mapping}:}{A list containing the object mapping.}
+\item{\code{raw_design}:}{The original data.frame.}
+\item{\code{augmented}:}{Whether the object has been augmented.}
 }
 }
 

@@ -11,7 +11,7 @@ parse_design(df, model = NULL, ...)
 
 \item{model}{An optional model to augment the design. See ??augment design}
 
-\item{...}{Other arguments passed to augment_design}
+\item{...}{Other arguments passed to augment}
 }
 \value{
 A CalmrDesign object
