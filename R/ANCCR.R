@@ -31,7 +31,7 @@ ANCCR <- function(
     dimnames = list(fsnames, seq_len(nt))
   )
 
-  m_ij <- prc <- src <- nc <- anc <- rs <- array(0, dim = c(
+  m_ij <- prc <- src <- nc <- anccr <- rs <- array(0, dim = c(
     length(fsnames), length(fsnames), nt
   ), dimnames = list(fsnames, fsnames, seq_len(nt)))
 
@@ -52,6 +52,7 @@ ANCCR <- function(
     sum(unlist(lapply(list(mean_ITI, post_trial_delay), mean)))
   )
   t_constants <- rep(tcons, nt)
+  gammas <- exp(-1 / t_constants)
   nextt <- 1
   numsampling <- 0
 
@@ -75,37 +76,32 @@ ANCCR <- function(
       }
     }
 
-
     if (!skip) {
       # This is the serious block
       numevents[event, ] <- numevents[event, ] + 1
-      if (parameters$use_exact_mean) {
-        alphat <- exp(
-          -parameters$alpha_exponent * timestep *
-            (parameters$alpha_init - parameters$alpha_min) +
-            parameters$alpha_min
-        )
-      } else {
-        alphat <- 1 / numevents[event]
-      }
+      alphat <- .anccr_get_alpha(
+        denom = numevents[event, ],
+        parameters = parameters,
+        timestep = timestep
+      )
 
       if (timestep > 1) {
         # Update delta
         delta[, timestep] <- delta[, timestep - 1] *
-          parameters$gammas[timestep]^(
+          gammas[timestep]^(
             experience[timestep, 2] -
               experience[timestep - 1, 2]
           )
         # Update eligibility trace
         e_ij[, timestep] <- e_ij[, timestep - 1] *
-          parameters$gammas[timestep]^(
+          gammas[timestep]^(
             experience[timestep, 2] -
               experience[timestep - 1, 2]
           )
         # Update average eligibility trace
         m_ij[, , timestep] <- m_ij[, , timestep - 1]
-        anc[absents, , timestep] <-
-          anc[absents, , timestep - 1]
+        anccr[absents, , timestep] <-
+          anccr[absents, , timestep - 1]
       }
       # Delta reset
       delta[event, timestep] <- 1
@@ -139,122 +135,127 @@ ANCCR <- function(
 
       # Indicator for causal links between events
       # VN: There is a bug in the original ANCCR code:
-      # I think the expression: max([1,jt-nevent_for_edge]:jt) is meant to be
+      # The expression: max([1,jt-nevent_for_edge]:jt) is meant to be
       # max([1,jt-nevent_for_edge]):jt
+      # This is because the nevent_for_edge is meant
+      # to allow averaging across timesteps but the bugged
+      # line only returns a scalar
       edge_ts <- max(c(1, timestep - nevent_for_edge)):timestep
       i_edge <- rowMeans(nc[, event, edge_ts, drop = FALSE]) >
         parameters$threshold
       i_edge[event] <- FALSE
 
-      browser()
-
-
-      # Something about the omission state of that reward state;
+      # TODO: Something about the omission state of that reward state;
       # Some omission garbage code
       if (event %in% omidx[, 2] && sum(i_edge) > 0) {
         omtrue[omidx[, 2] == event] <- omtrue[omidx[, 2] == event] | TRUE
       }
 
       # Calculate ANNCR for every event
-      # First, Rjj
-      r[event, event] <- experience[timestep, 3] # Magnitude of the US
-      for (ke in 1:length(fsnames)) {
+      # First, set reward magnitude of the event (r_jj)
+      r[event, event] <- experience[timestep, "reward_mag"]
+      for (ke in fsnames) {
         # Update edge indicator
-        # The mean in MATLAB is calculated on the 3 dimension; check
-        browser()
-        i_edge_ke <- mean(nc[, ke, max(max(1, timestep - nevent_for_edge):timestep)]) >
+        i_edge_ke <- rowMeans(nc[, ke, edge_ts, drop = FALSE]) >
           parameters$threshold
-        i_edge_ke <- FALSE
+        i_edge_ke[ke] <- FALSE
         # Update ANCCR
-        anc[ke, , timestep] <- nc[ke, , timestep] * r[ke, ] -
-          sum(sweep(anc[, , timestep] * delta[, timestep], i_edge_ke, FUN = "*"))
+        anccr[ke, , timestep] <- nc[ke, , timestep] * r[ke, ] -
+          colSums(sweep(anccr[, , timestep] * delta[, timestep], 1,
+            i_edge_ke,
+            FUN = "*"
+          ))
       }
 
       # Calculate DA response (replace if optolog says so)
       if (!optolog[timestep, 1]) {
-        da[timestep] <- sum(anc[event, , timestep] * t(imct)) + beta[event]
+        da[timestep] <- sum(anccr[event, , timestep] * as.numeric(imct))
       } else {
+        # TODO: Optolog related stuff
         da[timestep] <- optolog[timestep, 2]
       }
-
-      # Do some extra calculations for omission
+      # TODO: Do some extra calculations for omission
       if (event %in% omidx[, 1]) {
         je_om <- which(event == omidx[, 1])
         r[event, omidx[je_om, 2]] <- r[omidx[je_om, 2], omidx[je_om, 2]]
         imct[event] <- TRUE
       }
-
-      imct[event] <- imct[event] | da[timestep] + beta[event] > parameters$threshold
+      # Update meaningful causes index
+      imct[event] <- imct[event] | da[timestep] +
+        parameters$betas[event] > parameters$threshold[event]
 
       # Update estimated reward value
       rs[, , timestep] <- r
+      # Learning
       if (da[timestep] >= 0) {
         # Positive (or zero) DA response update rule
-        r[, event] <- r[, event] * parameters$alpha_r * (experience[timestep, 3] - r[, event])
+        r[, event] <- r[, event] +
+          parameters$alpha_r * (experience[timestep, "reward_mag"] - r[, event])
       } else {
         # Negative DA response update rule (overprediction)
         if (any(i_edge)) {
           r[i_edge, event] <- r[i_edge, event] -
             parameters$alpha_r * r[i_edge, event] *
-              (delta[i_edge, timestep] / numevents[i_edge]) /
-              sum((delta[i_edge] / numevents[i_edge]))
+              (delta[i_edge, timestep] / numevents[i_edge, ]) /
+              sum((delta[i_edge] / numevents[i_edge, ]))
         } else {
-          r[, event] <- r[, event] # ???
+          r[, event] <- r[, event] # ??? Must be vestigial
         }
       }
     }
-
     # Update sample eligibility trace
     if (timestep < nt) {
       # Time to sample baseline b/t events
       subsamplingtime <- sampling_times[
-        sampling_times >= experience[timestep, 2] & sampling_times < experience[timestep + 1, 2]
+        sampling_times >= experience[timestep, "time"] &
+          sampling_times < experience[timestep + 1, "time"]
       ]
-      e_i[, timestep + 1] <- e_i[, timestep] * parameters$gammas[timestep]^parameters$sampling_interval
+      e_i[, timestep + 1] <- e_i[, timestep] *
+        gammas[timestep]^parameters$sampling_interval
       if (length(subsamplingtime)) {
         for (jjt in nextt:timestep) {
-          e_i[experience[jjt, 1], timestep + 1] <- e_i[experience[jjt], timestep + 1] +
-            parameters$gammas[timestep]^(subsamplingtime[1] - experience[jjt, 2])
+          # TODO: omission log stuff
+          if (experience[jjt, "stimulus"] %in% omidx[, 1]) {
+            if (!omtrue[omidx[, 1] == experience[jjt, "stimulus"]]) {
+              1 #
+            }
+          }
+          e_i[experience[jjt, "stimulus"], timestep + 1] <-
+            e_i[experience[jjt, "stimulus"], timestep + 1] +
+            gammas[timestep]^(subsamplingtime[1] - experience[jjt, "time"])
         }
         nextt <- timestep + 1
       }
       # Update alpha of sample elegibility trace
-      if (parameters$use_exact_mean) {
-        if (is.array(parameters$alphas)) {
-          alphat <- parameters$alphas
-        } else {
-          alphat <- exp(
-            -parameters$alpha_pars$exponent * (timestep - 0) *
-              (parameters$alpha_pars$init - parameters$alpha_pars$min) +
-              parameters$alpha_pars$min
-          )
-        }
-      } else {
-        alphat <- 1 / (numsampling + 1)
-      }
+      alphat <- .anccr_get_alpha(
+        denom = numsampling + 1,
+        parameters = parameters,
+        timestep = timestep
+      )
+
       # Update average sample eligibility trace
-      m_i[, timestep + 1] <- m_i[, timestep] + parameters$k + alphat *
+      m_i[, timestep + 1] <- m_i[, timestep] + parameters$ks * alphat *
         (e_i[, timestep + 1] - m_i[, timestep])
-      for (iit in 2:length(subsamplingtime)) {
-        if (parameters$use_exact_mean) {
-          if (is.array(parameters$alphas)) {
-            alphat <- parameters$alphas
-          } else {
-            alphat <- exp(
-              -parameters$alpha_pars$exponent * (timestep - 0) *
-                (parameters$alpha_pars$init - parameters$alpha_pars$min) +
-                parameters$alpha_pars$min
-            )
-          }
-        } else {
-          alphat <- 1 / (numsampling + iit)
-        }
-        e_i[, timestep + 1] <- e_i[, timestep + 1] * parameters$gammas[timestep]^parameters$sampling_interval
+      for (iit in seq_len(length(subsamplingtime))[-1]) {
+        alphat <- .anccr_get_alpha(
+          denom = numsampling + iit,
+          parameters = parameters,
+          timestep = timestep
+        )
+        e_i[, timestep + 1] <- e_i[, timestep + 1] *
+          gammas[timestep]^parameters$sampling_interval
         m_i[, timestep + 1] <- m_i[, timestep + 1] +
-          parameters$k * alphat * (e_i[, timestep + 1] - m_i[, timestep + 1])
+          parameters$ks * alphat * (e_i[, timestep + 1] - m_i[, timestep + 1])
       }
       numsampling <- numsampling + length(subsamplingtime)
     }
   }
-  1
+  # some reshaping before return
+  twos <- sapply(c("e_ij", "e_i", "m_i", "delta"),
+    function(i) t(get(i)), simplify = FALSE
+  )
+  threes <- sapply(c("m_ij", "prc", "src", "nc", "anccr", "rs"),
+    function(i) aperm(get(i), c(3, 1, 2)), simplify = FALSE
+  )
+  c(twos, threes)
 }

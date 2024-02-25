@@ -118,15 +118,19 @@ parameter_info <- function(model = NULL) {
       name = c(
         "transition_delay", "post_trial_delay",
         "mean_ITI", "max_ITI", "reward_magnitude",
-        "betas", "thresholds", "w", "minimum_rate",
+        "betas", "thresholds", "ks",
+        "w", "minimum_rate", "sampling_interval",
         "use_exact_mean", "use_exponential", "t_ratio",
+        "alpha", "alpha_reward", "use_timed_alpha",
         "alpha_exponent", "alpha_init", "alpha_min"
       ),
       default_value = c(
         1, 1,
         30, 90, 1,
-        1, 0.6, 0.5, 1e-3,
+        1, 0.6, 0.01,
+        0.5, 1e-3, 0.2,
         TRUE, TRUE, 1.2,
+        0.02, 0.2, FALSE,
         1, 1, 0
       )
     ),
@@ -147,9 +151,11 @@ parameter_info <- function(model = NULL) {
   global_pars <- list(
     "SM2007" = c("order"),
     "ANCCR" = c(
-      "w",
-      "minimum_rate", "use_exact_mean",
-      "use_exponential", "t_ratio"
+      "w", "minimum_rate",
+      "sampling_interval",
+      "use_exact_mean", "use_exponential", "t_ratio",
+      "alpha", "alpha_reward", "use_timed_alpha",
+      "alpha_exponent", "alpha_init", "alpha_min"
     )
   )
   parameter %in% global_pars[[model]]

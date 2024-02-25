@@ -16,5 +16,7 @@ ex <- make_experiment(df,
   parameters = params, model = "ANCCR"
 )
 
-# can run
-run_experiment(ex)
+source("R/ANCCR.R")
+
+# can return raw values
+run_experiment(ex, parse = FALSE, aggregate = FALSE)

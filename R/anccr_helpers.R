@@ -113,3 +113,21 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
   row.names(eventlog) <- NULL
   eventlog
 }
+
+
+.anccr_get_alpha <- function(denom, parameters, timestep) {
+  if (!as.logical(parameters$use_exact_mean)) {
+    if (as.logical(parameters$use_timed_alpha)) {
+      alphat <- exp(
+        -parameters$alpha_exponent * timestep *
+          (parameters$alpha_init - parameters$alpha_min) +
+          parameters$alpha_min
+      )
+    } else {
+      alphat <- parameters$alpha
+    }
+  } else {
+    alphat <- 1 / denom
+  }
+  alphat
+}
