@@ -1,11 +1,10 @@
 rawdf <- data.frame(
   group = "G",
-  p1 = c("10A>(US)/10B>(US)/10(US)"),
+  p1 = c("20A>(US)"),
   r1 = TRUE
 )
 
-augment_args <- list(reward_labels = "US")
-df <- parse_design(rawdf, model = "ANCCR", augment_args)
+df <- parse_design(rawdf, model = "ANCCR")
 
 # can get parameters
 params <- get_parameters(df, model = "ANCCR")
@@ -16,7 +15,20 @@ ex <- make_experiment(df,
   parameters = params, model = "ANCCR"
 )
 
-source("R/ANCCR.R")
+# can aggregate
+# source("R/ANCCR.R")
+x <- run_experiment(ex)
 
-# can return raw values
-run_experiment(ex, parse = FALSE, aggregate = FALSE)
+# can plot
+plot(x)
+supported_plots("ANCCR")
+plot(x, type = "e_ij") # elegibility trace
+plot(x, type = "e_i") # elegibility trace (???)
+plot(x, type = "m_i") # base rate
+plot(x, type = "m_ij") # more base rates (???)
+plot(x, type = "nc") # net contingency
+plot(x, type = "anccr") # adjusted net contingency
+plot(x, type = "delta") # time delta (???)
+plot(x, type = "psrcs") # fine
+plot(x, type = "das") # dopamine
+plot(x, type = "rews") # reward values

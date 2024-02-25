@@ -23,29 +23,8 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
 #' @param reward_labels A character vector with reward names
 #' @export
 #' @rdname CalmrDesign-methods
-.anccrize_design <- function(object, reward_labels = NULL) {
-  if (is.null(reward_labels)) {
-    reward_labels <- "US"
-    warning("Using c('US') as reward_labels")
-  }
-  # Find which trial is rewarded using reward labels
-  object@mapping$reward_labels <- reward_labels
-  # Split into
-  object@mapping$cue_labels <- setdiff(
-    object@mapping$unique_functional_stimuli,
-    object@mapping$reward_labels
-  )
-  object@mapping$is_reward <- lapply(
-    object@mapping$trial_func, function(t) {
-      t %in% object@mapping$reward_labels
-    }
-  )
-  object@mapping$is_rewarded <- sapply(object@mapping$is_reward, any)
-  object@mapping$has_cues <- lapply(
-    object@mapping$trial_func, function(t) {
-      any(t %in% object@mapping$cue_labels)
-    }
-  )
+.anccrize_design <- function(object) {
+  # After refactoring the parser, this became unnecessary
   object
 }
 
@@ -69,6 +48,7 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
   experience <- args$experience
   mapping <- args$mapping
   pars <- args$parameters
+  rownames(experience) <- NULL
   # Initialize eventlog
   eventlog <- data.frame()
   running_time <- 0
@@ -93,11 +73,12 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
     for (p in seq_len(length(period_funcs))) {
       eventlog <- rbind(
         eventlog,
-        cbind(experience[ti, ],
+        data.frame(experience[ti, ],
           trial = ti,
           stimulus = period_funcs[[p]],
           time = running_time,
-          reward_mag = pars$reward_magnitude[[period_funcs[[p]]]]
+          reward_mag = pars$reward_magnitude[period_funcs[[p]]],
+          row.names = NULL
         )
       )
       # add delay if a transition is next

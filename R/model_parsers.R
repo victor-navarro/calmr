@@ -24,25 +24,34 @@
   gen_dat <- dplyr::select(gen_dat, -"tp")
   need_enframe <- c(
     "es", "vs", "eivs",
-    "acts", "relacts", "rs", "os"
+    "acts", "relacts", "rs", "os",
+    "m_ij", "nc", "anccr", "rews", "psrcs", "das"
   )
 
   dat <- NULL
   # arrays that need to be enframed
   if (type %in% need_enframe) {
-    # special treatment for HeiDI acts (ugly) and Konorskian models
+    # special treatment for HeiDI acts
+    # (list of lists with irregular matrices; ugly) and
+    # models that return a bundled list of matrices
     # that return an output as a list
-    if (
-      (args$model %in% c("HDI2020", "HD2022") && type == "acts") ||
-        type == "eivs"
-    ) {
-      raw_typed <- lapply(names(raw), function(r) {
+    if ((args$model %in% c("HDI2020", "HD2022") && type == "acts")) {
+      raw_typed <- sapply(names(raw), function(r) {
         hold <- tibble::enframe(lapply(raw[[r]], function(x) {
           as.data.frame(as.table(x), stringsAsFactors = FALSE)
         }), name = "trial")
         hold$type <- r
         dplyr::left_join(gen_dat, hold, by = "trial")
-      })
+      }, simplify = FALSE)
+      full_dat <- dplyr::bind_rows(raw_typed)
+    } else if (type %in% c("eivs", "psrcs")) {
+      raw_typed <- sapply(names(raw), function(r) {
+        hold <- tibble::enframe(apply(raw[[r]], 1, function(x) {
+          as.data.frame(as.table(x), stringsAsFactors = FALSE)
+        }), name = "trial")
+        hold$type <- r
+        dplyr::left_join(gen_dat, hold, by = "trial")
+      }, simplify = FALSE)
       full_dat <- dplyr::bind_rows(raw_typed)
     } else {
       dat <- tibble::enframe(apply(raw, 1, function(x) {
@@ -65,8 +74,8 @@
         "s1" = "Var1", "s2" = "Var2", "value" = "Freq"
       )
     }
-  }
-  if (type %in% c("as")) {
+  } else {
+    # outputs that do not need enframing
     dat <- as.data.frame(raw)
     long_cols <- names(dat)
     full_dat <- cbind(gen_dat, dat)
@@ -78,6 +87,13 @@
   if (type %in% c("eivs")) {
     full_dat$assoc_type <- ifelse(full_dat$type == "evs",
       "excitatory", "inhibitory"
+    )
+  }
+  # labelling for ANCCR
+  if (type %in% c("psrcs")) {
+    full_dat$rep_type <- ifelse(
+      full_dat$type == "src",
+      "successor", "predecessor"
     )
   }
 
@@ -109,11 +125,12 @@
 # type is the type of data
 .aggregate_results <- function(dat, type) {
   # define base terms for aggregation formula
+  no_s2 <- c("as", "e_ij", "e_i", "m_i", "delta")
   terms <- c(
     "group", "trial", "trial_type",
     "phase", "s1", "s2", "block_size"
   )
-  if (type %in% c("as")) {
+  if (type %in% no_s2) {
     terms <- terms[!(terms == "s2")]
   }
   if ("type" %in% names(dat)) {

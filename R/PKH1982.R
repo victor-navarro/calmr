@@ -37,7 +37,10 @@ PKH1982 <- function(
     dim = c(ntrials, nrow(ev)),
     dimnames = list(NULL, fsnames)
   )
-  evs <- ivs <- vector("list", ntrials)
+  evs <- ivs <- array(NA,
+    dim = c(ntrials, dim(ev)),
+    dimnames = list(NULL, fsnames, fsnames)
+  )
 
   for (t in 1:ntrials) {
     # get pointers
@@ -56,8 +59,8 @@ PKH1982 <- function(
     r <- (ev * oh_fstims) - (iv * oh_fstims)
 
     # save data
-    evs[[t]] <- ev
-    ivs[[t]] <- iv
+    evs[t, , ] <- ev
+    ivs[t, , ] <- iv
     as[t, ] <- parameters$alphas
     rs[t, , ] <- r
 

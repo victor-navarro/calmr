@@ -10,7 +10,7 @@
 \usage{
 \S4method{augment}{CalmrDesign}(object, model, ...)
 
-.anccrize_design(object, reward_labels = NULL)
+.anccrize_design(object)
 
 \S4method{mapping}{CalmrDesign}(object)
 

@@ -31,7 +31,7 @@ ANCCR <- function(
     dimnames = list(fsnames, seq_len(nt))
   )
 
-  m_ij <- prc <- src <- nc <- anccr <- rs <- array(0, dim = c(
+  m_ij <- prc <- src <- nc <- anccr <- rews <- das <- array(0, dim = c(
     length(fsnames), length(fsnames), nt
   ), dimnames = list(fsnames, fsnames, seq_len(nt)))
 
@@ -44,7 +44,6 @@ ANCCR <- function(
     dim = c(length(fsnames), 1),
     dimnames = list(fsnames, NULL)
   )
-  da <- array(0, dim = c(nt, 1))
   imct <- parameters$betas > parameters$thresholds
   # calculate t_constant based on the t_ratio
   tcons <- parameters$t_ratio * with(
@@ -89,14 +88,14 @@ ANCCR <- function(
         # Update delta
         delta[, timestep] <- delta[, timestep - 1] *
           gammas[timestep]^(
-            experience[timestep, 2] -
-              experience[timestep - 1, 2]
+            experience[timestep, "time"] -
+              experience[timestep - 1, "time"]
           )
         # Update eligibility trace
         e_ij[, timestep] <- e_ij[, timestep - 1] *
           gammas[timestep]^(
-            experience[timestep, 2] -
-              experience[timestep - 1, 2]
+            experience[timestep, "time"] -
+              experience[timestep - 1, "time"]
           )
         # Update average eligibility trace
         m_ij[, , timestep] <- m_ij[, , timestep - 1]
@@ -169,10 +168,10 @@ ANCCR <- function(
 
       # Calculate DA response (replace if optolog says so)
       if (!optolog[timestep, 1]) {
-        da[timestep] <- sum(anccr[event, , timestep] * as.numeric(imct))
+        das[event, , timestep] <- anccr[event, , timestep] * as.numeric(imct)
       } else {
         # TODO: Optolog related stuff
-        da[timestep] <- optolog[timestep, 2]
+        das[event, , timestep] <- optolog[timestep, 2]
       }
       # TODO: Do some extra calculations for omission
       if (event %in% omidx[, 1]) {
@@ -180,14 +179,16 @@ ANCCR <- function(
         r[event, omidx[je_om, 2]] <- r[omidx[je_om, 2], omidx[je_om, 2]]
         imct[event] <- TRUE
       }
+      # Total dopamine
+      tda <- sum(das[event, , timestep])
       # Update meaningful causes index
-      imct[event] <- imct[event] | da[timestep] +
+      imct[event] <- imct[event] | tda +
         parameters$betas[event] > parameters$threshold[event]
 
       # Update estimated reward value
-      rs[, , timestep] <- r
+      rews[, , timestep] <- r
       # Learning
-      if (da[timestep] >= 0) {
+      if (tda >= 0) {
         # Positive (or zero) DA response update rule
         r[, event] <- r[, event] +
           parameters$alpha_r * (experience[timestep, "reward_mag"] - r[, event])
@@ -252,10 +253,19 @@ ANCCR <- function(
   }
   # some reshaping before return
   twos <- sapply(c("e_ij", "e_i", "m_i", "delta"),
-    function(i) t(get(i)), simplify = FALSE
+    function(i) t(get(i)),
+    simplify = FALSE
   )
-  threes <- sapply(c("m_ij", "prc", "src", "nc", "anccr", "rs"),
-    function(i) aperm(get(i), c(3, 1, 2)), simplify = FALSE
+  threes <- sapply(c("m_ij", "prc", "src", "nc", "anccr", "rews", "das"),
+    function(i) {
+      x <- aperm(get(i), c(3, 1, 2))
+      rownames(x) <- NULL
+      x
+    },
+    simplify = FALSE
   )
-  c(twos, threes)
+  # bundle prc and src
+  psrcs <- threes[c("prc", "src")]
+  threes <- threes[c("m_ij", "nc", "anccr", "rews", "das")]
+  c(twos, threes, list(psrcs = psrcs))
 }

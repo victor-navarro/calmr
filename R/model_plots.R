@@ -9,8 +9,16 @@
 #' @importFrom rlang .data
 
 calmr_model_plot <- function(dat, type) {
+  # define some big categories
+  # exceptions are dealt with individually
+  targetted <- c(
+    "vs", "rs", "acts", "relacts",
+    "m_ij", "nc", "anccr", "rews", "das"
+  )
+  singles <- c("as", "e_ij", "e_i", "m_i", "delta")
   # recalculate trial
   dat$trial <- ceiling(dat$trial / dat$block_size)
+  # define geom layers
   line_point <- list(
     ggplot2::stat_summary(geom = "line", fun = "mean"),
     ggplot2::stat_summary(
@@ -20,14 +28,14 @@ calmr_model_plot <- function(dat, type) {
   )
 
   # Assemble aesthetics
-  if (type %in% c("vs", "rs", "acts", "relacts")) {
+  if (type %in% targetted) {
     .aes <- ggplot2::aes(
       x = .data$trial,
       y = .data$value,
       colour = .data$s2
     )
   }
-  if (type %in% c("as")) {
+  if (type %in% singles) {
     .aes <- ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s1)
   }
   if (type %in% c("os")) {
@@ -48,10 +56,10 @@ calmr_model_plot <- function(dat, type) {
     y = .get_prettyname(type),
     x = "Trial/Miniblock"
   ))
-  if (type %in% c("vs", "rs", "eivs", "acts", "relacts")) {
+  if (type %in% targetted) {
     labels <- c(labels, list(ggplot2::labs(colour = "Target")))
   }
-  if (type %in% c("as")) {
+  if (type %in% singles) {
     labels <- c(labels, list(ggplot2::labs(colour = "Stimulus")))
   }
   if (type %in% c("os")) {
@@ -70,7 +78,7 @@ calmr_model_plot <- function(dat, type) {
 
   # Define grid
   grid <- list()
-  if (type %in% c("vs", "eivs")) {
+  if (type %in% targetted) {
     grid <- ggplot2::facet_grid(
       .data$s1 ~ .data$phase,
       scales = "free_x"
@@ -88,7 +96,7 @@ calmr_model_plot <- function(dat, type) {
       scales = "free_x", switch = "y"
     )
   }
-  if (type %in% c("rs")) {
+  if (type %in% c("rs", "anccr", "das")) {
     grid <- ggplot2::facet_grid(
       .data$s1 ~ .data$phase +
         .data$trial_type,
@@ -137,7 +145,17 @@ calmr_model_plot <- function(dat, type) {
     "os" = "Switch Value",
     "eivs" = "Association Strength",
     "acts" = "Activation Strength",
-    "relacts" = "Relative Activation"
+    "relacts" = "Relative Activation",
+    "e_ij" = "Elegibility Trace Strength",
+    "e_i" = "Elegibility Trace Strength",
+    "m_i" = "Base Rate",
+    "m_ij" = "Base Rate",
+    "nc" = "Net Contingency",
+    "anccr" = "Adjusted Net Contingency",
+    "delta" = "Delta",
+    "psrcs" = "Representation Strength",
+    "das" = "DA",
+    "rews" = "Reward Values"
   )
   prettynames[output]
 }

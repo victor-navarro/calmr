@@ -48,7 +48,10 @@ supported_plots <- function(model = NULL) {
     "MAC1975" = c("as", "rs", "vs"),
     "SM2007" = c("acts", "relacts", "vs", "os"),
     "PKH1982" = c("as", "rs", "eivs"),
-    "ANCCR" = c("anccr", "da"),
+    "ANCCR" = c(
+      "e_ij", "e_i", "m_i", "delta", "m_ij",
+      "psrcs", "nc", "anccr", "rews", "das"
+    ),
     "RAND" = c("rs", "vs")
   )
   if (is.null(model)) {
@@ -192,7 +195,10 @@ model_outputs <- function(model = NULL) {
     "MAC1975" = c("as", "rs", "vs"),
     "SM2007" = c("acts", "relacts", "vs", "os"),
     "PKH1982" = c("as", "rs", "eivs"),
-    "ANCCR" = c("anccr", "da"),
+    "ANCCR" = c(
+      "e_ij", "e_i", "m_i", "delta", "m_ij",
+      "psrcs", "nc", "anccr", "rews", "das"
+    ),
     "RAND" = c("rs", "vs")
   )
   if (is.null(model)) {
@@ -212,7 +218,7 @@ model_outputs <- function(model = NULL) {
     "MAC1975" = "vs",
     "SM2007" = "vs",
     "PKH1982" = "eivs",
-    "ANCCR" = "vs",
+    "ANCCR" = "psrcs",
     "RAND" = "vs"
   )
   assoc_map[model]
