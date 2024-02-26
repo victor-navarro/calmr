@@ -16,6 +16,9 @@
     <loc>https://victornavarro.org/calmr/articles/PKH1982.html</loc>
   </url>
   <url>
+    <loc>https://victornavarro.org/calmr/articles/RAND.html</loc>
+  </url>
+  <url>
     <loc>https://victornavarro.org/calmr/articles/RW1972.html</loc>
   </url>
   <url>
@@ -37,6 +40,9 @@
     <loc>https://victornavarro.org/calmr/articles/index.html</loc>
   </url>
   <url>
+    <loc>https://victornavarro.org/calmr/articles/using_time_models.html</loc>
+  </url>
+  <url>
     <loc>https://victornavarro.org/calmr/authors.html</loc>
   </url>
   <url>
@@ -44,6 +50,12 @@
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/news/index.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calmr/reference/ANCCR.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calmr/reference/CalmrDesign-methods.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/CalmrDesign.html</loc>
@@ -158,5 +170,8 @@
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/run_experiment.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calmr/reference/set_reward_parameters.html</loc>
   </url>
 </urlset>
