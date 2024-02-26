@@ -1,0 +1,102 @@
+---
+title: "using_time_models"
+author: "Victor Navarro"
+output: rmarkdown::html_vignette
+bibliography: references.bib
+csl: apa.csl
+vignette: >
+  %\VignetteIndexEntry{using_time_models}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r set-options, echo=FALSE, cache=FALSE}
+options(width = 300)
+```
+
+```{R, include = FALSE}
+knitr::opts_chunk$set(
+  fig.width = 7,
+  collapse = TRUE,
+  comment = "#>",
+  message = F,
+  warning = F
+)
+```
+
+## Time models in calmr
+
+Version 0.5 of `calmr` introduced its first time-based model, ANCCR [@jeong_mesolimbic_2022], and with it, 
+I wrote several additional tools for future models.
+
+#### Changes to trial-based models
+
+The biggest change in calmr version 0.5 is the use of the ">" character and its effect on trial-based models. Before, the ">" character was used to specify a single split within a trial.
+For example, "A>(US)" would encode the typical situation in which stimulus A is followed by the US. This was used to mimic the traditional situation in which we expect an organism
+to start (conditionally) responding before the US is delivered. And so, all trial-based models had two steps within each trial: an expectation step in which the first half of the trial 
+retrieved absent stimuli, and a learning step, in which all stimuli in the trial were associated with each other. The first pass is no more 
+(so start throwing extinction trials, or better yet, probe trials to test your associations).
+
+#### Specifying a design for time-based models
+
+The designs for time-based models are nearly identical to those for trial-based models. However, clever use of the ">" character will
+enrich the parameter list. Let's specify a serial feature discrimination experiment:
+
+```{r}
+library(calmr)
+fpfn <- data.frame(
+  group = c("FP", "FN"),
+  phase1 = c("100F>T>(US)/100T", "100F>T/100T>(US)"),
+  r1 = c(TRUE, TRUE)
+)
+fpfn
+```
+
+And now let's get the parameters for the ANCCR model.
+
+```{r}
+pars <- get_parameters(fpfn, model = "ANCCR")
+# a convenience function to identify which stimuli are considered to be rewards
+pars <- set_reward_parameters(pars, rewards = c("US"))
+# increase learning rates
+pars$alpha_reward <- 0.8
+pars$alpha <- 0.08
+# increase sampling interval
+pars$sampling_interval <- 5
+pars
+```
+
+The ANCCR model has plenty of parameters, yet nearly half of the parameters in the above list correspond to parameters we will use to create 
+the experience that the model will receive. I leave the explanation of model-based parameters for the future. For now, it will suffice 
+to note that we can control the timing between trials (and their events) using things like `post_trial_delay`, `mean_ITI`, `transition_delay`, etc.
+
+Let's make the model's experience and look at the first 20 entries.
+
+```{r}
+experiment <- make_experiment(fpfn,
+  parameters = pars,
+  model = "ANCCR"
+)
+head(experience(experiment)[[1]], 20)
+```
+
+As you can see above, there are several rows per trial, each specifying a different stimulus.
+Time-based models like ANCCR run over a time log because they make ample use of the time difference between events.
+
+Let's run the model and see some plots.
+
+```{r}
+experiment <- run_experiment(experiment)
+```
+```{r}
+# Action values
+patch_plots(plot(experiment, type = "qs"))
+# ANCCR
+patch_plots(plot(experiment, type = "anccrs"))
+# Dopamine transients
+patch_plots(plot(experiment, type = "das"))
+```
+
+And that's it! Easy, right?
+
+#### References

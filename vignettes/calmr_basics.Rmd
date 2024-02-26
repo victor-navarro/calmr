@@ -13,8 +13,8 @@ knitr::opts_chunk$set(
   fig.width = 4,
   collapse = TRUE,
   comment = "#>",
-  message = F,
-  warning = F
+  message = FALSE,
+  warning = FALSE
 )
 ```
 
@@ -57,7 +57,7 @@ The trials in each phase column are specified using a very rigid notation. A few
 1. Trials are preceded by a number. That number represents 
 the number of times that trial will be given in each phase. 
 "10A>(US)" means that the "A>(US)" trial will be given 10 times.
-2. The presence and absence of the unconditioned stimulus is 
+2. The presence and absence of the unconditioned stimulus are 
 not denoted with the traditional "+" and "-" symbols. Instead, 
 here we use parenthesis to denote "complex" stimuli. These can 
 be thought of as an element with a complex name (i.e., with 
@@ -69,7 +69,7 @@ For example, "AB" implies the presence of two stimuli, A and B.
 4. The ">" character is used as a separator 
 of the "expectations" and "correction" steps within the trial. 
 "10A>(US)" means that the model generates an expectation 
-with A only, but learns from the co-occurence of A and the US.
+with A only, but learns from the co-occurrence of A and the US.
 5. The "/" character is used as a trial separator 
 (it does not imply randomization by itself). 
 Thus, "1A/1B" specifies that a single "A" trial 
@@ -209,7 +209,7 @@ graph(my_experiment, t = 20, graph_opts = my_graph_opts)
 ## Final thoughts
 
 The `calmr` package was designed to simulate quickly: 
-write your design and get a glance model predictions. 
+write your design and get a glance at model predictions. 
 That said, the package also has some features for advanced R users, 
 so make sure to check more advanced vignettes when you are ready.
 

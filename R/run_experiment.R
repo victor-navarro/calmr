@@ -47,8 +47,13 @@ run_experiment <- function(
   .calmr_assert("good_experiment", given = experiment)
 
   # now run the experiment
+  pb <- progress::progress_bar$new(
+    format = "Running models [:bar] :current/:total (:percent)",
+    total = length(experiment)
+  )
   results <- apply(experiment@arguments, 1, function(i) {
-    do.call(get_model(i$model), i)
+    pb$tick()
+    do.call(get_model(i$model), c(i, ...))
   }, simplify = FALSE)
 
   experiment@results@raw_results <- results

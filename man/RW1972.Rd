@@ -11,7 +11,7 @@ RW1972(v = NULL, parameters, experience, mapping, ...)
 where S is the number of stimuli.}
 
 \item{parameters}{A list containing the model parameters,
-as returned by parameter_info().}
+as returned by get_parameters().}
 
 \item{experience}{A data.frame specifying trials as rows,
 as returned by \code{make_experiment}}

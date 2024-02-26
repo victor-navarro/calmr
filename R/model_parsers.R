@@ -2,7 +2,12 @@
 # returns a list
 .parse_experiment <- function(experiment) {
   n <- length(experiment)
+  pb <- progress::progress_bar$new(
+    format = "Parsing Results [:bar] :current/:total (:percent)",
+    total = n
+  )
   sapply(seq_len(n), function(r) {
+    pb$tick()
     model <- experiment@arguments$model[r]
     outputs <- model_outputs(model)
     sapply(outputs, function(o) {
@@ -19,13 +24,12 @@
   full_dat <- NULL
   # get general data
   gen_dat <- args$experience[[1]]
-  gen_dat$trial <- seq_len(nrow(gen_dat))
   gen_dat$trial_type <- args$mapping[[1]]$trial_names[gen_dat$tp]
   gen_dat <- dplyr::select(gen_dat, -"tp")
   need_enframe <- c(
     "es", "vs", "eivs",
     "acts", "relacts", "rs", "os",
-    "m_ij", "nc", "anccr", "rews", "psrcs", "das"
+    "m_ij", "ncs", "anccrs", "rews", "psrcs", "das", "qs"
   )
 
   dat <- NULL
@@ -111,7 +115,12 @@
     mod_dat <- experiment@results@parsed_results[
       experiment@arguments$model == m
     ]
+    pb <- progress::progress_bar$new(
+      format = "Aggregating results [:bar] :current/:total (:percent)",
+      total = length(outputs)
+    )
     agg_dat[[m]] <- sapply(outputs, function(o) {
+      pb$tick()
       # put data together
       big_dat <- do.call(rbind, lapply(mod_dat, function(x) x[[o]]))
       # aggregate

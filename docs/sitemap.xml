@@ -13,19 +13,7 @@
     <loc>https://victornavarro.org/calmr/articles/calmr_fits.html</loc>
   </url>
   <url>
-    <loc>https://victornavarro.org/calmr/articles/fitting_heidi.html</loc>
-  </url>
-  <url>
     <loc>https://victornavarro.org/calmr/articles/HD2022.html</loc>
-  </url>
-  <url>
-    <loc>https://victornavarro.org/calmr/articles/heidi_basics.html</loc>
-  </url>
-  <url>
-    <loc>https://victornavarro.org/calmr/articles/heidi_fits.html</loc>
-  </url>
-  <url>
-    <loc>https://victornavarro.org/calmr/articles/heidi_math.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/articles/heidi_similarity.html</loc>
@@ -37,28 +25,19 @@
     <loc>https://victornavarro.org/calmr/articles/MAC1975.html</loc>
   </url>
   <url>
-    <loc>https://victornavarro.org/calmr/articles/mac1975_math.html</loc>
-  </url>
-  <url>
     <loc>https://victornavarro.org/calmr/articles/PKH1982.html</loc>
   </url>
   <url>
-    <loc>https://victornavarro.org/calmr/articles/PKH1982_math.html</loc>
+    <loc>https://victornavarro.org/calmr/articles/RAND.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/articles/RW1972.html</loc>
   </url>
   <url>
-    <loc>https://victornavarro.org/calmr/articles/RW1972_math.html</loc>
-  </url>
-  <url>
     <loc>https://victornavarro.org/calmr/articles/SM2007.html</loc>
   </url>
   <url>
-    <loc>https://victornavarro.org/calmr/articles/SM2007_math.html</loc>
-  </url>
-  <url>
-    <loc>https://victornavarro.org/calmr/articles/SM2007_sims.html</loc>
+    <loc>https://victornavarro.org/calmr/articles/using_time_models.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/authors.html</loc>
@@ -76,6 +55,9 @@
     <loc>https://victornavarro.org/calmr/reference/AIC-CalmrFit-method.html</loc>
   </url>
   <url>
+    <loc>https://victornavarro.org/calmr/reference/ANCCR.html</loc>
+  </url>
+  <url>
     <loc>https://victornavarro.org/calmr/reference/app.html</loc>
   </url>
   <url>
@@ -86,6 +68,9 @@
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/CalmrComparison-class.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calmr/reference/CalmrDesign-methods.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/CalmrDesign.html</loc>
@@ -311,6 +296,9 @@
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/RW1972.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calmr/reference/set_reward_parameters.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/SM2007.html</loc>

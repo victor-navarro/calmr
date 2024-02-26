@@ -1,6 +1,17 @@
+#' Train the ANCCR model
+#'
+#' @param parameters A list containing the model parameters,
+#' as returned by get_parameters().
+#' @param experience A data.frame specifying trials as rows,
+#' as returned by `make_experiment`
+#' @param mapping A named list specifying trial and stimulus mapping,
+#' as returned by `make_experiment`
+#' @returns A list with raw results
+#' @note This model is in a highly experimental state. Use with caution.
+#' @export
 ANCCR <- function(
     parameters, experience,
-    mapping, debug = FALSE, ...) {
+    mapping, debug = FALSE, debug_t = -1, ...) {
   # TODO: Deal with omission as you would do with probe trials
 
   #### Loose parameters ####
@@ -14,7 +25,9 @@ ANCCR <- function(
   # Initialization
   nt <- nrow(experience)
   fsnames <- mapping$unique_functional_stimuli
-  sampling_times <- experience[, "time"]
+  sampling_times <- seq(0, max(experience[, "time"]),
+    by = parameters$sampling_interval
+  )
 
   #### Model initialization ####
 
@@ -31,7 +44,7 @@ ANCCR <- function(
     dimnames = list(fsnames, seq_len(nt))
   )
 
-  m_ij <- prc <- src <- nc <- anccr <- rews <- das <- array(0, dim = c(
+  m_ij <- prc <- src <- ncs <- anccrs <- rews <- das <- array(0, dim = c(
     length(fsnames), length(fsnames), nt
   ), dimnames = list(fsnames, fsnames, seq_len(nt)))
 
@@ -46,11 +59,14 @@ ANCCR <- function(
   )
   imct <- parameters$betas > parameters$thresholds
   # calculate t_constant based on the t_ratio
-  tcons <- parameters$t_ratio * with(
-    parameters,
-    sum(unlist(lapply(list(mean_ITI, post_trial_delay), mean)))
-  )
-  t_constants <- rep(tcons, nt)
+  if (is.na(parameters$t_constant)) {
+    parameters$t_constant <- parameters$t_ratio *
+      with(
+        parameters,
+        sum(unlist(lapply(list(mean_ITI), mean)))
+      )
+  }
+  t_constants <- rep(parameters$t_constant, nt)
   gammas <- exp(-1 / t_constants)
   nextt <- 1
   numsampling <- 0
@@ -70,7 +86,7 @@ ANCCR <- function(
         m_ij[, timestep] <- m_ij[, timestep - 1]
         prc[, timestep] <- prc[, timestep - 1]
         src[, timestep] <- src[, timestep - 1]
-        nc[, timestep] <- nc[, timestep - 1]
+        ncs[, timestep] <- ncs[, timestep - 1]
         skip <- TRUE
       }
     }
@@ -99,8 +115,8 @@ ANCCR <- function(
           )
         # Update average eligibility trace
         m_ij[, , timestep] <- m_ij[, , timestep - 1]
-        anccr[absents, , timestep] <-
-          anccr[absents, , timestep - 1]
+        anccrs[absents, , timestep] <-
+          anccrs[absents, , timestep - 1]
       }
       # Delta reset
       delta[event, timestep] <- 1
@@ -111,7 +127,7 @@ ANCCR <- function(
         (e_ij[, timestep] - m_ij[, event, timestep]) * imct[event]
       # Calculate predecessor representations
       # Sweep subtracts
-      prc[, , timestep] <- sweep(m_ij[, , timestep], 2, m_i[, timestep])
+      prc[, , timestep] <- sweep(m_ij[, , timestep], 1, m_i[, timestep])
       # Calculate successor representation
       src[, , timestep] <- sweep(
         prc[, , timestep], 2,
@@ -129,7 +145,7 @@ ANCCR <- function(
         r[numevents == 0, ] <- r[, numevents == 0] <- 0
 
       # Calculate net contingency
-      nc[, , timestep] <- parameters$w * src[, , timestep] +
+      ncs[, , timestep] <- parameters$w * src[, , timestep] +
         (1 - parameters$w) * prc[, , timestep]
 
       # Indicator for causal links between events
@@ -140,7 +156,7 @@ ANCCR <- function(
       # to allow averaging across timesteps but the bugged
       # line only returns a scalar
       edge_ts <- max(c(1, timestep - nevent_for_edge)):timestep
-      i_edge <- rowMeans(nc[, event, edge_ts, drop = FALSE]) >
+      i_edge <- rowMeans(ncs[, event, edge_ts, drop = FALSE]) >
         parameters$threshold
       i_edge[event] <- FALSE
 
@@ -155,12 +171,12 @@ ANCCR <- function(
       r[event, event] <- experience[timestep, "reward_mag"]
       for (ke in fsnames) {
         # Update edge indicator
-        i_edge_ke <- rowMeans(nc[, ke, edge_ts, drop = FALSE]) >
+        i_edge_ke <- rowMeans(ncs[, ke, edge_ts, drop = FALSE]) >
           parameters$threshold
         i_edge_ke[ke] <- FALSE
         # Update ANCCR
-        anccr[ke, , timestep] <- nc[ke, , timestep] * r[ke, ] -
-          colSums(sweep(anccr[, , timestep] * delta[, timestep], 1,
+        anccrs[ke, , timestep] <- ncs[ke, , timestep] * r[ke, ] -
+          colSums(sweep(anccrs[, , timestep] * delta[, timestep], 1,
             i_edge_ke,
             FUN = "*"
           ))
@@ -168,7 +184,12 @@ ANCCR <- function(
 
       # Calculate DA response (replace if optolog says so)
       if (!optolog[timestep, 1]) {
-        das[event, , timestep] <- anccr[event, , timestep] * as.numeric(imct)
+        # conditioned DA
+        das[event, , timestep] <- anccrs[event, , timestep] *
+          as.numeric(imct)
+        # unconditioned DA
+        das[event, event, timestep] <- das[event, event, timestep] +
+          parameters$betas[event]
       } else {
         # TODO: Optolog related stuff
         das[event, , timestep] <- optolog[timestep, 2]
@@ -191,14 +212,15 @@ ANCCR <- function(
       if (tda >= 0) {
         # Positive (or zero) DA response update rule
         r[, event] <- r[, event] +
-          parameters$alpha_r * (experience[timestep, "reward_mag"] - r[, event])
+          parameters$alpha_reward *
+            (experience[timestep, "reward_mag"] - r[, event])
       } else {
         # Negative DA response update rule (overprediction)
         if (any(i_edge)) {
           r[i_edge, event] <- r[i_edge, event] -
-            parameters$alpha_r * r[i_edge, event] *
-              (delta[i_edge, timestep] / numevents[i_edge, ]) /
-              sum((delta[i_edge] / numevents[i_edge, ]))
+            parameters$alpha_reward * r[i_edge, event] *
+              ((delta[i_edge, timestep] / numevents[i_edge, ]) /
+                sum((delta[i_edge, timestep] / numevents[i_edge, ])))
         } else {
           r[, event] <- r[, event] # ??? Must be vestigial
         }
@@ -250,13 +272,21 @@ ANCCR <- function(
       }
       numsampling <- numsampling + length(subsamplingtime)
     }
+    if (timestep == debug_t) browser()
   }
+
+  # calculate q values
+  qs <- src * rews # nolint: object_usage_linter.
   # some reshaping before return
   twos <- sapply(c("e_ij", "e_i", "m_i", "delta"),
     function(i) t(get(i)),
     simplify = FALSE
   )
-  threes <- sapply(c("m_ij", "prc", "src", "nc", "anccr", "rews", "das"),
+  threes <- sapply(
+    c(
+      "m_ij", "prc", "src", "ncs", "anccrs",
+      "rews", "das", "qs"
+    ),
     function(i) {
       x <- aperm(get(i), c(3, 1, 2))
       rownames(x) <- NULL
@@ -266,6 +296,6 @@ ANCCR <- function(
   )
   # bundle prc and src
   psrcs <- threes[c("prc", "src")]
-  threes <- threes[c("m_ij", "nc", "anccr", "rews", "das")]
+  threes <- threes[c("m_ij", "ncs", "anccrs", "rews", "das", "qs")]
   c(twos, threes, list(psrcs = psrcs))
 }

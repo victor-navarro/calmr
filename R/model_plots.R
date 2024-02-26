@@ -13,7 +13,7 @@ calmr_model_plot <- function(dat, type) {
   # exceptions are dealt with individually
   targetted <- c(
     "vs", "rs", "acts", "relacts",
-    "m_ij", "nc", "anccr", "rews", "das"
+    "m_ij", "ncs", "anccrs", "rews", "das", "qs"
   )
   singles <- c("as", "e_ij", "e_i", "m_i", "delta")
   # recalculate trial
@@ -96,7 +96,7 @@ calmr_model_plot <- function(dat, type) {
       scales = "free_x", switch = "y"
     )
   }
-  if (type %in% c("rs", "anccr", "das")) {
+  if (type %in% c("rs", "psrcs", "anccr", "das", "qs")) {
     grid <- ggplot2::facet_grid(
       .data$s1 ~ .data$phase +
         .data$trial_type,
@@ -150,12 +150,13 @@ calmr_model_plot <- function(dat, type) {
     "e_i" = "Elegibility Trace Strength",
     "m_i" = "Base Rate",
     "m_ij" = "Base Rate",
-    "nc" = "Net Contingency",
-    "anccr" = "Adjusted Net Contingency",
+    "ncs" = "Net Contingency",
+    "anccrs" = "Adjusted Net Contingency",
     "delta" = "Delta",
     "psrcs" = "Representation Strength",
     "das" = "DA",
-    "rews" = "Reward Values"
+    "rews" = "Reward Value",
+    "qs" = "Action Value"
   )
   prettynames[output]
 }

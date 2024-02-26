@@ -156,6 +156,7 @@ make_experiment <- function(
   exptb <- exptb %>%
     dplyr::group_by(.data$iteration, .data$group) |>
     dplyr::summarise(
+      trial = list(seq_along(unlist(.data$tps))),
       tp = list(unlist(.data$tps)),
       tn = list(unlist(.data$tns)),
       is_test = list(unlist(.data$is_test)),

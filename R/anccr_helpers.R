@@ -42,6 +42,7 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
 
 # args is a tbl coming from make_experiment
 # it has (at least) experience, mapping, and parameters
+# TODO: Add normal noise using jitter to simultaneous events
 .get_time_logs <- function(
     args,
     debug = FALSE, ...) {
@@ -90,6 +91,18 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
     # add post_trial delay
     running_time <- running_time +
       pars$post_trial_delay[[trial_name]]
+  }
+  # jitter if necessary
+  if (pars$t_jitter > 0) {
+    eventlog$time <- unlist(sapply(unique(eventlog$time), function(t) {
+      tlen <- sum(eventlog$time == t)
+      if (tlen > 1) {
+        return(t + rnorm(tlen) * pars$t_jitter)
+      } else {
+        return(t)
+      }
+    }, simplify = FALSE))
+    eventlog <- eventlog[order(eventlog$time), ]
   }
   row.names(eventlog) <- NULL
   eventlog

@@ -1,14 +1,14 @@
 # welcome design
 base_df <- data.frame(
   Group = c("Blocking", "Control"),
-  P1 = c("10N(US)", ""),
+  P1 = c("10N>(US)", ""),
   R1 = FALSE,
-  P2 = c("10NL(US)/10#L", "10NL(US)/10#L"),
+  P2 = c("10NL>(US)/10#L", "10NL>(US)/10#L"),
   R2 = FALSE
 )
 
 # whether to print debugging messages
-debug <- FALSE
+debug <- TRUE
 
 base_plot_options <- list(common_scale = TRUE)
 base_sim_options <- list(iterations = 1, miniblocks = TRUE)
@@ -25,7 +25,9 @@ shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
   sim_options <- shiny::reactiveVal(base_sim_options)
   plot_options <- shiny::reactiveVal(base_plot_options)
   parsed <- shiny::reactiveVal(FALSE)
-  needs_globals <- shiny::reactiveVal(FALSE)
+  needs_globalpars <- shiny::reactiveVal(FALSE)
+  needs_trialpars <- shiny::reactiveVal(FALSE)
+  needs_transpars <- shiny::reactiveVal(FALSE)
   ran <- shiny::reactiveVal(FALSE)
   experiment <- shiny::reactiveVal()
   raw_results <- shiny::reactiveVal()
@@ -59,7 +61,7 @@ shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
     df <- rhandsontable::hot_to_r(input$design_tbl)
     cols <- ncol(df) - 1
     df[, paste0("P", cols / 2 + 1)] <- ""
-    df[, paste0("R", cols / 2 + 1)] <- T
+    df[, paste0("R", cols / 2 + 1)] <- TRUE
     design_df(df)
     parsed(FALSE)
     ran(FALSE)
@@ -85,10 +87,9 @@ shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
   shiny::observeEvent(input$parse_design, {
     # get old stimuli (for parameter retention)
     if (debug) print("parsing")
-
     # parse design_df
     design_df(rhandsontable::hot_to_r(input$design_tbl))
-    design(calmr::parse_design(design_df()))
+    design(calmr::parse_design(design_df(), model = input$model_selection))
     # get parameters
     # but, keep parameters if there are compatible parameters already
     new_params <- calmr::get_parameters(
@@ -112,10 +113,21 @@ shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
       model = input$model_selection,
       current_parameters()
     ))
+    # flip needs_globalpars if necessary
+    needs_globalpars(check_globalpars(
+      input$model_selection,
+      current_parameters()
+    ))
+    # flip needs_trialpars if necessary
+    needs_trialpars(check_trialpars(
+      input$model_selection,
+      current_parameters()
+    ))
+    needs_transpars(check_transpars(
+      input$model_selection,
+      current_parameters()
+    ))
 
-
-    # flip needs_globals if necessary
-    needs_globals(check_globals(input$model_selection, current_parameters()))
     # flip parsed
     parsed(TRUE)
   })
@@ -189,6 +201,7 @@ shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
       ph_choices <- unique(design()@design$phase)
       t_choices <- design()@mapping$trial_names
     }
+
     shiny::updateSelectInput(
       inputId = "phase_selection",
       choices = ph_choices,
@@ -263,7 +276,7 @@ shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
     if (debug) print("changing stimulus parameters due to changes in table")
     df <- rhandsontable::hot_to_r(input$stim_par_tbl)
     pars <- current_parameters()
-    newpars <- df_to_parlist(df)
+    newpars <- df_to_parlist(df, type = "stimulus")
     pars[names(newpars)] <- newpars
     current_parameters(pars)
 
@@ -272,7 +285,6 @@ shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
       model = input$model_selection,
       current_parameters()
     ))
-
     ran(FALSE)
   })
 
@@ -281,7 +293,7 @@ shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
     if (debug) print("changing global parameters due to changes in table")
     df <- rhandsontable::hot_to_r(input$glob_par_tbl)
     pars <- current_parameters()
-    newpars <- df_to_parlist(df)
+    newpars <- df_to_parlist(df, type = "global")
     pars[names(newpars)] <- newpars
     current_parameters(pars)
 
@@ -290,7 +302,40 @@ shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
       model = input$model_selection,
       current_parameters()
     ))
+    ran(FALSE)
+  })
 
+  # Changes to the trial parameter table
+  shiny::observeEvent(input$trial_par_tbl$changes$changes, {
+    if (debug) print("changing trial parameters due to changes in table")
+    df <- rhandsontable::hot_to_r(input$trial_par_tbl)
+    pars <- current_parameters()
+    newpars <- df_to_parlist(df, type = "trial")
+    pars[names(newpars)] <- newpars
+    current_parameters(pars)
+
+    # Remake the parameter tables
+    par_tables(make_par_tables(
+      model = input$model_selection,
+      current_parameters()
+    ))
+    ran(FALSE)
+  })
+
+  # Changes to the transition parameter table
+  shiny::observeEvent(input$trans_par_tbl$changes$changes, {
+    if (debug) print("changing transition parameters due to changes in table")
+    df <- rhandsontable::hot_to_r(input$trans_par_tbl)
+    pars <- current_parameters()
+    newpars <- df_to_parlist(df, type = "transition")
+    pars[names(newpars)] <- newpars
+    current_parameters(pars)
+
+    # Remake the parameter tables
+    par_tables(make_par_tables(
+      model = input$model_selection,
+      current_parameters()
+    ))
     ran(FALSE)
   })
 
@@ -335,7 +380,7 @@ shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
   # Global parameters table
   output$glob_par_tbl <- rhandsontable::renderRHandsontable({
     if (debug) print("rendering global parameters table")
-    if (!is.null(current_parameters()) && needs_globals()) {
+    if (!is.null(current_parameters()) && needs_globalpars()) {
       rhandsontable::rhandsontable(par_tables()$global,
         rowHeaders = FALSE
       ) %>%
@@ -344,9 +389,44 @@ shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
   })
 
   # To show global parameters table
-  output$needs_globals <- shiny::reactive({
-    return(needs_globals())
+  output$needs_globalpars <- shiny::reactive({
+    return(needs_globalpars())
   })
+
+  # Trial parameters table
+  output$trial_par_tbl <- rhandsontable::renderRHandsontable({
+    if (debug) print("rendering trial parameters table")
+    if (!is.null(current_parameters()) && needs_trialpars()) {
+      rhandsontable::rhandsontable(par_tables()$trial,
+        rowHeaders = FALSE
+      ) %>%
+        rhandsontable::hot_col(c("Parameter", "Trial"), readOnly = TRUE)
+    }
+  })
+
+  # To show trial parameters table
+  output$needs_trialpars <- shiny::reactive({
+    return(needs_trialpars())
+  })
+
+  # Transition parameters table
+  output$trans_par_tbl <- rhandsontable::renderRHandsontable({
+    if (debug) print("rendering trans parameters table")
+    if (!is.null(current_parameters()) && needs_transpars()) {
+      rhandsontable::rhandsontable(par_tables()$transition,
+        rowHeaders = FALSE
+      ) %>%
+        rhandsontable::hot_col(c("Parameter", "Trial", "Transition"),
+          readOnly = TRUE
+        )
+    }
+  })
+
+  # To show transition parameters table
+  output$needs_transpars <- shiny::reactive({
+    return(needs_transpars())
+  })
+
 
   # To export the state of the design_df and hide/show run button
   output$parsed <- shiny::reactive({
@@ -387,7 +467,7 @@ shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
         stimulus_parameters = rhandsontable::hot_to_r(input$stim_par_tbl)
       )
 
-      if (needs_globals()) {
+      if (needs_globalpars()) {
         data <- c(
           data,
           list(global_parameters = rhandsontable::hot_to_r(input$glob_par_tbl))
@@ -402,6 +482,8 @@ shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
   )
 
   shiny::outputOptions(output, "parsed", suspendWhenHidden = FALSE)
-  shiny::outputOptions(output, "needs_globals", suspendWhenHidden = FALSE)
+  shiny::outputOptions(output, "needs_globalpars", suspendWhenHidden = FALSE)
+  shiny::outputOptions(output, "needs_trialpars", suspendWhenHidden = FALSE)
+  shiny::outputOptions(output, "needs_transpars", suspendWhenHidden = FALSE)
   shiny::outputOptions(output, "ran", suspendWhenHidden = FALSE)
 })

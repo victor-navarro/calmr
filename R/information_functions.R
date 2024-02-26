@@ -50,7 +50,7 @@ supported_plots <- function(model = NULL) {
     "PKH1982" = c("as", "rs", "eivs"),
     "ANCCR" = c(
       "e_ij", "e_i", "m_i", "delta", "m_ij",
-      "psrcs", "nc", "anccr", "rews", "das"
+      "psrcs", "ncs", "anccrs", "rews", "das", "qs"
     ),
     "RAND" = c("rs", "vs")
   )
@@ -123,16 +123,18 @@ parameter_info <- function(model = NULL) {
         "mean_ITI", "max_ITI", "reward_magnitude",
         "betas", "thresholds", "ks",
         "w", "minimum_rate", "sampling_interval",
-        "use_exact_mean", "use_exponential", "t_ratio",
+        "use_exact_mean", "use_exponential",
+        "t_ratio", "t_constant", "t_jitter",
         "alpha", "alpha_reward", "use_timed_alpha",
         "alpha_exponent", "alpha_init", "alpha_min"
       ),
       default_value = c(
         1, 1,
         30, 90, 1,
-        1, 0.6, 0.01,
+        1, 0.6, 1,
         0.5, 1e-3, 0.2,
-        TRUE, TRUE, 1.2,
+        FALSE, TRUE,
+        1.2, NA, 0.1,
         0.02, 0.2, FALSE,
         1, 1, 0
       )
@@ -156,7 +158,8 @@ parameter_info <- function(model = NULL) {
     "ANCCR" = c(
       "w", "minimum_rate",
       "sampling_interval",
-      "use_exact_mean", "use_exponential", "t_ratio",
+      "use_exact_mean", "use_exponential",
+      "t_ratio", "t_constant", "t_jitter",
       "alpha", "alpha_reward", "use_timed_alpha",
       "alpha_exponent", "alpha_init", "alpha_min"
     )
@@ -197,7 +200,7 @@ model_outputs <- function(model = NULL) {
     "PKH1982" = c("as", "rs", "eivs"),
     "ANCCR" = c(
       "e_ij", "e_i", "m_i", "delta", "m_ij",
-      "psrcs", "nc", "anccr", "rews", "das"
+      "psrcs", "ncs", "anccrs", "rews", "das", "qs"
     ),
     "RAND" = c("rs", "vs")
   )
@@ -218,7 +221,7 @@ model_outputs <- function(model = NULL) {
     "MAC1975" = "vs",
     "SM2007" = "vs",
     "PKH1982" = "eivs",
-    "ANCCR" = "psrcs",
+    "ANCCR" = "anccrs",
     "RAND" = "vs"
   )
   assoc_map[model]

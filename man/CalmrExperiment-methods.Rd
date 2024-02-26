@@ -10,6 +10,9 @@
 \alias{parameters,CalmrExperiment-method}
 \alias{parameters}
 \alias{parameters<-,CalmrExperiment-method}
+\alias{experience,CalmrExperiment-method}
+\alias{experience}
+\alias{experience<-,CalmrExperiment-method}
 \alias{results,CalmrExperiment-method}
 \alias{results}
 \alias{raw_results,CalmrExperiment-method}
@@ -30,6 +33,10 @@
 \S4method{parameters}{CalmrExperiment}(x)
 
 \S4method{parameters}{CalmrExperiment}(x) <- value
+
+\S4method{experience}{CalmrExperiment}(x)
+
+\S4method{experience}{CalmrExperiment}(x) <- value
 
 \S4method{results}{CalmrExperiment}(object)
 

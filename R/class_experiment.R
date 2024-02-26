@@ -102,6 +102,36 @@ methods::setMethod("parameters<-", "CalmrExperiment", function(x, value) {
 })
 
 
+methods::setGeneric("experience", function(x) standardGeneric("experience"))
+methods::setGeneric(
+  "experience<-",
+  function(x, value) standardGeneric("experience<-")
+)
+#' @rdname CalmrExperiment-methods
+#' @aliases experience
+#' @export
+methods::setMethod(
+  "experience", "CalmrExperiment",
+  function(x) x@arguments$experience
+)
+#' @rdname CalmrExperiment-methods
+#' @export
+methods::setMethod("experience<-", "CalmrExperiment", function(x, value) {
+  if (length(names(value))) {
+    # If there are names in the experience,
+    # this is meant to be a single list
+    value <- list(value)
+  } else {
+    if (length(value) != length(x)) {
+      stop(sprintf("Length of experience list
+      must be equal to the length of the experiment (%s)", length(x)))
+    }
+  }
+  x@arguments$experience <- value
+  x
+})
+
+
 methods::setGeneric(
   "results",
   function(object) methods::standardGeneric("results")

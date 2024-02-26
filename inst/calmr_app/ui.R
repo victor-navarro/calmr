@@ -98,7 +98,7 @@ ui <- shinydashboard::dashboardPage(
             shiny::selectInput(
               inputId = "model_selection",
               label = "Model", choices = supported_models,
-              selected = "RW1972", multiple = FALSE
+              selected = "ANCCR", multiple = FALSE
             ),
             shiny::conditionalPanel(
               "output.parsed",
@@ -112,13 +112,35 @@ ui <- shinydashboard::dashboardPage(
               )
             ),
             shiny::conditionalPanel(
-              "output.parsed && output.needs_globals",
+              "output.parsed && output.needs_globalpars",
               h5("Global parameters")
             ),
             shiny::conditionalPanel(
-              "output.parsed && output.needs_globals",
+              "output.parsed && output.needs_globalpars",
               rhandsontable::rHandsontableOutput(
                 "glob_par_tbl",
+                width = "100%"
+              )
+            ),
+            shiny::conditionalPanel(
+              "output.parsed && output.needs_trialpars",
+              h5("Trial-specific parameters")
+            ),
+            shiny::conditionalPanel(
+              "output.parsed && output.needs_trialpars",
+              rhandsontable::rHandsontableOutput(
+                "trial_par_tbl",
+                width = "100%"
+              )
+            ),
+            shiny::conditionalPanel(
+              "output.parsed && output.needs_transpars",
+              h5("Transition-specific parameters")
+            ),
+            shiny::conditionalPanel(
+              "output.parsed && output.needs_transpars",
+              rhandsontable::rHandsontableOutput(
+                "trans_par_tbl",
                 width = "100%"
               )
             )

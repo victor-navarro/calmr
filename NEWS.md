@@ -1,4 +1,11 @@
 # calmr 0.5.0
+* Implementation of ANCCR (Jeong et al., 2022), the first time-based model included in calmr.
+* Added parameter distinction between trial-wise and period-wise parameters.
+* Added internal augmentation of design/arguments depending on the model.
+* All trial-based models do not use pre/post distinctions anymore. Using the ">" special character does not affect these models anymore.
+* The ">" special character is used to specify periods within a trial. For example, "A>B>C" implies A is followed by B which is followed by C. See "using_time_models" vignette for additional information.
+* Named stimuli now support numbers trailing characters (e.g., "(US1)" is valid now.)
+
 
 # calmr 0.4.0
 * Major refactoring of classes and models. This should help development moving forward.
@@ -27,7 +34,7 @@
 
 # calmr 0.1.0
 
-* heidi is now calmr: Canonical Associative Learning Models in R. The package now aims to maintain several associative learning models and implement tools for the their use.
+* heidi is now calmr: Canonical Associative Learning Models in R. The package now aims to maintain several associative learning models and implement tools for  their use.
 * Major overhaul of the training function (train_pav_model). All relevant calculations are now done as a function of all functional stimuli instead of just the US.
 * Support for the specification of expectation/correction steps within the trial via ">". For example, the trial "A>(US)" will use only A to generate the expectation, but will learn about both stimuli during the correction step.
 * The previous plotting function for R-values has been revamped to allow both simple and complex versions. The complex version facets r-values on a predictor basis, and uses colour lines for each target.

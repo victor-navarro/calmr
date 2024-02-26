@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">calmr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,12 +54,14 @@
     <a class="dropdown-item" href="../articles/PKH1982.html">PKH1982</a>
     <a class="dropdown-item" href="../articles/SM2007.html">SM2007</a>
     <a class="dropdown-item" href="../articles/HD2022.html">HD2022</a>
+    <a class="dropdown-item" href="../articles/RAND.html">RAND</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Demos</h6>
     <a class="dropdown-item" href="../articles/calmr_basics.html">calmr_basics</a>
     <a class="dropdown-item" href="../articles/calmr_app.html">calmr_app</a>
     <a class="dropdown-item" href="../articles/calmr_fits.html">calmr_fits</a>
     <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
+    <a class="dropdown-item" href="../articles/using_time_models.html">using_time_models</a>
   </div>
 </li>
 <li class="nav-item">
@@ -143,7 +145,7 @@ notation. A few observations about it:</p>
 <li>Trials are preceded by a number. That number represents the number
 of times that trial will be given in each phase. “10A&gt;(US)” means
 that the “A&gt;(US)” trial will be given 10 times.</li>
-<li>The presence and absence of the unconditioned stimulus is not
+<li>The presence and absence of the unconditioned stimulus are not
 denoted with the traditional “+” and “-” symbols. Instead, here we use
 parenthesis to denote “complex” stimuli. These can be thought of as an
 element with a complex name (i.e., with more than one character). As
@@ -154,7 +156,7 @@ stimuli, A and B.</li>
 <li>The “&gt;” character is used as a separator of the “expectations”
 and “correction” steps within the trial. “10A&gt;(US)” means that the
 model generates an expectation with A only, but learns from the
-co-occurence of A and the US.</li>
+co-occurrence of A and the US.</li>
 <li>The “/” character is used as a trial separator (it does not imply
 randomization by itself). Thus, “1A/1B” specifies that a single “A”
 trial and a single “B” trial will be given during that phase. Recall
@@ -194,7 +196,8 @@ fields.</p>
 call <code><a href="../reference/model_info.html">supported_models()</a></code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/model_info.html">supported_models</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "HDI2020" "HD2022"  "RW1972"  "MAC1975" "PKH1982" "SM2007"  "RAND"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "HDI2020" "HD2022"  "RW1972"  "MAC1975" "PKH1982" "SM2007"  "RAND"   </span></span>
+<span><span class="co">#&gt; [8] "ANCCR"</span></span></code></pre></div>
 <p>After picking a model, you can get default parameters for your design
 with <code>get_parameters</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -255,16 +258,16 @@ them accordingly.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 6</span></span></span>
 <span><span class="co">#&gt;    model  iteration group   experience    mapping           parameters      </span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> RW1972         1 Control <span style="color: #949494;">&lt;df [22 × 6]&gt;</span> <span style="color: #949494;">&lt;named list [11]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> RW1972         1 Exp     <span style="color: #949494;">&lt;df [22 × 6]&gt;</span> <span style="color: #949494;">&lt;named list [11]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> RW1972         2 Control <span style="color: #949494;">&lt;df [22 × 6]&gt;</span> <span style="color: #949494;">&lt;named list [11]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> RW1972         2 Exp     <span style="color: #949494;">&lt;df [22 × 6]&gt;</span> <span style="color: #949494;">&lt;named list [11]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> RW1972         3 Control <span style="color: #949494;">&lt;df [22 × 6]&gt;</span> <span style="color: #949494;">&lt;named list [11]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> RW1972         3 Exp     <span style="color: #949494;">&lt;df [22 × 6]&gt;</span> <span style="color: #949494;">&lt;named list [11]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> RW1972         4 Control <span style="color: #949494;">&lt;df [22 × 6]&gt;</span> <span style="color: #949494;">&lt;named list [11]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> RW1972         4 Exp     <span style="color: #949494;">&lt;df [22 × 6]&gt;</span> <span style="color: #949494;">&lt;named list [11]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> RW1972         5 Control <span style="color: #949494;">&lt;df [22 × 6]&gt;</span> <span style="color: #949494;">&lt;named list [11]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> RW1972         5 Exp     <span style="color: #949494;">&lt;df [22 × 6]&gt;</span> <span style="color: #949494;">&lt;named list [11]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> RW1972         1 Control <span style="color: #949494;">&lt;df [22 × 7]&gt;</span> <span style="color: #949494;">&lt;named list [12]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> RW1972         1 Exp     <span style="color: #949494;">&lt;df [22 × 7]&gt;</span> <span style="color: #949494;">&lt;named list [12]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> RW1972         2 Control <span style="color: #949494;">&lt;df [22 × 7]&gt;</span> <span style="color: #949494;">&lt;named list [12]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> RW1972         2 Exp     <span style="color: #949494;">&lt;df [22 × 7]&gt;</span> <span style="color: #949494;">&lt;named list [12]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> RW1972         3 Control <span style="color: #949494;">&lt;df [22 × 7]&gt;</span> <span style="color: #949494;">&lt;named list [12]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> RW1972         3 Exp     <span style="color: #949494;">&lt;df [22 × 7]&gt;</span> <span style="color: #949494;">&lt;named list [12]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> RW1972         4 Control <span style="color: #949494;">&lt;df [22 × 7]&gt;</span> <span style="color: #949494;">&lt;named list [12]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> RW1972         4 Exp     <span style="color: #949494;">&lt;df [22 × 7]&gt;</span> <span style="color: #949494;">&lt;named list [12]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> RW1972         5 Control <span style="color: #949494;">&lt;df [22 × 7]&gt;</span> <span style="color: #949494;">&lt;named list [12]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> RW1972         5 Exp     <span style="color: #949494;">&lt;df [22 × 7]&gt;</span> <span style="color: #949494;">&lt;named list [12]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
 <span><span class="co"># access results</span></span>
 <span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">results</a></span><span class="op">(</span><span class="va">my_experiment</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $rs</span></span>
@@ -379,7 +382,7 @@ experiment.</p>
 <h2 id="final-thoughts">Final thoughts<a class="anchor" aria-label="anchor" href="#final-thoughts"></a>
 </h2>
 <p>The <code>calmr</code> package was designed to simulate quickly:
-write your design and get a glance model predictions. That said, the
+write your design and get a glance at model predictions. That said, the
 package also has some features for advanced R users, so make sure to
 check more advanced vignettes when you are ready.</p>
 </div>

@@ -5,7 +5,7 @@
 #' @param iv (optional) A named matrix of dimensions S,S;
 #' where S is the number of stimuli.
 #' @param parameters A list containing the model parameters,
-#' as returned by parameter_info().
+#' as returned by get_parameters().
 #' @param experience A data.frame specifying trials as rows,
 #' as returned by `make_experiment`
 #' @param mapping A named list specifying trial and stimulus mapping,
