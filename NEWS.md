@@ -1,3 +1,5 @@
+# calmr 0.5.0
+
 # calmr 0.4.0
 * Major refactoring of classes and models. This should help development moving forward.
 * Added several methods for access to CalmrExperiment contents, including `c` (to bind experiments) `results`, `plot`, `graph`, `design` and `parameters`.

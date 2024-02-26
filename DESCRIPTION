@@ -1,6 +1,6 @@
 Package: calmr
 Title: Canonical associative learning models in R
-Version: 0.4.0
+Version: 0.5.0
 Authors@R: 
     person("Victor", "Navarro", , "navarrov@cardiff.ac.uk", role = c("aut", "cre"))
 Description: Tools to simulate associative learning models.
@@ -45,6 +45,7 @@ Collate:
     'MAC1975.R'
     'PKH1982.R'
     'RAND.R'
+    'ANCCR.R'
     'rsa_functions.R'
     'RW1972.R'
     'SM2007.R'
