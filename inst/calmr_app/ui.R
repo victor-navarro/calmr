@@ -98,7 +98,7 @@ ui <- shinydashboard::dashboardPage(
             shiny::selectInput(
               inputId = "model_selection",
               label = "Model", choices = supported_models,
-              selected = "ANCCR", multiple = FALSE
+              selected = "RW1972", multiple = FALSE
             ),
             shiny::conditionalPanel(
               "output.parsed",
