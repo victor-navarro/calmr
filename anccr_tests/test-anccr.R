@@ -1,13 +1,14 @@
+rm(list = ls(all = TRUE))
 df <- data.frame(
-  group = "G",
-  p1 = c("100N>(US)"),
-  r1 = TRUE
+  group = c("FP", "FN"),
+  phase1 = c("100F>T>(US)/100T", "100F>T/100T>(US)"),
+  r1 = c(TRUE, TRUE)
 )
 pars <- get_parameters(df, model = "ANCCR")
 # pars <- set_reward_parameters(pars, rewards = "US")
-# pars$alpha_reward <- .8
-# pars$alpha <- 0.08
-# pars$sampling_interval <- 5 # reduce sampling rate by a ton
+pars$alpha_reward <- .8
+pars$alpha <- 0.08
+pars$sampling_interval <- 5 # reduce sampling rate by a ton
 args <- make_experiment(df,
   parameters = pars, model = "ANCCR"
 )
@@ -16,9 +17,7 @@ args <- make_experiment(df,
 x <- run_experiment(args)
 
 # can plot
-supported_plots("ANCCR")
-
-plot(x, type = "anccrs") # adjusted net contingency
+patch_plots(plot(x, type = "anccrs")) # adjusted net contingency
 plot(x, type = "ncs") # adjusted net contingency
 
 

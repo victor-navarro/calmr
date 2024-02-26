@@ -96,7 +96,7 @@ calmr_model_plot <- function(dat, type) {
       scales = "free_x", switch = "y"
     )
   }
-  if (type %in% c("rs", "psrcs", "anccr", "das", "qs")) {
+  if (type %in% c("rs", "psrcs", "anccrs", "das", "qs")) {
     grid <- ggplot2::facet_grid(
       .data$s1 ~ .data$phase +
         .data$trial_type,

@@ -56,8 +56,6 @@ And now let's get the parameters for the ANCCR model.
 
 ```{r}
 pars <- get_parameters(fpfn, model = "ANCCR")
-# a convenience function to identify which stimuli are considered to be rewards
-pars <- set_reward_parameters(pars, rewards = c("US"))
 # increase learning rates
 pars$alpha_reward <- 0.8
 pars$alpha <- 0.08
