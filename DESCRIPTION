@@ -19,6 +19,7 @@ Imports:
     methods,
     network,
     openxlsx,
+    progress,
     purrr,
     rhandsontable,
     rlang,
