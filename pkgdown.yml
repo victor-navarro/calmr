@@ -12,8 +12,9 @@ articles:
   calmr_basics: calmr_basics.html
   calmr_fits: calmr_fits.html
   heidi_similarity: heidi_similarity.html
+  parallelism_in_calmr: parallelism_in_calmr.html
   using_time_models: using_time_models.html
-last_built: 2024-02-26T21:08Z
+last_built: 2024-02-27T17:24Z
 urls:
   reference: https://victornavarro.org/calmr/reference
   article: https://victornavarro.org/calmr/articles

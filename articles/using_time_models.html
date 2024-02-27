@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">calmr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,6 +62,7 @@
     <a class="dropdown-item" href="../articles/calmr_fits.html">calmr_fits</a>
     <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
     <a class="dropdown-item" href="../articles/using_time_models.html">using_time_models</a>
+    <a class="dropdown-item" href="../articles/parallelism_in_calmr.html">parallelism_in_calmr</a>
   </div>
 </li>
 <li class="nav-item">
@@ -248,27 +249,27 @@ entries.</p>
 <span>  model <span class="op">=</span> <span class="st">"ANCCR"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">experience</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fl">20</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    group trial tp     tn is_test  phase block_size trial.1 stimulus        time reward_mag</span></span>
-<span><span class="co">#&gt; 1     FN     1  4 T&gt;(US)   FALSE phase1          2       1        T   0.2171673          1</span></span>
-<span><span class="co">#&gt; 2     FN     1  4 T&gt;(US)   FALSE phase1          2       1       US   1.2171673          1</span></span>
-<span><span class="co">#&gt; 3     FN     2  3    F&gt;T   FALSE phase1          2       2        F   4.0774405          1</span></span>
-<span><span class="co">#&gt; 4     FN     2  3    F&gt;T   FALSE phase1          2       2        T   5.0774405          1</span></span>
-<span><span class="co">#&gt; 5     FN     3  4 T&gt;(US)   FALSE phase1          2       3        T   6.9562572          1</span></span>
-<span><span class="co">#&gt; 6     FN     3  4 T&gt;(US)   FALSE phase1          2       3       US   7.9562572          1</span></span>
-<span><span class="co">#&gt; 7     FN     4  3    F&gt;T   FALSE phase1          2       4        F  25.2977686          1</span></span>
-<span><span class="co">#&gt; 8     FN     4  3    F&gt;T   FALSE phase1          2       4        T  26.2977686          1</span></span>
-<span><span class="co">#&gt; 9     FN     5  4 T&gt;(US)   FALSE phase1          2       5        T 117.2977686          1</span></span>
-<span><span class="co">#&gt; 10    FN     5  4 T&gt;(US)   FALSE phase1          2       5       US 118.2977686          1</span></span>
-<span><span class="co">#&gt; 11    FN     6  3    F&gt;T   FALSE phase1          2       6        F 174.4975443          1</span></span>
-<span><span class="co">#&gt; 12    FN     6  3    F&gt;T   FALSE phase1          2       6        T 175.4975443          1</span></span>
-<span><span class="co">#&gt; 13    FN     7  4 T&gt;(US)   FALSE phase1          2       7        T 266.4975443          1</span></span>
-<span><span class="co">#&gt; 14    FN     7  4 T&gt;(US)   FALSE phase1          2       7       US 267.4975443          1</span></span>
-<span><span class="co">#&gt; 15    FN     8  3    F&gt;T   FALSE phase1          2       8        F 293.7323727          1</span></span>
-<span><span class="co">#&gt; 16    FN     8  3    F&gt;T   FALSE phase1          2       8        T 294.7323727          1</span></span>
-<span><span class="co">#&gt; 17    FN     9  3    F&gt;T   FALSE phase1          2       9        F 305.1458308          1</span></span>
-<span><span class="co">#&gt; 18    FN     9  3    F&gt;T   FALSE phase1          2       9        T 306.1458308          1</span></span>
-<span><span class="co">#&gt; 19    FN    10  4 T&gt;(US)   FALSE phase1          2      10        T 376.2423635          1</span></span>
-<span><span class="co">#&gt; 20    FN    10  4 T&gt;(US)   FALSE phase1          2      10       US 377.2423635          1</span></span></code></pre></div>
+<span><span class="co">#&gt;    group trial tp     tn is_test  phase block_size trial.1 stimulus       time reward_mag</span></span>
+<span><span class="co">#&gt; 1     FN     1  3    F&gt;T   FALSE phase1          2       1        F   7.758031          1</span></span>
+<span><span class="co">#&gt; 2     FN     1  3    F&gt;T   FALSE phase1          2       1        T   8.758031          1</span></span>
+<span><span class="co">#&gt; 3     FN     2  4 T&gt;(US)   FALSE phase1          2       2        T  71.175053          1</span></span>
+<span><span class="co">#&gt; 4     FN     2  4 T&gt;(US)   FALSE phase1          2       2       US  72.175053          1</span></span>
+<span><span class="co">#&gt; 5     FN     3  3    F&gt;T   FALSE phase1          2       3        F 130.384933          1</span></span>
+<span><span class="co">#&gt; 6     FN     3  3    F&gt;T   FALSE phase1          2       3        T 131.384933          1</span></span>
+<span><span class="co">#&gt; 7     FN     4  4 T&gt;(US)   FALSE phase1          2       4        T 145.378834          1</span></span>
+<span><span class="co">#&gt; 8     FN     4  4 T&gt;(US)   FALSE phase1          2       4       US 146.378834          1</span></span>
+<span><span class="co">#&gt; 9     FN     5  3    F&gt;T   FALSE phase1          2       5        F 177.316811          1</span></span>
+<span><span class="co">#&gt; 10    FN     5  3    F&gt;T   FALSE phase1          2       5        T 178.316811          1</span></span>
+<span><span class="co">#&gt; 11    FN     6  4 T&gt;(US)   FALSE phase1          2       6        T 179.394990          1</span></span>
+<span><span class="co">#&gt; 12    FN     6  4 T&gt;(US)   FALSE phase1          2       6       US 180.394990          1</span></span>
+<span><span class="co">#&gt; 13    FN     7  4 T&gt;(US)   FALSE phase1          2       7        T 198.989308          1</span></span>
+<span><span class="co">#&gt; 14    FN     7  4 T&gt;(US)   FALSE phase1          2       7       US 199.989308          1</span></span>
+<span><span class="co">#&gt; 15    FN     8  3    F&gt;T   FALSE phase1          2       8        F 224.741382          1</span></span>
+<span><span class="co">#&gt; 16    FN     8  3    F&gt;T   FALSE phase1          2       8        T 225.741382          1</span></span>
+<span><span class="co">#&gt; 17    FN     9  3    F&gt;T   FALSE phase1          2       9        F 295.015545          1</span></span>
+<span><span class="co">#&gt; 18    FN     9  3    F&gt;T   FALSE phase1          2       9        T 296.015545          1</span></span>
+<span><span class="co">#&gt; 19    FN    10  4 T&gt;(US)   FALSE phase1          2      10        T 331.731230          1</span></span>
+<span><span class="co">#&gt; 20    FN    10  4 T&gt;(US)   FALSE phase1          2      10       US 332.731230          1</span></span></code></pre></div>
 <p>As you can see above, there are several rows per trial, each
 specifying a different stimulus. Time-based models like ANCCR run over a
 time log because they make ample use of the time difference between
