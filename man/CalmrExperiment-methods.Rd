@@ -17,6 +17,8 @@
 \alias{results}
 \alias{raw_results,CalmrExperiment-method}
 \alias{raw_results}
+\alias{parsed_results,CalmrExperiment-method}
+\alias{parsed_results}
 \alias{length,CalmrExperiment-method}
 \alias{parse,CalmrExperiment-method}
 \alias{aggregate,CalmrExperiment-method}
@@ -41,6 +43,8 @@
 \S4method{results}{CalmrExperiment}(object)
 
 \S4method{raw_results}{CalmrExperiment}(object)
+
+\S4method{parsed_results}{CalmrExperiment}(object)
 
 \S4method{length}{CalmrExperiment}(x)
 

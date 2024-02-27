@@ -25,6 +25,9 @@
     <loc>https://victornavarro.org/calmr/articles/MAC1975.html</loc>
   </url>
   <url>
+    <loc>https://victornavarro.org/calmr/articles/parallelism_in_calmr.html</loc>
+  </url>
+  <url>
     <loc>https://victornavarro.org/calmr/articles/PKH1982.html</loc>
   </url>
   <url>
@@ -119,6 +122,9 @@
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/calmr_model_plot.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calmr/reference/calmr_verbosity.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/compare_models.html</loc>

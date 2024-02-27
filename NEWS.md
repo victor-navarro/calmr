@@ -1,3 +1,7 @@
+# calmr 0.5.1
+* Added parallelization and progress bars via `future`, `future.apply`, and `progressr`.
+* Function `calmr_verbosity` can set the verbosity of the package.
+
 # calmr 0.5.0
 * Implementation of ANCCR (Jeong et al., 2022), the first time-based model included in calmr.
 * Added parameter distinction between trial-wise and period-wise parameters.

@@ -47,8 +47,7 @@ make_experiment <- function(
   arguments <- .build_arguments(
     design = design,
     model = model,
-    options = options,
-    ...
+    options = options
   )
   # add mapping
   arguments$mapping <- list(design@mapping)
@@ -61,6 +60,68 @@ make_experiment <- function(
   return(methods::new("CalmrExperiment",
     arguments = arguments, design = design
   ))
+}
+
+.build_arguments <- function(design, options, model) {
+  args <- .build_experiment(
+    design = design,
+    model = model, options = options
+  )
+  args
+}
+
+# general function to build experiment
+.build_experiment <- function(design, model, options) {
+  # sample trials
+  exptb <- design@design |>
+    tidyr::expand_grid(iteration = 1:options$iterations)
+
+  pb <- progressr::progressor(nrow(exptb))
+  .parallel_standby(pb) # print parallel backend message
+  exptb$samples <- future.apply::future_apply(exptb, 1, function(x) {
+    pb("Sampling trials")
+    do.call(
+      .sample_trials,
+      c(x$phase_info$general_info, list(
+        randomize = x$randomize,
+        masterlist = design@mapping$trial_names,
+        miniblocks = options$miniblocks
+      ))
+    )
+  }, simplify = FALSE, future.seed = TRUE)
+
+  # add phaselab and block information
+  exptb <- tidyr::unnest_wider(exptb, "samples")
+  exptb$phaselab <- apply(exptb, 1, function(x) rep(x$phase, length(x$tps)),
+    simplify = FALSE
+  )
+  exptb$blocks <- apply(exptb, 1, function(x) rep(x$block_size, length(x$tps)),
+    simplify = FALSE
+  )
+
+  # one last manipulation to concatenate phases into single rows
+  exptb <- exptb %>%
+    dplyr::group_by(.data$iteration, .data$group) |>
+    dplyr::summarise(
+      trial = list(seq_along(unlist(.data$tps))),
+      tp = list(unlist(.data$tps)),
+      tn = list(unlist(.data$tns)),
+      is_test = list(unlist(.data$is_test)),
+      phase = list(unlist(.data$phaselab)),
+      block_size = list(unlist(.data$blocks))
+    )
+
+  # bundle into experiences
+  experience <- apply(
+    exptb[c(-1)], 1,
+    function(x) do.call("cbind.data.frame", x)
+  )
+
+  tibble::tibble(
+    model,
+    exptb[, c("iteration", "group")],
+    experience
+  )
 }
 
 .sample_trials <- function(
@@ -116,65 +177,6 @@ make_experiment <- function(
     is_test = tstps,
     block_size = block_size
   ))
-}
-
-.build_arguments <- function(design, options, model) {
-  args <- .build_experiment(
-    design = design,
-    model = model, options = options
-  )
-  args
-}
-
-# general function to build experiment
-.build_experiment <- function(design, model, options) {
-  # sample trials
-  exptb <- design@design |>
-    tidyr::expand_grid(iteration = 1:options$iterations)
-
-  exptb$samples <- apply(exptb, 1, function(x) {
-    do.call(
-      .sample_trials,
-      c(x$phase_info$general_info, list(
-        randomize = x$randomize,
-        masterlist = design@mapping$trial_names,
-        miniblocks = options$miniblocks
-      ))
-    )
-  })
-
-  # add phaselab and block information
-  exptb <- tidyr::unnest_wider(exptb, "samples")
-  exptb$phaselab <- apply(exptb, 1, function(x) rep(x$phase, length(x$tps)),
-    simplify = FALSE
-  )
-  exptb$blocks <- apply(exptb, 1, function(x) rep(x$block_size, length(x$tps)),
-    simplify = FALSE
-  )
-
-  # one last manipulation to concatenate phases into single rows
-  exptb <- exptb %>%
-    dplyr::group_by(.data$iteration, .data$group) |>
-    dplyr::summarise(
-      trial = list(seq_along(unlist(.data$tps))),
-      tp = list(unlist(.data$tps)),
-      tn = list(unlist(.data$tns)),
-      is_test = list(unlist(.data$is_test)),
-      phase = list(unlist(.data$phaselab)),
-      block_size = list(unlist(.data$blocks))
-    )
-
-  # bundle into experiences
-  experience <- apply(
-    exptb[c(-1)], 1,
-    function(x) do.call("cbind.data.frame", x)
-  )
-
-  tibble::tibble(
-    model,
-    exptb[, c("iteration", "group")],
-    experience
-  )
 }
 
 .augment_arguments <- function(args, ...) {

@@ -1,19 +1,15 @@
-# experiment is a CalmrExperiment
+# Parses model raw results
+# args is the tbl row used to fit the model
+# raw are the raw results
 # returns a list
-.parse_experiment <- function(experiment) {
-  n <- length(experiment)
-  pb <- progress::progress_bar$new(
-    format = "Parsing Results [:bar] :current/:total (:percent)",
-    total = n
-  )
-  sapply(seq_len(n), function(r) {
-    pb$tick()
-    model <- experiment@arguments$model[r]
-    outputs <- model_outputs(model)
-    sapply(outputs, function(o) {
-      raw <- experiment@results@raw_results[[r]][[o]]
-      .parse_raw(raw, type = o, args = experiment@arguments[r, ])
-    }, simplify = FALSE)
+.parse_model <- function(raw, args) {
+  model <- args$model
+  outputs <- model_outputs(model)
+  sapply(outputs, function(o) {
+    .parse_raw(raw[[o]],
+      type = o,
+      args = args
+    )
   }, simplify = FALSE)
 }
 
@@ -23,9 +19,7 @@
 .parse_raw <- function(raw, type, args) {
   full_dat <- NULL
   # get general data
-  gen_dat <- args$experience[[1]]
-  gen_dat$trial_type <- args$mapping[[1]]$trial_names[gen_dat$tp]
-  gen_dat <- dplyr::select(gen_dat, -"tp")
+  gen_dat <- args$experience
   need_enframe <- c(
     "es", "vs", "eivs",
     "acts", "relacts", "rs", "os",
@@ -100,7 +94,8 @@
       "successor", "predecessor"
     )
   }
-
+  # renaming
+  full_dat <- dplyr::rename(full_dat, "trial_type" = "tn")
   full_dat
 }
 
@@ -115,12 +110,9 @@
     mod_dat <- experiment@results@parsed_results[
       experiment@arguments$model == m
     ]
-    pb <- progress::progress_bar$new(
-      format = "Aggregating results [:bar] :current/:total (:percent)",
-      total = length(outputs)
-    )
+    pb <- progressr::progressor(length(outputs))
     agg_dat[[m]] <- sapply(outputs, function(o) {
-      pb$tick()
+      pb(message = sprintf("Aggregating model %s", m))
       # put data together
       big_dat <- do.call(rbind, lapply(mod_dat, function(x) x[[o]]))
       # aggregate

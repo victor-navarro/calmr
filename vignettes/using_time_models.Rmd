@@ -19,8 +19,8 @@ knitr::opts_chunk$set(
   fig.width = 7,
   collapse = TRUE,
   comment = "#>",
-  message = F,
-  warning = F
+  message = FALSE,
+  warning = FALSE
 )
 ```
 

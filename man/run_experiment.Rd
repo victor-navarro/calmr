@@ -15,9 +15,7 @@ should be parsed. Default = TRUE.}
 \item{aggregate}{A logical specifying whether the parsed results
 should be aggregated. Default = TRUE.}
 
-\item{...}{Arguments to make the experiment
-(in case x is a design data.frame)
-or arguments for the model call (e.g., debug)}
+\item{...}{Arguments passed to other functions}
 }
 \value{
 A CalmrExperiment with results.

@@ -22,11 +22,7 @@ methods::setClass(
 #' @rdname CalmrExperiment-methods
 #' @export
 setMethod("show", "CalmrExperiment", function(object) {
-  if (is.null(object@results@raw_results)) {
-    print(object@arguments)
-  } else {
-    print(object@results)
-  }
+  print(object@arguments)
 })
 
 methods::setGeneric("design", function(x) methods::standardGeneric("design"))
@@ -156,6 +152,18 @@ methods::setMethod("raw_results", "CalmrExperiment", function(object) {
   object@results@raw_results
 })
 
+methods::setGeneric(
+  "parsed_results",
+  function(object) methods::standardGeneric("parsed_results")
+)
+#' @rdname CalmrExperiment-methods
+#' @aliases parsed_results
+#' @export
+methods::setMethod("parsed_results", "CalmrExperiment", function(object) {
+  # Returns raw results
+  object@results@parsed_results
+})
+
 #' @rdname CalmrExperiment-methods
 #' @export
 methods::setMethod("length", "CalmrExperiment", function(x) {
@@ -166,7 +174,10 @@ methods::setMethod("length", "CalmrExperiment", function(x) {
   }
 })
 
-setGeneric("parse", function(object) methods::standardGeneric("parse"))
+setGeneric(
+  "parse",
+  function(object) methods::standardGeneric("parse")
+)
 #' @rdname CalmrExperiment-methods
 #' @export
 methods::setMethod(
@@ -174,7 +185,20 @@ methods::setMethod(
   function(object) {
     if (!is.null(object@results@raw_results)) {
       # we gotta parse
-      object@results@parsed_results <- .parse_experiment(object)
+      n <- length(object)
+      pb <- progressr::progressor(n)
+      .parallel_standby(pb) # print parallel backend message
+      object@results@parsed_results <- future.apply::future_sapply(
+        seq_len(n), function(r) {
+          pb("Parsing results")
+          .parse_model(
+            object@results@raw_results[[r]],
+            # insane stuff due to tbls being stupid
+            unlist(as.list(object@arguments[r, ]), recursive = FALSE)
+          )
+        },
+        simplify = FALSE
+      )
     } else {
       stop("Found no raw_results to parse.")
     }

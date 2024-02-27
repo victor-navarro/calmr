@@ -5,9 +5,7 @@
 #' should be parsed. Default = TRUE.
 #' @param aggregate A logical specifying whether the parsed results
 #' should be aggregated. Default = TRUE.
-#' @param ... Arguments to make the experiment
-#' (in case x is a design data.frame)
-#' or arguments for the model call (e.g., debug)
+#' @param ... Arguments passed to other functions
 #' @return A CalmrExperiment with results.
 #' @examples
 #' # Using a data.frame only (throws warning)
@@ -33,6 +31,7 @@
 
 run_experiment <- function(
     x, parse = TRUE, aggregate = TRUE, ...) {
+  # start parallel cluster if required
   if (!is_experiment(x)) {
     # parse design
     parsed_design <- parse_design(x)
@@ -47,22 +46,29 @@ run_experiment <- function(
   .calmr_assert("good_experiment", given = experiment)
 
   # now run the experiment
-  pb <- progress::progress_bar$new(
-    format = "Running models [:bar] :current/:total (:percent)",
-    total = length(experiment)
+  pb <- progressr::progressor(length(experiment))
+  .parallel_standby(pb) # print parallel backend message
+  # get results
+  all_results <- future.apply::future_apply(
+    experiment@arguments, 1, function(i) {
+      pb(message = "Running experiment")
+      raw <- do.call(get_model(i$model), c(i, ...))
+      parsed <- NULL
+      if (parse) {
+        parsed <- .parse_model(raw = raw, args = i)
+      }
+      list(raw = raw, parsed = parsed)
+    },
+    simplify = FALSE,
+    future.seed = TRUE
   )
-  results <- apply(experiment@arguments, 1, function(i) {
-    pb$tick()
-    do.call(get_model(i$model), c(i, ...))
-  }, simplify = FALSE)
-
-  experiment@results@raw_results <- results
-
+  experiment@results@raw_results <- lapply(all_results, "[[", "raw")
   if (parse) {
-    experiment <- parse(experiment)
-    if (aggregate) {
-      experiment <- aggregate(experiment)
-    }
+    experiment@results@parsed_results <- lapply(all_results, "[[", "parsed")
+  }
+  # aggregate
+  if (aggregate) {
+    experiment <- aggregate(experiment)
   }
 
   return(experiment)

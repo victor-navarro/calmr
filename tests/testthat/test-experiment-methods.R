@@ -1,4 +1,4 @@
-df <- df <- data.frame(
+df <- data.frame(
   Group = c("True", "Pseudo"),
   P1 = c("2AB(US)/2AC", "1AB(US)/1AB/1AC(US)/1AC"),
   R1 = c(TRUE, TRUE),
@@ -7,6 +7,7 @@ df <- df <- data.frame(
 )
 models <- c("RW1972", "MAC1975")
 df <- parse_design(df)
+
 
 experiments <- sapply(
   models,
@@ -19,6 +20,15 @@ experiments <- sapply(
   },
   simplify = FALSE, USE.NAMES = FALSE
 )
+
+test_that("can run without parsing/aggregating", {
+  res <- run_experiment(experiments[[1]], parse = FALSE, aggregate = FALSE)
+  expect_true(length(raw_results(res)) > 1)
+})
+test_that("can run with parsing", {
+  res <- run_experiment(experiments[[1]], parse = TRUE, aggregate = FALSE)
+  expect_true(length(parsed_results(res)) > 1)
+})
 
 concat <- do.call(c, experiments)
 

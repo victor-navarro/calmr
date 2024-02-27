@@ -8,12 +8,13 @@ articles:
   HD2022: HD2022.html
   heidi_similarity: heidi_similarity.html
   MAC1975: MAC1975.html
+  parallelism_in_calmr: parallelism_in_calmr.html
   PKH1982: PKH1982.html
   RAND: RAND.html
   RW1972: RW1972.html
   SM2007: SM2007.html
   using_time_models: using_time_models.html
-last_built: 2024-02-26T20:26Z
+last_built: 2024-02-27T17:11Z
 urls:
   reference: https://victornavarro.org/calmr/reference
   article: https://victornavarro.org/calmr/articles

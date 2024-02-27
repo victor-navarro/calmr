@@ -1,6 +1,6 @@
 Package: calmr
 Title: Canonical associative learning models in R
-Version: 0.5.0
+Version: 0.5.1
 Authors@R: 
     person("Victor", "Navarro", , "navarrov@cardiff.ac.uk", role = c("aut", "cre"))
 Description: Tools to simulate associative learning models.
@@ -10,6 +10,8 @@ BugReports: https://github.com/victor-navarro/calmr/issues
 Imports: 
     cowplot,
     dplyr,
+    future,
+    future.apply,
     GA,
     ggbeeswarm,
     ggnetwork,
@@ -20,6 +22,7 @@ Imports:
     network,
     openxlsx,
     progress,
+    progressr,
     purrr,
     rhandsontable,
     rlang,
@@ -71,6 +74,8 @@ Collate:
     'get_design.R'
     'heidi_helpers.R'
     'anccr_helpers.R'
+    'calmr_verbosity.R'
+    'parallel_helpers.R'
     'class_model.R'
     'class_design.R'
     'class_result.R'

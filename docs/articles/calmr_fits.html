@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">calmr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,6 +62,7 @@
     <a class="dropdown-item" href="../articles/calmr_fits.html">calmr_fits</a>
     <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
     <a class="dropdown-item" href="../articles/using_time_models.html">using_time_models</a>
+    <a class="dropdown-item" href="../articles/parallelism_in_calmr.html">parallelism_in_calmr</a>
   </div>
 </li>
 <li class="nav-item">
@@ -223,7 +224,7 @@ good idea to see what results <code>run_experiment</code> returns.</p>
 <code class="sourceCode R"><span><span class="va">exp_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_experiment.html">run_experiment</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">results</a></span><span class="op">(</span><span class="va">exp_res</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $as</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 352 × 8</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 360 × 8</span></span></span>
 <span><span class="co">#&gt;    model  group trial trial_type phase    s1    block_size value</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> HD2022 CB1       1 L&gt;(Pellet) training L              2   0.4</span></span>
@@ -234,12 +235,12 @@ good idea to see what results <code>run_experiment</code> returns.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> HD2022 CB1       6 L&gt;(Pellet) training L              2   0.4</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> HD2022 CB1       7 L&gt;(Pellet) training L              2   0.4</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> HD2022 CB1       8 L&gt;(Pellet) training L              2   0.4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> HD2022 CB1       9 L&gt;(Pellet) training L              2   0.4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> HD2022 CB1      10 L&gt;(Pellet) training L              2   0.4</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 342 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> HD2022 CB1      10 L&gt;(Pellet) training L              2   0.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> HD2022 CB1      11 L&gt;(Pellet) training L              2   0.4</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 350 more rows</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $acts</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,056 × 10</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,080 × 10</span></span></span>
 <span><span class="co">#&gt;    model  group trial trial_type phase    s1    s2    block_size type    value</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> HD2022 CB1       1 L&gt;(Pellet) training L     L              2 chainvs     0</span></span>
@@ -250,12 +251,12 @@ good idea to see what results <code>run_experiment</code> returns.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> HD2022 CB1       6 L&gt;(Pellet) training L     L              2 chainvs     0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> HD2022 CB1       7 L&gt;(Pellet) training L     L              2 chainvs     0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> HD2022 CB1       8 L&gt;(Pellet) training L     L              2 chainvs     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> HD2022 CB1       9 L&gt;(Pellet) training L     L              2 chainvs     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> HD2022 CB1      10 L&gt;(Pellet) training L     L              2 chainvs     0</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,046 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> HD2022 CB1      10 L&gt;(Pellet) training L     L              2 chainvs     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> HD2022 CB1      11 L&gt;(Pellet) training L     L              2 chainvs     0</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,070 more rows</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $rs</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,408 × 9</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,440 × 9</span></span></span>
 <span><span class="co">#&gt;    model  group trial trial_type phase    s1    s2    block_size  value</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> HD2022 CB1       1 L&gt;(Pellet) training L     L              2 0     </span></span>
@@ -266,12 +267,12 @@ good idea to see what results <code>run_experiment</code> returns.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> HD2022 CB1       6 L&gt;(Pellet) training L     L              2 0.161 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> HD2022 CB1       7 L&gt;(Pellet) training L     L              2 0.206 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> HD2022 CB1       8 L&gt;(Pellet) training L     L              2 0.206 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> HD2022 CB1       9 L&gt;(Pellet) training L     L              2 0.235 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> HD2022 CB1      10 L&gt;(Pellet) training L     L              2 0.235 </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,398 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> HD2022 CB1      10 L&gt;(Pellet) training L     L              2 0.235 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> HD2022 CB1      11 L&gt;(Pellet) training L     L              2 0.252 </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,430 more rows</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $vs</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,408 × 9</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,440 × 9</span></span></span>
 <span><span class="co">#&gt;    model  group trial trial_type phase    s1    s2    block_size value</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> HD2022 CB1       1 L&gt;(Pellet) training L     L              2     0</span></span>
@@ -282,9 +283,9 @@ good idea to see what results <code>run_experiment</code> returns.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> HD2022 CB1       6 L&gt;(Pellet) training L     L              2     0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> HD2022 CB1       7 L&gt;(Pellet) training L     L              2     0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> HD2022 CB1       8 L&gt;(Pellet) training L     L              2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> HD2022 CB1       9 L&gt;(Pellet) training L     L              2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> HD2022 CB1      10 L&gt;(Pellet) training L     L              2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,398 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> HD2022 CB1      10 L&gt;(Pellet) training L     L              2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> HD2022 CB1      11 L&gt;(Pellet) training L     L              2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,430 more rows</span></span></span></code></pre></div>
 <p>Although the <code>run_experiment</code> function returns an S4 class
 with many things, we only care about one of them: <code>rs</code> (the
 model responses). With them, we can write our model function.</p>
@@ -328,9 +329,9 @@ is no trivial task!&lt;/p&gt;"><sup>1</sup></a></p></li>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">my_model_function</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.2</span>, <span class="fl">.4</span>, <span class="fl">.3</span><span class="op">)</span>, experiment <span class="op">=</span> <span class="va">experiment</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] 0.008050000 0.002650000 0.010565625 0.005048437 0.031828820 0.010963860</span></span>
-<span><span class="co">#&gt;  [7] 0.042306678 0.021017097 0.048334710 0.016245999 0.051563010 0.029143051</span></span>
-<span><span class="co">#&gt; [13] 0.055357838 0.019443732 0.059424110 0.035295622 0.049869514 0.021628425</span></span>
-<span><span class="co">#&gt; [19] 0.076977266 0.040424470 0.052653243 0.023580269 0.079672680 0.043265862</span></span></code></pre></div>
+<span><span class="co">#&gt;  [7] 0.042306678 0.021017097 0.048681560 0.016592848 0.052716098 0.029575459</span></span>
+<span><span class="co">#&gt; [13] 0.045854934 0.019078479 0.072643696 0.036820249 0.059624559 0.021863861</span></span>
+<span><span class="co">#&gt; [19] 0.063996559 0.039602881 0.057311961 0.023442829 0.073063348 0.042882258</span></span></code></pre></div>
 <p>The order of the empirical data and model responses must match. I
 cannot emphasize this point enough: there is nothing within the fit
 function that checks or reorders the data for you. You are the sole
