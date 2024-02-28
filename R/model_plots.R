@@ -13,7 +13,7 @@ calmr_model_plot <- function(dat, type) {
   # exceptions are dealt with individually
   targetted <- c(
     "vs", "rs", "acts", "relacts",
-    "m_ij", "ncs", "anccrs", "rews", "das", "qs"
+    "m_ij", "ncs", "anccrs", "cws", "das", "qs"
   )
   singles <- c("as", "e_ij", "e_i", "m_i", "delta")
   # recalculate trial
@@ -146,17 +146,18 @@ calmr_model_plot <- function(dat, type) {
     "eivs" = "Association Strength",
     "acts" = "Activation Strength",
     "relacts" = "Relative Activation",
-    "e_ij" = "Elegibility Trace Strength",
-    "e_i" = "Elegibility Trace Strength (Lone)",
-    "m_i" = "Base Rate (Lone)",
-    "m_ij" = "Base Rate",
+    "e_ij" = "Event-contingent Elig. Trace",
+    "e_i" = "Elig. Trace",
+    "m_i" = "Baseline Predecessor Representation",
+    "m_ij" = "Predecessor Representation",
     "ncs" = "Net Contingency",
     "anccrs" = "Adjusted Net Contingency",
     "delta" = "Delta",
     "psrcs" = "Representation Strength",
     "das" = "DA",
-    "rews" = "Reward Value",
-    "qs" = "Action Value"
+    "cws" = "Causal Weights",
+    "qs" = "Action Value",
+    "ps" = "Action Probabilities"
   )
   prettynames[output]
 }

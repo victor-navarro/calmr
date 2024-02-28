@@ -23,7 +23,7 @@
   need_enframe <- c(
     "es", "vs", "eivs",
     "acts", "relacts", "rs", "os",
-    "m_ij", "ncs", "anccrs", "rews", "psrcs", "das", "qs"
+    "m_ij", "ncs", "anccrs", "cws", "psrcs", "das", "qs"
   )
 
   dat <- NULL

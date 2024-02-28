@@ -50,7 +50,7 @@ supported_plots <- function(model = NULL) {
     "PKH1982" = c("as", "rs", "eivs"),
     "ANCCR" = c(
       "e_ij", "e_i", "m_i", "delta", "m_ij",
-      "psrcs", "ncs", "anccrs", "rews", "das", "qs"
+      "psrcs", "ncs", "anccrs", "cws", "das", "qs"
     ),
     "RAND" = c("rs", "vs")
   )
@@ -200,7 +200,7 @@ model_outputs <- function(model = NULL) {
     "PKH1982" = c("as", "rs", "eivs"),
     "ANCCR" = c(
       "e_ij", "e_i", "m_i", "delta", "m_ij",
-      "psrcs", "ncs", "anccrs", "rews", "das", "qs"
+      "psrcs", "ncs", "anccrs", "cws", "das", "qs"
     ),
     "RAND" = c("rs", "vs")
   )

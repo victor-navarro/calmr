@@ -3,6 +3,7 @@
 export("%>%")
 export(.anccrize_design)
 export(ANCCR)
+export(TD)
 export(app)
 export(calmr_model_graph)
 export(calmr_model_plot)

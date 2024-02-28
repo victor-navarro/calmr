@@ -1,4 +1,4 @@
-#' Train the ANCCR model
+#' Train the TD model
 #'
 #' @param parameters A list containing the model parameters,
 #' as returned by get_parameters().
@@ -9,7 +9,7 @@
 #' @returns A list with raw results
 #' @note This model is in a highly experimental state. Use with caution.
 #' @export
-ANCCR <- function(
+TD <- function(
     parameters, experience,
     mapping, debug = FALSE, debug_t = -1, ...) {
   # TODO: Deal with omission as you would do with probe trials
@@ -120,7 +120,7 @@ ANCCR <- function(
       }
       # Delta reset
       delta[event, timestep] <- 1
-      # Increment elegibility trace for the event that occurred by + 1
+      # Increment elegibility trace for the event that occurred
       e_ij[event, timestep] <- e_ij[event, timestep] + 1
       # Update average eligibility trace
       m_ij[, event, timestep] <- m_ij[, event, timestep] + alphat *
@@ -149,7 +149,7 @@ ANCCR <- function(
         (1 - parameters$w) * prc[, , timestep]
 
       # Indicator for causal links between events
-      # VN: There is a bug in the original ANCCR code:
+      # VN: There is a bug in the original TD code:
       # The expression: max([1,jt-nevent_for_edge]:jt) is meant to be
       # max([1,jt-nevent_for_edge]):jt
       # This is because the nevent_for_edge is meant
@@ -174,7 +174,7 @@ ANCCR <- function(
         i_edge_ke <- rowMeans(ncs[, ke, edge_ts, drop = FALSE]) >
           parameters$threshold
         i_edge_ke[ke] <- FALSE
-        # Update ANCCR
+        # Update TD
         anccrs[ke, , timestep] <- ncs[ke, , timestep] * r[ke, ] -
           colSums(sweep(anccrs[, , timestep] * delta[, timestep], 1,
             i_edge_ke,
@@ -257,7 +257,6 @@ ANCCR <- function(
       )
 
       # Update average sample eligibility trace
-      # Name: Baseline predecessor representation
       m_i[, timestep + 1] <- m_i[, timestep] + parameters$ks * alphat *
         (e_i[, timestep + 1] - m_i[, timestep])
       for (iit in seq_len(length(subsamplingtime))[-1]) {

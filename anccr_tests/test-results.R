@@ -14,7 +14,7 @@ rmap <- data.frame(
   ),
   "calmr" = c(
     "das", "anccr", "prc", "src", "nc",
-    "rews", "delta", "m_ij", "m_i", "e_ij", "e_i", "qs"
+    "cws", "delta", "m_ij", "m_i", "e_ij", "e_i", "qs"
   )
 )
 
