@@ -57,7 +57,7 @@ ANCCR <- function(
     dim = c(length(fsnames), 1),
     dimnames = list(fsnames, NULL)
   )
-  imct <- parameters$betas > parameters$thresholds
+  imct <- parameters$betas > parameters$threshold
   # calculate t_constant based on the t_ratio
   if (is.na(parameters$t_constant)) {
     parameters$t_constant <- parameters$t_ratio *
@@ -125,7 +125,7 @@ ANCCR <- function(
       # Update average eligibility trace
       m_ij[, event, timestep] <- m_ij[, event, timestep] + alphat *
         (e_ij[, timestep] - m_ij[, event, timestep]) * imct[event]
-      # Calculate predecessor representations
+      # Calculate predecessor representation contingency
       # Sweep subtracts
       prc[, , timestep] <- sweep(m_ij[, , timestep], 1, m_i[, timestep])
       # Calculate successor representation
@@ -258,7 +258,7 @@ ANCCR <- function(
 
       # Update average sample eligibility trace
       # Name: Baseline predecessor representation
-      m_i[, timestep + 1] <- m_i[, timestep] + parameters$ks * alphat *
+      m_i[, timestep + 1] <- m_i[, timestep] + parameters$k * alphat *
         (e_i[, timestep + 1] - m_i[, timestep])
       for (iit in seq_len(length(subsamplingtime))[-1]) {
         alphat <- .anccr_get_alpha(
@@ -269,7 +269,7 @@ ANCCR <- function(
         e_i[, timestep + 1] <- e_i[, timestep + 1] *
           gammas[timestep]^parameters$sampling_interval
         m_i[, timestep + 1] <- m_i[, timestep + 1] +
-          parameters$ks * alphat * (e_i[, timestep + 1] - m_i[, timestep + 1])
+          parameters$k * alphat * (e_i[, timestep + 1] - m_i[, timestep + 1])
       }
       numsampling <- numsampling + length(subsamplingtime)
     }
@@ -277,7 +277,11 @@ ANCCR <- function(
   }
 
   # calculate q values
-  qs <- src * cws # nolint: object_usage_linter.
+  qs <- src * cws
+  # calculate probabilities (funny softmax)
+  cqs <- qs + parameters$cost
+  ps <- exp(cqs) / (exp(0) + exp(cqs)) # nolint: object_usage_linter.
+
   # some reshaping before return
   twos <- sapply(c("e_ij", "e_i", "m_i", "delta"),
     function(i) t(get(i)),
@@ -286,7 +290,7 @@ ANCCR <- function(
   threes <- sapply(
     c(
       "m_ij", "prc", "src", "ncs", "anccrs",
-      "cws", "das", "qs"
+      "cws", "das", "qs", "ps"
     ),
     function(i) {
       x <- aperm(get(i), c(3, 1, 2))
@@ -297,6 +301,8 @@ ANCCR <- function(
   )
   # bundle prc and src
   psrcs <- threes[c("prc", "src")]
-  threes <- threes[c("m_ij", "ncs", "anccrs", "cws", "das", "qs")]
+  threes <- threes[c("m_ij", "ncs", "anccrs", "cws", "das", "qs", "ps")]
+
+
   c(twos, threes, list(psrcs = psrcs))
 }

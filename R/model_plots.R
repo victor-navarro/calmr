@@ -13,7 +13,7 @@ calmr_model_plot <- function(dat, type) {
   # exceptions are dealt with individually
   targetted <- c(
     "vs", "rs", "acts", "relacts",
-    "m_ij", "ncs", "anccrs", "cws", "das", "qs"
+    "m_ij", "ncs", "anccrs", "cws", "das", "qs", "ps"
   )
   singles <- c("as", "e_ij", "e_i", "m_i", "delta")
   # recalculate trial
@@ -96,7 +96,7 @@ calmr_model_plot <- function(dat, type) {
       scales = "free_x", switch = "y"
     )
   }
-  if (type %in% c("rs", "psrcs", "anccrs", "das", "qs")) {
+  if (type %in% c("rs")) {
     grid <- ggplot2::facet_grid(
       .data$s1 ~ .data$phase +
         .data$trial_type,
@@ -146,8 +146,8 @@ calmr_model_plot <- function(dat, type) {
     "eivs" = "Association Strength",
     "acts" = "Activation Strength",
     "relacts" = "Relative Activation",
-    "e_ij" = "Event-contingent Elig. Trace",
-    "e_i" = "Elig. Trace",
+    "e_ij" = "Event-contingent Eleg. Trace",
+    "e_i" = "Eleg. Trace",
     "m_i" = "Baseline Predecessor Representation",
     "m_ij" = "Predecessor Representation",
     "ncs" = "Net Contingency",

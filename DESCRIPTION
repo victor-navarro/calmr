@@ -50,6 +50,7 @@ Collate:
     'PKH1982.R'
     'RAND.R'
     'ANCCR.R'
+    'TD.R'
     'rsa_functions.R'
     'RW1972.R'
     'SM2007.R'

@@ -30,7 +30,7 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
 
 # args are arguments from .build_experiment
 .anccrize_arguments <- function(
-    args, log_fn = calmr:::.get_time_logs) {
+    args, log_fn = calmr:::.get_time_logs, ...) {
   # Uses the vanilla experience to create time logs
   args$experience <- apply(
     args, 1,

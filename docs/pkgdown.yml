@@ -3,7 +3,6 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   ANCCR: ANCCR.html
-  model_parameters: model_parameters.html
   calmr_app: calmr_app.html
   calmr_basics: calmr_basics.html
   calmr_fits: calmr_fits.html
@@ -16,7 +15,7 @@ articles:
   RW1972: RW1972.html
   SM2007: SM2007.html
   using_time_models: using_time_models.html
-last_built: 2024-02-28T11:57Z
+last_built: 2024-02-28T21:20Z
 urls:
   reference: https://victornavarro.org/calmr/reference
   article: https://victornavarro.org/calmr/articles

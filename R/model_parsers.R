@@ -23,7 +23,7 @@
   need_enframe <- c(
     "es", "vs", "eivs",
     "acts", "relacts", "rs", "os",
-    "m_ij", "ncs", "anccrs", "cws", "psrcs", "das", "qs"
+    "m_ij", "ncs", "anccrs", "cws", "psrcs", "das", "qs", "ps"
   )
 
   dat <- NULL
@@ -128,8 +128,8 @@
   # define base terms for aggregation formula
   no_s2 <- c("as", "e_ij", "e_i", "m_i", "delta")
   terms <- c(
-    "group", "trial", "trial_type",
-    "phase", "s1", "s2", "block_size"
+    "group", "phase", "trial_type",
+    "trial", "s1", "s2", "block_size"
   )
   if (type %in% no_s2) {
     terms <- terms[!(terms == "s2")]

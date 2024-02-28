@@ -31,6 +31,7 @@
 
 run_experiment <- function(
     x, parse = TRUE, aggregate = TRUE, ...) {
+  nargs <- list(...)
   # start parallel cluster if required
   if (!is_experiment(x)) {
     # parse design
@@ -52,7 +53,8 @@ run_experiment <- function(
   all_results <- future.apply::future_apply(
     experiment@arguments, 1, function(i) {
       pb(message = "Running experiment")
-      raw <- do.call(get_model(i$model), c(i, ...))
+      if (!is.null(nargs$.callback_fn)) nargs$.callback_fn()
+      raw <- do.call(get_model(i$model), c(i, ...)) # for shiny
       parsed <- NULL
       if (parse) {
         parsed <- .parse_model(raw = raw, args = i)

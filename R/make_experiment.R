@@ -25,7 +25,8 @@
 
 make_experiment <- function(
     design, parameters = NULL,
-    model = NULL, options = get_exp_opts(), ...) {
+    model = NULL, options = get_exp_opts(),
+    ...) {
   # parse design
   design <- parse_design(design,
     model = model, ...
@@ -47,7 +48,8 @@ make_experiment <- function(
   arguments <- .build_arguments(
     design = design,
     model = model,
-    options = options
+    options = options,
+    ...
   )
   # add mapping
   arguments$mapping <- list(design@mapping)
@@ -62,16 +64,19 @@ make_experiment <- function(
   ))
 }
 
-.build_arguments <- function(design, options, model) {
+.build_arguments <- function(design, options, model, ...) {
   args <- .build_experiment(
     design = design,
-    model = model, options = options
+    model = model,
+    options = options, ...
   )
   args
 }
 
 # general function to build experiment
-.build_experiment <- function(design, model, options) {
+.build_experiment <- function(
+    design, model, options,
+    .callback_fn = NULL, ...) {
   # sample trials
   exptb <- design@design |>
     tidyr::expand_grid(iteration = 1:options$iterations)
@@ -80,6 +85,7 @@ make_experiment <- function(
   .parallel_standby(pb) # print parallel backend message
   exptb$samples <- future.apply::future_apply(exptb, 1, function(x) {
     pb("Sampling trials")
+    if (!is.null(.callback_fn)) .callback_fn() # for shiny
     do.call(
       .sample_trials,
       c(x$phase_info$general_info, list(

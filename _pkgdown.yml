@@ -6,7 +6,6 @@ articles:
 - title: Model reference
   navbar: Model reference
   contents:
-  - articles/model_parameters
   - RW1972
   - MAC1975
   - PKH1982

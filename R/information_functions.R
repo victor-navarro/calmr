@@ -50,7 +50,8 @@ supported_plots <- function(model = NULL) {
     "PKH1982" = c("as", "rs", "eivs"),
     "ANCCR" = c(
       "e_ij", "e_i", "m_i", "delta", "m_ij",
-      "psrcs", "ncs", "anccrs", "cws", "das", "qs"
+      "psrcs", "ncs", "anccrs", "cws", "das", "qs",
+      "ps"
     ),
     "RAND" = c("rs", "vs")
   )
@@ -121,7 +122,8 @@ parameter_info <- function(model = NULL) {
       name = c(
         "transition_delay", "post_trial_delay",
         "mean_ITI", "max_ITI", "reward_magnitude",
-        "betas", "thresholds", "ks",
+        "betas", "cost", "temperature",
+        "threshold", "k",
         "w", "minimum_rate", "sampling_interval",
         "use_exact_mean", "use_exponential",
         "t_ratio", "t_constant", "t_jitter",
@@ -131,7 +133,8 @@ parameter_info <- function(model = NULL) {
       default_value = c(
         1, 1,
         30, 90, 1,
-        1, 0.6, 1,
+        1, 0, 1,
+        0.6, 1,
         0.5, 1e-3, 0.2,
         FALSE, TRUE,
         1.2, NA, 0.1,
@@ -156,6 +159,8 @@ parameter_info <- function(model = NULL) {
   global_pars <- list(
     "SM2007" = c("order"),
     "ANCCR" = c(
+      "cost", "temperature",
+      "threshold", "k",
       "w", "minimum_rate",
       "sampling_interval",
       "use_exact_mean", "use_exponential",
@@ -200,7 +205,8 @@ model_outputs <- function(model = NULL) {
     "PKH1982" = c("as", "rs", "eivs"),
     "ANCCR" = c(
       "e_ij", "e_i", "m_i", "delta", "m_ij",
-      "psrcs", "ncs", "anccrs", "cws", "das", "qs"
+      "psrcs", "ncs", "anccrs", "cws", "das", "qs",
+      "ps"
     ),
     "RAND" = c("rs", "vs")
   )

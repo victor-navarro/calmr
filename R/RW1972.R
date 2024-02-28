@@ -65,7 +65,7 @@ RW1972 <- function(v = NULL, # nolint: object_name_linter.
       tlambdas[mapping$nomi2func[nstims]] <-
         parameters$lambdas[nstims]
 
-      err <- oh_fstims * talphas - e # error
+      err <- oh_fstims * tlambdas - e # error
       d <- oh_fstims * talphas %*% err # delta
       diag(d) <- 0
       v <- v + d

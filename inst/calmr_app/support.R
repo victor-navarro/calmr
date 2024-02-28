@@ -22,7 +22,7 @@ make_par_tables <- function(model, parameters) {
 
   if (any(gpars)) {
     globpars <- data.frame(
-      parameter = stringr::str_to_title(parnames[gpars]),
+      parameter = parnames[gpars],
       value = as.numeric(unlist(parameters[parnames[gpars]]))
     )
     names(globpars) <- stringr::str_to_title(names(globpars))
@@ -70,6 +70,8 @@ df_to_parlist <- function(df, type) {
       for (p in parnames[-1]) {
         pars[[p]] <- stats::setNames(df[[p]], stimnames)
       }
+      names(pars) <- stringr::str_to_lower(names(pars))
+      pars
     },
     "global" = {
       pars <- list()
@@ -77,15 +79,18 @@ df_to_parlist <- function(df, type) {
       for (p in parnames[-1]) {
         pars[[p]] <- df[[p]]
       }
+      names(pars) <- stringr::str_to_lower(names(pars))
+      pars
     },
     "trial" = {
-      pars <- unique(df$Parameter)
-      sapply(pars, function(p) {
+      pars <- sapply(unique(df$Parameter), function(p) {
         stats::setNames(
           df$Value[df$Parameter == p],
           df$Trial[df$Parameter == p]
         )
       }, simplify = FALSE)
+      names(pars) <- stringr::str_to_lower(names(pars))
+      pars
     },
     "transition" = {
       parlist <- list()
@@ -99,10 +104,10 @@ df_to_parlist <- function(df, type) {
           )
         }, simplify = FALSE)
       }
+      names(parlist) <- stringr::str_to_lower(names(pars))
       parlist
     }
   )
-  pars
 }
 
 check_globalpars <- function(model, parameters) {
@@ -122,4 +127,23 @@ check_transpars <- function(model, parameters) {
     calmr:::.is_trans_parameter,
     model = model
   ))
+}
+
+join_parameters <- function(old, new) {
+  # changing between models
+  if (length(setdiff(names(old), names(new)))) {
+    return(new)
+  }
+  mapply(.replace, new, old, simplify = FALSE)
+}
+
+# recursively replaces the intersection of parameters
+.replace <- function(a, b, ...) {
+  if (is.list(a)) {
+    mapply(.replace, a = a, b = b, simplify = FALSE)
+  } else {
+    to_replace <- intersect(names(a), names(b))
+    a[to_replace] <- b[to_replace]
+    list(a)
+  }
 }

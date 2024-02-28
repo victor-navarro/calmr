@@ -16,22 +16,6 @@ args <- make_experiment(df,
 # can aggregate
 x <- run_experiment(args)
 res <- results(x)
-plot(res$m_ij$value, res$psrcs$value[res$psrcs$type == "prc"])
 
 # can plot
-patch_plots(plot(x, type = "anccrs")) # adjusted net contingency
-plot(x, type = "ncs") # adjusted net contingency
-
-
-
-plot(x, type = "e_ij") # elegibility trace
-plot(x, type = "e_i") # elegibility trace (???)
-plot(x, type = "m_i") # base rate
-plot(x, type = "m_ij") # more base rates (???)
-plot(x, type = "nc") # net contingency
-
-plot(x, type = "delta") # time delta (???)
-plot(x, type = "psrcs") # fine
-plot(x, type = "das") # dopamine
-plot(x, type = "cws") # reward values
-plot(x, type = "qs") # action values
+all_plots <- plot(x)
