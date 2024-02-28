@@ -279,7 +279,7 @@ ANCCR <- function(
   # calculate q values
   qs <- src * cws
   # calculate probabilities (funny softmax)
-  cqs <- qs + parameters$cost
+  cqs <- (qs + parameters$cost) * parameters$temperature
   ps <- exp(cqs) / (exp(0) + exp(cqs)) # nolint: object_usage_linter.
 
   # some reshaping before return

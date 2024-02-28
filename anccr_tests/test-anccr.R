@@ -9,9 +9,12 @@ pars <- get_parameters(df, model = "ANCCR")
 pars$alpha_reward <- .8
 pars$alpha <- 0.08
 pars$sampling_interval <- 5 # reduce sampling rate by a ton
+pars$temperature <- 10
+
 args <- make_experiment(df,
   parameters = pars, model = "ANCCR"
 )
+
 
 # can aggregate
 x <- run_experiment(args)
@@ -19,3 +22,5 @@ res <- results(x)
 
 # can plot
 all_plots <- plot(x)
+
+plot(x, type = "ps")
