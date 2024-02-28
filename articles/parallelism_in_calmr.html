@@ -55,6 +55,7 @@
     <a class="dropdown-item" href="../articles/SM2007.html">SM2007</a>
     <a class="dropdown-item" href="../articles/HD2022.html">HD2022</a>
     <a class="dropdown-item" href="../articles/RAND.html">RAND</a>
+    <a class="dropdown-item" href="../articles/ANCCR.html">ANCCR</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Demos</h6>
     <a class="dropdown-item" href="../articles/calmr_basics.html">calmr_basics</a>
@@ -144,7 +145,7 @@ package.</p>
 <span><span class="va">end</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html" class="external-link">proc.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">start</span></span>
 <span><span class="va">end</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;  16.760   0.091  16.853</span></span></code></pre></div>
+<span><span class="co">#&gt;  16.846   0.086  16.935</span></span></code></pre></div>
 <p>You can see the timings above, under the <code>elapsed</code> column.
 Let’s try parallelizing now.</p>
 </div>
@@ -166,7 +167,7 @@ on a single computer, you’ll be using
 <span><span class="va">end</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html" class="external-link">proc.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">start</span></span>
 <span><span class="va">end</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   1.742   0.119  10.149</span></span>
+<span><span class="co">#&gt;   2.059   0.089  10.785</span></span>
 <span></span>
 <span><span class="co"># go back to non-parallel evaluations</span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">sequential</span><span class="op">)</span></span></code></pre></div>
@@ -174,7 +175,7 @@ on a single computer, you’ll be using
 <code>future</code> package trades off ease-of-use for bulkier
 overheads. As those overheads tend to be constant, the parallelization
 will have a better payoff once you run more iterations.</p>
-<div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0" line-spacing="2">
 <div id="ref-honey_heidi_2020" class="csl-entry">
 Honey, R. C., Dwyer, D. M., &amp; Iliescu, A. F. (2020).
 <span>HeiDI</span>: <span>A</span> model for <span>Pavlovian</span>

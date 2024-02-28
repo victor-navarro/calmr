@@ -1,7 +1,8 @@
-pandoc: 2.19.2
+pandoc: 3.1.11
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
+  ANCCR: ANCCR.html
   HD2022: HD2022.html
   MAC1975: MAC1975.html
   PKH1982: PKH1982.html
@@ -14,7 +15,7 @@ articles:
   heidi_similarity: heidi_similarity.html
   parallelism_in_calmr: parallelism_in_calmr.html
   using_time_models: using_time_models.html
-last_built: 2024-02-27T17:24Z
+last_built: 2024-02-28T21:25Z
 urls:
   reference: https://victornavarro.org/calmr/reference
   article: https://victornavarro.org/calmr/articles
