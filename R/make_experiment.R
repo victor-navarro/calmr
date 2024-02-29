@@ -7,6 +7,7 @@
 #' returned by `get_parameters`
 #' @param model A string specifying the model name. One of `supported_models()`
 #' @param options A list with options as returned by `get_exp_opts`
+#' @param .callback_fn A function for keeping track of progress. Internal use.
 #' @param ... Extra parameters passed to other functions
 #' @return A CalmrExperiment object
 #' @seealso \code{\link{parse_design}},
@@ -25,18 +26,17 @@
 
 make_experiment <- function(
     design, parameters = NULL,
-    model = NULL, options = get_exp_opts(),
+    model = NULL,
+    options = get_exp_opts(),
+    .callback_fn = NULL,
     ...) {
   # parse design
   design <- parse_design(design,
     model = model, ...
   )
-
   .calmr_assert("length", 1, model = model)
-
   # assert model
   model <- .calmr_assert("supported_model", model)
-
   # assert parameters
   parameters <- .calmr_assert("parameters", parameters,
     design = design, model = model
@@ -44,33 +44,33 @@ make_experiment <- function(
   # assert options
   options <- .calmr_assert("experiment_options", options)
 
-  # build the experiment
-  arguments <- .build_arguments(
-    design = design,
-    model = model,
-    options = options,
-    ...
-  )
-  # add mapping
-  arguments$mapping <- list(design@mapping)
-  # add parameters
-  arguments$parameters <- list(parameters)
+  # build the arguments for the experiment
+  iter <- options$iterations
+  pb <- progressr::progressor(iter)
+  .parallel_standby(pb) # print parallel backend message
+  arguments <- future.apply::future_lapply(seq_len(iter), function(x) {
+    pb("Building experiment")
+    if (!is.null(.callback_fn)) .callback_fn() # for shiny
+    args <- .build_experiment(
+      design = design,
+      model = model,
+      options = options,
+      ...
+    )
+    # add mapping
+    args$mapping <- list(design@mapping)
+    # add parameters
+    args$parameters <- list(parameters)
+    # augment arguments if necessary
+    args <- .augment_arguments(args, ...)
+  }, future.seed = TRUE)
 
-  # augment arguments if necessary
-  arguments <- .augment_arguments(arguments, ...)
+  arguments <- tibble::enframe(arguments, name = "iteration") |>
+    tidyr::unnest("value")
 
   return(methods::new("CalmrExperiment",
     arguments = arguments, design = design
   ))
-}
-
-.build_arguments <- function(design, options, model, ...) {
-  args <- .build_experiment(
-    design = design,
-    model = model,
-    options = options, ...
-  )
-  args
 }
 
 # general function to build experiment
@@ -78,14 +78,8 @@ make_experiment <- function(
     design, model, options,
     .callback_fn = NULL, ...) {
   # sample trials
-  exptb <- design@design |>
-    tidyr::expand_grid(iteration = 1:options$iterations)
-
-  pb <- progressr::progressor(nrow(exptb))
-  .parallel_standby(pb) # print parallel backend message
-  exptb$samples <- future.apply::future_apply(exptb, 1, function(x) {
-    pb("Sampling trials")
-    if (!is.null(.callback_fn)) .callback_fn() # for shiny
+  exptb <- design@design
+  exptb$samples <- apply(exptb, 1, function(x) {
     do.call(
       .sample_trials,
       c(x$phase_info$general_info, list(
@@ -94,7 +88,7 @@ make_experiment <- function(
         miniblocks = options$miniblocks
       ))
     )
-  }, simplify = FALSE, future.seed = TRUE)
+  }, simplify = FALSE)
 
   # add phaselab and block information
   exptb <- tidyr::unnest_wider(exptb, "samples")
@@ -106,8 +100,8 @@ make_experiment <- function(
   )
 
   # one last manipulation to concatenate phases into single rows
-  exptb <- exptb %>%
-    dplyr::group_by(.data$iteration, .data$group) |>
+  exptb <- exptb |>
+    dplyr::group_by(.data$group) |>
     dplyr::summarise(
       trial = list(seq_along(unlist(.data$tps))),
       tp = list(unlist(.data$tps)),
@@ -119,13 +113,13 @@ make_experiment <- function(
 
   # bundle into experiences
   experience <- apply(
-    exptb[c(-1)], 1,
+    exptb, 1,
     function(x) do.call("cbind.data.frame", x)
   )
 
   tibble::tibble(
     model,
-    exptb[, c("iteration", "group")],
+    group = exptb$group,
     experience
   )
 }

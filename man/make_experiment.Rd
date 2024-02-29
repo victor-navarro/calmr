@@ -9,6 +9,7 @@ make_experiment(
   parameters = NULL,
   model = NULL,
   options = get_exp_opts(),
+  .callback_fn = NULL,
   ...
 )
 }
@@ -21,6 +22,8 @@ returned by \code{get_parameters}}
 \item{model}{A string specifying the model name. One of \code{supported_models()}}
 
 \item{options}{A list with options as returned by \code{get_exp_opts}}
+
+\item{.callback_fn}{A function for keeping track of progress. Internal use.}
 
 \item{...}{Extra parameters passed to other functions}
 }

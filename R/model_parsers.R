@@ -1,3 +1,5 @@
+#' @import data.table
+
 # Parses model raw results
 # args is the tbl row used to fit the model
 # raw are the raw results
@@ -117,7 +119,7 @@
       # put data together
       big_dat <- do.call(rbind, lapply(mod_dat, function(x) x[[o]]))
       # aggregate
-      .aggregate_results(big_dat, type = o)
+      .aggregate_results_data_table(big_dat, type = o)
     }, simplify = FALSE)
   }
   agg_dat
@@ -126,6 +128,32 @@
 # dat is a tbl
 # type is the type of data
 .aggregate_results <- function(dat, type) {
+  # define base terms for aggregation formula
+  no_s2 <- c("as", "e_ij", "e_i", "m_i", "delta")
+  terms <- c(
+    "phase", "trial_type",
+    "trial", "s1", "s2", "block_size"
+  )
+  if ("time" %in% names(dat)) {
+    terms <- c(terms, "time")
+  }
+  if (type %in% no_s2) {
+    terms <- terms[!(terms == "s2")]
+  }
+  if ("type" %in% names(dat)) {
+    terms <- c(terms, "type")
+  }
+  if (type %in% c("os")) {
+    terms <- c(terms, "comp")
+  }
+  form <- formula(paste0("value~", paste0(terms, collapse = "+")))
+  aggregate(form, dat, mean)
+}
+
+# dat is a tbl
+# type is the type of data
+.aggregate_results_data_table <- function(dat, type) {
+  dat <- data.table::data.table(dat)
   # define base terms for aggregation formula
   no_s2 <- c("as", "e_ij", "e_i", "m_i", "delta")
   terms <- c(
@@ -144,9 +172,10 @@
   if (type %in% c("os")) {
     terms <- c(terms, "comp")
   }
-  form <- formula(paste0("value~", paste0(terms, collapse = "+")))
-  aggregate(form, dat, mean)
+  form <- paste0(terms, collapse = ",")
+  data.table::setDT(dat)[, list("value" = mean(value)), by = form]
 }
+
 
 filter_calmr_results <- function(parsed_experiment, filters) {
   if (!is.null(parsed_experiment)) {
