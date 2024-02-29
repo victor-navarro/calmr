@@ -12,7 +12,7 @@ calmr_model_plot <- function(dat, type) {
   # define some big categories
   # exceptions are dealt with individually
   targetted <- c(
-    "vs", "rs", "acts", "relacts",
+    "vs", "rs", "acts", "relacts", "psrcs",
     "m_ij", "ncs", "anccrs", "cws", "das", "qs", "ps"
   )
   singles <- c("as", "e_ij", "e_i", "m_i", "delta")

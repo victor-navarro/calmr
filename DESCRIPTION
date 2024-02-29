@@ -54,7 +54,7 @@ Collate:
     'rsa_functions.R'
     'RW1972.R'
     'SM2007.R'
-    'calmr_app.R'
+    'app.R'
     'compare_models.R'
     'data.R'
     'fit_helpers.R'

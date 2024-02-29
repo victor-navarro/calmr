@@ -81,6 +81,7 @@
       cols = tidyr::all_of(long_cols), names_to = "s1"
     )
   }
+
   # labelling for Konorskian models
   if (type %in% c("eivs")) {
     full_dat$assoc_type <- ifelse(full_dat$type == "evs",
@@ -131,6 +132,9 @@
     "group", "phase", "trial_type",
     "trial", "s1", "s2", "block_size"
   )
+  if ("time" %in% names(dat)) {
+    terms <- c(terms, "time")
+  }
   if (type %in% no_s2) {
     terms <- terms[!(terms == "s2")]
   }
