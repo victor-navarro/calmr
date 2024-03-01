@@ -39,7 +39,7 @@ ANCCR <- function(
   # TODO: Do the opto logs
   optolog <- array(FALSE, dim = c(nt, 2))
 
-  e_ij <- e_i <- m_i <- delta <- array(0,
+  e_ij <- e_i <- m_i <- delta <- imcts <- array(0,
     dim = c(length(fsnames), nt),
     dimnames = list(fsnames, seq_len(nt))
   )
@@ -94,6 +94,8 @@ ANCCR <- function(
     }
 
     if (!skip) {
+      # save imcts
+      imcts[, timestep] <- imct
       # This is the serious block
       numevents[event, ] <- numevents[event, ] + 1
       alphat <- .anccr_get_alpha(
@@ -115,7 +117,7 @@ ANCCR <- function(
             experience[timestep, "time"] -
               experience[timestep - 1, "time"]
           )
-        # Update average eligibility trace
+        # Set eligibility trace and anccrs
         m_ij[, , timestep] <- m_ij[, , timestep - 1]
         anccrs[absents, , timestep] <- anccrs[absents, , timestep - 1]
       }
@@ -123,7 +125,7 @@ ANCCR <- function(
       delta[event, timestep] <- 1
       # Increment elegibility trace for the event that occurred by + 1
       e_ij[event, timestep] <- e_ij[event, timestep] + 1
-      # Update average eligibility trace
+      # Update predecessor representation
       m_ij[, event, timestep] <- m_ij[, event, timestep] + alphat *
         (e_ij[, timestep] - m_ij[, event, timestep]) * imct[event]
       # Calculate predecessor representation contingency
@@ -204,8 +206,11 @@ ANCCR <- function(
       # Total dopamine
       tda <- sum(das[event, , timestep])
       # Update meaningful causes index
-      imct[event] <- imct[event] | tda +
-        parameters$betas[event] > parameters$threshold
+      imct[event] <- imct[event] |
+        (
+          (tda + parameters$betas[event]) >
+            parameters$threshold
+        )
 
       # Update estimated reward value
       cws[, , timestep] <- r
@@ -285,7 +290,7 @@ ANCCR <- function(
   ps <- exp(cqs) / (exp(0) + exp(cqs)) # nolint: object_usage_linter.
 
   # some reshaping before return
-  twos <- sapply(c("e_ij", "e_i", "m_i", "delta"),
+  twos <- sapply(c("e_ij", "e_i", "m_i", "delta", "imcts"),
     function(i) t(get(i)),
     simplify = FALSE
   )
