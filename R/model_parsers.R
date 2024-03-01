@@ -8,7 +8,7 @@
   model <- args$model
   outputs <- model_outputs(model)
   sapply(outputs, function(o) {
-    .parse_raw(raw[[o]],
+    .parse_raw_data_table(raw[[o]],
       type = o,
       args = args
     )
@@ -83,18 +83,82 @@
       cols = tidyr::all_of(long_cols), names_to = "s1"
     )
   }
+  # renaming
+  full_dat <- dplyr::rename(full_dat, "trial_type" = "tn")
+  full_dat
+}
 
-  # labelling for Konorskian models
-  if (type %in% c("eivs")) {
-    full_dat$assoc_type <- ifelse(full_dat$type == "evs",
-      "excitatory", "inhibitory"
-    )
+.unnest_raw <- function(raw) {
+  raw <- data.table::as.data.table(raw)
+  names(raw)[names(raw) == "V1"] <- "trial"
+  raw
+}
+
+.unnest_raw_list <- function(raw) {
+  dims <- lapply(raw, dim)
+  udims <- unique(dims)
+  matches <- lapply(udims, function(u) {
+    which(unlist(lapply(dims, function(d) all(d == u))))
+  })
+  raw <- data.table::rbindlist(lapply(matches, function(m) {
+    data.table::as.data.table(aperm(simplify2array(raw[m]), c(3, 1, 2)))
+  }))
+  # now need to put the trials back
+  raw[, "V1" := rep(unlist(matches), sapply(dims, prod))]
+  names(raw)[names(raw) == "V1"] <- "trial"
+  raw
+}
+
+.parse_raw_data_table <- function(raw, type, args) {
+  # outputs containing three dimensional arrays (trial, s, s)
+  threes <- c(
+    "es", "vs", "eivs",
+    "acts", "relacts", "rs", "os",
+    "m_ij", "ncs", "anccrs", "cws",
+    "psrcs", "das", "qs", "ps"
+  )
+  # get general data
+  gen_dat <- data.table::as.data.table(args$experience)
+  if (!is.list(raw)) {
+    raw <- .unnest_raw(raw)
+  } else {
+    if (args$model %in% c("HDI2020", "HD2022") && type == "acts") {
+      raw <- data.table::rbindlist(
+        sapply(names(raw), function(r) {
+          hold <- .unnest_raw_list(raw[[r]])
+          hold[, "type" := r]
+        }, simplify = FALSE)
+      )
+    } else {
+      raw <- data.table::rbindlist(
+        sapply(names(raw), function(r) {
+          hold <- .unnest_raw(raw[[r]])
+          hold[, "type" := r]
+        }, simplify = FALSE)
+      )
+    }
   }
-  # labelling for ANCCR
-  if (type %in% c("psrcs")) {
-    full_dat$rep_type <- ifelse(
-      full_dat$type == "src",
-      "successor", "predecessor"
+  if (type %in% threes) {
+    # can bind directly
+    full_dat <- raw[gen_dat, on = list(trial)]
+    # renaming
+    if (type %in% c("os")) {
+      # the only model output that does not follow Var1 = s1, Var2 = s2
+      full_dat <- dplyr::rename(full_dat,
+        "s1" = "V2", "comp" = "V3", "s2" = "V4"
+      )
+    } else {
+      full_dat <- dplyr::rename(full_dat,
+        "s1" = "V2", "s2" = "V3"
+      )
+    }
+  } else {
+    # need to melt, but no need to name
+    full_dat <- cbind(gen_dat, raw)
+    full_dat <- data.table::melt(full_dat,
+      id.vars = names(gen_dat),
+      measure.vars = names(raw),
+      variable.name = "s1"
     )
   }
   # renaming
