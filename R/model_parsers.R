@@ -1,3 +1,5 @@
+#' @import data.table
+
 # Parses model raw results
 # args is the tbl row used to fit the model
 # raw are the raw results
@@ -81,6 +83,7 @@
       cols = tidyr::all_of(long_cols), names_to = "s1"
     )
   }
+
   # labelling for Konorskian models
   if (type %in% c("eivs")) {
     full_dat$assoc_type <- ifelse(full_dat$type == "evs",
@@ -101,7 +104,9 @@
 
 # experiment is a CalmrExperiment
 # returns a list of tibbles
-.aggregate_experiment <- function(experiment) {
+.aggregate_experiment <- function(
+    experiment,
+    .callback_fn = NULL, ...) {
   # Aggregation is done on a model by model basis
   models <- unique(experiment@arguments$model)
   agg_dat <- list()
@@ -113,10 +118,11 @@
     pb <- progressr::progressor(length(outputs))
     agg_dat[[m]] <- sapply(outputs, function(o) {
       pb(message = sprintf("Aggregating model %s", m))
+      if (!is.null(.callback_fn)) .callback_fn()
       # put data together
       big_dat <- do.call(rbind, lapply(mod_dat, function(x) x[[o]]))
       # aggregate
-      .aggregate_results(big_dat, type = o)
+      .aggregate_results_data_table(big_dat, type = o)
     }, simplify = FALSE)
   }
   agg_dat
@@ -128,9 +134,12 @@
   # define base terms for aggregation formula
   no_s2 <- c("as", "e_ij", "e_i", "m_i", "delta")
   terms <- c(
-    "group", "phase", "trial_type",
+    "phase", "trial_type",
     "trial", "s1", "s2", "block_size"
   )
+  if ("time" %in% names(dat)) {
+    terms <- c(terms, "time")
+  }
   if (type %in% no_s2) {
     terms <- terms[!(terms == "s2")]
   }
@@ -143,6 +152,33 @@
   form <- formula(paste0("value~", paste0(terms, collapse = "+")))
   aggregate(form, dat, mean)
 }
+
+# dat is a tbl
+# type is the type of data
+.aggregate_results_data_table <- function(dat, type) {
+  dat <- data.table::data.table(dat)
+  # define base terms for aggregation formula
+  no_s2 <- c("as", "e_ij", "e_i", "m_i", "delta")
+  terms <- c(
+    "group", "phase", "trial_type",
+    "trial", "s1", "s2", "block_size"
+  )
+  if ("time" %in% names(dat)) {
+    terms <- c(terms, "time")
+  }
+  if (type %in% no_s2) {
+    terms <- terms[!(terms == "s2")]
+  }
+  if ("type" %in% names(dat)) {
+    terms <- c(terms, "type")
+  }
+  if (type %in% c("os")) {
+    terms <- c(terms, "comp")
+  }
+  form <- paste0(terms, collapse = ",")
+  data.table::setDT(dat)[, list("value" = mean(value)), by = form]
+}
+
 
 filter_calmr_results <- function(parsed_experiment, filters) {
   if (!is.null(parsed_experiment)) {

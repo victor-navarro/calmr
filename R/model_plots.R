@@ -12,7 +12,7 @@ calmr_model_plot <- function(dat, type) {
   # define some big categories
   # exceptions are dealt with individually
   targetted <- c(
-    "vs", "rs", "acts", "relacts",
+    "vs", "rs", "acts", "relacts", "psrcs",
     "m_ij", "ncs", "anccrs", "cws", "das", "qs", "ps"
   )
   singles <- c("as", "e_ij", "e_i", "m_i", "delta")
@@ -152,7 +152,7 @@ calmr_model_plot <- function(dat, type) {
     "m_ij" = "Predecessor Representation",
     "ncs" = "Net Contingency",
     "anccrs" = "Adjusted Net Contingency",
-    "delta" = "Delta",
+    "delta" = "Time Delta",
     "psrcs" = "Representation Strength",
     "das" = "DA",
     "cws" = "Causal Weights",

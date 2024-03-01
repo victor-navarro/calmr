@@ -75,7 +75,6 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
       eventlog <- rbind(
         eventlog,
         data.frame(experience[ti, ],
-          trial = ti,
           stimulus = period_funcs[[p]],
           time = running_time,
           reward_mag = pars$reward_magnitude[period_funcs[[p]]],

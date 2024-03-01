@@ -52,6 +52,8 @@ ANCCR <- function(
     length(fsnames),
     length(fsnames)
   ), dimnames = list(fsnames, fsnames))
+  # prepopulate values based on their innateness
+  diag(r) <- parameters$reward_magnitude
 
   numevents <- array(0,
     dim = c(length(fsnames), 1),
@@ -115,8 +117,7 @@ ANCCR <- function(
           )
         # Update average eligibility trace
         m_ij[, , timestep] <- m_ij[, , timestep - 1]
-        anccrs[absents, , timestep] <-
-          anccrs[absents, , timestep - 1]
+        anccrs[absents, , timestep] <- anccrs[absents, , timestep - 1]
       }
       # Delta reset
       delta[event, timestep] <- 1
@@ -204,7 +205,7 @@ ANCCR <- function(
       tda <- sum(das[event, , timestep])
       # Update meaningful causes index
       imct[event] <- imct[event] | tda +
-        parameters$betas[event] > parameters$threshold[event]
+        parameters$betas[event] > parameters$threshold
 
       # Update estimated reward value
       cws[, , timestep] <- r
@@ -233,6 +234,7 @@ ANCCR <- function(
         sampling_times >= experience[timestep, "time"] &
           sampling_times < experience[timestep + 1, "time"]
       ]
+
       e_i[, timestep + 1] <- e_i[, timestep] *
         gammas[timestep]^parameters$sampling_interval
       if (length(subsamplingtime)) {
