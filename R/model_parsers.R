@@ -104,7 +104,9 @@
 
 # experiment is a CalmrExperiment
 # returns a list of tibbles
-.aggregate_experiment <- function(experiment) {
+.aggregate_experiment <- function(
+    experiment,
+    .callback_fn = NULL, ...) {
   # Aggregation is done on a model by model basis
   models <- unique(experiment@arguments$model)
   agg_dat <- list()
@@ -116,6 +118,7 @@
     pb <- progressr::progressor(length(outputs))
     agg_dat[[m]] <- sapply(outputs, function(o) {
       pb(message = sprintf("Aggregating model %s", m))
+      if (!is.null(.callback_fn)) .callback_fn()
       # put data together
       big_dat <- do.call(rbind, lapply(mod_dat, function(x) x[[o]]))
       # aggregate

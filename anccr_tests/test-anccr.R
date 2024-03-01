@@ -1,9 +1,9 @@
 rm(list = ls(all = TRUE))
 library(calmr)
-future::plan(future::sequential, split = TRUE)
-# future::plan(future::multisession)
-# calmr_verbosity(TRUE)
-calmr_verbosity(FALSE)
+# future::plan(future::sequential, split = TRUE)
+future::plan(future::multisession)
+calmr_verbosity(TRUE)
+# calmr_verbosity(FALSE)
 
 # LONG EXP
 df <- data.frame(
@@ -14,12 +14,17 @@ df <- data.frame(
   r2 = FALSE
 )
 
+
 pars <- get_parameters(df, model = "ANCCR")
 args <- make_experiment(df,
   parameters = pars, model = "ANCCR",
-  options = get_exp_opts(iterations = 1)
+  options = get_exp_opts(iterations = 10)
 )
 
 x <- run_experiment(args)
+patch_plots(plot(x, type = "cws"))
 
-plot(x, type = "cws")
+
+
+# profvis::profvis({
+# })

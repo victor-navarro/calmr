@@ -63,51 +63,42 @@ make_par_tables <- function(model, parameters) {
 #' Convert parameter data.frame to list
 df_to_parlist <- function(df, type) {
   parnames <- names(df)
-  pars <- switch(type,
-    "stimulus" = {
-      stimnames <- df$Stimulus
-      pars <- list()
-      for (p in parnames[-1]) {
-        pars[[p]] <- stats::setNames(df[[p]], stimnames)
-      }
-      names(pars) <- stringr::str_to_lower(names(pars))
-      pars
-    },
-    "global" = {
-      pars <- list()
-      parnames <- unique(df$parameter)
-      for (p in parnames[-1]) {
-        pars[[p]] <- df[[p]]
-      }
-      names(pars) <- stringr::str_to_lower(names(pars))
-      pars
-    },
-    "trial" = {
-      pars <- sapply(unique(df$Parameter), function(p) {
+  pars <- NULL
+  if (type == "stimulus") {
+    stimnames <- df$Stimulus
+    pars <- list()
+    for (p in parnames[-1]) {
+      pars[[p]] <- stats::setNames(df[[p]], stimnames)
+    }
+    names(pars) <- stringr::str_to_lower(names(pars))
+  }
+  if (type == "global") {
+    pars <- c(sapply(df$Parameter, function(p) {
+      df$Value[df$Parameter == p]
+    }, simplify = FALSE))
+  }
+  if (type == "trial") {
+    pars <- sapply(unique(df$Parameter), function(p) {
+      stats::setNames(
+        df$Value[df$Parameter == p],
+        df$Trial[df$Parameter == p]
+      )
+    }, simplify = FALSE)
+  }
+  if (type == "transition") {
+    pars <- list()
+    parnames <- unique(df$Parameter)
+    for (p in parnames) {
+      pdat <- df[df$Parameter == p, ]
+      pars[[p]] <- sapply(unique(pdat$Trial), function(t) {
         stats::setNames(
-          df$Value[df$Parameter == p],
-          df$Trial[df$Parameter == p]
+          pdat$Value[df$Trial == t],
+          df$Transition[df$Trial == t]
         )
       }, simplify = FALSE)
-      names(pars) <- stringr::str_to_lower(names(pars))
-      pars
-    },
-    "transition" = {
-      parlist <- list()
-      pars <- unique(df$Parameter)
-      for (p in pars) {
-        pdat <- df[df$Parameter == p, ]
-        parlist[[p]] <- sapply(unique(pdat$Trial), function(t) {
-          stats::setNames(
-            pdat$Value[df$Trial == t],
-            df$Transition[df$Trial == t]
-          )
-        }, simplify = FALSE)
-      }
-      names(parlist) <- stringr::str_to_lower(names(pars))
-      parlist
     }
-  )
+  }
+  pars
 }
 
 check_globalpars <- function(model, parameters) {

@@ -152,7 +152,7 @@ calmr_model_plot <- function(dat, type) {
     "m_ij" = "Predecessor Representation",
     "ncs" = "Net Contingency",
     "anccrs" = "Adjusted Net Contingency",
-    "delta" = "Delta",
+    "delta" = "Time Delta",
     "psrcs" = "Representation Strength",
     "das" = "DA",
     "cws" = "Causal Weights",

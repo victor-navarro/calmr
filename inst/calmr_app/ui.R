@@ -10,7 +10,6 @@ library(rhandsontable)
 library(stringr)
 library(tibble)
 library(calmr)
-source("support.R")
 
 supported_models <- calmr::supported_models()
 

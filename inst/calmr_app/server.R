@@ -1,3 +1,4 @@
+source("support.R")
 # welcome design
 base_df <- data.frame(
   Group = c("Blocking", "Control"),
@@ -8,7 +9,8 @@ base_df <- data.frame(
 )
 
 # whether to print debugging messages
-debug <- TRUE
+debug <- FALSE
+# some options
 base_plot_options <- list(common_scale = TRUE)
 base_sim_options <- list(iterations = 1, miniblocks = TRUE)
 
@@ -127,14 +129,16 @@ shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
         # the experiment
         # expected experiment size
         n <- length(unique(design()@design$group)) * input$iterations
-        # create a callback function for progress
+        # create a callback function for sampling progress
         args_call <- function() {
           shiny::incProgress(
             1 / n
           )
         }
-        print(current_parameters())
-
+        if (debug) {
+          print("running with parameters ...")
+          print(current_parameters())
+        }
         shiny::withProgress(message = "Sampling trials...", value = 0, {
           experiment <- calmr::make_experiment(
             design(),
@@ -144,7 +148,7 @@ shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
             .callback_fn = args_call
           )
         })
-        # create a callback function for progress
+        # create a callback function for running progress
         run_call <- function() {
           shiny::incProgress(
             1 / n
@@ -157,16 +161,30 @@ shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
             .callback_fn = run_call
           )
         })
+        # create a callback function for aggregation progress
+        n_outputs <- length(c(
+          sapply(
+            unique(arguments(experiment)$model),
+            calmr::model_outputs
+          )
+        ))
+        agg_call <- function() {
+          shiny::incProgress(
+            1 / n_outputs
+          )
+        }
+        if (debug) print("experiment ran")
         shiny::withProgress(message = "Aggregating results...", value = 0, {
-          experiment <- calmr::aggregate(experiment)
-          shiny::setProgress(1)
+          experiment <- calmr::aggregate(experiment, .callback_fn = agg_call)
         })
+        if (debug) print("experiment aggregated")
         experiment(experiment)
         shiny::withProgress(message = "Making plots...", value = 0, {
           plots(calmr::plot(experiment))
           graphs(calmr::graph(experiment))
           shiny::setProgress(1)
         })
+        if (debug) print("plots made")
         ran(TRUE)
       },
       error = function(x) {

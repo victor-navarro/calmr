@@ -52,6 +52,8 @@ ANCCR <- function(
     length(fsnames),
     length(fsnames)
   ), dimnames = list(fsnames, fsnames))
+  # prepopulate values based on their innateness
+  diag(r) <- parameters$reward_magnitude
 
   numevents <- array(0,
     dim = c(length(fsnames), 1),

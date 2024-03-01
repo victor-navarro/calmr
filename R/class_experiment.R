@@ -214,7 +214,7 @@ methods::setMethod(
     if (is.null(x@results@parsed_results)) {
       x <- parse(x)
     }
-    res <- .aggregate_experiment(x)
+    res <- .aggregate_experiment(x, ...)
     tbl <- do.call(
       dplyr::bind_rows,
       sapply(names(res), function(m) {
