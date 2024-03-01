@@ -226,66 +226,66 @@ good idea to see what results <code>run_experiment</code> returns.</p>
 <span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">results</a></span><span class="op">(</span><span class="va">exp_res</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $as</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 344 × 8</span></span></span>
-<span><span class="co">#&gt;    model  group phase    trial_type  trial s1      block_size value</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> HD2022 CB1   training L&gt;(Pellet)      1 L                2   0.4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> HD2022 CB1   training L&gt;(Pellet)      1 Pellet           2   0.4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> HD2022 CB1   training L&gt;(Pellet)      1 R                2   0  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> HD2022 CB1   training L&gt;(Pellet)      1 Sucrose          2   0  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> HD2022 CB1   training R&gt;(Sucrose)     2 L                2   0  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> HD2022 CB1   training R&gt;(Sucrose)     2 Pellet           2   0  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> HD2022 CB1   training R&gt;(Sucrose)     2 R                2   0.4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> HD2022 CB1   training R&gt;(Sucrose)     2 Sucrose          2   0.4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> HD2022 CB1   training R&gt;(Sucrose)     3 L                2   0  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> HD2022 CB1   training R&gt;(Sucrose)     3 Pellet           2   0  </span></span>
+<span><span class="co">#&gt;    model  group phase    trial_type  trial s1    block_size value</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> HD2022 CB1   training L&gt;(Pellet)      1 L              2   0.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> HD2022 CB1   training R&gt;(Sucrose)     2 L              2   0  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> HD2022 CB1   training R&gt;(Sucrose)     3 L              2   0  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> HD2022 CB1   training L&gt;(Pellet)      4 L              2   0.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> HD2022 CB1   training R&gt;(Sucrose)     5 L              2   0  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> HD2022 CB1   training L&gt;(Pellet)      6 L              2   0.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> HD2022 CB1   training L&gt;(Pellet)      7 L              2   0.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> HD2022 CB1   training R&gt;(Sucrose)     8 L              2   0  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> HD2022 CB1   training R&gt;(Sucrose)     9 L              2   0  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> HD2022 CB1   training L&gt;(Pellet)     10 L              2   0.4</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 334 more rows</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $acts</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,032 × 10</span></span></span>
-<span><span class="co">#&gt;    model  group phase    trial_type  trial s1       s2    block_size type  value</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> HD2022 CB1   training L&gt;(Pellet)      1 LPellet  L              2 comb…     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> HD2022 CB1   training L&gt;(Pellet)      1 LPellet  Pell…          2 comb…     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> HD2022 CB1   training L&gt;(Pellet)      1 LPellet  R              2 comb…     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> HD2022 CB1   training L&gt;(Pellet)      1 LPellet  Sucr…          2 comb…     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> HD2022 CB1   training R&gt;(Sucrose)     2 RSucrose L              2 comb…     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> HD2022 CB1   training R&gt;(Sucrose)     2 RSucrose Pell…          2 comb…     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> HD2022 CB1   training R&gt;(Sucrose)     2 RSucrose R              2 comb…     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> HD2022 CB1   training R&gt;(Sucrose)     2 RSucrose Sucr…          2 comb…     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> HD2022 CB1   training R&gt;(Sucrose)     3 RSucrose L              2 comb…     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> HD2022 CB1   training R&gt;(Sucrose)     3 RSucrose Pell…          2 comb…     0</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,022 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,272 × 10</span></span></span>
+<span><span class="co">#&gt;    model  group phase    trial_type trial s1      s2      block_size type  value</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> HD2022 CB1   training L&gt;(Pellet)     1 LPellet L                2 comb…     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> HD2022 CB1   training L&gt;(Pellet)     1 LPellet Pellet           2 comb…     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> HD2022 CB1   training L&gt;(Pellet)     1 LPellet R                2 comb…     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> HD2022 CB1   training L&gt;(Pellet)     1 LPellet Sucrose          2 comb…     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> HD2022 CB1   training L&gt;(Pellet)     1 L       L                2 chai…     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> HD2022 CB1   training L&gt;(Pellet)     1 L       Pellet           2 chai…     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> HD2022 CB1   training L&gt;(Pellet)     1 L       R                2 chai…     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> HD2022 CB1   training L&gt;(Pellet)     1 L       Sucrose          2 chai…     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> HD2022 CB1   training L&gt;(Pellet)     1 Pellet  L                2 chai…     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> HD2022 CB1   training L&gt;(Pellet)     1 Pellet  Pellet           2 chai…     0</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,262 more rows</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $rs</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,376 × 9</span></span></span>
-<span><span class="co">#&gt;    model  group phase    trial_type trial s1      s2     block_size value</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> HD2022 CB1   training L&gt;(Pellet)     1 L       L               2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> HD2022 CB1   training L&gt;(Pellet)     1 Pellet  L               2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> HD2022 CB1   training L&gt;(Pellet)     1 R       L               2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> HD2022 CB1   training L&gt;(Pellet)     1 Sucrose L               2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> HD2022 CB1   training L&gt;(Pellet)     1 L       Pellet          2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> HD2022 CB1   training L&gt;(Pellet)     1 Pellet  Pellet          2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> HD2022 CB1   training L&gt;(Pellet)     1 R       Pellet          2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> HD2022 CB1   training L&gt;(Pellet)     1 Sucrose Pellet          2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> HD2022 CB1   training L&gt;(Pellet)     1 L       R               2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> HD2022 CB1   training L&gt;(Pellet)     1 Pellet  R               2     0</span></span>
+<span><span class="co">#&gt;    model  group phase    trial_type trial s1     s2      block_size value</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> HD2022 CB1   training L&gt;(Pellet)     1 L      L                2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> HD2022 CB1   training L&gt;(Pellet)     1 L      Pellet           2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> HD2022 CB1   training L&gt;(Pellet)     1 L      R                2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> HD2022 CB1   training L&gt;(Pellet)     1 L      Sucrose          2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> HD2022 CB1   training L&gt;(Pellet)     1 Pellet L                2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> HD2022 CB1   training L&gt;(Pellet)     1 Pellet Pellet           2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> HD2022 CB1   training L&gt;(Pellet)     1 Pellet R                2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> HD2022 CB1   training L&gt;(Pellet)     1 Pellet Sucrose          2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> HD2022 CB1   training L&gt;(Pellet)     1 R      L                2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> HD2022 CB1   training L&gt;(Pellet)     1 R      Pellet           2     0</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,366 more rows</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $vs</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,376 × 9</span></span></span>
-<span><span class="co">#&gt;    model  group phase    trial_type trial s1      s2     block_size value</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> HD2022 CB1   training L&gt;(Pellet)     1 L       L               2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> HD2022 CB1   training L&gt;(Pellet)     1 Pellet  L               2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> HD2022 CB1   training L&gt;(Pellet)     1 R       L               2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> HD2022 CB1   training L&gt;(Pellet)     1 Sucrose L               2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> HD2022 CB1   training L&gt;(Pellet)     1 L       Pellet          2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> HD2022 CB1   training L&gt;(Pellet)     1 Pellet  Pellet          2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> HD2022 CB1   training L&gt;(Pellet)     1 R       Pellet          2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> HD2022 CB1   training L&gt;(Pellet)     1 Sucrose Pellet          2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> HD2022 CB1   training L&gt;(Pellet)     1 L       R               2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> HD2022 CB1   training L&gt;(Pellet)     1 Pellet  R               2     0</span></span>
+<span><span class="co">#&gt;    model  group phase    trial_type trial s1     s2      block_size value</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> HD2022 CB1   training L&gt;(Pellet)     1 L      L                2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> HD2022 CB1   training L&gt;(Pellet)     1 L      Pellet           2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> HD2022 CB1   training L&gt;(Pellet)     1 L      R                2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> HD2022 CB1   training L&gt;(Pellet)     1 L      Sucrose          2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> HD2022 CB1   training L&gt;(Pellet)     1 Pellet L                2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> HD2022 CB1   training L&gt;(Pellet)     1 Pellet Pellet           2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> HD2022 CB1   training L&gt;(Pellet)     1 Pellet R                2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> HD2022 CB1   training L&gt;(Pellet)     1 Pellet Sucrose          2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> HD2022 CB1   training L&gt;(Pellet)     1 R      L                2     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> HD2022 CB1   training L&gt;(Pellet)     1 R      Pellet           2     0</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,366 more rows</span></span></span></code></pre></div>
 <p>Although the <code>run_experiment</code> function returns an S4 class
 with many things, we only care about one of them: <code>rs</code> (the
