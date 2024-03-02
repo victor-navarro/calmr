@@ -27,7 +27,7 @@ join_results <- function(md, cd, rmap) {
     function(i) t(cd[[i]]),
     simplify = FALSE
   )
-  threes <- sapply(c("m_ij", "prc", "src", "nc", "anccr", "cws", "das", "qs"),
+  threes <- sapply(c("m_ij", "prc", "src", "ncs", "anccrs", "cws", "das", "qs"),
     function(i) {
       x <- aperm(cd[[i]], c(2, 3, 1))
       rownames(x) <- NULL

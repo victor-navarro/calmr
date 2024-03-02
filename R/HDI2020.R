@@ -38,11 +38,14 @@ HDI2020 <- function(v = NULL, # nolint: object_name_linter.
     # get functional and nominal stimuli
     fstims <- mapping$trial_functionals[[tn]]
     nstims <- mapping$trial_nominals[[tn]]
+    # get one-hot vector of pre functional stimuli (for learning)
+    oh_fstims <- mapping$trial_ohs[[tn]]
 
     # compute combV for all stimuli
     combV <- .combV(
       v = v, pre_func = fstims,
-      post_func = fsnames, db_trial = t
+      post_func = fsnames,
+      db_trial = t
     )
 
     # compute chainV for all stimuli without a similarity rule
@@ -76,9 +79,6 @@ HDI2020 <- function(v = NULL, # nolint: object_name_linter.
 
     # learn if we need to
     if (!experience$is_test[t]) {
-      # get one-hot vector of pre functional stimuli (for learning)
-      oh_fstims <- mapping$trial_ohs[[tn]]
-
       # get saliencies for learning
       lalphas <- stats::setNames(rep(0, length(fsnames)), fsnames)
       lalphas[mapping$nomi2func[nstims]] <- parameters$alphas[nstims]

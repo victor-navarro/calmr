@@ -13,7 +13,7 @@ rmap <- data.frame(
     "Ei", "q.src"
   ),
   "calmr" = c(
-    "das", "anccr", "prc", "src", "nc",
+    "das", "anccrs", "prc", "src", "ncs",
     "cws", "delta", "m_ij", "m_i", "e_ij", "e_i", "qs"
   )
 )
@@ -27,8 +27,8 @@ pmap <- data.frame(
   ),
   "calmr" = c(
     "t_ratio", "alpha", "alpha_reward", "betas",
-    "ks", "minimum_rate", "sampling_interval",
-    "thresholds", "w"
+    "k", "minimum_rate", "sampling_interval",
+    "threshold", "w"
   )
 )
 
@@ -110,14 +110,40 @@ df <- data.frame(
 )
 pars <- get_parameters(df, model = "ANCCR")
 pars <- set_reward_parameters(pars, rewards = "US")
-pars$ks[] <- 0.01 # for some reason k is 100 times smaller
+pars$k <- 0.01 # for some reason k is 100 times smaller
+
 args <- make_experiment(df, parameters = pars, model = "ANCCR")
 args <- put_eventlog(matdat$eventlog, args)
-res <- raw_results(run_experiment(args, debug_t = -101))[[1]]
+res <- raw_results(run_experiment(args, debug_t = -3))[[1]]
 
 jres <- join_results(matdat, res, rmap)
 p <- assert_joint_results(jres)
 ggsave("anccr_tests/simple_blocking.png",
+  height = 8, width = 8.5, units = "in",
+  plot = p
+)
+join_parameters(matdat, pars, pmap)
+
+#### Simple no blocking ####
+matdat <- readMat("anccr_tests/simple_no_blocking.mat")
+df <- data.frame(
+  group = "G",
+  p1 = c("30C>(US)"),
+  r1 = TRUE,
+  p2 = c("30AB>(US)"),
+  r2 = TRUE
+)
+pars <- get_parameters(df, model = "ANCCR")
+pars <- set_reward_parameters(pars, rewards = "US")
+pars$k <- 0.01 # for some reason k is 100 times smaller
+
+args <- make_experiment(df, parameters = pars, model = "ANCCR")
+args <- put_eventlog(matdat$eventlog, args)
+res <- raw_results(run_experiment(args, debug_t = -3))[[1]]
+
+jres <- join_results(matdat, res, rmap)
+p <- assert_joint_results(jres)
+ggsave("anccr_tests/simple_no_blocking.png",
   height = 8, width = 8.5, units = "in",
   plot = p
 )

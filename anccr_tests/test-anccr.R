@@ -1,8 +1,8 @@
 rm(list = ls(all = TRUE))
 library(calmr)
 future::plan(future::sequential, split = TRUE)
-# future::plan(future::multisession)
-# calmr_verbosity(TRUE)
+future::plan(future::multisession)
+calmr_verbosity(TRUE)
 calmr_verbosity(FALSE)
 
 # LONG EXP
@@ -18,13 +18,10 @@ df <- data.frame(
 pars <- get_parameters(df, model = "ANCCR")
 args <- make_experiment(df,
   parameters = pars, model = "ANCCR",
-  options = get_exp_opts(iterations = 1)
+  options = get_exp_opts(iterations = 10)
 )
 
 x <- run_experiment(args, debug_t = -403, parse = FALSE)
-x <- parse(x)
-
-
 ps <- plot(x)
 names(ps)
 ps[16]
@@ -43,8 +40,6 @@ imcts <- raw$imcts
 m_ij[timestep, , event] +
   (e_ij[timestep, ] - m_ij[timestep, , event]) *
     imcts[timestep, event] * pars$alpha
-
-
 
 library(ggplot2)
 res <- results(x)

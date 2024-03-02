@@ -89,7 +89,6 @@
 }
 
 .unnest_raw_list <- function(raw) {
-  breaking_so_you_have_to_fix_it
   dims <- lapply(raw, dim)
   udims <- unique(dims)
   matches <- lapply(udims, function(u) {
@@ -99,8 +98,8 @@
     data.table::as.data.table(aperm(simplify2array(raw[m]), c(3, 1, 2)))
   }))
   # now need to put the trials back
-  raw[, "V1" := rep(unlist(matches), each = sapply(dims, prod))]
-  names(raw)[names(raw) == "V1"] <- "trial"
+  raw[, "V1" := rep(unlist(matches), sapply(dims, prod))]
+  names(raw)[names(raw) == "V1"] <- "tie"
   raw
 }
 
@@ -125,15 +124,10 @@
     }
   } else {
     if (args$model %in% c("HDI2020", "HD2022") && type == "acts") {
-      raw <- data.table::rbindlist(
+      raw2d <- data.table::rbindlist(
         sapply(names(raw), function(r) {
-          hold <- data.table::as.data.table(raw[[r]])
+          hold <- .unnest_raw_list(raw[[r]])
           hold[, "type" := r]
-          if (length(dim(raw[[r]])) > 2) {
-            hold[, "tie" := rep(seq_len(nrow(gen_dat)),
-              each = prod(dim(raw[[r]])[-1])
-            )]
-          }
         }, simplify = FALSE)
       )
     } else {
