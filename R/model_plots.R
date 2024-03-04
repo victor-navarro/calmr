@@ -110,6 +110,13 @@ calmr_model_plot <- function(dat, type) {
       scales = "free_x"
     )
   }
+  if (type %in% "psrcs") {
+    grid <- ggplot2::facet_grid(
+      .data$s1 ~ .data$type + .data$phase,
+      scales = "free_x"
+    )
+  }
+
   ggplot2::ggplot(data = dat, mapping = .aes) +
     ggplot2::theme_bw() +
     geoms +

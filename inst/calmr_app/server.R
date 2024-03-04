@@ -9,7 +9,7 @@ base_df <- data.frame(
 )
 
 # whether to print debugging messages
-debug <- FALSE
+debug <- TRUE
 # some options
 base_plot_options <- list(common_scale = TRUE)
 base_sim_options <- list(iterations = 1, miniblocks = TRUE)
