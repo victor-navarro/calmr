@@ -1,6 +1,6 @@
 test_that("parsing empty string", {
-  expect_setequal(
-    phase_parser("")$general_info$trial_repeats, 0
+  expect_true(
+    is.null(phase_parser(""))
   )
 })
 

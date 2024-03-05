@@ -65,6 +65,7 @@ parse_design <- function(df, model = NULL, ...) {
 
   # gather at the period level
   mastert <- unlist(lapply(ginfo, "[[", "trial_names"))
+  # VN: in case of null tinfo, information gets duplicated (but then removed)
   funcs <- unlist(lapply(tinfo, function(r) {
     lapply(r, "[[", "functionals")
   }), recursive = FALSE)

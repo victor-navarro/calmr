@@ -80,6 +80,9 @@ make_experiment <- function(
   # sample trials
   exptb <- design@design
   exptb$samples <- apply(exptb, 1, function(x) {
+    if (x$parse_string == "") {
+      return(NULL)
+    }
     do.call(
       .sample_trials,
       c(x$phase_info$general_info, list(

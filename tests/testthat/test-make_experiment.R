@@ -55,4 +55,17 @@ test_that("make_experiment fails with too many models", {
   ))
 })
 
+# A problematic design
+df <- data.frame(
+  group = c("Blocking", "Control"),
+  p1 = c("10N>(US)", ""), r1 = FALSE,
+  p2 = c("10NL>(US)", "10NL>(US)/10#L"), r2 = FALSE
+)
+pars <- get_parameters(df, model = "ANCCR")
+
+test_that("can make an experiment with empty phases", {
+  exp <- make_experiment(df, parameters = pars, model = "ANCCR")
+  expect_true(!("p1" %in% experience(exp)[[2]]$phase))
+})
+
 # TODO: Write more tests (unique sampling per iteration, master list)
