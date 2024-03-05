@@ -145,7 +145,7 @@ package.</p>
 <span><span class="va">end</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html" class="external-link">proc.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">start</span></span>
 <span><span class="va">end</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   5.677   0.078   4.089</span></span></code></pre></div>
+<span><span class="co">#&gt;   5.900   0.069   4.264</span></span></code></pre></div>
 <p>You can see the timings above, under the <code>elapsed</code> column.
 Let’s try parallelizing now.</p>
 </div>
@@ -167,7 +167,7 @@ on a single computer, you’ll be using
 <span><span class="va">end</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html" class="external-link">proc.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">start</span></span>
 <span><span class="va">end</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.678   0.069   4.349</span></span>
+<span><span class="co">#&gt;   0.672   0.103   4.816</span></span>
 <span></span>
 <span><span class="co"># go back to non-parallel evaluations</span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">sequential</span><span class="op">)</span></span></code></pre></div>
