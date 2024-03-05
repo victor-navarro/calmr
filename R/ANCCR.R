@@ -25,9 +25,6 @@ ANCCR <- function(
   # Initialization
   nt <- nrow(experience)
   fsnames <- mapping$unique_functional_stimuli
-  sampling_times <- seq(0, max(experience[, "time"]),
-    by = parameters$sampling_interval
-  )
 
   #### Model initialization ####
 
@@ -192,7 +189,7 @@ ANCCR <- function(
           as.numeric(imct)
         # unconditioned DA
         das[event, event, timestep] <- das[event, event, timestep] +
-          parameters$betas[event]
+          parameters$betas[event] * parameters$add_beta
       } else {
         # TODO: Optolog related stuff
         das[event, , timestep] <- optolog[timestep, 2]

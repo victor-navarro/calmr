@@ -9,7 +9,7 @@ base_df <- data.frame(
 )
 
 # whether to print debugging messages
-debug <- TRUE
+debug <- FALSE
 # some options
 base_plot_options <- list(common_scale = TRUE)
 base_sim_options <- list(iterations = 1, miniblocks = TRUE)
@@ -491,8 +491,6 @@ shiny::shinyServer(function(input, output) { # nolint: cyclocomp_linter.
         model = input$model_selection,
         stimulus_parameters = rhandsontable::hot_to_r(input$stim_par_tbl)
       )
-      print(input$model_selection)
-
       if (needs_globalpars()) {
         data <- c(
           data,

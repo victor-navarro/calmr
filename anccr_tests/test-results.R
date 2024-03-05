@@ -23,12 +23,12 @@ pmap <- data.frame(
   "matlab" = c(
     "Tratio", "alpha", "alpha.r", "beta",
     "k", "minimumrate", "samplingperiod",
-    "threshold", "w"
+    "threshold", "w", "T"
   ),
   "calmr" = c(
     "t_ratio", "alpha", "alpha_reward", "betas",
     "k", "minimum_rate", "sampling_interval",
-    "threshold", "w"
+    "threshold", "w", "t_constant"
   )
 )
 
@@ -43,6 +43,7 @@ df <- data.frame(
 )
 pars <- get_parameters(df, model = "ANCCR")
 pars <- set_reward_parameters(pars, rewards = "US")
+pars$add_beta <- 1
 args <- make_experiment(df, parameters = pars, model = "ANCCR")
 args <- put_eventlog(matdat$eventlog, args)
 res <- raw_results(run_experiment(args, debug_t = -13))[[1]]
@@ -68,6 +69,7 @@ df <- data.frame(
 )
 pars <- get_parameters(df, model = "ANCCR")
 pars <- set_reward_parameters(pars, rewards = "US")
+pars$add_beta <- 1
 args <- make_experiment(df, parameters = pars, model = "ANCCR")
 args <- put_eventlog(matdat$eventlog, args)
 res <- raw_results(run_experiment(args, debug_t = -13))[[1]]
@@ -88,6 +90,7 @@ df <- data.frame(
 )
 pars <- get_parameters(df, model = "ANCCR")
 pars <- set_reward_parameters(pars, rewards = "US")
+pars$add_beta <- 1
 args <- make_experiment(df, parameters = pars, model = "ANCCR")
 args <- put_eventlog(matdat$eventlog, args)
 res <- raw_results(run_experiment(args, debug_t = -97))[[1]]
@@ -111,6 +114,7 @@ df <- data.frame(
 pars <- get_parameters(df, model = "ANCCR")
 pars <- set_reward_parameters(pars, rewards = "US")
 pars$k <- 0.01 # for some reason k is 100 times smaller
+pars$add_beta <- 1
 
 args <- make_experiment(df, parameters = pars, model = "ANCCR")
 args <- put_eventlog(matdat$eventlog, args)
@@ -136,6 +140,7 @@ df <- data.frame(
 pars <- get_parameters(df, model = "ANCCR")
 pars <- set_reward_parameters(pars, rewards = "US")
 pars$k <- 0.01 # for some reason k is 100 times smaller
+pars$add_beta <- 1
 
 args <- make_experiment(df, parameters = pars, model = "ANCCR")
 args <- put_eventlog(matdat$eventlog, args)
@@ -159,6 +164,7 @@ df <- data.frame(
 pars <- get_parameters(df, model = "ANCCR")
 pars$t_constant <- 12 # uses a different time constant
 pars$use_exact_mean <- 1
+pars$add_beta <- 1
 args <- make_experiment(df, parameters = pars, model = "ANCCR")
 args <- put_eventlog(matdat$eventlog, args)
 res <- raw_results(run_experiment(args, debug_t = -4))[[1]]
@@ -169,6 +175,65 @@ ggsave("anccr_tests/multiple_associations.png",
   plot = p
 )
 join_parameters(matdat, pars, pmap)
+
+
+#### Full blocking ####
+matdat <- readMat("anccr_tests/full_blocking_blocking.mat")
+df <- data.frame(
+  group = "G",
+  p1 = c("30A>(US)"),
+  r1 = TRUE,
+  p2 = c("30AB>(US)"),
+  r2 = TRUE
+)
+pars <- get_parameters(df, model = "ANCCR")
+pars <- set_reward_parameters(pars, rewards = "US")
+pars$k <- 0.01 # for some reason k is 100 times smaller
+pars$add_beta <- 0
+pars$t_constant <- 120.6 # uses a different time constant
+
+args <- make_experiment(df, parameters = pars, model = "ANCCR")
+args <- put_eventlog(matdat$eventlog, args)
+res <- raw_results(run_experiment(args, debug_t = -3))[[1]]
+
+jres <- join_results(matdat, res, rmap)
+p <- assert_joint_results(jres)
+ggsave("anccr_tests/full_blocking.png",
+  height = 8, width = 8.5, units = "in",
+  plot = p
+)
+join_parameters(matdat, pars, pmap)
+
+#### Full no blocking ####
+matdat <- readMat("anccr_tests/full_blocking_control.mat")
+df <- data.frame(
+  group = "G",
+  p1 = c(""),
+  r1 = TRUE,
+  p2 = c("30AB>(US)"),
+  r2 = TRUE
+)
+pars <- get_parameters(df, model = "ANCCR")
+pars <- set_reward_parameters(pars, rewards = "US")
+pars$k <- 0.01 # for some reason k is 100 times smaller
+pars$add_beta <- 0
+pars$t_constant <- 120.6 # uses a different time constant
+
+args <- make_experiment(df, parameters = pars, model = "ANCCR")
+args <- put_eventlog(matdat$eventlog, args)
+res <- raw_results(run_experiment(args, debug_t = -3))[[1]]
+
+jres <- join_results(matdat, res, rmap)
+p <- assert_joint_results(jres)
+ggsave("anccr_tests/full_no-blocking.png",
+  height = 8, width = 8.5, units = "in",
+  plot = p
+)
+join_parameters(matdat, pars, pmap)
+
+
+
+
 
 # That's the most complicated design really
 # Seems enough to me

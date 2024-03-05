@@ -128,7 +128,8 @@ parameter_info <- function(model = NULL) {
         "use_exact_mean", "use_exponential",
         "t_ratio", "t_constant", "t_jitter",
         "alpha", "alpha_reward", "use_timed_alpha",
-        "alpha_exponent", "alpha_init", "alpha_min"
+        "alpha_exponent", "alpha_init", "alpha_min",
+        "add_beta"
       ),
       default_value = c(
         1, 1,
@@ -139,7 +140,8 @@ parameter_info <- function(model = NULL) {
         FALSE, TRUE,
         1.2, NA, 0.1,
         0.02, 0.2, FALSE,
-        1, 1, 0
+        1, 1, 0,
+        FALSE
       )
     ),
     "RAND" = list(
@@ -166,7 +168,8 @@ parameter_info <- function(model = NULL) {
       "use_exact_mean", "use_exponential",
       "t_ratio", "t_constant", "t_jitter",
       "alpha", "alpha_reward", "use_timed_alpha",
-      "alpha_exponent", "alpha_init", "alpha_min"
+      "alpha_exponent", "alpha_init", "alpha_min",
+      "add_beta"
     )
   )
   parameter %in% global_pars[[model]]

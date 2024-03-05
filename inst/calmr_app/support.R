@@ -41,7 +41,6 @@ make_par_tables <- function(model, parameters) {
 
   # can't be bothered; too nested
   if (any(trpars)) {
-    print(parameters)
     tnames <- names(parameters[[which(trpars)[1]]])
     trnames <- unique(names(unlist(unname(parameters[[which(trpars)[1]]]))))
     pnames <- names(parameters[trpars])
@@ -52,10 +51,6 @@ make_par_tables <- function(model, parameters) {
         for (tr in trial_trnames) {
           val <- parameters[[par]][[trial]][[tr]]
           if (length(val)) {
-            print(val)
-            print(tr)
-            print(trial)
-            print(par)
             transpars <- rbind(transpars, data.frame(
               parameter = par,
               trial = trial,
