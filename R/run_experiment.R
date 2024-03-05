@@ -49,16 +49,17 @@ run_experiment <- function(
   # now run the experiment
   pb <- progressr::progressor(length(experiment))
   .parallel_standby(pb) # print parallel backend message
+  pb(amount = 0, message = "Running experiment")
   # get results
   all_results <- future.apply::future_apply(
     experiment@arguments, 1, function(i) {
-      pb(message = "Running experiment")
       if (!is.null(nargs$.callback_fn)) nargs$.callback_fn()
       raw <- do.call(get_model(i$model), c(i, ...)) # for shiny
       parsed <- NULL
       if (parse) {
         parsed <- .parse_model(raw = raw, args = i)
       }
+      pb(message = "Running experiment")
       list(raw = raw, parsed = parsed)
     },
     simplify = FALSE,

@@ -124,3 +124,16 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
   }
   alphat
 }
+
+# to generate subsampling times
+.seq_gen <- function(t1, t2, res) {
+  t1 <- ceiling(t1 / res) * res
+  if (t1 > t2) {
+    return(numeric(0))
+  }
+  s <- seq(t1, t2, res)
+  if (s[length(s)] == t2) {
+    s <- s[1:(length(s) - 1)]
+  }
+  s
+}

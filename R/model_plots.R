@@ -112,7 +112,7 @@ calmr_model_plot <- function(dat, type) {
   }
   if (type %in% "psrcs") {
     grid <- ggplot2::facet_grid(
-      .data$s1 ~ .data$type + .data$phase,
+      .data$s1 + .data$type ~ .data$phase,
       scales = "free_x"
     )
   }

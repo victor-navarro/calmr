@@ -48,8 +48,8 @@ make_experiment <- function(
   iter <- options$iterations
   pb <- progressr::progressor(iter)
   .parallel_standby(pb) # print parallel backend message
+  pb(amount = 0, message = "Building experiment")
   arguments <- future.apply::future_lapply(seq_len(iter), function(x) {
-    pb("Building experiment")
     if (!is.null(.callback_fn)) .callback_fn() # for shiny
     args <- .build_experiment(
       design = design,
@@ -63,6 +63,8 @@ make_experiment <- function(
     args$parameters <- list(parameters)
     # augment arguments if necessary
     args <- .augment_arguments(args, ...)
+    pb("Building experiment")
+    args
   }, future.seed = TRUE)
 
   arguments <- tibble::enframe(arguments, name = "iteration") |>

@@ -33,8 +33,8 @@ ANCCR <- function(
 
   # TODO: Do the omission logs
   # not even implemented in the original code
-  omidx <- array(-1, dim = c(nt, 2))
-  omtrue <- array(FALSE, dim = c(nt, 2))
+  # omidx <- array(-1, dim = c(nt, 2))
+  # omtrue <- array(FALSE, dim = c(nt, 2))
 
   # TODO: Do the opto logs
   optolog <- array(FALSE, dim = c(nt, 2))
@@ -80,18 +80,18 @@ ANCCR <- function(
     event <- experience[timestep, "stimulus"] # event
     absents <- fsnames[!(fsnames == event)]
 
-    # deal with omission
-    if (event %in% omidx[, 1]) {
-      if (!omtrue[, 1] == event) {
-        delta[, timestep] <- delta[, timestep - 1]
-        e_ij[, timestep] <- e_ij[, timestep - 1]
-        m_ij[, timestep] <- m_ij[, timestep - 1]
-        prc[, timestep] <- prc[, timestep - 1]
-        src[, timestep] <- src[, timestep - 1]
-        ncs[, timestep] <- ncs[, timestep - 1]
-        skip <- TRUE
-      }
-    }
+    # TODO: deal with omission
+    # if (event %in% omidx[, 1]) {
+    #   if (!omtrue[, 1] == event) {
+    #     delta[, timestep] <- delta[, timestep - 1]
+    #     e_ij[, timestep] <- e_ij[, timestep - 1]
+    #     m_ij[, timestep] <- m_ij[, timestep - 1]
+    #     prc[, timestep] <- prc[, timestep - 1]
+    #     src[, timestep] <- src[, timestep - 1]
+    #     ncs[, timestep] <- ncs[, timestep - 1]
+    #     skip <- TRUE
+    #   }
+    # }
 
     if (!skip) {
       # save imcts
@@ -163,11 +163,11 @@ ANCCR <- function(
         parameters$threshold
       i_edge[event] <- FALSE
 
-      # TODO: Something about the omission state of that reward state;
-      # Some omission garbage code
-      if (event %in% omidx[, 2] && sum(i_edge) > 0) {
-        omtrue[omidx[, 2] == event] <- omtrue[omidx[, 2] == event] | TRUE
-      }
+      # # TODO: Something about the omission state of that reward state;
+      # # Some omission garbage code
+      # if (event %in% omidx[, 2] && sum(i_edge) > 0) {
+      #   omtrue[omidx[, 2] == event] <- omtrue[omidx[, 2] == event] | TRUE
+      # }
 
       # Calculate ANNCR for every event
       # First, set reward magnitude of the event (r_jj)
@@ -197,12 +197,12 @@ ANCCR <- function(
         # TODO: Optolog related stuff
         das[event, , timestep] <- optolog[timestep, 2]
       }
-      # TODO: Do some extra calculations for omission
-      if (event %in% omidx[, 1]) {
-        je_om <- which(event == omidx[, 1])
-        r[event, omidx[je_om, 2]] <- r[omidx[je_om, 2], omidx[je_om, 2]]
-        imct[event] <- TRUE
-      }
+      # # TODO: Do some extra calculations for omission
+      # if (event %in% omidx[, 1]) {
+      #   je_om <- which(event == omidx[, 1])
+      #   r[event, omidx[je_om, 2]] <- r[omidx[je_om, 2], omidx[je_om, 2]]
+      #   imct[event] <- TRUE
+      # }
       # Total dopamine
       tda <- sum(das[event, , timestep])
       # Update meaningful causes index
@@ -235,21 +235,23 @@ ANCCR <- function(
     # Update sample eligibility trace
     if (timestep < nt) {
       # Time to sample baseline b/t events
-      subsamplingtime <- sampling_times[
-        sampling_times >= experience[timestep, "time"] &
-          sampling_times < experience[timestep + 1, "time"]
-      ]
+      # VN: The function below is about 100 times faster than the original
+      subsamplingtime <- .seq_gen(
+        experience[timestep, "time"],
+        experience[timestep + 1, "time"],
+        parameters$sampling_interval
+      )
 
       e_i[, timestep + 1] <- e_i[, timestep] *
         gammas[timestep]^parameters$sampling_interval
       if (length(subsamplingtime)) {
         for (jjt in nextt:timestep) {
-          # TODO: omission log stuff
-          if (experience[jjt, "stimulus"] %in% omidx[, 1]) {
-            if (!omtrue[omidx[, 1] == experience[jjt, "stimulus"]]) {
-              1 #
-            }
-          }
+          # # TODO: omission log stuff
+          # if (experience[jjt, "stimulus"] %in% omidx[, 1]) {
+          #   if (!omtrue[omidx[, 1] == experience[jjt, "stimulus"]]) {
+          #     1 #
+          #   }
+          # }
           e_i[experience[jjt, "stimulus"], timestep + 1] <-
             e_i[experience[jjt, "stimulus"], timestep + 1] +
             gammas[timestep]^(subsamplingtime[1] - experience[jjt, "time"])
