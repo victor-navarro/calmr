@@ -47,7 +47,7 @@ unconditioned stimuli (pellets or sucrose). Let's take a look at it.
 glimpse(pati)
 pati %>% ggplot(aes(x = block, y = rpert, colour = us)) +
   geom_line(aes(group = interaction(us, subject)), alpha = .3) +
-  stat_summary(geom = "line", fun = "mean", size = 1) +
+  stat_summary(geom = "line", fun = "mean", linewidth = 1) +
   labs(x = "Block", y = "Responses per trial", colour = "US") +
   facet_grid(~response)
 ```
@@ -240,7 +240,7 @@ the_fit <- fit_model(pati_summ$rpert,
 ```
 
 ```{r, include = F, echo = F}
-# save("the_fit", file = "calmr_fits_fit.rda")
+# save("the_fit", file = "vignettes/calmr_fits_fit.rda")
 # load(file = "vignettes/calmr_fits_fit.rda")
 load(file = "calmr_fits_fit.rda")
 ```
