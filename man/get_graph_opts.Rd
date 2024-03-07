@@ -2,7 +2,7 @@
 % Please edit documentation in R/model_graphs.R
 \name{get_graph_opts}
 \alias{get_graph_opts}
-\title{Get options for calmr graph}
+\title{Get options for calm graph}
 \usage{
 get_graph_opts(graph_size = "small")
 }
@@ -14,5 +14,5 @@ to return default values for small or large graphs}
 A list with graph options, to be passed to \code{ggnetwork::geom_nodes}
 }
 \description{
-Get options for calmr graph
+Get options for calm graph
 }

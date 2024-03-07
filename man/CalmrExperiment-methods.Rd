@@ -25,7 +25,7 @@
 \alias{parse}
 \alias{parse,CalmrExperiment-method}
 \alias{aggregate,CalmrExperiment-method}
-\alias{plot,CalmrExperiment-method}
+\alias{plot,CalmrExperiment,ANY-method}
 \alias{plot}
 \title{CalmrExperiment methods}
 \usage{
@@ -63,7 +63,7 @@ parse(object)
 
 \S4method{aggregate}{CalmrExperiment}(x, ...)
 
-\S4method{plot}{CalmrExperiment}(x, type = NULL, ...)
+\S4method{plot}{CalmrExperiment,ANY}(x, type = NULL, ...)
 }
 \arguments{
 \item{x}{An object of class \code{\link{CalmrExperiment-class}}.}
@@ -89,13 +89,12 @@ With type = NULL, all supported plots are returned.
 \examples{
 # Concatenate experiments
 df <- get_design("blocking")
-pars1 <- get_parameters(df, model = "RW1972")
-pars2 <- get_parameters(df, model = "MAC1975")
-ex1 <- make_experiment(df, model = "RW1972")
-ex2 <- make_experiment(df, model = "MAC1975")
-c(ex1, ex2)
-
-# Concatenate results
-ran_experiments <- lapply(c(ex1, ex2), run_experiments)
-do.call(c, ran_experiments)
+mods <- c("RW1972", "MAC1975")
+exs <- lapply(mods, function(m) {
+  make_experiment(df, parameters = get_parameters(df, model = m), model = m)
+})
+# joining separate experiments
+c(exs[[1]], exs[[2]])
+# joining a list of experiments
+joint <- do.call(c, exs)
 }

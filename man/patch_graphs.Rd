@@ -7,7 +7,7 @@
 patch_graphs(graphs, selection = names(graphs))
 }
 \arguments{
-\item{graphs}{A list of named graphs, as returned by \code{calmr::graph}}
+\item{graphs}{A list of named graphs, as returned by \code{calm::graph}}
 
 \item{selection}{A character or numeric vector determining the plots to patch}
 }

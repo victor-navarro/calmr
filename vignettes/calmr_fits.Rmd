@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(calmr)
+library(calm)
 library(ggplot2)
 library(magrittr)
 library(dplyr)
@@ -272,7 +272,7 @@ pati_summ %>%
 ```
 
 This looks pretty good! Save from some blatant misfits, of course. Now you know 
-everything you need to fit calmr to your empirical data. Go forth!
+everything you need to fit calm to your empirical data. Go forth!
 
 ### A final note
 This vignette was pre-generated, as I don't want the user to fit the 

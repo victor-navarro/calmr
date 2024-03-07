@@ -2,7 +2,7 @@
 % Please edit documentation in R/calmr_verbosity.R
 \name{calmr_verbosity}
 \alias{calmr_verbosity}
-\title{Set verbosity options for calmr}
+\title{Set verbosity options for calm}
 \usage{
 calmr_verbosity(verbose)
 }

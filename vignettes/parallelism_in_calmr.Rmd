@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 
 ## Running experiments in parallel
 
-With the advent of time-based models, version 0.51 of `calmr` uses the `future` package to parallelize some operations.
+With the advent of time-based models, version 0.51 of `calm` uses the `future` package to parallelize some operations.
 Thanks to the design philosophy of `future`, running things in parallel takes a single line of code.
 
 ### Why run things in parallel?
@@ -35,7 +35,7 @@ Let's run the HeiDI model [@honey_heidi_2020] over a long, random design.
 Let's also enable verbosity via `calmr_verbosity`, which uses the cool `progressr` package.
 
 ```{r setup}
-library(calmr)
+library(calm)
 # enables progress bars (try it on your computer)
 # calmr_verbosity(TRUE)
 pav_inhib <- data.frame(
@@ -64,7 +64,7 @@ You can see the timings above, under the `elapsed` column. Let's try parallelizi
 
 To run the same experiment, but in parallel, you need to enable a `future` plan.
 A "plan" is one of many ways the `future` package can parallelize things (you should consult their documentation).
-Regardless, if you are running `calmr` on a single computer, you'll be using `plan(multisession)`
+Regardless, if you are running `calm` on a single computer, you'll be using `plan(multisession)`
 
 ```{r}
 library(future)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/model_plots.R
 \name{calmr_model_plot}
 \alias{calmr_model_plot}
-\title{Create a plot with calmr data}
+\title{Create a plot with calm data}
 \usage{
 calmr_model_plot(dat, type)
 }
@@ -15,7 +15,7 @@ calmr_model_plot(dat, type)
 A ggplot object
 }
 \description{
-Create a plot with calmr data
+Create a plot with calm data
 }
 \note{
 You should probably be getting plots via

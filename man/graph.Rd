@@ -3,7 +3,7 @@
 \name{calmr_model_graph}
 \alias{calmr_model_graph}
 \alias{graph,CalmrExperiment-method}
-\title{Create a graph with calmr data}
+\title{Create a graph with calm data}
 \usage{
 calmr_model_graph(
   x,
@@ -40,7 +40,7 @@ in which case, limits are set to be max(abs(x$value))*c(-1,1)}
 A ggplot object
 }
 \description{
-Create a graph with calmr data
+Create a graph with calm data
 
 Graph CalmrExperiment
 }

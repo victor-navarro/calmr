@@ -2,13 +2,17 @@
 % Please edit documentation in R/app.R
 \name{app}
 \alias{app}
-\title{Run the calmr shiny application}
+\title{Run the calm shiny application}
 \usage{
-app(browser = getOption("shiny.launch.browser", interactive()))
+app(browser = TRUE, install_pkg = FALSE)
 }
 \arguments{
-\item{browser}{If TRUE, the app is launched in a browser.}
+\item{browser}{If TRUE, the app is launched in a browser.
+calm.app package from github. Defaults to FALSE.}
 }
 \description{
-Run the calmr shiny application
+Run the calm shiny application
+}
+\note{
+The shiny app is distributed separately from this package.
 }

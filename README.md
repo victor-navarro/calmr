@@ -1,4 +1,4 @@
-# calmr
+# calm
 
 Canonical Associative Learning Models in R
 
@@ -10,16 +10,16 @@ You will need devtools to install this package from github. If you do not have i
 
 Afterwards, you can install directly from this repository via:
 
-`devtools::install_github("victor-navarro/calmr", build_vignettes = TRUE)`
+`devtools::install_github("victor-navarro/calm", build_vignettes = TRUE)`
 
 If you managed to build the vignettes, there's a vignette showing the basics of the package in
 
-`vignette("calmr_basics", package = "calmr")`
+`vignette("calmr_basics", package = "calm")`
 
 If you just want to do some quick simulating, launch the visual interface via:
 
 ```
-library(calmr)
+library(calm)
 calmr_app()
 ```
 

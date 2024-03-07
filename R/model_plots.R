@@ -1,4 +1,4 @@
-#' Create a plot with calmr data
+#' Create a plot with calm data
 #'
 #' @param dat A tbl with data to use in the plot
 #' @param type A character specifying the type of plot
@@ -190,7 +190,7 @@ get_plot_opts <- function(common_scale = TRUE) {
 #' Patch Calmr plots
 #'
 #' @description Convenience function to patch plots with cowplot
-#' @param plots A list of named plots, as returned by `calmr::plot`
+#' @param plots A list of named plots, as returned by `calm::plot`
 #' @param selection A character or numeric vector determining the plots to patch
 #' @param plot_options A list of plot options as returned by `get_plot_opts`
 #' @export

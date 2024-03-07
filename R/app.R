@@ -1,14 +1,17 @@
-#' Run the calmr shiny application
+#' Run the calm shiny application
 #' @param browser If TRUE, the app is launched in a browser.
-#' @export
+#' calm.app package from github. Defaults to FALSE.
+#' @note The shiny app is distributed separately from this package.
 
-app <- function(
-    browser = getOption("shiny.launch.browser", interactive())) {
-  app_dir <- system.file("calmr_app", package = "calmr")
-  if (app_dir == "") {
-    stop("Could not find app directory.
-    Try re-installing `calmr`.
-    If all else fails, let the maintainer know and use the online app.")
+
+app <- function(browser = TRUE, install_pkg = FALSE) {
+  if (requireNamespace("calm.app", quietly = TRUE)) {
+    calm.app::launch_app(browser = browser)
+  } else {
+    stop(c(
+      "Launching the app requires installation of the calm.app package.\n",
+      "Please install the package from github using devtools.\n",
+      "hint: `devtools::install_github('victor-navarro/calmr.app')`"
+    ))
   }
-  shiny::runApp(app_dir, display.mode = "normal")
 }

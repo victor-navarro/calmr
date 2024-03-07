@@ -1,4 +1,4 @@
-#' Create a graph with calmr data
+#' Create a graph with calm data
 #'
 #' @param x A tbl with data to use in the plot
 #' @param loops Logical. Whether to draw arrows back and forth
@@ -77,7 +77,7 @@ calmr_model_graph <- function(
 #' Patch Calmr graphs
 #'
 #' @description Convenience function to patch graphs with cowplot
-#' @param graphs A list of named graphs, as returned by `calmr::graph`
+#' @param graphs A list of named graphs, as returned by `calm::graph`
 #' @param selection A character or numeric vector determining the plots to patch
 #' @export
 
@@ -95,7 +95,7 @@ patch_graphs <- function(graphs, selection = names(graphs)) {
   cow
 }
 
-#' Get options for calmr graph
+#' Get options for calm graph
 #' @param size A character (one of "small" or "large")
 #' to return default values for small or large graphs
 #' @return A list with graph options, to be passed to `ggnetwork::geom_nodes`

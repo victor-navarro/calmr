@@ -1,4 +1,4 @@
-#' S4 class for calmr experiments.
+#' S4 class for calm experiments.
 #' @section Slots:
 #' \describe{
 #' \item{\code{arguments}:}{A tbl containing arguments to run models.}
@@ -54,15 +54,14 @@ methods::setMethod("arguments", "CalmrExperiment", function(x) {
 #' @examples
 #' # Concatenate experiments
 #' df <- get_design("blocking")
-#' pars1 <- get_parameters(df, model = "RW1972")
-#' pars2 <- get_parameters(df, model = "MAC1975")
-#' ex1 <- make_experiment(df, model = "RW1972")
-#' ex2 <- make_experiment(df, model = "MAC1975")
-#' c(ex1, ex2)
-#'
-#' # Concatenate results
-#' ran_experiments <- lapply(c(ex1, ex2), run_experiment)
-#' do.call(c, ran_experiments)
+#' mods <- c("RW1972", "MAC1975")
+#' exs <- lapply(mods, function(m) {
+#'   make_experiment(df, parameters = get_parameters(df, model = m), model = m)
+#' })
+#' # joining separate experiments
+#' c(exs[[1]], exs[[2]])
+#' # joining a list of experiments
+#' joint <- do.call(c, exs)
 methods::setMethod("c", "CalmrExperiment", function(x, ..., recursive = FALSE) {
   allexps <- list(x, ...)
   methods::new("CalmrExperiment",

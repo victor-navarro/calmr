@@ -2,12 +2,12 @@
 % Please edit documentation in R/class_rsa.R
 \name{test,CalmrRSA-method}
 \alias{test,CalmrRSA-method}
-\alias{plot,CalmrRSA-method}
+\alias{plot,CalmrRSA,ANY-method}
 \title{Test CalmrRSA object via permutation test}
 \usage{
 \S4method{test}{CalmrRSA}(object, n_samples = 1000, p = 0.95)
 
-\S4method{plot}{CalmrRSA}(x, y, ...)
+\S4method{plot}{CalmrRSA,ANY}(x, y, ...)
 }
 \arguments{
 \item{object}{A CalmrRSA object}

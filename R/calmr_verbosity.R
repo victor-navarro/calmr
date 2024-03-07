@@ -1,4 +1,4 @@
-#' Set verbosity options for calmr
+#' Set verbosity options for calm
 #' @description Whether to show verbosity messages and progress bars
 #' @param verbose A logical
 #' @note Progress bars are handled by the progressr package.

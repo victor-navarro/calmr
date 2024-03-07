@@ -1,42 +1,37 @@
-Package: calmr
-Title: Canonical associative learning models in R
+Package: calm
+Title: Canonical Associative Learning Models
 Version: 0.5.1
 Authors@R: 
     person("Victor", "Navarro", , "navarrov@cardiff.ac.uk", role = c("aut", "cre"))
-Description: Tools to simulate associative learning models.
+Description: Tools to simulate learning experiments using canonical associative learning models.
 License: GPL (>= 3)
-URL: https://github.com/victor-navarro/calmr, https://victornavarro.org/calmr/
-BugReports: https://github.com/victor-navarro/calmr/issues
+URL: https://github.com/victor-navarro/calm, https://victornavarro.org/calm/
+BugReports: https://github.com/victor-navarro/calm/issues
 Imports: 
-    cowplot,
     data.table,
     dplyr,
     future,
     future.apply,
     GA,
-    ggbeeswarm,
-    ggnetwork,
-    ggplot2,
-    htmltools,
-    magrittr,
     methods,
-    network,
     openxlsx,
     progress,
     progressr,
     purrr,
-    rhandsontable,
     rlang,
-    shiny,
-    shinyalert,
-    shinydashboard,
     stringr,
     tibble,
     tidyr
 Suggests: 
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    cowplot,
+    ggbeeswarm,
+    ggnetwork,
+    ggplot2,
+    network,
+    spelling
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3
@@ -85,3 +80,4 @@ Collate:
     'class_fit.R'
 Depends: 
     R (>= 3.5)
+Language: en-US

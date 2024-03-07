@@ -31,7 +31,7 @@ We will use a data.frame to specify our experimental design.
 Let's specify a blocking design.
 
 ```{r}
-library(calmr)
+library(calm)
 
 my_blocking <- data.frame(
   Group = c("Exp", "Control"),
@@ -102,7 +102,7 @@ trial$general_info[c("func2nomi")]
 
 Now we need to pick a model and its parameters.
 
-To get the models currently supported in `calmr`, you can call `supported_models()`.
+To get the models currently supported in `calm`, you can call `supported_models()`.
 
 ```{r}
 supported_models()
@@ -208,7 +208,7 @@ graph(my_experiment, t = 20, graph_opts = my_graph_opts)
 
 ## Final thoughts
 
-The `calmr` package was designed to simulate quickly: 
+The `calm` package was designed to simulate quickly: 
 write your design and get a glance at model predictions. 
 That said, the package also has some features for advanced R users, 
 so make sure to check more advanced vignettes when you are ready.
