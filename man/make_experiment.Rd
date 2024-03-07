@@ -2,7 +2,7 @@
 % Please edit documentation in R/make_experiment.R
 \name{make_experiment}
 \alias{make_experiment}
-\title{Make CalmrExperiment}
+\title{Make CalmExperiment}
 \usage{
 make_experiment(
   design,
@@ -28,10 +28,10 @@ returned by \code{get_parameters}}
 \item{...}{Extra parameters passed to other functions}
 }
 \value{
-A CalmrExperiment object
+A CalmExperiment object
 }
 \description{
-Makes a CalmrExperiment object containing
+Makes a CalmExperiment object containing
 the arguments necessary to run models
 }
 \examples{

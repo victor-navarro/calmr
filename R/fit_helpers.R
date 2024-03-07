@@ -21,8 +21,8 @@ get_optimizer_opts <- function(model_pars,
                                ll = rep(NA, length(model_pars)),
                                ul = rep(NA, length(model_pars)),
                                optimizer = NULL, family = NULL) {
-  optimizer <- .calmr_assert("supported_optimizer", optimizer)
-  family <- .calmr_assert("supported_family", family)
+  optimizer <- .calm_assert("supported_optimizer", optimizer)
+  family <- .calm_assert("supported_family", family)
 
   # family-specific
   family_pars <- NULL
@@ -48,7 +48,7 @@ get_optimizer_opts <- function(model_pars,
   )
 }
 
-.get_calmr_link <- function(family) {
+.get_calm_link <- function(family) {
   link_f <- NULL
   if (family %in% c("identity", "OLS")) {
     link_f <- function(y, c) y
@@ -67,7 +67,7 @@ get_optimizer_opts <- function(model_pars,
   link_f
 }
 
-.get_calmr_loglikelihood <- function(family) {
+.get_calm_loglikelihood <- function(family) {
   like_f <- NULL
   if (family == "OLS") {
     like_f <- function(dat, mod) -sum((dat - mod)^2)

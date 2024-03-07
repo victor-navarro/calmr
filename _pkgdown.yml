@@ -16,9 +16,9 @@ articles:
 - title: Demos
   navbar: Demos
   contents:
-  - calmr_basics
-  - calmr_app
-  - calmr_fits
+  - calm_basics
+  - calm_app
+  - calm_fits
   - heidi_similarity
   - using_time_models
-  - parallelism_in_calmr
+  - parallelism_in_calm

@@ -1,6 +1,6 @@
-#' Make CalmrExperiment
+#' Make CalmExperiment
 #'
-#' @description Makes a CalmrExperiment object containing
+#' @description Makes a CalmExperiment object containing
 #' the arguments necessary to run models
 #' @param design A design data.frame
 #' @param parameters Parameters for a  model as
@@ -9,7 +9,7 @@
 #' @param options A list with options as returned by `get_exp_opts`
 #' @param .callback_fn A function for keeping track of progress. Internal use.
 #' @param ... Extra parameters passed to other functions
-#' @return A CalmrExperiment object
+#' @return A CalmExperiment object
 #' @seealso \code{\link{parse_design}},
 #' \code{\link{get_parameters}}, \code{\link{get_exp_opts}}
 #' @examples
@@ -34,15 +34,15 @@ make_experiment <- function(
   design <- parse_design(design,
     model = model, ...
   )
-  .calmr_assert("length", 1, model = model)
+  .calm_assert("length", 1, model = model)
   # assert model
-  model <- .calmr_assert("supported_model", model)
+  model <- .calm_assert("supported_model", model)
   # assert parameters
-  parameters <- .calmr_assert("parameters", parameters,
+  parameters <- .calm_assert("parameters", parameters,
     design = design, model = model
   )
   # assert options
-  options <- .calmr_assert("experiment_options", options)
+  options <- .calm_assert("experiment_options", options)
 
   # build the arguments for the experiment
   iter <- options$iterations
@@ -70,7 +70,7 @@ make_experiment <- function(
   arguments <- tibble::enframe(arguments, name = "iteration") |>
     tidyr::unnest("value")
 
-  return(methods::new("CalmrExperiment",
+  return(methods::new("CalmExperiment",
     arguments = arguments, design = design
   ))
 }

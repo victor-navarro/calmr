@@ -18,7 +18,7 @@ PKH1982 <- function(
     ev = NULL,
     iv = NULL, parameters,
     experience, mapping, ...) {
-  .calmr_assert("no_functional_stimuli", mapping)
+  .calm_assert("no_functional_stimuli", mapping)
 
   # data initialization
   ntrials <- length(experience$tp)

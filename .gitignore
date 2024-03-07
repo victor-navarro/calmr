@@ -4,7 +4,7 @@ inst/doc
 .Rdata
 .httr-oauth
 .DS_Store
-/inst/calmr_app/rsconnect/
+/inst/calm_app/rsconnect/
 /doc/
 /Meta/
 -Victor’s MacBook Air.Rhistory

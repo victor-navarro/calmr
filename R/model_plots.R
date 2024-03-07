@@ -4,11 +4,11 @@
 #' @param type A character specifying the type of plot
 #' @return A ggplot object
 #' @note You should probably be getting plots via
-#' the `plot` method for CalmrExperiments.
+#' the `plot` method for CalmExperiments.
 #' @export
 #' @importFrom rlang .data
 
-calmr_model_plot <- function(dat, type) {
+calm_model_plot <- function(dat, type) {
   # define some big categories
   # exceptions are dealt with individually
   targetted <- c(
@@ -71,8 +71,8 @@ calmr_model_plot <- function(dat, type) {
 
   # Assemble scales
   scales <- c(
-    .calmr_scales("colour_d"),
-    .calmr_scales("fill_d"),
+    .calm_scales("colour_d"),
+    .calm_scales("fill_d"),
     ggplot2::scale_x_continuous(breaks = NULL)
   )
 
@@ -126,7 +126,7 @@ calmr_model_plot <- function(dat, type) {
 }
 
 # internal function to define and make scales available
-.calmr_scales <- function(which, ...) {
+.calm_scales <- function(which, ...) {
   switch(which,
     "colour_d" = {
       ggplot2::scale_colour_viridis_d(begin = .1, end = .9, ...)
@@ -187,7 +187,7 @@ get_plot_opts <- function(common_scale = TRUE) {
   return(list(common_scale = common_scale))
 }
 
-#' Patch Calmr plots
+#' Patch Calm plots
 #'
 #' @description Convenience function to patch plots with cowplot
 #' @param plots A list of named plots, as returned by `calm::plot`

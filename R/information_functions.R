@@ -58,7 +58,7 @@ supported_plots <- function(model = NULL) {
   if (is.null(model)) {
     plot_info
   } else {
-    model <- .calmr_assert("supported_model", model)
+    model <- .calm_assert("supported_model", model)
     plot_info[[model]]
   }
 }
@@ -67,7 +67,7 @@ supported_plots <- function(model = NULL) {
 #' @export
 get_model <- function(model) {
   # Check model is supported
-  .calmr_assert("supported_model", model)
+  .calm_assert("supported_model", model)
   get(model)
 }
 
@@ -216,7 +216,7 @@ model_outputs <- function(model = NULL) {
   if (is.null(model)) {
     output_info
   } else {
-    model <- .calmr_assert("supported_model", model)
+    model <- .calm_assert("supported_model", model)
     output_info[[model]]
   }
 }

@@ -2,35 +2,35 @@
 #' @section Slots:
 #' \describe{
 #' \item{\code{arguments}:}{A tbl containing arguments to run models.}
-#' \item{\code{design}:}{A CalmrDesign object.}
-#' \item{\code{results}:}{A CalmrExperimentResult object.}
+#' \item{\code{design}:}{A CalmDesign object.}
+#' \item{\code{results}:}{A CalmExperimentResult object.}
 #' }
-#' @rdname CalmrExperiment
-#' @exportClass CalmrExperiment
-#' @seealso CalmrExperiment-methods
+#' @rdname CalmExperiment
+#' @exportClass CalmExperiment
+#' @seealso CalmExperiment-methods
 
 methods::setClass(
-  "CalmrExperiment",
+  "CalmExperiment",
   representation(
     arguments = "tbl",
-    design = "CalmrDesign",
-    results = "CalmrExperimentResult"
+    design = "CalmDesign",
+    results = "CalmExperimentResult"
   )
 )
 
 show <- methods::show
-#' @title CalmrExperiment methods
-#' @rdname CalmrExperiment-methods
+#' @title CalmExperiment methods
+#' @rdname CalmExperiment-methods
 #' @export
-setMethod("show", "CalmrExperiment", function(object) {
+setMethod("show", "CalmExperiment", function(object) {
   print(object@arguments)
 })
 
 methods::setGeneric("design", function(x) methods::standardGeneric("design"))
 #' @export
 #' @aliases design
-#' @rdname CalmrExperiment-methods
-methods::setMethod("design", "CalmrExperiment", function(x) {
+#' @rdname CalmExperiment-methods
+methods::setMethod("design", "CalmExperiment", function(x) {
   x@design
 })
 
@@ -41,13 +41,13 @@ methods::setGeneric(
 )
 #' @export
 #' @aliases arguments
-#' @rdname CalmrExperiment-methods
-methods::setMethod("arguments", "CalmrExperiment", function(x) {
+#' @rdname CalmExperiment-methods
+methods::setMethod("arguments", "CalmExperiment", function(x) {
   x@arguments
 })
 
 #' @export
-#' @rdname CalmrExperiment-methods
+#' @rdname CalmExperiment-methods
 #' @param x Objects to concatenate
 #' @param ... Objects to concatenate
 #' @param recursive Unused
@@ -62,9 +62,9 @@ methods::setMethod("arguments", "CalmrExperiment", function(x) {
 #' c(exs[[1]], exs[[2]])
 #' # joining a list of experiments
 #' joint <- do.call(c, exs)
-methods::setMethod("c", "CalmrExperiment", function(x, ..., recursive = FALSE) {
+methods::setMethod("c", "CalmExperiment", function(x, ..., recursive = FALSE) {
   allexps <- list(x, ...)
-  methods::new("CalmrExperiment",
+  methods::new("CalmExperiment",
     arguments = dplyr::bind_rows(lapply(allexps, function(e) e@arguments)),
     design = allexps[[1]]@design,
     results = do.call(c, lapply(allexps, function(e) e@results))
@@ -73,26 +73,26 @@ methods::setMethod("c", "CalmrExperiment", function(x, ..., recursive = FALSE) {
 
 
 methods::setGeneric("parameters", function(x) standardGeneric("parameters"))
-#' @rdname CalmrExperiment-methods
+#' @rdname CalmExperiment-methods
 #' @aliases parameters
 #' @export
 methods::setGeneric(
   "parameters<-",
   function(x, value) standardGeneric("parameters<-")
 )
-#' @rdname CalmrExperiment-methods
-#' @param x A CalmrExperiment
+#' @rdname CalmExperiment-methods
+#' @param x A CalmExperiment
 #' @aliases parameters
 #' @export
 methods::setMethod(
-  "parameters", "CalmrExperiment",
+  "parameters", "CalmExperiment",
   function(x) x@arguments$parameters
 )
-#' @param x A CalmrExperiment
+#' @param x A CalmExperiment
 #' @param value A list of parameter lists.
-#' @rdname CalmrExperiment-methods
+#' @rdname CalmExperiment-methods
 #' @export
-methods::setMethod("parameters<-", "CalmrExperiment", function(x, value) {
+methods::setMethod("parameters<-", "CalmExperiment", function(x, value) {
   if (length(names(value))) {
     # If there are names in the parameters,
     # this is meant to be a single list
@@ -109,7 +109,7 @@ methods::setMethod("parameters<-", "CalmrExperiment", function(x, value) {
 
 
 methods::setGeneric("experience", function(x) standardGeneric("experience"))
-#' @rdname CalmrExperiment-methods
+#' @rdname CalmExperiment-methods
 #' @param value A list of experiences.
 #' @aliases experience
 #' @export
@@ -117,18 +117,18 @@ methods::setGeneric(
   "experience<-",
   function(x, value) standardGeneric("experience<-")
 )
-#' @rdname CalmrExperiment-methods
+#' @rdname CalmExperiment-methods
 #' @aliases experience
 #' @export
 methods::setMethod(
-  "experience", "CalmrExperiment",
+  "experience", "CalmExperiment",
   function(x) x@arguments$experience
 )
-#' @rdname CalmrExperiment-methods
-#' @param x A CalmrExperiment
+#' @rdname CalmExperiment-methods
+#' @param x A CalmExperiment
 #' @param value A list of experiences.
 #' @export
-methods::setMethod("experience<-", "CalmrExperiment", function(x, value) {
+methods::setMethod("experience<-", "CalmExperiment", function(x, value) {
   if (length(names(value))) {
     # If there are names in the experience,
     # this is meant to be a single list
@@ -148,10 +148,10 @@ methods::setGeneric(
   "results",
   function(object) methods::standardGeneric("results")
 )
-#' @rdname CalmrExperiment-methods
+#' @rdname CalmExperiment-methods
 #' @aliases results
 #' @export
-methods::setMethod("results", "CalmrExperiment", function(object) {
+methods::setMethod("results", "CalmExperiment", function(object) {
   # Returns aggregated results
   object@results@aggregated_results
 })
@@ -160,10 +160,10 @@ methods::setGeneric(
   "raw_results",
   function(object) methods::standardGeneric("raw_results")
 )
-#' @rdname CalmrExperiment-methods
+#' @rdname CalmExperiment-methods
 #' @aliases raw_results
 #' @export
-methods::setMethod("raw_results", "CalmrExperiment", function(object) {
+methods::setMethod("raw_results", "CalmExperiment", function(object) {
   # Returns raw results
   object@results@raw_results
 })
@@ -172,17 +172,17 @@ methods::setGeneric(
   "parsed_results",
   function(object) methods::standardGeneric("parsed_results")
 )
-#' @rdname CalmrExperiment-methods
+#' @rdname CalmExperiment-methods
 #' @aliases parsed_results
 #' @export
-methods::setMethod("parsed_results", "CalmrExperiment", function(object) {
+methods::setMethod("parsed_results", "CalmExperiment", function(object) {
   # Returns raw results
   object@results@parsed_results
 })
 
-#' @rdname CalmrExperiment-methods
+#' @rdname CalmExperiment-methods
 #' @export
-methods::setMethod("length", "CalmrExperiment", function(x) {
+methods::setMethod("length", "CalmExperiment", function(x) {
   if (!is.null(x@arguments)) {
     nrow(x@arguments)
   } else {
@@ -190,17 +190,17 @@ methods::setMethod("length", "CalmrExperiment", function(x) {
   }
 })
 
-#' @rdname CalmrExperiment-methods
+#' @rdname CalmExperiment-methods
 #' @aliases parse
 #' @export
 setGeneric(
   "parse",
   function(object) methods::standardGeneric("parse")
 )
-#' @rdname CalmrExperiment-methods
+#' @rdname CalmExperiment-methods
 #' @export
 methods::setMethod(
-  "parse", "CalmrExperiment",
+  "parse", "CalmExperiment",
   function(object) {
     if (!is.null(object@results@raw_results)) {
       # we gotta parse
@@ -225,10 +225,10 @@ methods::setMethod(
   }
 )
 
-#' @rdname CalmrExperiment-methods
+#' @rdname CalmExperiment-methods
 #' @export
 methods::setMethod(
-  "aggregate", "CalmrExperiment",
+  "aggregate", "CalmExperiment",
   function(x, ...) {
     if (is.null(x@results@parsed_results)) {
       x <- parse(x)
@@ -251,20 +251,20 @@ methods::setMethod(
 
 setGeneric("plot", function(x, y, ...) methods::standardGeneric("plot"))
 
-#' Plot CalmrExperiment
+#' Plot CalmExperiment
 #'
-#' Creates plots (or plot) with aggregated results in CalmrExperiment
+#' Creates plots (or plot) with aggregated results in CalmExperiment
 #'
-#' @param x An object of class \code{\link{CalmrExperiment-class}}.
+#' @param x An object of class \code{\link{CalmExperiment-class}}.
 #' @param type character vector specifying the types of plots to create.
 #' See ??supported_plots. Defaults to NULL.
 #' @return A ggplot object
 #' @note With type = NULL, all supported plots are returned.
 #' @export
 #' @aliases plot
-#' @rdname CalmrExperiment-methods
+#' @rdname CalmExperiment-methods
 setMethod(
-  "plot", "CalmrExperiment",
+  "plot", "CalmExperiment",
   function(x, type = NULL, ...) {
     if (is.null(x@results@aggregated_results)) {
       stop("Experiment does not contain aggregated results.
@@ -278,7 +278,7 @@ setMethod(
     for (m in models) {
       model_plots <- supported_plots(m)
       if (!is.null(type)) {
-        sapply(type, .calmr_assert, supported = model_plots)
+        sapply(type, .calm_assert, supported = model_plots)
         model_plots <- type
       }
       for (p in model_plots) {
@@ -287,7 +287,7 @@ setMethod(
         groups <- unique(pdat$group)
         for (g in groups) {
           plot_name <- sprintf("%s - %s (%s)", g, .get_prettyname(p), m)
-          plots[[plot_name]] <- calmr_model_plot(pdat[pdat$group == g, ],
+          plots[[plot_name]] <- calm_model_plot(pdat[pdat$group == g, ],
             type = p
           )
         }
@@ -298,12 +298,12 @@ setMethod(
 )
 
 setGeneric("graph", function(x, ...) standardGeneric("graph"))
-#' Graph CalmrExperiment
-#' @param x A CalmrExperiment
-#' @param ... Additional parameters passed to `graph_calmr_model`
+#' Graph CalmExperiment
+#' @param x A CalmExperiment
+#' @param ... Additional parameters passed to `graph_calm_model`
 #' @export
 #' @rdname graph
-setMethod("graph", "CalmrExperiment", function(x, ...) {
+setMethod("graph", "CalmExperiment", function(x, ...) {
   if (is.null(x@results@aggregated_results)) {
     stop("Experiment does not contain aggregated results.
       Please parse and aggregate results beforehand.")
@@ -326,7 +326,7 @@ setMethod("graph", "CalmrExperiment", function(x, ...) {
     mgraphs <- list()
     for (g in groups) {
       graph_name <- sprintf("%s - Associations (%s)", g, m)
-      mgraphs[[graph_name]] <- calmr_model_graph(
+      mgraphs[[graph_name]] <- calm_model_graph(
         weights[weights$group == g, ], ...
       ) + ggplot2::labs(title = graph_name)
     }
@@ -338,7 +338,7 @@ setMethod("graph", "CalmrExperiment", function(x, ...) {
 
 
 methods::setGeneric("rsa", function(x, layers, ...) standardGeneric("rsa"))
-#' Perform representational similarity analysis on CalmrExperiment
+#' Perform representational similarity analysis on CalmExperiment
 #'
 #' @param x A tbl of m by o (models by outputs) with aggregated results.
 #' @param comparisons A model-named list containing the model
@@ -346,7 +346,7 @@ methods::setGeneric("rsa", function(x, layers, ...) standardGeneric("rsa"))
 #' @param test Whether to test the RSA via permutation test. Default = FALSE.
 #' @param ... Additional parameters passed to `stats::dist`
 #' and `stats::cor`
-#' @returns A CalmrRSA object
+#' @returns A CalmRSA object
 #' @note The object returned by this function
 #' can be later tested via its own `test` method.
 #' @aliases rsa
@@ -374,7 +374,7 @@ methods::setGeneric("rsa", function(x, layers, ...) standardGeneric("rsa"))
 #' res <- rsa(exp_res, comparisons = comparisons)
 #' test(res, n_samples = 100)
 methods::setMethod(
-  "rsa", "CalmrExperiment",
+  "rsa", "CalmExperiment",
   function(x, comparisons, test = FALSE, ...) {
     .rsa(results(x), comparisons = comparisons, .test = test, ...)
   }

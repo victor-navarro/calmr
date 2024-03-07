@@ -14,7 +14,7 @@ parse_design(df, model = NULL, ...)
 \item{...}{Other arguments passed to augment}
 }
 \value{
-A CalmrDesign object
+A CalmDesign object
 }
 \description{
 Parse design data.frame

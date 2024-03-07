@@ -1,4 +1,4 @@
-#' S4 class for Calmr Models
+#' S4 class for Calm Models
 #'
 #' @section Slots:
 #' \describe{
@@ -7,13 +7,13 @@
 #' \item{state}{A list with the model internal state}
 #' \item{parameters}{A list with the model with model parameters}
 #' }
-#' @name CalmrModel-class
-#' @rdname CalmrModel-class
+#' @name CalmModel-class
+#' @rdname CalmModel-class
 #' @note Currently unused.
-#' @exportClass CalmrModel
+#' @exportClass CalmModel
 
 setClass(
-  "CalmrModel",
+  "CalmModel",
   representation(
     model = "character",
     model_fn = "function",

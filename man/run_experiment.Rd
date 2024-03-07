@@ -7,7 +7,7 @@
 run_experiment(x, parse = TRUE, aggregate = TRUE, ...)
 }
 \arguments{
-\item{x}{A CalmrExperiment or design data.frame}
+\item{x}{A CalmExperiment or design data.frame}
 
 \item{parse}{A logical specifying whether the raw results
 should be parsed. Default = TRUE.}
@@ -18,7 +18,7 @@ should be aggregated. Default = TRUE.}
 \item{...}{Arguments passed to other functions}
 }
 \value{
-A CalmrExperiment with results.
+A CalmExperiment with results.
 }
 \description{
 Runs an experiment with minimal parameters.
@@ -34,7 +34,7 @@ pars <- get_parameters(df, model = "HD2022")
 pars$alphas["US"] <- 0.6
 run_experiment(df, parameters = pars, model = "HD2022")
 
-# Using CalmrExperiment, for more iterations
+# Using CalmExperiment, for more iterations
 df <- get_design("blocking")
 pars <- get_parameters(df, model = "SM2007")
 exper <- make_experiment(df,

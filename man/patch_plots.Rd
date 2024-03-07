@@ -2,7 +2,7 @@
 % Please edit documentation in R/model_plots.R
 \name{patch_plots}
 \alias{patch_plots}
-\title{Patch Calmr plots}
+\title{Patch Calm plots}
 \usage{
 patch_plots(plots, selection = NULL, plot_options = get_plot_opts())
 }

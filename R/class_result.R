@@ -1,16 +1,16 @@
-#' S4 class for Calmr Results
-#' @rdname CalmrResult
+#' S4 class for Calm Results
+#' @rdname CalmResult
 #' @section Slots:
 #' \describe{
 #' \item{aggregated_results}{A list with fully aggregated results.}
 #' \item{parsed_results}{A list with parsed results, i.e., fn(model_output).}
 #' \item{raw_results}{A list with model outputs.}
 #' }
-#' @exportClass CalmrResult
-#' @seealso CalmrResults-methods
+#' @exportClass CalmResult
+#' @seealso CalmResults-methods
 #' @import tibble
 methods::setClass(
-  "CalmrResult",
+  "CalmResult",
   representation(
     aggregated_results = "list",
     parsed_results = "list",
@@ -23,15 +23,15 @@ methods::setClass(
   )
 )
 
-methods::setClass("CalmrExperimentResult",
-  contains = "CalmrResult"
+methods::setClass("CalmExperimentResult",
+  contains = "CalmResult"
 )
 
-#' Methods for CalmrResult
-#' @param object A CalmrResult object
-#' @rdname CalmrResult-methods
+#' Methods for CalmResult
+#' @param object A CalmResult object
+#' @rdname CalmResult-methods
 #' @export
-methods::setMethod("show", "CalmrResult", function(object) {
+methods::setMethod("show", "CalmResult", function(object) {
   if (!is.null(object@aggregated_results)) {
     print(object@aggregated_results)
   } else {
@@ -40,16 +40,16 @@ methods::setMethod("show", "CalmrResult", function(object) {
 })
 
 
-#' @param x A CalmrResult object
-#' @param ... More CalmrResult objects to concatenate
+#' @param x A CalmResult object
+#' @param ... More CalmResult objects to concatenate
 #' @param recursive Unused
-#' @rdname CalmrResult-methods
+#' @rdname CalmResult-methods
 #' @export
 methods::setMethod(
-  "c", "CalmrExperimentResult",
+  "c", "CalmExperimentResult",
   function(x, ..., recursive = FALSE) {
     allres <- list(x, ...)
-    h <- methods::new("CalmrExperimentResult")
+    h <- methods::new("CalmExperimentResult")
     raws <- do.call(c, lapply(
       allres, function(e) e@raw_results
     ))

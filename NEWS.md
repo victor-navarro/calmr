@@ -1,6 +1,6 @@
 # calm 0.5.1
 * Added parallelization and progress bars via `future`, `future.apply`, and `progressr`.
-* Function `calmr_verbosity` can set the verbosity of the package.
+* Function `calm_verbosity` can set the verbosity of the package.
 
 # calm 0.5.0
 * Implementation of ANCCR (Jeong et al., 2022), the first time-based model included in calm.
@@ -13,8 +13,8 @@
 
 # calm 0.4.0
 * Major refactoring of classes and models. This should help development moving forward.
-* Added several methods for access to CalmrExperiment contents, including `c` (to bind experiments) `results`, `plot`, `graph`, `design` and `parameters`.
-* Created CalmrDesign and CalmrResult classes. 
+* Added several methods for access to CalmExperiment contents, including `c` (to bind experiments) `results`, `plot`, `graph`, `design` and `parameters`.
+* Created CalmDesign and CalmResult classes. 
 * Rewrote parsers to be less verbose and to rely less on the tidyverse suite and piping.
 * Substantially reduced the complexity of `make_experiment` function (previous `make_experiment`).
 * Introduced distinction between stimulus-specific and global parameters.

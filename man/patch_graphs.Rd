@@ -2,7 +2,7 @@
 % Please edit documentation in R/model_graphs.R
 \name{patch_graphs}
 \alias{patch_graphs}
-\title{Patch Calmr graphs}
+\title{Patch Calm graphs}
 \usage{
 patch_graphs(graphs, selection = names(graphs))
 }

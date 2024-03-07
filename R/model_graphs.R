@@ -12,12 +12,12 @@
 #' @param ... Additional named arguments
 #' @return A ggplot object
 #' @note You should probably be getting graphs via
-#' the `graph` method for CalmrExperiments.
+#' the `graph` method for CalmExperiments.
 #' @export
 #' @rdname graph
 #' @importFrom rlang .data
 
-calmr_model_graph <- function(
+calm_model_graph <- function(
     x, loops = TRUE,
     limits = max(abs(x$value)) * c(-1, 1), colour_key = FALSE,
     t = max(x$trial),
@@ -74,7 +74,7 @@ calmr_model_graph <- function(
   p
 }
 
-#' Patch Calmr graphs
+#' Patch Calm graphs
 #'
 #' @description Convenience function to patch graphs with cowplot
 #' @param graphs A list of named graphs, as returned by `calm::graph`

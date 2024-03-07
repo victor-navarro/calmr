@@ -42,7 +42,7 @@ test_that("rsa method stops with bad model outputs", {
 })
 
 test_res <- test(res, n_samples = 20)
-test_that("test method for CalmrRSA works", {
+test_that("test method for CalmRSA works", {
   expect_named(test_res@test_data)
 })
 

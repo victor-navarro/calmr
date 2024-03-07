@@ -11,7 +11,7 @@ app <- function(browser = TRUE, install_pkg = FALSE) {
     stop(c(
       "Launching the app requires installation of the calm.app package.\n",
       "Please install the package from github using devtools.\n",
-      "hint: `devtools::install_github('victor-navarro/calmr.app')`"
+      "hint: `devtools::install_github('victor-navarro/calm.app')`"
     ))
   }
 }

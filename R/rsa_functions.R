@@ -1,4 +1,4 @@
-# x is a tbl (aggregated_results from CalmrExperiment@results)
+# x is a tbl (aggregated_results from CalmExperiment@results)
 # comparisons is a model-named list with model outputs
 .rsa <- function(x, comparisons, .test = FALSE, ...) {
   # Assert the comparisons list is named
@@ -46,8 +46,8 @@
   # calculate correlation matrix
   corr_mat <- stats::cor(data.frame(lapply(trial_dists, as.numeric)))
 
-  # create CalmrRSA object
-  obj <- methods::new("CalmrRSA",
+  # create CalmRSA object
+  obj <- methods::new("CalmRSA",
     corr_mat = corr_mat,
     distances = trial_dists,
     args = list(comparisons = comparisons, ...)
@@ -59,8 +59,8 @@
   obj
 }
 
-# implements a permutation test for CalmrRSA object
-# object is a CalmrRSA object
+# implements a permutation test for CalmRSA object
+# object is a CalmRSA object
 # n_samples is a integer
 # p is a float
 .rsa_test <- function(object, n_samples = 1e3, p = 0.95) {

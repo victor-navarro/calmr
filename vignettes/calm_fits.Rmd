@@ -1,9 +1,9 @@
 ---
-title: "calmr_fits"
+title: "calm_fits"
 author: "Victor Navarro"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{calmr_fits}
+  %\VignetteIndexEntry{calm_fits}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -240,9 +240,9 @@ the_fit <- fit_model(pati_summ$rpert,
 ```
 
 ```{r, include = F, echo = F}
-# save("the_fit", file = "vignettes/calmr_fits_fit.rda")
-# load(file = "vignettes/calmr_fits_fit.rda")
-load(file = "calmr_fits_fit.rda")
+# save("the_fit", file = "vignettes/calm_fits_fit.rda")
+# load(file = "vignettes/calm_fits_fit.rda")
+load(file = "calm_fits_fit.rda")
 ```
 
 

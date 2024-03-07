@@ -70,7 +70,7 @@ Collate:
     'get_design.R'
     'heidi_helpers.R'
     'anccr_helpers.R'
-    'calmr_verbosity.R'
+    'calm_verbosity.R'
     'parallel_helpers.R'
     'class_model.R'
     'class_design.R'

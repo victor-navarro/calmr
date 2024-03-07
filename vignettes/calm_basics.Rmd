@@ -1,9 +1,9 @@
 ---
-title: "calmr_basics"
+title: "calm_basics"
 author: "Victor Navarro"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{calmr_basics}
+  %\VignetteIndexEntry{calm_basics}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

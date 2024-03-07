@@ -1,4 +1,4 @@
-#' S4 class for Calmr designs
+#' S4 class for Calm designs
 #'
 #' @description Inherits from the tbl class
 #' @section Slots:
@@ -8,9 +8,9 @@
 #' \item{\code{raw_design}:}{The original data.frame.}
 #' \item{\code{augmented}:}{Whether the object has been augmented.}
 #' }
-#' @exportClass CalmrDesign
+#' @exportClass CalmDesign
 methods::setClass(
-  "CalmrDesign",
+  "CalmDesign",
   representation(
     design = "tbl",
     mapping = "list",
@@ -19,38 +19,38 @@ methods::setClass(
   ),
   prototype(augmented = FALSE)
 )
-#' CalmrDesign methods
+#' CalmDesign methods
 #' @export
-#' @rdname CalmrDesign-methods
+#' @rdname CalmDesign-methods
 methods::setMethod(
-  "show", "CalmrDesign",
+  "show", "CalmDesign",
   function(object) print(object@design)
 )
 
-#' @rdname CalmrDesign-methods
+#' @rdname CalmDesign-methods
 methods::setGeneric(
   "mapping",
   function(object) methods::standardGeneric("mapping")
 )
-#' CalmrDesign methods
+#' CalmDesign methods
 #' @description Methods mapping, and trials, are extractor functions.
-#' @param object A CalmrDesign, as returned by parse_design
+#' @param object A CalmDesign, as returned by parse_design
 #' @export
-#' @rdname CalmrDesign-methods
+#' @rdname CalmDesign-methods
 methods::setMethod(
-  "mapping", "CalmrDesign",
+  "mapping", "CalmDesign",
   function(object) object@mapping
 )
 #' @export
-#' @rdname CalmrDesign-methods
+#' @rdname CalmDesign-methods
 methods::setGeneric(
   "trials",
   function(object) methods::standardGeneric("trials")
 )
 #' @export
-#' @rdname CalmrDesign-methods
+#' @rdname CalmDesign-methods
 methods::setMethod(
-  "trials", "CalmrDesign",
+  "trials", "CalmDesign",
   function(object) {
     des <- object@design
     trial_dat <- data.frame()
@@ -75,15 +75,15 @@ methods::setGeneric(
   "augment",
   function(object, model, ...) methods::standardGeneric("augment")
 )
-#' Augment CalmrDesign
-#' @param object A CalmrDesign, as returned by parse_design
+#' Augment CalmDesign
+#' @param object A CalmDesign, as returned by parse_design
 #' @param model A modelname string. One of supported_models()
 #' @param ... Additional parameters depending on the model.
-#' @rdname CalmrDesign-methods
+#' @rdname CalmDesign-methods
 #' @aliases augment
 #' @order 1
 #' @export
-methods::setMethod("augment", "CalmrDesign", function(object, model, ...) {
+methods::setMethod("augment", "CalmDesign", function(object, model, ...) {
   if (model %in% c("ANCCR")) {
     # creates eventlogs
     object <- .anccrize_design(object, ...)

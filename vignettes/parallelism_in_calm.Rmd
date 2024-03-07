@@ -1,11 +1,11 @@
 ---
-title: "parallelism_in_calmr"
+title: "parallelism_in_calm"
 author: "Victor Navarro"
 output: rmarkdown::html_vignette
 bibliography: references.bib
 csl: apa.csl
 vignette: >
-  %\VignetteIndexEntry{parallelism_in_calmr}
+  %\VignetteIndexEntry{parallelism_in_calm}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -32,12 +32,12 @@ because our design contains enough kinds of trials so that order effects are a w
 because we want to run the same model with different parameters.
 
 Let's run the HeiDI model [@honey_heidi_2020] over a long, random design.
-Let's also enable verbosity via `calmr_verbosity`, which uses the cool `progressr` package.
+Let's also enable verbosity via `calm_verbosity`, which uses the cool `progressr` package.
 
 ```{r setup}
 library(calm)
 # enables progress bars (try it on your computer)
-# calmr_verbosity(TRUE)
+# calm_verbosity(TRUE)
 pav_inhib <- data.frame(
   group = "group",
   phase1 = "50(US)/50AB/50#A",

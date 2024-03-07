@@ -8,8 +8,8 @@
 #' block <- get_design("blocking")
 #' get_parameters(block, model = "SM2007")
 get_parameters <- function(design, model = NULL) {
-  model <- .calmr_assert("supported_model", model)
-  parsed_design <- .calmr_assert("parsed_design", design)
+  model <- .calm_assert("supported_model", model)
+  parsed_design <- .calm_assert("parsed_design", design)
 
   # Get parameter information
   par_info <- parameter_info(model)

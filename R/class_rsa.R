@@ -1,4 +1,4 @@
-#' S4 class for Calmr representational similarity analysis
+#' S4 class for Calm representational similarity analysis
 #'
 #' @section Slots:
 #' \describe{
@@ -8,9 +8,9 @@
 #' \item{\code{test_data}:}{List.
 #' Test data, populated after testing the object.}
 #' }
-#' @exportClass CalmrRSA
+#' @exportClass CalmRSA
 setClass(
-  "CalmrRSA",
+  "CalmRSA",
   representation(
     corr_mat = "array",
     distances = "list",
@@ -19,12 +19,12 @@ setClass(
   )
 )
 
-#' CalmrRSA Methods
-#' @param object A CalmrRSA object
+#' CalmRSA Methods
+#' @param object A CalmRSA object
 #' @export
-#' @rdname CalmrRSA-methods
-setMethod("show", "CalmrRSA", function(object) {
-  cat("CalmrRSA object\n")
+#' @rdname CalmRSA-methods
+setMethod("show", "CalmRSA", function(object) {
+  cat("CalmRSA object\n")
   cat("---------------\n")
   cat("Correlation matrix:\n")
   print(object@corr_mat)
@@ -43,27 +43,27 @@ methods::setGeneric(
   "test",
   function(object, n_samples = 1e3, p = .95) standardGeneric("test")
 )
-#' Test CalmrRSA object via permutation test
+#' Test CalmRSA object via permutation test
 #'
-#' @param object A CalmrRSA object
+#' @param object A CalmRSA object
 #' @param n_samples The number of samples for the permutation test
 #' (default = 1e3)
 #' @param p The critical threshold level for the permutation test
 #' (default = 0.95)
-#' @return A CalmrRSA object with the test results
+#' @return A CalmRSA object with the test results
 #' @rdname rsa
 #' @export
-methods::setMethod("test", "CalmrRSA", function(
+methods::setMethod("test", "CalmRSA", function(
     object, n_samples, p) {
   .rsa_test(object, n_samples = n_samples, p = p)
 })
 
-#' @param object A CalmrRSA object
+#' @param object A CalmRSA object
 #' @param ... Extra parameters passed to the plot call
 #' @rdname rsa
 #' @export
 setMethod(
-  "plot", "CalmrRSA",
+  "plot", "CalmRSA",
   function(x, ...) {
     p <- NULL
     corrmat <- x@corr_mat
@@ -78,7 +78,7 @@ setMethod(
       )) +
       ggplot2::geom_tile(na.rm = TRUE) +
       ggplot2::geom_text(na.rm = TRUE) +
-      .calmr_scales("fill_c", limits = c(-1, 1)) +
+      .calm_scales("fill_c", limits = c(-1, 1)) +
       ggplot2::theme(
         axis.title = ggplot2::element_blank(),
         panel.background = ggplot2::element_blank()

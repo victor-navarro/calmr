@@ -16,6 +16,15 @@
     <loc>https://victornavarro.org/calm/articles/calmr_fits.html</loc>
   </url>
   <url>
+    <loc>https://victornavarro.org/calm/articles/calm_app.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calm/articles/calm_basics.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calm/articles/calm_fits.html</loc>
+  </url>
+  <url>
     <loc>https://victornavarro.org/calm/articles/HD2022.html</loc>
   </url>
   <url>
@@ -26,6 +35,9 @@
   </url>
   <url>
     <loc>https://victornavarro.org/calm/articles/MAC1975.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calm/articles/parallelism_in_calm.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calm/articles/parallelism_in_calmr.html</loc>
@@ -73,6 +85,27 @@
     <loc>https://victornavarro.org/calm/reference/build_model.html</loc>
   </url>
   <url>
+    <loc>https://victornavarro.org/calm/reference/CalmDesign-class.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calm/reference/CalmDesign-methods.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calm/reference/CalmExperiment-methods.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calm/reference/CalmExperiment.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calm/reference/CalmFit-class.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calm/reference/CalmFit-methods.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calm/reference/CalmModel-class.html</loc>
+  </url>
+  <url>
     <loc>https://victornavarro.org/calm/reference/CalmrComparison-class.html</loc>
   </url>
   <url>
@@ -83,6 +116,12 @@
   </url>
   <url>
     <loc>https://victornavarro.org/calm/reference/CalmrDesign.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calm/reference/CalmResult-methods.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calm/reference/CalmResult.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calm/reference/CalmrExperiment-class.html</loc>
@@ -124,6 +163,12 @@
     <loc>https://victornavarro.org/calm/reference/CalmrRSATest-class.html</loc>
   </url>
   <url>
+    <loc>https://victornavarro.org/calm/reference/CalmRSA-class.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calm/reference/CalmRSA-methods.html</loc>
+  </url>
+  <url>
     <loc>https://victornavarro.org/calm/reference/calmr_app.html</loc>
   </url>
   <url>
@@ -131,6 +176,12 @@
   </url>
   <url>
     <loc>https://victornavarro.org/calm/reference/calmr_verbosity.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calm/reference/calm_model_plot.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calm/reference/calm_verbosity.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calm/reference/compare_models.html</loc>
@@ -299,6 +350,9 @@
   </url>
   <url>
     <loc>https://victornavarro.org/calm/reference/results.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calm/reference/rsa-CalmExperiment-method.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calm/reference/rsa-CalmrExperiment-method.html</loc>

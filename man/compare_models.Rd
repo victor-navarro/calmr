@@ -7,7 +7,7 @@
 compare_models(design, models, parameters = NULL, options = NULL)
 }
 \arguments{
-\item{design}{A design data.frame or CalmrDesign}
+\item{design}{A design data.frame or CalmDesign}
 
 \item{models}{A character vector of length m, specifying the models to run.}
 
@@ -18,7 +18,7 @@ as returned by \code{get_parameters}}
 \item{options}{A list of options, as returned by get_exp_opts.}
 }
 \value{
-A CalmrExperiment object
+A CalmExperiment object
 }
 \description{
 Run models given a set of parameters

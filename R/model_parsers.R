@@ -182,7 +182,7 @@
   full_dat
 }
 
-# experiment is a CalmrExperiment
+# experiment is a CalmExperiment
 # returns a list of tibbles
 .aggregate_experiment <- function(
     experiment,
@@ -236,7 +236,7 @@
 }
 
 
-filter_calmr_results <- function(parsed_experiment, filters) {
+filter_calm_results <- function(parsed_experiment, filters) {
   if (!is.null(parsed_experiment)) {
     parsed_experiment@parsed_results <-
       lapply(

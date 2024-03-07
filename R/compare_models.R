@@ -1,11 +1,11 @@
 #' @title Run models given a set of parameters
-#' @param design A design data.frame or CalmrDesign
+#' @param design A design data.frame or CalmDesign
 #' @param models A character vector of length m, specifying the models to run.
 #' @param parameters A list of length m,
 #' with each entry containing a list with model parameters,
 #' as returned by `get_parameters`
 #' @param options A list of options, as returned by get_exp_opts.
-#' @returns A CalmrExperiment object
+#' @returns A CalmExperiment object
 #' @export
 #' @examples
 #' exp <- data.frame(
@@ -24,7 +24,7 @@ compare_models <- function(
   supported_models <- supported_models()
 
   # assert models
-  models <- sapply(models, .calmr_assert, what = "supported_model")
+  models <- sapply(models, .calm_assert, what = "supported_model")
 
   if (is.null(parameters)) {
     warning("Parameters not provided.
@@ -34,12 +34,12 @@ compare_models <- function(
     }, simplify = FALSE)
   } else {
     # assert length parameters
-    .calmr_assert("length", length(models),
+    .calm_assert("length", length(models),
       models = models, parameters = parameters
     )
     # assert parameters
     parameters <- sapply(seq_along(models), function(i) {
-      .calmr_assert("parameters",
+      .calm_assert("parameters",
         parameters[[i]],
         design = design, model = models[i]
       )
@@ -47,7 +47,7 @@ compare_models <- function(
   }
 
   # assert options
-  options <- .calmr_assert("experiment_options", options)
+  options <- .calm_assert("experiment_options", options)
 
   # make the arguments for all the models
   args <- sapply(seq_len(length((models))),

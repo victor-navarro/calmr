@@ -1,4 +1,4 @@
-#' S4 class for Calmr Fit
+#' S4 class for Calm Fit
 #'
 #' @section Slots:
 #' \describe{
@@ -15,9 +15,9 @@
 #' \item{\code{extra_pars}:}{List. Extra parameters
 #' passed to the fit call (...)}
 #' }
-#' @exportClass CalmrFit
-#' @seealso CalmrFit-methods
-setClass("CalmrFit",
+#' @exportClass CalmFit
+#' @seealso CalmFit-methods
+setClass("CalmFit",
   slots = c(
     nloglik = "numeric",
     best_pars = "numeric",
@@ -32,13 +32,13 @@ setClass("CalmrFit",
   )
 )
 
-#' CalmrFit Methods
-#' @param object A CalmrFit
-#' @rdname CalmrFit-methods
+#' CalmFit Methods
+#' @param object A CalmFit
+#' @rdname CalmFit-methods
 #' @export
-setMethod("show", "CalmrFit", function(object) {
+setMethod("show", "CalmFit", function(object) {
   cat(
-    "Calmr model fit: \n ",
+    "Calm model fit: \n ",
     "Parameters: \n"
   )
   print(object@best_pars)
@@ -48,12 +48,12 @@ setMethod("show", "CalmrFit", function(object) {
   )
 })
 
-#' @param object A CalmrFit
+#' @param object A CalmFit
 #' @param type A string specifying the type of prediction to generate
-#' @rdname CalmrFit-methods
+#' @rdname CalmFit-methods
 #' @export
 setMethod(
-  "predict", "CalmrFit",
+  "predict", "CalmFit",
   function(object, type = "response", ...) {
     prediction <- object@model_function(object@model_pars, ...)
     if (type == "response") {
@@ -65,34 +65,34 @@ setMethod(
 
 #### GOF methods ####
 setGeneric("NLL", function(object, ...) standardGeneric("NLL"))
-#' @param object A CalmrFit
-#' @rdname CalmrFit-methods
+#' @param object A CalmFit
+#' @rdname CalmFit-methods
 #' @export
 NLL <- function(object) NULL # nolint: object_name_linter.
-setMethod("NLL", "CalmrFit", function(object) {
+setMethod("NLL", "CalmFit", function(object) {
   object@nloglik
 })
 
-#' @param object A CalmrFit
+#' @param object A CalmFit
 #' @param k Penalty term
 #' @details The AIC is defined as `2*k - 2*-NLL`, where k is a penalty
 #' term and NLL is the negative log likelihood of the model.
-#' @rdname CalmrFit-methods
+#' @rdname CalmFit-methods
 #' @export
 setMethod(
-  "AIC", "CalmrFit",
+  "AIC", "CalmFit",
   function(object, k = 2) {
     k * length(object@best_pars) - 2 * -object@nloglik
   }
 )
 
-#' @param object A CalmrFit
+#' @param object A CalmFit
 #' @details The BIC is defined as `k*log(n) - 2*-NLL`, where k is the number
 #' of parameters in the model and n is the number of observations
-#' @rdname CalmrFit-methods
+#' @rdname CalmFit-methods
 #' @export
 setMethod(
-  "BIC", "CalmrFit",
+  "BIC", "CalmFit",
   function(object) {
     length(object@best_pars) * log(length(object@data)) -
       2 * -object@nloglik

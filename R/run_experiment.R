@@ -1,12 +1,12 @@
 #' @title Run experiment
 #' @description Runs an experiment with minimal parameters.
-#' @param x A CalmrExperiment or design data.frame
+#' @param x A CalmExperiment or design data.frame
 #' @param parse A logical specifying whether the raw results
 #' should be parsed. Default = TRUE.
 #' @param aggregate A logical specifying whether the parsed results
 #' should be aggregated. Default = TRUE.
 #' @param ... Arguments passed to other functions
-#' @return A CalmrExperiment with results.
+#' @return A CalmExperiment with results.
 #' @examples
 #' # Using a data.frame only (throws warning)
 #' df <- get_design("relative_validity")
@@ -18,7 +18,7 @@
 #' pars$alphas["US"] <- 0.6
 #' run_experiment(df, parameters = pars, model = "HD2022")
 #'
-#' # Using CalmrExperiment, for more iterations
+#' # Using CalmExperiment, for more iterations
 #' df <- get_design("blocking")
 #' pars <- get_parameters(df, model = "SM2007")
 #' exper <- make_experiment(df,
@@ -44,7 +44,7 @@ run_experiment <- function(
     experiment <- x
   }
   # check if experiment needs (can) to be run
-  .calmr_assert("good_experiment", given = experiment)
+  .calm_assert("good_experiment", given = experiment)
 
   # now run the experiment
   pb <- progressr::progressor(length(experiment))

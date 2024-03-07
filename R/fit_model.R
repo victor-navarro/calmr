@@ -18,16 +18,16 @@
 #' \item {optimizer_options: the optimizer options supplied by the user}
 #' \item {extra_pars: any extra parameters passed to the optimizer call via ...}
 #' }
-#' @note See the calmr_fits vignette for examples
+#' @note See the calm_fits vignette for examples
 #' @export
 #' @seealso \code{\link{get_optimizer_opts}}, \code{\link{make_experiment}}
 fit_model <- function(
     data, model_function,
     optimizer_options, file = NULL, ...) {
   # check if the user passed lower and upper limits
-  .calmr_assert("limits", optimizer_options)
+  .calm_assert("limits", optimizer_options)
   # check if user wants to save the fit in a file
-  if (!is.null(file)) .calmr_assert("filepath_OK", file)
+  if (!is.null(file)) .calm_assert("filepath_OK", file)
 
   # split the parameters
   model_par_pointers <- which(
@@ -38,9 +38,9 @@ fit_model <- function(
   )
 
   # get link function
-  link_function <- .get_calmr_link(optimizer_options$family)
+  link_function <- .get_calm_link(optimizer_options$family)
   # get the log likelihood function
-  ll_function <- .get_calmr_loglikelihood(optimizer_options$family)
+  ll_function <- .get_calm_loglikelihood(optimizer_options$family)
 
   # define the objective function
   objective_function <- function(pars, ...) {
@@ -105,7 +105,7 @@ fit_model <- function(
     )
   }
 
-  fit <- methods::new("CalmrFit",
+  fit <- methods::new("CalmFit",
     nloglik = best_nloglik,
     best_pars = stats::setNames(best_pars, optimizer_options$all_pars),
     model_pars = best_pars[model_par_pointers],

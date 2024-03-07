@@ -36,7 +36,7 @@ A list with
 Obtain MLE estimates for model, given data
 }
 \note{
-See the calmr_fits vignette for examples
+See the calm_fits vignette for examples
 }
 \seealso{
 \code{\link{get_optimizer_opts}}, \code{\link{make_experiment}}

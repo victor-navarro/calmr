@@ -6,7 +6,7 @@
 #' @export
 
 get_design <- function(design_name = NULL) {
-  calmr_designs <- list(
+  calm_designs <- list(
     "blocking" = data.frame(
       Group = c("Blocking", "Control"),
       P1 = c("10N>(US)", ""),
@@ -23,8 +23,8 @@ get_design <- function(design_name = NULL) {
     )
   )
   if (is.null(design_name)) {
-    return(calmr_designs)
+    return(calm_designs)
   } else {
-    calmr_designs[[design_name]]
+    calm_designs[[design_name]]
   }
 }
