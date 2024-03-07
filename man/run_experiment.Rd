@@ -44,5 +44,5 @@ exper <- make_experiment(df,
 run_experiment(exper)
 }
 \seealso{
-\code{\link{get_exp_opts}}, \code{\link{parse_experiment_results}}
+\code{\link{get_exp_opts}}
 }

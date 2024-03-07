@@ -7,6 +7,9 @@
 #' @param colour_key Logical. Whether to show the color key
 #' @param trial Numerical. The trial to graph.
 #' @param options A list with graph options, as returned by `get_graph_opts`
+#' @param t The trial from which weights are obtained
+#' (defaults to the maximum trial in the design)
+#' @param ... Additional named arguments
 #' @return A ggplot object
 #' @note You should probably be getting graphs via
 #' the `graph` method for CalmrExperiments.
@@ -92,6 +95,10 @@ patch_graphs <- function(graphs, selection = names(graphs)) {
   cow
 }
 
+#' Get options for calmr graph
+#' @param size A character (one of "small" or "large")
+#' to return default values for small or large graphs
+#' @return A list with graph options, to be passed to `ggnetwork::geom_nodes`
 #' @export
 get_graph_opts <- function(graph_size = "small") {
   if (graph_size == "large") {

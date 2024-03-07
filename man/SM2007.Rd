@@ -36,6 +36,8 @@ information for the comparison process. Defaults to FALSE.}
 
 \item{comparator_func}{A function to be used in the comparison
 process. Either \code{.witnauer_comparator_func}or \code{.comparator_func}.}
+
+\item{...}{Additional named arguments}
 }
 \value{
 A list with raw results

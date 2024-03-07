@@ -104,6 +104,9 @@
 }
 
 .parse_raw_data_table <- function(raw, type, args) {
+  # local bindings
+  tie <- NULL
+
   # outputs containing three dimensional arrays (trial, s, s)
   threes <- c(
     "es", "vs", "eivs",
@@ -207,32 +210,8 @@
 
 # dat is a tbl
 # type is the type of data
-.aggregate_results <- function(dat, type) {
-  # define base terms for aggregation formula
-  no_s2 <- c("as", "e_ij", "e_i", "m_i", "delta")
-  terms <- c(
-    "phase", "trial_type",
-    "trial", "s1", "s2", "block_size"
-  )
-  if ("time" %in% names(dat)) {
-    terms <- c(terms, "time")
-  }
-  if (type %in% no_s2) {
-    terms <- terms[!(terms == "s2")]
-  }
-  if ("type" %in% names(dat)) {
-    terms <- c(terms, "type")
-  }
-  if (type %in% c("os")) {
-    terms <- c(terms, "comp")
-  }
-  form <- formula(paste0("value~", paste0(terms, collapse = "+")))
-  aggregate(form, dat, mean)
-}
-
-# dat is a tbl
-# type is the type of data
 .aggregate_results_data_table <- function(dat, type) {
+  value <- NULL # local binding
   dat <- data.table::data.table(dat)
   # define base terms for aggregation formula
   no_s2 <- c("as", "e_ij", "e_i", "m_i", "delta")

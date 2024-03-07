@@ -3,7 +3,7 @@
 \name{show,CalmrFit-method}
 \alias{show,CalmrFit-method}
 \alias{predict,CalmrFit-method}
-\alias{NLL,CalmrFit-method}
+\alias{NLL}
 \alias{AIC,CalmrFit-method}
 \alias{BIC,CalmrFit-method}
 \title{CalmrFit Methods}
@@ -12,11 +12,18 @@
 
 \S4method{predict}{CalmrFit}(object, type = "response", ...)
 
-\S4method{NLL}{CalmrFit}(object)
+NLL(object)
 
-\S4method{AIC}{CalmrFit}(object, ..., k = 2)
+\S4method{AIC}{CalmrFit}(object, k = 2)
 
-\S4method{BIC}{CalmrFit}(object, ...)
+\S4method{BIC}{CalmrFit}(object)
+}
+\arguments{
+\item{object}{A CalmrFit}
+
+\item{type}{A string specifying the type of prediction to generate}
+
+\item{k}{Penalty term}
 }
 \description{
 CalmrFit Methods

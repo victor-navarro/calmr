@@ -39,5 +39,5 @@ Obtain MLE estimates for model, given data
 See the calmr_fits vignette for examples
 }
 \seealso{
-\code{\link{get_optimizer_opts}}, \code{\link{make_model_args}}
+\code{\link{get_optimizer_opts}}, \code{\link{make_experiment}}
 }

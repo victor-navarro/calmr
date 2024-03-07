@@ -7,11 +7,13 @@
 \alias{arguments,CalmrExperiment-method}
 \alias{arguments}
 \alias{c,CalmrExperiment-method}
-\alias{parameters,CalmrExperiment-method}
+\alias{parameters<-}
 \alias{parameters}
+\alias{parameters,CalmrExperiment-method}
 \alias{parameters<-,CalmrExperiment-method}
-\alias{experience,CalmrExperiment-method}
+\alias{experience<-}
 \alias{experience}
+\alias{experience,CalmrExperiment-method}
 \alias{experience<-,CalmrExperiment-method}
 \alias{results,CalmrExperiment-method}
 \alias{results}
@@ -20,8 +22,11 @@
 \alias{parsed_results,CalmrExperiment-method}
 \alias{parsed_results}
 \alias{length,CalmrExperiment-method}
+\alias{parse}
 \alias{parse,CalmrExperiment-method}
 \alias{aggregate,CalmrExperiment-method}
+\alias{plot,CalmrExperiment-method}
+\alias{plot}
 \title{CalmrExperiment methods}
 \usage{
 \S4method{show}{CalmrExperiment}(object)
@@ -32,9 +37,13 @@
 
 \S4method{c}{CalmrExperiment}(x, ..., recursive = FALSE)
 
+parameters(x) <- value
+
 \S4method{parameters}{CalmrExperiment}(x)
 
 \S4method{parameters}{CalmrExperiment}(x) <- value
+
+experience(x) <- value
 
 \S4method{experience}{CalmrExperiment}(x)
 
@@ -48,15 +57,37 @@
 
 \S4method{length}{CalmrExperiment}(x)
 
+parse(object)
+
 \S4method{parse}{CalmrExperiment}(object)
 
 \S4method{aggregate}{CalmrExperiment}(x, ...)
+
+\S4method{plot}{CalmrExperiment}(x, type = NULL, ...)
+}
+\arguments{
+\item{x}{An object of class \code{\link{CalmrExperiment-class}}.}
+
+\item{...}{Objects to concatenate}
+
+\item{recursive}{Unused}
+
+\item{value}{A list of experiences.}
+
+\item{type}{character vector specifying the types of plots to create.
+See ??supported_plots. Defaults to NULL.}
+}
+\value{
+A ggplot object
 }
 \description{
-CalmrExperiment methods
+Creates plots (or plot) with aggregated results in CalmrExperiment
+}
+\note{
+With type = NULL, all supported plots are returned.
 }
 \examples{
-# Concatenate designs
+# Concatenate experiments
 df <- get_design("blocking")
 pars1 <- get_parameters(df, model = "RW1972")
 pars2 <- get_parameters(df, model = "MAC1975")
@@ -65,5 +96,6 @@ ex2 <- make_experiment(df, model = "MAC1975")
 c(ex1, ex2)
 
 # Concatenate results
-lapply(c(ex1, ex2), run_experiment)
+ran_experiments <- lapply(c(ex1, ex2), run_experiments)
+do.call(c, ran_experiments)
 }

@@ -8,8 +8,6 @@
 #' \item{\code{test_data}:}{List.
 #' Test data, populated after testing the object.}
 #' }
-#' @name CalmrRSA
-#' @rdname CalmrRSA
 #' @exportClass CalmrRSA
 setClass(
   "CalmrRSA",
@@ -22,6 +20,7 @@ setClass(
 )
 
 #' CalmrRSA Methods
+#' @param object A CalmrRSA object
 #' @export
 #' @rdname CalmrRSA-methods
 setMethod("show", "CalmrRSA", function(object) {
@@ -46,7 +45,7 @@ methods::setGeneric(
 )
 #' Test CalmrRSA object via permutation test
 #'
-#' @param object The CalmrRSA object
+#' @param object A CalmrRSA object
 #' @param n_samples The number of samples for the permutation test
 #' (default = 1e3)
 #' @param p The critical threshold level for the permutation test
@@ -59,6 +58,8 @@ methods::setMethod("test", "CalmrRSA", function(
   .rsa_test(object, n_samples = n_samples, p = p)
 })
 
+#' @param object A CalmrRSA object
+#' @param ... Extra parameters passed to the plot call
 #' @rdname rsa
 #' @export
 setMethod(
@@ -70,7 +71,7 @@ setMethod(
     dat <- data.frame(as.table(corrmat))
     dat$label <- round(dat$Freq, 2)
     p <- dat %>%
-      na.omit() %>%
+      stats::na.omit() %>%
       ggplot2::ggplot(ggplot2::aes(
         x = .data$Var1, y = .data$Var2,
         fill = .data$Freq, label = .data$label

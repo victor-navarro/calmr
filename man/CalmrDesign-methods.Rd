@@ -4,7 +4,9 @@
 \alias{augment,CalmrDesign-method}
 \alias{augment}
 \alias{.anccrize_design}
+\alias{show,CalmrDesign-method}
 \alias{mapping,CalmrDesign-method}
+\alias{trials}
 \alias{trials,CalmrDesign-method}
 \title{Augment CalmrDesign}
 \usage{
@@ -12,7 +14,11 @@
 
 .anccrize_design(object)
 
+\S4method{show}{CalmrDesign}(object)
+
 \S4method{mapping}{CalmrDesign}(object)
+
+trials(object)
 
 \S4method{trials}{CalmrDesign}(object)
 }
@@ -22,8 +28,6 @@
 \item{model}{A modelname string. One of supported_models()}
 
 \item{...}{Additional parameters depending on the model.}
-
-\item{reward_labels}{A character vector with reward names}
 }
 \description{
 Methods mapping, and trials, are extractor functions.

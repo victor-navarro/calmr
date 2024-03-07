@@ -27,7 +27,12 @@ in which case, limits are set to be max(abs(x$value))*c(-1,1)}
 
 \item{colour_key}{Logical. Whether to show the color key}
 
+\item{t}{The trial from which weights are obtained
+(defaults to the maximum trial in the design)}
+
 \item{options}{A list with graph options, as returned by \code{get_graph_opts}}
+
+\item{...}{Additional named arguments}
 
 \item{trial}{Numerical. The trial to graph.}
 }
@@ -36,6 +41,8 @@ A ggplot object
 }
 \description{
 Create a graph with calmr data
+
+Graph CalmrExperiment
 }
 \note{
 You should probably be getting graphs via

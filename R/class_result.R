@@ -28,6 +28,7 @@ methods::setClass("CalmrExperimentResult",
 )
 
 #' Methods for CalmrResult
+#' @param object A CalmrResult object
 #' @rdname CalmrResult-methods
 #' @export
 methods::setMethod("show", "CalmrResult", function(object) {
@@ -38,6 +39,10 @@ methods::setMethod("show", "CalmrResult", function(object) {
   }
 })
 
+
+#' @param x A CalmrResult object
+#' @param ... More CalmrResult objects to concatenate
+#' @param recursive Unused
 #' @rdname CalmrResult-methods
 #' @export
 methods::setMethod(

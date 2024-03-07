@@ -75,8 +75,8 @@ parse_design <- function(df, model = NULL, ...) {
   # reduce
   uniqs <- !duplicated(mastert)
   tnames <- mastert[uniqs]
-  funcs <- setNames(funcs[uniqs], tnames)
-  nomis <- setNames(nomis[uniqs], tnames)
+  funcs <- stats::setNames(funcs[uniqs], tnames)
+  nomis <- stats::setNames(nomis[uniqs], tnames)
 
   # get transition names (nested within trial)
   transitions <- lapply(funcs, function(t) {

@@ -15,6 +15,13 @@ as returned by \code{make_experiment}}
 
 \item{mapping}{A named list specifying trial and stimulus mapping,
 as returned by \code{make_experiment}}
+
+\item{debug}{Logical specifying whether to print debug information.}
+
+\item{debug_t}{Whether to invoke a \code{browser} at
+the end of a timestep equal to debug_t.}
+
+\item{...}{Additional named arguments}
 }
 \value{
 A list with raw results

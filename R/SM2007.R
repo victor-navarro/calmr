@@ -14,6 +14,7 @@
 #' information for the comparison process. Defaults to FALSE.
 #' @param comparator_func A function to be used in the comparison
 #' process. Either `.witnauer_comparator_func`or `.comparator_func`.
+#' @param ... Additional named arguments
 #' @returns A list with raw results
 #' @note
 #' Correct usage of the v and o parameters requires the

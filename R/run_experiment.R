@@ -26,7 +26,7 @@
 #'   options = get_exp_opts(iterations = 4)
 #' )
 #' run_experiment(exper)
-#' @seealso \code{\link{get_exp_opts}}, \code{\link{parse_experiment_results}}
+#' @seealso \code{\link{get_exp_opts}}
 #' @export
 
 run_experiment <- function(
@@ -49,7 +49,6 @@ run_experiment <- function(
   # now run the experiment
   pb <- progressr::progressor(length(experiment))
   .parallel_standby(pb) # print parallel backend message
-  pb(amount = 0, message = "Running experiment")
   # get results
   all_results <- future.apply::future_apply(
     experiment@arguments, 1, function(i) {

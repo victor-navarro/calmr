@@ -14,8 +14,7 @@
 #' @note Whenever a family function other than the identity is used,
 #' the family-specific parameters will always be appended to
 #' the end of the relevant lists.
-#' @rdname options
-#' @seealso \code{\link{fit_model}}, \code{\link{make_model_args}}
+#' @seealso \code{\link{fit_model}}, \code{\link{make_experiment}}
 #' @export
 get_optimizer_opts <- function(model_pars,
                                initial_pars = rep(NA, length(model_pars)),

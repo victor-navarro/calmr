@@ -40,5 +40,5 @@ the family-specific parameters will always be appended to
 the end of the relevant lists.
 }
 \seealso{
-\code{\link{fit_model}}, \code{\link{make_model_args}}
+\code{\link{fit_model}}, \code{\link{make_experiment}}
 }

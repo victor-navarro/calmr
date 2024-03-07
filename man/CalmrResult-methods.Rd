@@ -9,6 +9,15 @@
 
 \S4method{c}{CalmrExperimentResult}(x, ..., recursive = FALSE)
 }
+\arguments{
+\item{object}{A CalmrResult object}
+
+\item{x}{A CalmrResult object}
+
+\item{...}{More CalmrResult objects to concatenate}
+
+\item{recursive}{Unused}
+}
 \description{
 Methods for CalmrResult
 }

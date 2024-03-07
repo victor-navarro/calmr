@@ -16,7 +16,7 @@
 * Added several methods for access to CalmrExperiment contents, including `c` (to bind experiments) `results`, `plot`, `graph`, `design` and `parameters`.
 * Created CalmrDesign and CalmrResult classes. 
 * Rewrote parsers to be less verbose and to rely less on the tidyverse suite and piping.
-* Substantially reduced the complexity of `make_experiment` function (previous `make_model_args`).
+* Substantially reduced the complexity of `make_experiment` function (previous `make_experiment`).
 * Introduced distinction between stimulus-specific and global parameters.
 * Parameters are now lists instead of data.frames.
 * Modified UI for calmr app to include a sidebar (to reduce clutter). 

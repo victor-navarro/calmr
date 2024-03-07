@@ -20,7 +20,7 @@
 #' }
 #' @note See the calmr_fits vignette for examples
 #' @export
-#' @seealso \code{\link{get_optimizer_opts}}, \code{\link{make_model_args}}
+#' @seealso \code{\link{get_optimizer_opts}}, \code{\link{make_experiment}}
 fit_model <- function(
     data, model_function,
     optimizer_options, file = NULL, ...) {

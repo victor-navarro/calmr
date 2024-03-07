@@ -18,6 +18,8 @@ as returned by \code{make_experiment}}
 
 \item{mapping}{A named list specifying trial and stimulus mapping,
 as returned by \code{make_experiment}}
+
+\item{...}{Additional named arguments}
 }
 \value{
 A list with raw results

@@ -6,6 +6,9 @@
 \usage{
 \S4method{show}{CalmrRSA}(object)
 }
+\arguments{
+\item{object}{A CalmrRSA object}
+}
 \description{
 CalmrRSA Methods
 }

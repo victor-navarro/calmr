@@ -20,7 +20,6 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
 
 #' Augment CalmrDesign to be used with the ANCCR model.
 #' @param object A CalmrDesign
-#' @param reward_labels A character vector with reward names
 #' @export
 #' @rdname CalmrDesign-methods
 .anccrize_design <- function(object) {
@@ -30,7 +29,7 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
 
 # args are arguments from .build_experiment
 .anccrize_arguments <- function(
-    args, log_fn = calmr:::.get_time_logs, ...) {
+    args, log_fn = .get_time_logs, ...) {
   # Uses the vanilla experience to create time logs
   args$experience <- apply(
     args, 1,
@@ -64,10 +63,10 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
     if (pars$use_exponential) {
       new_ts <- min(
         pars$max_ITI[trial_name],
-        rexp(1, 1 / pars$mean_ITI[trial_name])
+        stats::rexp(1, 1 / pars$mean_ITI[trial_name])
       )
     } else {
-      new_ts <- runif(1) * pars$mean_ITI[trial_name] *
+      new_ts <- stats::runif(1) * pars$mean_ITI[trial_name] *
         0.4 + pars$mean_ITI[trial_name] * 0.8
     }
     running_time <- running_time + new_ts
@@ -96,7 +95,7 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
     eventlog$time <- unlist(sapply(unique(eventlog$time), function(t) {
       tlen <- sum(eventlog$time == t)
       if (tlen > 1) {
-        return(t + rnorm(tlen) * pars$t_jitter)
+        return(t + stats::rnorm(tlen) * pars$t_jitter)
       } else {
         return(t)
       }

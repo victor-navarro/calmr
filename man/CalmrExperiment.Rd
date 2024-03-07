@@ -12,7 +12,7 @@ S4 class for calmr experiments.
 \describe{
 \item{\code{arguments}:}{A tbl containing arguments to run models.}
 \item{\code{design}:}{A CalmrDesign object.}
-\item{\code{design}:}{A CalmrExperimentResult object.}
+\item{\code{results}:}{A CalmrExperimentResult object.}
 }
 }
 

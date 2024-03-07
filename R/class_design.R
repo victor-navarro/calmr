@@ -8,10 +8,7 @@
 #' \item{\code{raw_design}:}{The original data.frame.}
 #' \item{\code{augmented}:}{Whether the object has been augmented.}
 #' }
-#' @name CalmrDesign
-#' @rdname CalmrDesign
 #' @exportClass CalmrDesign
-
 methods::setClass(
   "CalmrDesign",
   representation(
@@ -22,14 +19,18 @@ methods::setClass(
   ),
   prototype(augmented = FALSE)
 )
+#' CalmrDesign methods
+#' @export
+#' @rdname CalmrDesign-methods
 methods::setMethod(
   "show", "CalmrDesign",
   function(object) print(object@design)
 )
 
-methods::setGeneric("mapping", function(object) {
-  methods::standardGeneric("mapping")
-})
+methods::setGeneric(
+  "mapping",
+  function(object) methods::standardGeneric("mapping")
+)
 #' CalmrDesign methods
 #' @description Methods mapping, and trials, are extractor functions.
 #' @param object A CalmrDesign, as returned by parse_design
@@ -39,7 +40,8 @@ methods::setMethod(
   "mapping", "CalmrDesign",
   function(object) object@mapping
 )
-
+#' @export
+#' @rdname CalmrDesign-methods
 methods::setGeneric(
   "trials",
   function(object) methods::standardGeneric("trials")
