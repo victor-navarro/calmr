@@ -58,12 +58,12 @@
     <a class="dropdown-item" href="../articles/ANCCR.html">ANCCR</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Demos</h6>
-    <a class="dropdown-item" href="../articles/calmr_basics.html">calmr_basics</a>
-    <a class="dropdown-item" href="../articles/calmr_app.html">calmr_app</a>
-    <a class="dropdown-item" href="../articles/calmr_fits.html">calmr_fits</a>
+    <a class="dropdown-item" href="../articles/calm_basics.html">calm_basics</a>
+    <a class="dropdown-item" href="../articles/calm_app.html">calm_app</a>
+    <a class="dropdown-item" href="../articles/calm_fits.html">calm_fits</a>
     <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
     <a class="dropdown-item" href="../articles/using_time_models.html">using_time_models</a>
-    <a class="dropdown-item" href="../articles/parallelism_in_calmr.html">parallelism_in_calmr</a>
+    <a class="dropdown-item" href="../articles/parallelism_in_calm.html">parallelism_in_calm</a>
   </div>
 </li>
 <li class="nav-item">
@@ -256,28 +256,28 @@ entries.</p>
 <span>  parameters <span class="op">=</span> <span class="va">pars</span>,</span>
 <span>  model <span class="op">=</span> <span class="st">"ANCCR"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">experience</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fl">20</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/CalmExperiment-methods.html">experience</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fl">20</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    group trial tp     tn is_test  phase block_size stimulus      time reward_mag</span></span>
-<span><span class="co">#&gt; 1     FN     1  3    F&gt;T   FALSE phase1          2        F  36.39597          1</span></span>
-<span><span class="co">#&gt; 2     FN     1  3    F&gt;T   FALSE phase1          2        T  37.39597          1</span></span>
-<span><span class="co">#&gt; 3     FN     2  4 T&gt;(US)   FALSE phase1          2        T  91.99720          1</span></span>
-<span><span class="co">#&gt; 4     FN     2  4 T&gt;(US)   FALSE phase1          2       US  92.99720          1</span></span>
-<span><span class="co">#&gt; 5     FN     3  4 T&gt;(US)   FALSE phase1          2        T 103.08790          1</span></span>
-<span><span class="co">#&gt; 6     FN     3  4 T&gt;(US)   FALSE phase1          2       US 104.08790          1</span></span>
-<span><span class="co">#&gt; 7     FN     4  3    F&gt;T   FALSE phase1          2        F 177.77796          1</span></span>
-<span><span class="co">#&gt; 8     FN     4  3    F&gt;T   FALSE phase1          2        T 178.77796          1</span></span>
-<span><span class="co">#&gt; 9     FN     5  3    F&gt;T   FALSE phase1          2        F 232.15520          1</span></span>
-<span><span class="co">#&gt; 10    FN     5  3    F&gt;T   FALSE phase1          2        T 233.15520          1</span></span>
-<span><span class="co">#&gt; 11    FN     6  4 T&gt;(US)   FALSE phase1          2        T 256.27314          1</span></span>
-<span><span class="co">#&gt; 12    FN     6  4 T&gt;(US)   FALSE phase1          2       US 257.27314          1</span></span>
-<span><span class="co">#&gt; 13    FN     7  4 T&gt;(US)   FALSE phase1          2        T 277.53152          1</span></span>
-<span><span class="co">#&gt; 14    FN     7  4 T&gt;(US)   FALSE phase1          2       US 278.53152          1</span></span>
-<span><span class="co">#&gt; 15    FN     8  3    F&gt;T   FALSE phase1          2        F 295.36795          1</span></span>
-<span><span class="co">#&gt; 16    FN     8  3    F&gt;T   FALSE phase1          2        T 296.36795          1</span></span>
-<span><span class="co">#&gt; 17    FN     9  3    F&gt;T   FALSE phase1          2        F 349.60138          1</span></span>
-<span><span class="co">#&gt; 18    FN     9  3    F&gt;T   FALSE phase1          2        T 350.60138          1</span></span>
-<span><span class="co">#&gt; 19    FN    10  4 T&gt;(US)   FALSE phase1          2        T 410.70917          1</span></span>
-<span><span class="co">#&gt; 20    FN    10  4 T&gt;(US)   FALSE phase1          2       US 411.70917          1</span></span></code></pre></div>
+<span><span class="co">#&gt; 1     FN     1  3    F&gt;T   FALSE phase1          2        F  28.38458          1</span></span>
+<span><span class="co">#&gt; 2     FN     1  3    F&gt;T   FALSE phase1          2        T  29.38458          1</span></span>
+<span><span class="co">#&gt; 3     FN     2  4 T&gt;(US)   FALSE phase1          2        T  53.77464          1</span></span>
+<span><span class="co">#&gt; 4     FN     2  4 T&gt;(US)   FALSE phase1          2       US  54.77464          1</span></span>
+<span><span class="co">#&gt; 5     FN     3  4 T&gt;(US)   FALSE phase1          2        T  72.51985          1</span></span>
+<span><span class="co">#&gt; 6     FN     3  4 T&gt;(US)   FALSE phase1          2       US  73.51985          1</span></span>
+<span><span class="co">#&gt; 7     FN     4  3    F&gt;T   FALSE phase1          2        F 127.34227          1</span></span>
+<span><span class="co">#&gt; 8     FN     4  3    F&gt;T   FALSE phase1          2        T 128.34227          1</span></span>
+<span><span class="co">#&gt; 9     FN     5  4 T&gt;(US)   FALSE phase1          2        T 146.59053          1</span></span>
+<span><span class="co">#&gt; 10    FN     5  4 T&gt;(US)   FALSE phase1          2       US 147.59053          1</span></span>
+<span><span class="co">#&gt; 11    FN     6  3    F&gt;T   FALSE phase1          2        F 170.93884          1</span></span>
+<span><span class="co">#&gt; 12    FN     6  3    F&gt;T   FALSE phase1          2        T 171.93884          1</span></span>
+<span><span class="co">#&gt; 13    FN     7  4 T&gt;(US)   FALSE phase1          2        T 174.87341          1</span></span>
+<span><span class="co">#&gt; 14    FN     7  4 T&gt;(US)   FALSE phase1          2       US 175.87341          1</span></span>
+<span><span class="co">#&gt; 15    FN     8  3    F&gt;T   FALSE phase1          2        F 182.04159          1</span></span>
+<span><span class="co">#&gt; 16    FN     8  3    F&gt;T   FALSE phase1          2        T 183.04159          1</span></span>
+<span><span class="co">#&gt; 17    FN     9  3    F&gt;T   FALSE phase1          2        F 222.41382          1</span></span>
+<span><span class="co">#&gt; 18    FN     9  3    F&gt;T   FALSE phase1          2        T 223.41382          1</span></span>
+<span><span class="co">#&gt; 19    FN    10  4 T&gt;(US)   FALSE phase1          2        T 264.77391          1</span></span>
+<span><span class="co">#&gt; 20    FN    10  4 T&gt;(US)   FALSE phase1          2       US 265.77391          1</span></span></code></pre></div>
 <p>As you can see above, there are several rows per trial, each
 specifying a different stimulus. Time-based models like ANCCR run over a
 time log because they make ample use of the time difference between
@@ -287,15 +287,15 @@ events.</p>
 <code class="sourceCode R"><span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_experiment.html">run_experiment</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Action values</span></span>
-<span><span class="fu"><a href="../reference/patch_plots.html">patch_plots</a></span><span class="op">(</span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">experiment</span>, type <span class="op">=</span> <span class="st">"qs"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/patch_plots.html">patch_plots</a></span><span class="op">(</span><span class="fu"><a href="../reference/CalmExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">experiment</span>, type <span class="op">=</span> <span class="st">"qs"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="using_time_models_files/figure-html/unnamed-chunk-6-1.png" width="672"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ANCCR</span></span>
-<span><span class="fu"><a href="../reference/patch_plots.html">patch_plots</a></span><span class="op">(</span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">experiment</span>, type <span class="op">=</span> <span class="st">"anccrs"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/patch_plots.html">patch_plots</a></span><span class="op">(</span><span class="fu"><a href="../reference/CalmExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">experiment</span>, type <span class="op">=</span> <span class="st">"anccrs"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="using_time_models_files/figure-html/unnamed-chunk-6-2.png" width="672"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Dopamine transients</span></span>
-<span><span class="fu"><a href="../reference/patch_plots.html">patch_plots</a></span><span class="op">(</span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">experiment</span>, type <span class="op">=</span> <span class="st">"das"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/patch_plots.html">patch_plots</a></span><span class="op">(</span><span class="fu"><a href="../reference/CalmExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">experiment</span>, type <span class="op">=</span> <span class="st">"das"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="using_time_models_files/figure-html/unnamed-chunk-6-3.png" width="672"></p>
 <p>And that’s it! Easy, right?</p>
 </div>
