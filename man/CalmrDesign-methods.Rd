@@ -5,6 +5,7 @@
 \alias{augment}
 \alias{.anccrize_design}
 \alias{show,CalmrDesign-method}
+\alias{mapping}
 \alias{mapping,CalmrDesign-method}
 \alias{trials}
 \alias{trials,CalmrDesign-method}
@@ -15,6 +16,8 @@
 .anccrize_design(object)
 
 \S4method{show}{CalmrDesign}(object)
+
+mapping(object)
 
 \S4method{mapping}{CalmrDesign}(object)
 

@@ -18,6 +18,7 @@ methods::setClass(
   )
 )
 
+show <- methods::show
 #' @title CalmrExperiment methods
 #' @rdname CalmrExperiment-methods
 #' @export
@@ -60,10 +61,10 @@ methods::setMethod("arguments", "CalmrExperiment", function(x) {
 #' c(ex1, ex2)
 #'
 #' # Concatenate results
-#' ran_experiments <- lapply(c(ex1, ex2), run_experiments)
+#' ran_experiments <- lapply(c(ex1, ex2), run_experiment)
 #' do.call(c, ran_experiments)
 methods::setMethod("c", "CalmrExperiment", function(x, ..., recursive = FALSE) {
-  allexps <- list(...)
+  allexps <- list(x, ...)
   methods::new("CalmrExperiment",
     arguments = dplyr::bind_rows(lapply(allexps, function(e) e@arguments)),
     design = allexps[[1]]@design,
@@ -299,6 +300,8 @@ setMethod(
 
 setGeneric("graph", function(x, ...) standardGeneric("graph"))
 #' Graph CalmrExperiment
+#' @param x A CalmrExperiment
+#' @param ... Additional parameters passed to `graph_calmr_model`
 #' @export
 #' @rdname graph
 setMethod("graph", "CalmrExperiment", function(x, ...) {

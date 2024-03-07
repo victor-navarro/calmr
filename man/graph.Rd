@@ -18,7 +18,7 @@ calmr_model_graph(
 \S4method{graph}{CalmrExperiment}(x, ...)
 }
 \arguments{
-\item{x}{A tbl with data to use in the plot}
+\item{x}{A CalmrExperiment}
 
 \item{loops}{Logical. Whether to draw arrows back and forth}
 
@@ -32,7 +32,7 @@ in which case, limits are set to be max(abs(x$value))*c(-1,1)}
 
 \item{options}{A list with graph options, as returned by \code{get_graph_opts}}
 
-\item{...}{Additional named arguments}
+\item{...}{Additional parameters passed to \code{graph_calmr_model}}
 
 \item{trial}{Numerical. The trial to graph.}
 }

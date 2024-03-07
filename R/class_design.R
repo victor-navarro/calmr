@@ -27,6 +27,7 @@ methods::setMethod(
   function(object) print(object@design)
 )
 
+#' @rdname CalmrDesign-methods
 methods::setGeneric(
   "mapping",
   function(object) methods::standardGeneric("mapping")
