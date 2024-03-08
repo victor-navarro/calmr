@@ -5,12 +5,12 @@
 \alias{CalmDesign-class}
 \title{S4 class for Calm designs}
 \description{
-Inherits from the tbl class
+S4 class for Calm designs
 }
 \section{Slots}{
 
 \describe{
-\item{\code{design}:}{A tbl containing the object.}
+\item{\code{design}:}{A list containing design information.}
 \item{\code{mapping}:}{A list containing the object mapping.}
 \item{\code{raw_design}:}{The original data.frame.}
 \item{\code{augmented}:}{Whether the object has been augmented.}

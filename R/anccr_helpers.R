@@ -39,7 +39,7 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
   args
 }
 
-# args is a tbl coming from make_experiment
+# args is a list coming from make_experiment
 # it has (at least) experience, mapping, and parameters
 # TODO: Add normal noise using jitter to simultaneous events
 .get_time_logs <- function(

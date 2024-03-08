@@ -10,7 +10,7 @@ S4 class for calm experiments.
 \section{Slots}{
 
 \describe{
-\item{\code{arguments}:}{A tbl containing arguments to run models.}
+\item{\code{arguments}:}{A list containing arguments to run models.}
 \item{\code{design}:}{A CalmDesign object.}
 \item{\code{results}:}{A CalmExperimentResult object.}
 }

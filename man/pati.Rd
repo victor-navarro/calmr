@@ -5,7 +5,7 @@
 \alias{pati}
 \title{Rat responses from Patittucci et al. 2016}
 \format{
-A tibble with the following variables:
+A data.frame with the following variables:
 \describe{
 \item{subject}{subject identifier}
 \item{block}{the 2-session block of training (1 to 8)}
@@ -23,6 +23,7 @@ A tibble with the following variables:
 pati
 }
 \description{
-A dataset containing rat nose pokes and lever presses when levers were associated with different appetitive stimuli.
+A dataset containing rat nose pokes and lever
+presses when levers were associated with different appetitive stimuli.
 }
 \keyword{datasets}

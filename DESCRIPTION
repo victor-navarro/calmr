@@ -17,7 +17,6 @@ Imports:
     progress,
     progressr,
     rlang,
-    tibble,
     tidyr
 Suggests: 
     knitr,

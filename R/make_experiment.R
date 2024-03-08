@@ -57,6 +57,7 @@ make_experiment <- function(
       options = options,
       ...
     )
+    browser() # we go differently now
     # add mapping
     args$mapping <- list(design@mapping)
     # add parameters
@@ -80,12 +81,12 @@ make_experiment <- function(
     design, model, options,
     .callback_fn = NULL, ...) {
   # sample trials
-  exptb <- design@design
-  exptb$samples <- apply(exptb, 1, function(x) {
+  des <- design@design
+  samples <- lapply(des, function(x) {
     if (x$parse_string == "") {
       return(NULL)
     }
-    do.call(
+    samps <- do.call(
       .sample_trials,
       c(x$phase_info$general_info, list(
         randomize = x$randomize,
@@ -93,39 +94,17 @@ make_experiment <- function(
         miniblocks = options$miniblocks
       ))
     )
-  }, simplify = FALSE)
-
-  # add phaselab and block information
-  exptb <- tidyr::unnest_wider(exptb, "samples")
-  exptb$phaselab <- apply(exptb, 1, function(x) rep(x$phase, length(x$tps)),
-    simplify = FALSE
-  )
-  exptb$blocks <- apply(exptb, 1, function(x) rep(x$block_size, length(x$tps)),
-    simplify = FALSE
-  )
-
-  # one last manipulation to concatenate phases into single rows
-  exptb <- exptb |>
-    dplyr::group_by(.data$group) |>
-    dplyr::summarise(
-      trial = list(seq_along(unlist(.data$tps))),
-      tp = list(unlist(.data$tps)),
-      tn = list(unlist(.data$tns)),
-      is_test = list(unlist(.data$is_test)),
-      phase = list(unlist(.data$phaselab)),
-      block_size = list(unlist(.data$blocks))
-    )
-
-  # bundle into experiences
-  experience <- apply(
-    exptb, 1,
-    function(x) do.call("cbind.data.frame", x)
-  )
-
-  tibble::tibble(
-    model,
-    group = exptb$group,
-    experience
+    c(list(model = model, group = x$group, phase = x$phase), samps)
+  })
+  # finally, convert lists to data.frames and bind across phases per group
+  gs <- unlist(lapply(des, "[[", "group"))
+  experience <- lapply(unique(gs), function(g) {
+    do.call(rbind, lapply(samples[which(gs == g)], as.data.frame))
+  })
+  # return as list
+  list(
+    model = rep(model, length(gs)),
+    group = gs, experience = experience
   )
 }
 

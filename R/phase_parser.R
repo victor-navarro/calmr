@@ -11,9 +11,6 @@ phase_parser <- function(phase_string) {
   # check for empty phase_strings
   if (!nchar(phase_string)) {
     return(NULL)
-    dummy <- rapply(phase_parser("1A"), function(x) NULL, how = "replace")
-    dummy$general_info$trial_repeats <- 0
-    return(dummy)
   }
 
   ts <- unlist(base::strsplit(phase_string, "/"))

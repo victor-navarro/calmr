@@ -28,20 +28,19 @@ parse_design <- function(df, model = NULL, ...) {
       design_obj <- augment(design_obj, model = model, ...)
     }
   } else {
-    phases <- colnames(df)
-    groups <- df[, 1]
-    design <- tibble::tibble()
-    for (g in seq_len(nrow(df))) {
-      for (p in seq(2, ncol(df), 2)) {
-        design <- rbind(design, tibble::tibble(
-          group = groups[g],
-          phase = phases[p],
-          parse_string = df[g, p],
-          randomize = df[g, p + 1],
-          phase_info = list(phase_parser(df[g, p]))
-        ))
-      }
-    }
+    design <- apply(df, 1, function(r) {
+      sapply(seq(2, length(r), 2), function(p) {
+        list(
+          group = r[[1]],
+          phase = names(r)[p],
+          parse_string = r[[p]],
+          randomize = r[[p + 1]],
+          phase_info = phase_parser(r[[p]])
+        )
+      }, simplify = FALSE)
+    }, simplify = FALSE)
+    # unnest one level (now group:phase is flat now)
+    design <- unlist(design, recursive = FALSE)
     # That's the easy part
     # The hard part is to create the mapping for the experiment
     map <- .get_mapping(design)
@@ -59,9 +58,11 @@ parse_design <- function(df, model = NULL, ...) {
 }
 
 .get_mapping <- function(design) {
+  # get phase info
+  pinfo <- lapply(design, "[[", "phase_info")
   # trial names
-  tinfo <- lapply(design$phase_info, "[[", "trial_info")
-  ginfo <- lapply(design$phase_info, "[[", "general_info")
+  tinfo <- lapply(pinfo, "[[", "trial_info")
+  ginfo <- lapply(pinfo, "[[", "general_info")
 
   # gather at the period level
   mastert <- unlist(lapply(ginfo, "[[", "trial_names"))

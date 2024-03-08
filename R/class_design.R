@@ -1,9 +1,8 @@
 #' S4 class for Calm designs
 #'
-#' @description Inherits from the tbl class
 #' @section Slots:
 #' \describe{
-#' \item{\code{design}:}{A tbl containing the object.}
+#' \item{\code{design}:}{A list containing design information.}
 #' \item{\code{mapping}:}{A list containing the object mapping.}
 #' \item{\code{raw_design}:}{The original data.frame.}
 #' \item{\code{augmented}:}{Whether the object has been augmented.}
@@ -12,7 +11,7 @@
 methods::setClass(
   "CalmDesign",
   representation(
-    design = "tbl",
+    design = "list",
     mapping = "list",
     raw_design = "data.frame",
     augmented = "logical"
@@ -24,7 +23,13 @@ methods::setClass(
 #' @rdname CalmDesign-methods
 methods::setMethod(
   "show", "CalmDesign",
-  function(object) print(object@design)
+  function(object) {
+    cat("CalmrDesign built from data.frame:\n")
+    print(object@raw_design)
+    cat("----------------\n")
+    cat("Trials detected:\n")
+    print(trials(object))
+  }
 )
 
 #' @rdname CalmDesign-methods
@@ -54,18 +59,20 @@ methods::setMethod(
   function(object) {
     des <- object@design
     trial_dat <- data.frame()
-    for (r in seq_len(nrow(des))) {
-      td <- des$phase_info[[r]]
-      gdf <- data.frame(
-        group = des$group[r],
-        phase = des$phase[r],
-        td$general_info[c("trial_names", "trial_repeats", "is_test")]
-      )
-      gdf$stimuli <- lapply(
-        object@mapping$trial_nominals[gdf$trial_names],
-        function(object) paste(object, collapse = ";")
-      )
-      trial_dat <- rbind(trial_dat, gdf)
+    for (r in seq_len(length(des))) {
+      td <- des[[r]]$phase_info
+      if (!is.null(td)) {
+        gdf <- data.frame(
+          group = des[[r]]$group,
+          phase = des[[r]]$phase,
+          td$general_info[c("trial_names", "trial_repeats", "is_test")]
+        )
+        gdf$stimuli <- lapply(
+          object@mapping$trial_nominals[gdf$trial_names],
+          function(object) paste(object, collapse = ";")
+        )
+        trial_dat <- rbind(trial_dat, gdf)
+      }
     }
     return(trial_dat)
   }
