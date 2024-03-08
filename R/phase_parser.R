@@ -16,7 +16,7 @@ phase_parser <- function(phase_string) {
     return(dummy)
   }
 
-  ts <- unlist(stringr::str_split(phase_string, "/"))
+  ts <- unlist(base::strsplit(phase_string, "/"))
   # parse each trial separately
   tinfo <- sapply(ts, .parse_trial, simplify = FALSE)
   # now prepare the general information
@@ -53,25 +53,26 @@ phase_parser <- function(phase_string) {
   # remove repeats
   tn <- gsub("^\\d+", "", ts)
   # get repetitions
-  treps <- as.numeric(stringr::str_extract(ts, "^\\d+"))
+  treps <- as.numeric(regmatches(ts, regexpr("^\\d+", ts)))
   treps <- if (is.na(treps)) 1 else treps
   # detect test character
-  is_test <- stringr::str_detect(tn, "#")
+  is_test <- grepl("#", tn)
   # split into nominal periods (removing # from trial names)
-  nomi_split <- unlist(stringr::str_split(sub("#", "", tn), ">"))
+  nomi_split <- unlist(strsplit(sub("#", "", tn), ">"))
   # extract complex stimuli
   nomi_complex <- sapply(
     nomi_split,
     function(x) {
-      unlist(stringr::str_extract_all(x, pattern = "(?<=\\().+?(?=\\))"))
+      unlist(regmatches(x, gregexpr("(?<=\\().+?(?=\\))", x, perl = TRUE)))
     },
     simplify = FALSE
   )
+
   # extract simple stimuli
   nomi_simple <- sapply(
     nomi_split,
     function(x) {
-      unlist(stringr::str_split(gsub("\\([^()]*\\)", "", x), ""))
+      unlist(strsplit(gsub("\\([^()]*\\)", "", x), ""))
     },
     simplify = FALSE
   )
