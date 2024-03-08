@@ -14,10 +14,8 @@ Imports:
     future.apply,
     GA,
     methods,
-    openxlsx,
     progress,
     progressr,
-    purrr,
     rlang,
     tibble,
     tidyr

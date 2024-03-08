@@ -74,20 +74,20 @@ head(pati_summ)
 We now prepare the arguments for the model function 
 (as you would pass to `run_experiment`experiment.
 
-This is no minor issue, because the HeiDI is sensitive to order 
-effects. Hence, it is important that the arguments we prepare here 
-reflect the behavior of the model after an "general" experimental 
-procedure, and not the quirks of an unfortunate run of tials. Here, 
+This is no minor issue because the HeiDI is sensitive to order 
+effects. Hence, the arguments we prepare here must
+reflect the behavior of the model after a "general" experimental 
+procedure, and not the quirks of an unfortunate run of trials. Here, 
 we simply address this issue by running several iterations of the model 
-(with random trial orders) and average all models before evaluating the 
+(with random trial orders) and averaging all models before evaluating the 
 likelihood of the parameters.
 
-So what do we have to design? The experiment presented in Patittuci 
+So what do we have to design? The experiment presented by Patittuci 
 et al. (2016) was fairly simple, and it can be reduced to the 
 presentations of two levers, each followed by a different appetitive 
 outcome. Here, we will assume that the two outcomes are independent 
 from each other. We will also take some liberties with the number of trials 
-we specify, in order to reduce computing time.
+we specify, to reduce computing time.
 
 
 ```{r}
@@ -116,16 +116,16 @@ experiment <- make_experiment(des_df,
 ```
 
 Note we specified two counterbalancings as groups. 
-It is very important that we reproduce the counterbalancings in 
+We must reproduce the counterbalancings in 
 the data we are trying to fit as close as possible. Otherwise, 
 the optimization process might latch onto experimentally-irrelevant variables. 
 For example, it can be seen in `pati` that there was more lever pressing whenever 
 a lever was paired with pellets. If we didn't counterbalance the identities of the 
-levers and USs, the optimization might result into one of the levers being less 
+levers and USs, the optimization might result in one of the levers being less 
 salient than the other.
 
 We can now begin to write the model function. First, it would be a good 
-idea to see what results `run_experiment` returns.
+to see what results `run_experiment` returns.
 
 ```{r}
 exp_res <- run_experiment(experiment)
