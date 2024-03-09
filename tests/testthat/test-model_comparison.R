@@ -1,24 +1,16 @@
-exp <- data.frame(
-  Group = c("A", "B"),
-  P1 = c("2(A)>(US)/1B>(US)", "1(A)>(US)/2B>(US)"),
-  R1 = TRUE
-)
-exp <- parse_design(exp)
+# By making experiment beforehand (recommended)
+df <- data.frame(g = "A", p1 = "2A>(US)", r1 = TRUE)
 models <- c("HD2022", "RW1972", "PKH1982")
-options <- get_exp_opts()
-parameters <- sapply(models, get_parameters, design = exp)
-
-test_that("compare_models works with full parameters", {
-  comp <- compare_models(exp,
-    models = models,
-    parameters = parameters, options = options
+exps <- lapply(models, function(m) {
+  make_experiment(df,
+    parameters = get_parameters(df, model = m),
+    model = m
   )
-  expect_named(results(comp))
+})
+test_that("compare_models works with experiment list", {
+  expect_true(length(compare_models(exps)) == 3)
 })
 
-test_that("compare_models works with some parameters", {
-  comp <- suppressWarnings(
-    compare_models(exp, models = models)
-  )
-  expect_named(results(comp))
+test_that("compare_models works with partial arguments", {
+  expect_true(length(compare_models(df, models = models)) == 3)
 })

@@ -17,7 +17,6 @@ methods::setClass(
     groups = "character",
     parameters = "list",
     experiences = "list",
-    options = "list",
     results = "CalmExperimentResult",
     .model = "character",
     .group = "character",
@@ -181,9 +180,9 @@ methods::setMethod(
         seq_len(n), function(r) {
           pb("Parsing results")
           .parse_model(
-            object@results@raw_results[[r]],
-            # insane stuff due to tbls being stupid
-            unlist(as.list(object@arguments[r, ]), recursive = FALSE)
+            raw = object@results@raw_results[[r]],
+            experience = object@experiences[[r]],
+            model = object@model
           )
         },
         simplify = FALSE
@@ -205,7 +204,9 @@ methods::setMethod(
     }
     res <- .aggregate_experiment(x, ...)
     # unnest_once to leave at output level
-    x@results@aggregated_results <- unlist(res, recursive = FALSE)
+    x@results@aggregated_results <- unlist(unname(res),
+      recursive = FALSE
+    )
     x
   }
 )
@@ -234,7 +235,7 @@ setMethod(
     # get aggregated results
     res <- results(x)
     plots <- list()
-    models <- unique(x@arguments$model)
+    models <- unique(x@model)
     # Go through each row
     for (m in models) {
       model_plots <- supported_plots(m)
@@ -272,7 +273,7 @@ setMethod("graph", "CalmExperiment", function(x, ...) {
   # get aggregated results
   res <- results(x)
   graphs <- list()
-  models <- unique(x@arguments$model)
+  models <- unique(x@model)
   for (m in models) {
     assoc_output <- .model_associations(m)
     odat <- res[[assoc_output]]
@@ -295,48 +296,3 @@ setMethod("graph", "CalmExperiment", function(x, ...) {
   }
   graphs
 })
-
-
-
-methods::setGeneric("rsa", function(x, layers, ...) standardGeneric("rsa"))
-#' Perform representational similarity analysis on CalmExperiment
-#'
-#' @param x A CalmrExperiment object
-#' @param comparisons A model-named list containing the model
-#' outputs to compare.
-#' @param test Whether to test the RSA via permutation test. Default = FALSE.
-#' @param ... Additional parameters passed to `stats::dist`
-#' and `stats::cor`
-#' @returns A CalmRSA object
-#' @note The object returned by this function
-#' can be later tested via its own `test` method.
-#' @aliases rsa
-#' @export
-#' @examples
-#' # Comparing the associations in three models
-#' exp <- data.frame(
-#'   Group = c("A", "B"),
-#'   P1 = c("2(A)>(US)/1B>(US)", "1(A)>(US)/2B>(US)"),
-#'   R1 = TRUE
-#' )
-#' exp <- parse_design(exp)
-#' models <- c("HD2022", "RW1972", "PKH1982")
-#' parameters <- sapply(models, get_parameters, design = exp)
-#' options <- get_exp_opts()
-#' exp_res <- compare_models(exp,
-#'   models = models,
-#'   parameters = parameters, options = options
-#' )
-#' comparisons <- list(
-#'   "HD2022" = c("vs"),
-#'   "RW1972" = c("vs"),
-#'   "PKH1982" = c("eivs")
-#' )
-#' res <- rsa(exp_res, comparisons = comparisons)
-#' test(res, n_samples = 100)
-methods::setMethod(
-  "rsa", "CalmExperiment",
-  function(x, comparisons, test = FALSE, ...) {
-    .rsa(results(x), comparisons = comparisons, .test = test, ...)
-  }
-)

@@ -31,11 +31,12 @@ parse_design <- function(df, model = NULL, ...) {
       design_obj <- augment(design_obj, model = model, ...)
     }
   } else {
+    ri <- seq(2, ncol(df), 2)
     design <- apply(df, 1, function(r) {
-      sapply(seq(2, length(r), 2), function(p) {
+      sapply(ri, function(p) {
         list(
           group = r[[1]],
-          phase = names(r)[p],
+          phase = names(df)[p],
           parse_string = r[[p]],
           randomize = r[[p + 1]],
           phase_info = phase_parser(r[[p]])
@@ -43,7 +44,7 @@ parse_design <- function(df, model = NULL, ...) {
       }, simplify = FALSE)
     }, simplify = FALSE)
     # unnest one level (now group:phase is flat now)
-    design <- unlist(design, recursive = FALSE)
+    design <- unlist(design, recursive = FALSE, use.names = FALSE)
     # That's the easy part
     # The hard part is to create the mapping for the experiment
     map <- .get_mapping(design)

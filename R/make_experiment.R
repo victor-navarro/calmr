@@ -6,19 +6,24 @@
 #' @param parameters Parameters for a  model as
 #' returned by `get_parameters`
 #' @param model A string specifying the model name. One of `supported_models()`
-#' @param options A list with options as returned by `get_exp_opts`
+#' @param iterations An integer specifying the number of iterations per group.
+#' @param miniblocks Whether to organize trials in miniblocks.
 #' @param .callback_fn A function for keeping track of progress. Internal use.
 #' @param ... Extra parameters passed to other functions
 #' @return A CalmExperiment object
 #' @seealso \code{\link{parse_design}},
-#' \code{\link{get_parameters}}, \code{\link{get_exp_opts}}
+#' @note The miniblocks option will direct the sampling function to create
+#' equally-sized miniblocks with random trials within a phase.
+#' For example, the phase string "2A/2B" will create two miniblocks
+#' with one of each trial. The phase string "2A/4B" will create two miniblocks
+#'  with one A trial, and 2 B trials. However, the phase string "2A/1B" will
+#'  not result in miniblocks, even if miniblocks here is set to TRUE.
 #' @examples
 #' des <- data.frame(Group = "G1", P1 = "10A>(US)", R1 = TRUE)
 #' ps <- get_parameters(des, model = "HD2022")
-#' op <- get_exp_opts(miniblocks = TRUE, iterations = 2)
 #' make_experiment(
 #'   design = des, parameters = ps,
-#'   model = "HD2022", options = op
+#'   model = "HD2022", iterations = 2
 #' )
 #'
 #' @export
@@ -27,7 +32,8 @@
 make_experiment <- function(
     design, parameters = NULL,
     model = NULL,
-    options = get_exp_opts(),
+    iterations = 1,
+    miniblocks = TRUE,
     .callback_fn = NULL,
     ...) {
   # parse design
@@ -43,20 +49,18 @@ make_experiment <- function(
   parameters <- .calm_assert("parameters", parameters,
     design = design, model = model
   )
-  # assert options
-  options <- .calm_assert("experiment_options", options)
 
   # build the experiences for the experiment
-  iter <- options$iterations
-  pb <- progressr::progressor(iter)
+  pb <- progressr::progressor(iterations)
   .parallel_standby(pb) # print parallel backend message
   pb(amount = 0, message = "Building experiment")
-  allexps <- future.apply::future_sapply(seq_len(iter), function(x) {
+  allexps <- future.apply::future_sapply(seq_len(iterations), function(x) {
     if (!is.null(.callback_fn)) .callback_fn() # for shiny
     exper <- .build_experiment(
       design = design,
       model = model,
-      options = options,
+      iterations = iterations,
+      miniblocks = miniblocks,
       ...
     )
     # augment experience if necessary
@@ -79,17 +83,16 @@ make_experiment <- function(
       length(group_names)
     ), group_names),
     experiences = allexps,
-    options = options,
     results = methods::new("CalmExperimentResult"),
     .model = rep(model, length(allexps)),
-    .group = rep(group_names, iter),
-    .iter = rep(seq_len(iter), each = length(group_names))
+    .group = rep(group_names, iterations),
+    .iter = rep(seq_len(iterations), each = length(group_names))
   )
 }
 
 # general function to build experiment
 .build_experiment <- function(
-    design, model, options,
+    design, model, iterations, miniblocks,
     .callback_fn = NULL, ...) {
   # sample trials
   des <- design@design
@@ -102,7 +105,7 @@ make_experiment <- function(
       c(x$phase_info$general_info, list(
         randomize = x$randomize,
         masterlist = design@mapping$trial_names,
-        miniblocks = options$miniblocks
+        miniblocks = miniblocks
       ))
     )
     c(list(model = model, group = x$group, phase = x$phase), samps)

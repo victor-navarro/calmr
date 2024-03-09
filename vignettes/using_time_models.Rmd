@@ -75,7 +75,7 @@ experiment <- make_experiment(fpfn,
   parameters = pars,
   model = "ANCCR"
 )
-head(experience(experiment)[[1]], 20)
+head(experiences(experiment)[[1]], 20)
 ```
 
 As you can see above, there are several rows per trial, each specifying a different stimulus.

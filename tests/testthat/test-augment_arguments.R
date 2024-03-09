@@ -9,7 +9,7 @@ df <- parse_design(rawdf)
 pars <- get_parameters(rawdf, model = "ANCCR")
 
 test_that("augmenting ANCCR design creates more experience rows than trials", {
-  exp <- experience(make_experiment(df,
+  exp <- experiences(make_experiment(df,
     parameters = pars, model = "ANCCR"
   ))[[1]]
   expect_equal(nrow(exp), (20 + 30))
@@ -18,10 +18,10 @@ test_that("augmenting ANCCR design creates more experience rows than trials", {
 test_that("augmenting ANCCR design with jitter creates different timestamps", {
   nojitt <- pars
   nojitt$t_jitter <- 0
-  exp_jit <- experience(make_experiment(df,
+  exp_jit <- experiences(make_experiment(df,
     parameters = pars, model = "ANCCR"
   ))[[1]]
-  exp_nojit <- experience(make_experiment(df,
+  exp_nojit <- experiences(make_experiment(df,
     parameters = nojitt, model = "ANCCR"
   ))[[1]]
   expect_true(length(unique(exp_jit$time)) != length(unique(exp_nojit$time)))

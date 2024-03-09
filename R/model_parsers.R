@@ -162,20 +162,3 @@
   form <- paste0(terms, collapse = ",")
   data.table::setDT(dat)[, list("value" = mean(value)), by = form]
 }
-
-
-filter_calm_results <- function(parsed_experiment, filters) {
-  if (!is.null(parsed_experiment)) {
-    parsed_experiment@parsed_results <-
-      lapply(
-        parsed_experiment@parsed_results,
-        function(x) {
-          x %>% dplyr::filter(
-            .data$phase %in% filters$phase &
-              .data$trial_type %in% filters$trial_type
-          )
-        }
-      )
-  }
-  parsed_experiment
-}

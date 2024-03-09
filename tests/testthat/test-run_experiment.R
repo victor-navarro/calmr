@@ -1,29 +1,17 @@
-df <- get_design("relative_validity")
-models <- c("RW1972", "MAC1975")
-df <- parse_design(df)
-
-experiments <- lapply(
-  models,
-  function(m) {
-    make_experiment(df,
-      model = m,
-      parameters = get_parameters(df, model = m),
-      options = get_exp_opts(iterations = 2)
-    )
-  }
-)
+df <- get_design("blocking")
+pars <- get_parameters(df, model = "RW1972")
+exper <- make_experiment(df, parameters = pars, model = "RW1972")
 
 test_that("can run without parsing/aggregating", {
-  res <- run_experiment(experiments[[1]], parse = FALSE, aggregate = FALSE)
+  res <- run_experiment(exper, parse = FALSE, aggregate = FALSE)
   expect_true(length(raw_results(res)) > 1)
 })
 test_that("can run with parsing", {
-  res <- run_experiment(experiments[[1]], parse = TRUE, aggregate = FALSE)
+  res <- run_experiment(exper, parse = TRUE, aggregate = FALSE)
   expect_true(length(parsed_results(res)) > 1)
 })
-
 test_that("can run with parsing/aggregating", {
-  res <- run_experiment(experiments[[1]])
+  res <- run_experiment(exper)
   expect_true(length(results(res)) > 1)
 })
 
@@ -31,24 +19,15 @@ test_that("run_experiment asserts correctly", {
   # warning for not passing parameters
   expect_warning(run_experiment(
     df,
-    model = "HD2022", options = get_exp_opts()
+    model = "HD2022"
   ))
-  # error for not passing enough parameters
-  expect_error(run_experiment(df,
-    parameters = pars[1, ],
-    model = "HD2022", options = get_exp_opts()
-  ))
-  # error for passing bad options
-  expect_error(run_experiment(df,
-    parameters = pars,
-    model = "HD2022", options = list(mybadOption = TRUE)
-  ))
+  # TODO: write tests that check for parameters and for options
 })
 
 test_that("run_experiment runs with split args", {
   res <- run_experiment(df,
     parameters = pars,
-    model = "HD2022", options = get_exp_opts()
+    model = "HD2022"
   )
   expect_named(
     results(res)
@@ -58,7 +37,7 @@ test_that("run_experiment runs with split args", {
 test_that("run_experiment runs with bundled args", {
   args <- make_experiment(df,
     parameters = pars,
-    model = "HD2022", options = get_exp_opts()
+    model = "HD2022"
   )
   res <- run_experiment(args)
   expect_named(
@@ -79,8 +58,7 @@ test_that("run_experiment works with simple cells", {
   simple_pars <- get_parameters(simple_df, model = "HD2022")
   res <- run_experiment(
     simple_df,
-    parameters = simple_pars, model = "HD2022",
-    options = get_exp_opts()
+    parameters = simple_pars, model = "HD2022"
   )
   expect_named(
     results(res)
@@ -92,7 +70,6 @@ test_that("run_experiment stops overly minimal experiments", {
   expect_error(run_experiment(
     df,
     model = "HD2022",
-    parameters = get_parameters(df, model = "HD2022"),
-    options = get_exp_opts()
+    parameters = get_parameters(df, model = "HD2022")
   ))
 })

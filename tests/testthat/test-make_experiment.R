@@ -13,7 +13,7 @@ parsed_df <- parse_design(df)
 parameters <- get_parameters(df, model = "HD2022")
 minib_args <- make_experiment(parsed_df,
   parameters = parameters,
-  model = "HD2022", options = get_exp_opts(iterations = 2)
+  model = "HD2022", iterations = 2
 )
 
 test_that("trials are generated in blocks", {
@@ -40,12 +40,11 @@ df <- data.frame(
   R2 = c(TRUE, TRUE)
 )
 df <- parse_design(df)
-opts <- get_exp_opts()
 parameters <- get_parameters(df, "RW1972")
 
 test_that("function works with even trials per row", {
   args <- make_experiment(df,
-    parameters = parameters, model = "RW1972", options = opts
+    parameters = parameters, model = "RW1972"
   )
   expect_true(length(args) > 1)
 })
@@ -53,8 +52,7 @@ test_that("function works with even trials per row", {
 test_that("make_experiment fails with too many models", {
   expect_error(make_experiment(df,
     parameters = parameters,
-    model = c("RW1972", "MAC1975"),
-    options = opts
+    model = c("RW1972", "MAC1975")
   ))
 })
 

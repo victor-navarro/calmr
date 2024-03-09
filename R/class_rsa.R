@@ -28,7 +28,7 @@ setMethod("show", "CalmRSA", function(object) {
   cat("---------------\n")
   cat("Correlation matrix:\n")
   print(object@corr_mat)
-  if (!is.null(object@test_data)) {
+  if (length(object@test_data)) {
     cat("\nSignificance matrix:\n\n")
     print(object@test_data$sig_mat)
     cat(sprintf(
@@ -89,7 +89,7 @@ setMethod(
       sigmat <- x@test_data$sig_mat
       sigmat[lower.tri(sigmat)] <- NA
       dat <- p$data
-      dat$sig <- data.frame(as.table(sigmat))$Freq
+      dat$sig <- na.omit(data.frame(as.table(sigmat)))$Freq
       p <- p + ggplot2::geom_label(
         data = stats::na.omit(dat[dat$sig, ]), fill = "white"
       )

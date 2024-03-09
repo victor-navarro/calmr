@@ -4,33 +4,34 @@
 \alias{compare_models}
 \title{Run models given a set of parameters}
 \usage{
-compare_models(design, models, parameters = NULL, options = NULL)
+compare_models(x, models = NULL, ...)
 }
 \arguments{
-\item{design}{A design data.frame or CalmDesign}
+\item{x}{A list of CalmExperiment objects or a design data.frame}
 
-\item{models}{A character vector of length m, specifying the models to run.}
+\item{models}{A character vector of length m, specifying the models to run.
+Ignored if x is a list of CalmrExperiment objects.}
 
-\item{parameters}{A list of length m,
-with each entry containing a list with model parameters,
-as returned by \code{get_parameters}}
-
-\item{options}{A list of options, as returned by get_exp_opts.}
+\item{...}{Arguments passed to \code{make_experiment}}
 }
 \value{
-A CalmExperiment object
+A list of CalmExperiment objects
 }
 \description{
 Run models given a set of parameters
 }
 \examples{
-exp <- data.frame(
-  Group = c("A", "B"),
-  P1 = c("10(A)>(US)/5B>(US)", "5(A)>(US)/10B>(US)"),
-  R1 = TRUE
-)
-exp <- parse_design(exp)
+# By making experiment beforehand (recommended)
+df <- get_design("blocking")
 models <- c("HD2022", "RW1972", "PKH1982")
-parameters <- sapply(models, get_parameters, design = exp)
-comp <- compare_models(exp, models = models, parameters = parameters)
+exps <- lapply(models, function(m) {
+  make_experiment(df,
+    parameters = get_parameters(df, model = m),
+    model = m
+  )
+})
+comp <- compare_models(exps)
+
+# By passing minimal arguments (not recommended; default parameters)
+comp <- compare_models(df, models = models)
 }

@@ -30,18 +30,6 @@
         return(parse_design(given))
       }
     },
-    "experiment_options" = {
-      if (is.null(given)) {
-        warning("No experiment options passed. Using default options.")
-        return(get_exp_opts())
-      } else {
-        if (length(setdiff(names(given), names(given))) > 0) {
-          stop("Did not supply proper options. Please see ?get_exp_opts")
-        } else {
-          return(given)
-        }
-      }
-    },
     "supported_optimizer" = {
       if (is.null(given)) {
         warning("No optimizer passed. Using 'optim'.")
@@ -120,4 +108,8 @@
 
 is_experiment <- function(object) {
   inherits(object, "CalmExperiment")
+}
+
+is_design <- function(object) {
+  inherits(object, "CalmDesign")
 }

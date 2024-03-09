@@ -3,5 +3,5 @@ pars <- get_parameters(df, model = "ANCCR")
 
 test_that("can build experiment without transitions", {
   exp <- make_experiment(df, parameters = pars, model = "ANCCR")
-  expect_true(nrow(experience(exp)[[1]]) > 1)
+  expect_true(nrow(experiences(exp)[[1]]) > 1)
 })

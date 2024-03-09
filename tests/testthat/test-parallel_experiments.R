@@ -15,7 +15,7 @@
 #   args <- make_experiment(df,
 #     model = "RW1972",
 #     parameters = pars,
-#     options = get_exp_opts(iterations = 10)
+#     iterations = 10
 #   )
 #   expect_equal(length(args), 10)
 # })
@@ -25,7 +25,7 @@
 #   args <- make_experiment(df,
 #     model = "RW1972",
 #     parameters = pars,
-#     options = get_exp_opts(iterations = 10)
+#     iterations = 10
 #   )
 #   future::plan(future::multisession)
 #   exp <- run_experiment(args)

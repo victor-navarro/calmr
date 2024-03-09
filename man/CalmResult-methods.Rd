@@ -2,21 +2,12 @@
 % Please edit documentation in R/class_result.R
 \name{show,CalmResult-method}
 \alias{show,CalmResult-method}
-\alias{c,CalmExperimentResult-method}
 \title{Methods for CalmResult}
 \usage{
 \S4method{show}{CalmResult}(object)
-
-\S4method{c}{CalmExperimentResult}(x, ..., recursive = FALSE)
 }
 \arguments{
 \item{object}{A CalmResult object}
-
-\item{x}{A CalmResult object}
-
-\item{...}{More CalmResult objects to concatenate}
-
-\item{recursive}{Unused}
 }
 \description{
 Methods for CalmResult

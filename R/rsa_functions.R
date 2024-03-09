@@ -1,30 +1,61 @@
-# x is a data.table with aggregated data
-# comparisons is a model-named list with model outputs
-.rsa <- function(x, comparisons, .test = FALSE, ...) {
+#' Perform representational similarity analysis on CalmExperiment
+#'
+#' @param x A list of CalmExperiment objects
+#' @param comparisons A model-named list containing the model
+#' outputs to compare.
+#' @param test Whether to test the RSA via permutation test. Default = FALSE.
+#' @param ... Additional parameters passed to `stats::dist`
+#' and `stats::cor`
+#' @returns A CalmRSA object
+#' @note The object returned by this function
+#' can be later tested via its own `test` method.
+#' @export
+#' @examples
+#' # Comparing the associations in three models
+#' exp <- data.frame(
+#'   Group = c("A", "B"),
+#'   P1 = c("2(A)>(US)/1B>(US)", "1(A)>(US)/2B>(US)"),
+#'   R1 = TRUE
+#' )
+#' exp <- parse_design(exp)
+#' models <- c("HD2022", "RW1972", "PKH1982")
+#' parameters <- sapply(models, get_parameters, design = exp)
+#' exp_res <- compare_models(exp,
+#'   models = models,
+#'   parameters = parameters
+#' )
+#' comparisons <- list(
+#'   "HD2022" = c("vs"),
+#'   "RW1972" = c("vs"),
+#'   "PKH1982" = c("eivs")
+#' )
+#' res <- rsa(exp_res, comparisons = comparisons)
+#' test(res, n_samples = 100)
+rsa <- function(x, comparisons, .test = FALSE, ...) {
   # Assert the comparisons list is named
   modnames <- names(comparisons)
   if (!length(modnames)) {
     stop("Comparisons list must be a model-named list.")
   }
   # Assert all model outputs are in x
-  for (m in modnames) {
-    for (o in comparisons[[m]]) {
-      odat <- x[[o]]
-      if (is.null(odat[odat$model == m, ])) {
+  all_res <- lapply(x, results)
+
+  sapply(modnames, function(m) {
+    sapply(comparisons[[m]], function(o) {
+      if (is.null(all_res[[m]][[o]])) {
         stop(sprintf("Output %s not found for model %s", o, m))
       }
-    }
-  }
+    })
+  })
 
   # Get trial matrices
   trial_mats <- sapply(modnames, function(m) {
     sapply(comparisons[[m]], function(o) {
-      odat <- x[[o]]
-      dat <- odat[odat$model == m, ]
+      dat <- all_res[[m]][[o]]
       tsize <- unique(with(dat, tapply(value, trial, length)))
       if (length(tsize) > 1) {
         stop(sprintf("Output %s for model %s is inconsistent across trials.
-        Cannot calculate distances"))
+        Cannot calculate distances", o, m))
       }
       matrix(dat$value, ncol = tsize, byrow = TRUE)
     }, simplify = FALSE)

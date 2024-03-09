@@ -124,14 +124,6 @@ Simulation options are entirely optional, and if you don't pass them you will ju
 
 We can get a default one with `get_exp_opts`, and modify them accordingly.
 
-
-```{r}
-my_opts <- get_exp_opts()
-# Increase number of simulations to average out randomization effects
-my_opts$iterations <- 5
-my_opts
-```
-
 ### Simulating
 
 With all of the above, we can run our simulation using the `run_experiment` function.
@@ -141,7 +133,7 @@ my_experiment <- run_experiment(
   my_blocking,
   model = "RW1972",
   parameters = my_pars,
-  options = my_opts,
+  iterations = 5
 )
 slotNames(my_experiment)
 # access arguments (see how many iterations we ran?)

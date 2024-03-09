@@ -18,12 +18,12 @@
 #' pars$alphas["US"] <- 0.6
 #' run_experiment(df, parameters = pars, model = "HD2022")
 #'
-#' # Using CalmExperiment, for more iterations
+#' # Using make_experiment, for more iterations
 #' df <- get_design("blocking")
 #' pars <- get_parameters(df, model = "SM2007")
 #' exper <- make_experiment(df,
 #'   parameters = pars, model = "SM2007",
-#'   options = get_exp_opts(iterations = 4)
+#'   iterations = 4
 #' )
 #' run_experiment(exper)
 #' @seealso \code{\link{get_exp_opts}}
@@ -44,7 +44,10 @@ run_experiment <- function(
     experiment <- x
   }
   # sanitize nargs
-  nargs <- nargs[!(names(nargs) %in% c("parameters", "experience", "mapping"))]
+  nargs <- nargs[!(names(nargs) %in% c(
+    "parameters",
+    "experience", "mapping"
+  ))]
 
   # check if experiment needs (can) to be run
   .calm_assert("good_experiment", given = experiment)

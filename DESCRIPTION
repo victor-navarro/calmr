@@ -16,8 +16,7 @@ Imports:
     methods,
     progress,
     progressr,
-    rlang,
-    tidyr
+    rlang
 Suggests: 
     knitr,
     rmarkdown,
@@ -50,7 +49,6 @@ Collate:
     'data.R'
     'fit_helpers.R'
     'fit_model.R'
-    'get_exp_opts.R'
     'model_parsers.R'
     'model_plots.R'
     'model_graphs.R'
