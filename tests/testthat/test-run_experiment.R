@@ -1,11 +1,31 @@
-df <- data.frame(
-  Group = c("True", "Pseudo"),
-  P1 = c("10AB(US)/10AC", "5AB(US)/5AB/5AC(US)/5AC"),
-  R1 = c(TRUE, TRUE),
-  P2 = c("1A", "1A"),
-  R2 = c(TRUE, TRUE)
+df <- get_design("relative_validity")
+models <- c("RW1972", "MAC1975")
+df <- parse_design(df)
+
+experiments <- lapply(
+  models,
+  function(m) {
+    make_experiment(df,
+      model = m,
+      parameters = get_parameters(df, model = m),
+      options = get_exp_opts(iterations = 2)
+    )
+  }
 )
-pars <- get_parameters(df, model = "HD2022")
+
+test_that("can run without parsing/aggregating", {
+  res <- run_experiment(experiments[[1]], parse = FALSE, aggregate = FALSE)
+  expect_true(length(raw_results(res)) > 1)
+})
+test_that("can run with parsing", {
+  res <- run_experiment(experiments[[1]], parse = TRUE, aggregate = FALSE)
+  expect_true(length(parsed_results(res)) > 1)
+})
+
+test_that("can run with parsing/aggregating", {
+  res <- run_experiment(experiments[[1]])
+  expect_true(length(results(res)) > 1)
+})
 
 test_that("run_experiment asserts correctly", {
   # warning for not passing parameters

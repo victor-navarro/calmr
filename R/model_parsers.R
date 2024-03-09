@@ -1,16 +1,16 @@
 #' @import data.table
 
 # Parses model raw results
-# args is the tbl row used to fit the model
+# args is the list of arguments used to fit the model
 # raw are the raw results
 # returns a list
-.parse_model <- function(raw, args) {
-  model <- args$model
+.parse_model <- function(raw, experience, model) {
   outputs <- model_outputs(model)
   sapply(outputs, function(o) {
     .parse_raw_data_table(raw[[o]],
       type = o,
-      args = args
+      experience = experience,
+      model = model
     )
   }, simplify = FALSE)
 }
@@ -30,7 +30,7 @@
   raw
 }
 
-.parse_raw_data_table <- function(raw, type, args) {
+.parse_raw_data_table <- function(raw, type, experience, model) {
   # local bindings
   tie <- NULL
 
@@ -42,7 +42,7 @@
     "psrcs", "das", "qs", "ps"
   )
   # get general data
-  gen_dat <- data.table::as.data.table(args$experience)
+  gen_dat <- data.table::as.data.table(experience)
   # necessary for join
   gen_dat[, "tie" := seq_len(nrow(gen_dat))]
   if (!is.list(raw)) {
@@ -53,7 +53,7 @@
       )]
     }
   } else {
-    if (args$model %in% c("HDI2020", "HD2022") && type == "acts") {
+    if (model %in% c("HDI2020", "HD2022") && type == "acts") {
       raw2d <- data.table::rbindlist(
         sapply(names(raw), function(r) {
           hold <- .unnest_raw_list(raw[[r]])
@@ -115,27 +115,28 @@
     experiment,
     .callback_fn = NULL, ...) {
   # Aggregation is done on a model by model basis
-  models <- unique(experiment@arguments$model)
+  models <- unique(experiment@model)
   agg_dat <- list()
   for (m in models) {
     outputs <- model_outputs(m)
     mod_dat <- experiment@results@parsed_results[
-      experiment@arguments$model == m
+      experiment@.model == m
     ]
     pb <- progressr::progressor(length(outputs))
     agg_dat[[m]] <- sapply(outputs, function(o) {
       pb(message = sprintf("Aggregating model %s", m))
       if (!is.null(.callback_fn)) .callback_fn()
       # put data together
-      big_dat <- do.call(rbind, lapply(mod_dat, function(x) x[[o]]))
+      big_dat <- data.table::rbindlist(lapply(mod_dat, "[[", o))
       # aggregate
-      .aggregate_results_data_table(big_dat, type = o)
+      agg_dat <- .aggregate_results_data_table(big_dat, type = o)
+      agg_dat$model <- m
+      agg_dat
     }, simplify = FALSE)
   }
   agg_dat
 }
 
-# dat is a tbl
 # type is the type of data
 .aggregate_results_data_table <- function(dat, type) {
   value <- NULL # local binding

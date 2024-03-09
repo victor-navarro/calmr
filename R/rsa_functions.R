@@ -1,4 +1,4 @@
-# x is a tbl (aggregated_results from CalmExperiment@results)
+# x is a data.table with aggregated data
 # comparisons is a model-named list with model outputs
 .rsa <- function(x, comparisons, .test = FALSE, ...) {
   # Assert the comparisons list is named

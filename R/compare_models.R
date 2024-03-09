@@ -34,8 +34,9 @@ compare_models <- function(
     }, simplify = FALSE)
   } else {
     # assert length parameters
-    .calm_assert("length", length(models),
-      models = models, parameters = parameters
+    .calm_assert("length",
+      length(models),
+      parameters = parameters
     )
     # assert parameters
     parameters <- sapply(seq_along(models), function(i) {

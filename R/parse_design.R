@@ -20,6 +20,9 @@
 #' @export
 
 parse_design <- function(df, model = NULL, ...) {
+  if (!is.null(model)) {
+    .calm_assert("length", 1, model = model)
+  }
   # if already parsed, skip
   if ("CalmDesign" %in% class(df)) {
     design_obj <- df

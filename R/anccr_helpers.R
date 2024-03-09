@@ -27,27 +27,26 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
   object
 }
 
-# args are arguments from .build_experiment
-.anccrize_arguments <- function(
-    args, log_fn = .get_time_logs, ...) {
+# exp is an experience from .build_experiment
+.anccrize_experience <- function(
+    exper, design, parameters,
+    mapping, log_fn = .get_time_logs, ...) {
   # Uses the vanilla experience to create time logs
-  args$experience <- apply(
-    args, 1,
-    log_fn,
-    simplify = FALSE
-  )
-  args
+  lapply(exper, function(g) {
+    log_fn(g,
+      design = design,
+      parameters = parameters
+    )
+  })
 }
 
 # args is a list coming from make_experiment
 # it has (at least) experience, mapping, and parameters
 # TODO: Add normal noise using jitter to simultaneous events
 .get_time_logs <- function(
-    args,
+    experience, design, parameters,
     debug = FALSE, ...) {
-  experience <- args$experience
-  mapping <- args$mapping
-  pars <- args$parameters
+  mapping <- design@mapping
   rownames(experience) <- NULL
   # Initialize eventlog
   eventlog <- data.frame()
@@ -60,14 +59,14 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
     # go through periods
     period_funcs <- mapping$period_functionals[[trial_name]]
     # sample start of the trial
-    if (pars$use_exponential) {
+    if (parameters$use_exponential) {
       new_ts <- min(
-        pars$max_ITI[trial_name],
-        stats::rexp(1, 1 / pars$mean_ITI[trial_name])
+        parameters$max_ITI[trial_name],
+        stats::rexp(1, 1 / parameters$mean_ITI[trial_name])
       )
     } else {
-      new_ts <- stats::runif(1) * pars$mean_ITI[trial_name] *
-        0.4 + pars$mean_ITI[trial_name] * 0.8
+      new_ts <- stats::runif(1) * parameters$mean_ITI[trial_name] *
+        0.4 + parameters$mean_ITI[trial_name] * 0.8
     }
     running_time <- running_time + new_ts
     for (p in seq_len(length(period_funcs))) {
@@ -76,26 +75,26 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
         data.frame(experience[ti, ],
           stimulus = period_funcs[[p]],
           time = running_time,
-          reward_mag = pars$reward_magnitude[period_funcs[[p]]],
+          reward_mag = parameters$reward_magnitude[period_funcs[[p]]],
           row.names = NULL
         )
       )
       # add delay if a transition is next
       if (p < length(period_funcs) && length(transitions)) {
         running_time <- running_time +
-          pars$transition_delay[[trial_name]][[p]]
+          parameters$transition_delay[[trial_name]][[p]]
       }
     }
     # add post_trial delay
     running_time <- running_time +
-      pars$post_trial_delay[[trial_name]]
+      parameters$post_trial_delay[[trial_name]]
   }
   # jitter if necessary
-  if (pars$t_jitter > 0) {
+  if (parameters$t_jitter > 0) {
     eventlog$time <- unlist(sapply(unique(eventlog$time), function(t) {
       tlen <- sum(eventlog$time == t)
       if (tlen > 1) {
-        return(t + stats::rnorm(tlen) * pars$t_jitter)
+        return(t + stats::rnorm(tlen) * parameters$t_jitter)
       } else {
         return(t)
       }

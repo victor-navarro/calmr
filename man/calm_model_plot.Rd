@@ -7,7 +7,7 @@
 calm_model_plot(dat, type)
 }
 \arguments{
-\item{dat}{A tbl with data to use in the plot}
+\item{dat}{A data.frame-like with data to use in the plot}
 
 \item{type}{A character specifying the type of plot}
 }

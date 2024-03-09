@@ -1,3 +1,5 @@
+# TODO: Write more stronger expectation tests
+
 # A basic experiment
 df <- data.frame(
   Group = c("X", "Y"),
@@ -11,12 +13,12 @@ parsed_df <- parse_design(df)
 parameters <- get_parameters(df, model = "HD2022")
 minib_args <- make_experiment(parsed_df,
   parameters = parameters,
-  model = "HD2022", options = get_exp_opts()
+  model = "HD2022", options = get_exp_opts(iterations = 2)
 )
 
 test_that("trials are generated in blocks", {
   blocks <- rep(1:20, each = 3)
-  tps <- minib_args@arguments$experience[[1]]$tp
+  tps <- experiences(minib_args)[[1]]$tp
   # should generate 20 blocks for group X
   # pointers within block sum to 6 (1+2+3)
   expect_true(all(tapply(tps, blocks, sum) == 6))
@@ -24,7 +26,7 @@ test_that("trials are generated in blocks", {
   # should generate 4 blocks for group Y
   # pointers within block sum to 28 (4+3+15+6)
   blocks <- rep(1:4, each = 8)
-  tps <- minib_args@arguments$experience[[2]]$tp
+  tps <- experiences(minib_args)[[2]]$tp
   expect_true(all(tapply(tps, blocks, sum) == 28))
   #
 })
@@ -45,13 +47,14 @@ test_that("function works with even trials per row", {
   args <- make_experiment(df,
     parameters = parameters, model = "RW1972", options = opts
   )
-  expect_named(args@arguments)
+  expect_true(length(args) > 1)
 })
 
 test_that("make_experiment fails with too many models", {
-  expect_error(make_experimendt(df,
+  expect_error(make_experiment(df,
     parameters = parameters,
-    model = c("RW1972", "MAC1975"), options = opts
+    model = c("RW1972", "MAC1975"),
+    options = opts
   ))
 })
 
@@ -65,7 +68,5 @@ pars <- get_parameters(df, model = "ANCCR")
 
 test_that("can make an experiment with empty phases", {
   exp <- make_experiment(df, parameters = pars, model = "ANCCR")
-  expect_true(!("p1" %in% experience(exp)[[2]]$phase))
+  expect_true(!("p1" %in% experiences(exp)[[2]]$phase))
 })
-
-# TODO: Write more tests (unique sampling per iteration, master list)

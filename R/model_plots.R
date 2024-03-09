@@ -1,6 +1,6 @@
 #' Create a plot with calm data
 #'
-#' @param dat A tbl with data to use in the plot
+#' @param dat A data.frame-like with data to use in the plot
 #' @param type A character specifying the type of plot
 #' @return A ggplot object
 #' @note You should probably be getting plots via

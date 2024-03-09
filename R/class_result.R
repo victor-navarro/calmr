@@ -8,7 +8,6 @@
 #' }
 #' @exportClass CalmResult
 #' @seealso CalmResults-methods
-#' @import tibble
 methods::setClass(
   "CalmResult",
   representation(

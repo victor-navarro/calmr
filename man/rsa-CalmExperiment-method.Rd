@@ -8,7 +8,7 @@
 \S4method{rsa}{CalmExperiment}(x, comparisons, test = FALSE, ...)
 }
 \arguments{
-\item{x}{A tbl of m by o (models by outputs) with aggregated results.}
+\item{x}{A CalmrExperiment object}
 
 \item{comparisons}{A model-named list containing the model
 outputs to compare.}

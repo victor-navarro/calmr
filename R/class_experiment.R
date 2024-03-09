@@ -12,9 +12,16 @@
 methods::setClass(
   "CalmExperiment",
   representation(
-    arguments = "list",
     design = "CalmDesign",
-    results = "CalmExperimentResult"
+    model = "character",
+    groups = "character",
+    parameters = "list",
+    experiences = "list",
+    options = "list",
+    results = "CalmExperimentResult",
+    .model = "character",
+    .group = "character",
+    .iter = "integer"
   )
 )
 
@@ -23,7 +30,15 @@ show <- methods::show
 #' @rdname CalmExperiment-methods
 #' @export
 setMethod("show", "CalmExperiment", function(object) {
-  print(object@arguments)
+  cat("-----------------------------\n")
+  cat("CalmExperiment with model:\n")
+  cat(object@model, "\n")
+  cat("-----------------------------\n")
+  cat("For design:\n")
+  print(object@design@raw_design)
+  cat("-----------------------------\n")
+  cat("With parameters:\n")
+  print(object@parameters)
 })
 
 methods::setGeneric("design", function(x) methods::standardGeneric("design"))
@@ -34,43 +49,12 @@ methods::setMethod("design", "CalmExperiment", function(x) {
   x@design
 })
 
-
-methods::setGeneric(
-  "arguments",
-  function(x) methods::standardGeneric("arguments")
-)
 #' @export
-#' @aliases arguments
+#' @aliases trials
 #' @rdname CalmExperiment-methods
-methods::setMethod("arguments", "CalmExperiment", function(x) {
-  x@arguments
+methods::setMethod("trials", "CalmExperiment", function(object) {
+  trials(object@design)
 })
-
-#' @export
-#' @rdname CalmExperiment-methods
-#' @param x Objects to concatenate
-#' @param ... Objects to concatenate
-#' @param recursive Unused
-#' @examples
-#' # Concatenate experiments
-#' df <- get_design("blocking")
-#' mods <- c("RW1972", "MAC1975")
-#' exs <- lapply(mods, function(m) {
-#'   make_experiment(df, parameters = get_parameters(df, model = m), model = m)
-#' })
-#' # joining separate experiments
-#' c(exs[[1]], exs[[2]])
-#' # joining a list of experiments
-#' joint <- do.call(c, exs)
-methods::setMethod("c", "CalmExperiment", function(x, ..., recursive = FALSE) {
-  allexps <- list(x, ...)
-  methods::new("CalmExperiment",
-    arguments = dplyr::bind_rows(lapply(allexps, function(e) e@arguments)),
-    design = allexps[[1]]@design,
-    results = do.call(c, lapply(allexps, function(e) e@results))
-  )
-})
-
 
 methods::setGeneric("parameters", function(x) standardGeneric("parameters"))
 #' @rdname CalmExperiment-methods
@@ -86,63 +70,53 @@ methods::setGeneric(
 #' @export
 methods::setMethod(
   "parameters", "CalmExperiment",
-  function(x) x@arguments$parameters
+  function(x) x@parameters
 )
 #' @param x A CalmExperiment
 #' @param value A list of parameter lists.
 #' @rdname CalmExperiment-methods
 #' @export
 methods::setMethod("parameters<-", "CalmExperiment", function(x, value) {
-  if (length(names(value))) {
-    # If there are names in the parameters,
-    # this is meant to be a single list
-    value <- list(value)
+  newpars <- NULL
+  oldpars <- parameters(x)
+  gnames <- names(oldpars)
+  parnames <- unlist(lapply(oldpars, names))
+  valnames <- names(value)
+  # Check if the user passed group-level parameters
+  if (length(setdiff(gnames, valnames))) {
+    # If not, check if the user passed appropriate
+    # parameters (from get_parameters)
+    if (!length(setdiff(parnames, valnames))) {
+      newpars <- lapply(oldpars, function(g) {
+        value
+      })
+    }
   } else {
-    if (length(value) != length(x)) {
-      stop(sprintf("Length of parameters list
-      must be equal to the length of the experiment (%s)", length(x)))
+    valparnames <- unlist(lapply(value, names))
+
+    if (!length(setdiff(parnames, valparnames)) &&
+      (length(parnames) == length(valparnames))) {
+      newpars <- value
     }
   }
-  x@arguments$parameters <- value
+  if (is.null(newpars)) {
+    stop(paste(
+      "Could not find a match for group/parameter names.",
+      "Try calling parameters on experiment before trying the assignment."
+    ))
+  }
+  x@parameters <- newpars
   x
 })
 
-
-methods::setGeneric("experience", function(x) standardGeneric("experience"))
-#' @rdname CalmExperiment-methods
-#' @param value A list of experiences.
-#' @aliases experience
-#' @export
-methods::setGeneric(
-  "experience<-",
-  function(x, value) standardGeneric("experience<-")
-)
+methods::setGeneric("experiences", function(x) standardGeneric("experiences"))
 #' @rdname CalmExperiment-methods
 #' @aliases experience
 #' @export
 methods::setMethod(
-  "experience", "CalmExperiment",
-  function(x) x@arguments$experience
+  "experiences", "CalmExperiment",
+  function(x) x@experiences
 )
-#' @rdname CalmExperiment-methods
-#' @param x A CalmExperiment
-#' @param value A list of experiences.
-#' @export
-methods::setMethod("experience<-", "CalmExperiment", function(x, value) {
-  if (length(names(value))) {
-    # If there are names in the experience,
-    # this is meant to be a single list
-    value <- list(value)
-  } else {
-    if (length(value) != length(x)) {
-      stop(sprintf("Length of experience list
-      must be equal to the length of the experiment (%s)", length(x)))
-    }
-  }
-  x@arguments$experience <- value
-  x
-})
-
 
 methods::setGeneric(
   "results",
@@ -183,11 +157,7 @@ methods::setMethod("parsed_results", "CalmExperiment", function(object) {
 #' @rdname CalmExperiment-methods
 #' @export
 methods::setMethod("length", "CalmExperiment", function(x) {
-  if (!is.null(x@arguments)) {
-    nrow(x@arguments)
-  } else {
-    NULL
-  }
+  length(x@experiences)
 })
 
 #' @rdname CalmExperiment-methods
@@ -234,17 +204,8 @@ methods::setMethod(
       x <- parse(x)
     }
     res <- .aggregate_experiment(x, ...)
-    tbl <- do.call(
-      dplyr::bind_rows,
-      sapply(names(res), function(m) {
-        tibble::tibble(model = m, tibble::as_tibble(lapply(res[[m]], list)))
-      }, simplify = FALSE)
-    )
-    x@results@aggregated_results <- sapply(names(tbl)[-1], function(o) {
-      dat <- tbl[, c("model", o)]
-      tidyr::unnest(dat, tidyselect::all_of(o))
-    }, simplify = FALSE)
-
+    # unnest_once to leave at output level
+    x@results@aggregated_results <- unlist(res, recursive = FALSE)
     x
   }
 )
@@ -340,7 +301,7 @@ setMethod("graph", "CalmExperiment", function(x, ...) {
 methods::setGeneric("rsa", function(x, layers, ...) standardGeneric("rsa"))
 #' Perform representational similarity analysis on CalmExperiment
 #'
-#' @param x A tbl of m by o (models by outputs) with aggregated results.
+#' @param x A CalmrExperiment object
 #' @param comparisons A model-named list containing the model
 #' outputs to compare.
 #' @param test Whether to test the RSA via permutation test. Default = FALSE.

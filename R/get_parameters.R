@@ -10,7 +10,6 @@
 get_parameters <- function(design, model = NULL) {
   model <- .calm_assert("supported_model", model)
   parsed_design <- .calm_assert("parsed_design", design)
-
   # Get parameter information
   par_info <- parameter_info(model)
   # Get stimulus names from design

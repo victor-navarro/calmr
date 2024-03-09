@@ -34,6 +34,8 @@ make_experiment <- function(
   design <- parse_design(design,
     model = model, ...
   )
+  group_names <- design@raw_design[, 1]
+
   .calm_assert("length", 1, model = model)
   # assert model
   model <- .calm_assert("supported_model", model)
@@ -44,36 +46,45 @@ make_experiment <- function(
   # assert options
   options <- .calm_assert("experiment_options", options)
 
-  # build the arguments for the experiment
+  # build the experiences for the experiment
   iter <- options$iterations
   pb <- progressr::progressor(iter)
   .parallel_standby(pb) # print parallel backend message
   pb(amount = 0, message = "Building experiment")
-  arguments <- future.apply::future_lapply(seq_len(iter), function(x) {
+  allexps <- future.apply::future_sapply(seq_len(iter), function(x) {
     if (!is.null(.callback_fn)) .callback_fn() # for shiny
-    args <- .build_experiment(
+    exper <- .build_experiment(
       design = design,
       model = model,
       options = options,
       ...
     )
-    browser() # we go differently now
-    # add mapping
-    args$mapping <- list(design@mapping)
-    # add parameters
-    args$parameters <- list(parameters)
-    # augment arguments if necessary
-    args <- .augment_arguments(args, ...)
+    # augment experience if necessary
+    exper <- .augment_experience(exper,
+      model = model, design = design,
+      parameters = parameters, ...
+    )
     pb("Building experiment")
-    args
-  }, future.seed = TRUE)
-
-  arguments <- tibble::enframe(arguments, name = "iteration") |>
-    tidyr::unnest("value")
-
-  return(methods::new("CalmExperiment",
-    arguments = arguments, design = design
-  ))
+    exper
+  }, simplify = FALSE, future.seed = TRUE)
+  # unnest once
+  allexps <- unlist(allexps, recursive = FALSE)
+  # return experiment
+  methods::new("CalmExperiment",
+    design = design,
+    model = model,
+    groups = group_names,
+    parameters = stats::setNames(rep(
+      list(parameters),
+      length(group_names)
+    ), group_names),
+    experiences = allexps,
+    options = options,
+    results = methods::new("CalmExperimentResult"),
+    .model = rep(model, length(allexps)),
+    .group = rep(group_names, iter),
+    .iter = rep(seq_len(iter), each = length(group_names))
+  )
 }
 
 # general function to build experiment
@@ -98,14 +109,12 @@ make_experiment <- function(
   })
   # finally, convert lists to data.frames and bind across phases per group
   gs <- unlist(lapply(des, "[[", "group"))
-  experience <- lapply(unique(gs), function(g) {
-    do.call(rbind, lapply(samples[which(gs == g)], as.data.frame))
+  ugs <- unique(gs)
+  lapply(ugs, function(g) {
+    d <- do.call(rbind, lapply(samples[which(gs == g)], as.data.frame))
+    d$trial <- seq_len(nrow(d))
+    d
   })
-  # return as list
-  list(
-    model = rep(model, length(gs)),
-    group = gs, experience = experience
-  )
 }
 
 .sample_trials <- function(
@@ -156,18 +165,23 @@ make_experiment <- function(
   }
 
   return(list(
-    tps = tps,
-    tns = masterlist[tps],
+    tp = tps,
+    tn = masterlist[tps],
     is_test = tstps,
     block_size = block_size
   ))
 }
 
-.augment_arguments <- function(args, ...) {
-  if (unique(args$model) == "ANCCR") {
-    args <- .anccrize_arguments(args, ...)
+.augment_experience <- function(
+    exper, model,
+    design, parameters, ...) {
+  if (model == "ANCCR") {
+    exper <- .anccrize_experience(
+      exper, design,
+      parameters, ...
+    )
   }
-  args
+  exper
 }
 
 # function to return the gcd

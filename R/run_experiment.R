@@ -43,20 +43,34 @@ run_experiment <- function(
   } else {
     experiment <- x
   }
+  # sanitize nargs
+  nargs <- nargs[!(names(nargs) %in% c("parameters", "experience", "mapping"))]
+
   # check if experiment needs (can) to be run
   .calm_assert("good_experiment", given = experiment)
 
   # now run the experiment
-  pb <- progressr::progressor(length(experiment))
+  exp_length <- length(experiment)
+  pb <- progressr::progressor(exp_length)
   .parallel_standby(pb) # print parallel backend message
   # get results
-  all_results <- future.apply::future_apply(
-    experiment@arguments, 1, function(i) {
+  all_results <- future.apply::future_sapply(
+    seq_len(exp_length), function(i) {
       if (!is.null(nargs$.callback_fn)) nargs$.callback_fn()
-      raw <- do.call(get_model(i$model), c(i, ...)) # for shiny
+      # bundle arguments
+      args <- c(list(
+        experience = experiment@experiences[[i]],
+        mapping = experiment@design@mapping,
+        parameters = experiment@parameters[[experiment@.group[i]]]
+      ), nargs)
+      raw <- do.call(get_model(experiment@.model[i]), args)
       parsed <- NULL
       if (parse) {
-        parsed <- .parse_model(raw = raw, args = i)
+        parsed <- .parse_model(
+          raw = raw,
+          experience = args$experience,
+          model = experiment@.model[i]
+        )
       }
       pb(message = "Running experiment")
       list(raw = raw, parsed = parsed)

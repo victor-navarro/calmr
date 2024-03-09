@@ -1,6 +1,6 @@
 #' Create a graph with calm data
 #'
-#' @param x A tbl with data to use in the plot
+#' @param x A data.frame-like with data to use in the plot
 #' @param loops Logical. Whether to draw arrows back and forth
 #' @param limits Numerical. Limits for color scale. Defaults to NULL,
 #' in which case, limits are set to be max(abs(x$value))*c(-1,1)

@@ -4,17 +4,14 @@
 \alias{show,CalmExperiment-method}
 \alias{design,CalmExperiment-method}
 \alias{design}
-\alias{arguments,CalmExperiment-method}
-\alias{arguments}
-\alias{c,CalmExperiment-method}
+\alias{trials,CalmExperiment-method}
+\alias{trials}
 \alias{parameters<-}
 \alias{parameters}
 \alias{parameters,CalmExperiment-method}
 \alias{parameters<-,CalmExperiment-method}
-\alias{experience<-}
+\alias{experiences,CalmExperiment-method}
 \alias{experience}
-\alias{experience,CalmExperiment-method}
-\alias{experience<-,CalmExperiment-method}
 \alias{results,CalmExperiment-method}
 \alias{results}
 \alias{raw_results,CalmExperiment-method}
@@ -33,9 +30,7 @@
 
 \S4method{design}{CalmExperiment}(x)
 
-\S4method{arguments}{CalmExperiment}(x)
-
-\S4method{c}{CalmExperiment}(x, ..., recursive = FALSE)
+\S4method{trials}{CalmExperiment}(object)
 
 parameters(x) <- value
 
@@ -43,11 +38,7 @@ parameters(x) <- value
 
 \S4method{parameters}{CalmExperiment}(x) <- value
 
-experience(x) <- value
-
-\S4method{experience}{CalmExperiment}(x)
-
-\S4method{experience}{CalmExperiment}(x) <- value
+\S4method{experiences}{CalmExperiment}(x)
 
 \S4method{results}{CalmExperiment}(object)
 
@@ -68,11 +59,7 @@ parse(object)
 \arguments{
 \item{x}{An object of class \code{\link{CalmExperiment-class}}.}
 
-\item{...}{Objects to concatenate}
-
-\item{recursive}{Unused}
-
-\item{value}{A list of experiences.}
+\item{value}{A list of parameter lists.}
 
 \item{type}{character vector specifying the types of plots to create.
 See ??supported_plots. Defaults to NULL.}
@@ -85,16 +72,4 @@ Creates plots (or plot) with aggregated results in CalmExperiment
 }
 \note{
 With type = NULL, all supported plots are returned.
-}
-\examples{
-# Concatenate experiments
-df <- get_design("blocking")
-mods <- c("RW1972", "MAC1975")
-exs <- lapply(mods, function(m) {
-  make_experiment(df, parameters = get_parameters(df, model = m), model = m)
-})
-# joining separate experiments
-c(exs[[1]], exs[[2]])
-# joining a list of experiments
-joint <- do.call(c, exs)
 }
