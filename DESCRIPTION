@@ -1,14 +1,13 @@
-Package: calm
-Title: Canonical Associative Learning Models
+Package: calmr
+Title: Canonical Associative Learning Models and their Representations
 Version: 0.5.1
 Authors@R: 
     person("Victor", "Navarro", , "navarrov@cardiff.ac.uk", role = c("aut", "cre"))
-Description: Tools to simulate learning experiments using canonical
-    associative learning models.
+Description: Tools to simulate, estimate, and analize the representations of canonical associative learning models
 License: GPL (>= 3)
-URL: https://github.com/victor-navarro/calm,
-    https://victornavarro.org/calm/
-BugReports: https://github.com/victor-navarro/calm/issues
+URL: https://github.com/victor-navarro/calmr,
+    https://victornavarro.org/calmr/
+BugReports: https://github.com/victor-navarro/calmr/issues
 Depends: 
     R (>= 3.5)
 Imports: 
@@ -66,7 +65,7 @@ Collate:
     'get_design.R'
     'heidi_helpers.R'
     'anccr_helpers.R'
-    'calm_verbosity.R'
+    'calmr_verbosity.R'
     'parallel_helpers.R'
     'class_model.R'
     'class_design.R'

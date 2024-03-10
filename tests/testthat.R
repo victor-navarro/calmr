@@ -1,4 +1,4 @@
 library(testthat)
-library(calm)
+library(calmr)
 
-test_check("calm")
+test_check("calmr")

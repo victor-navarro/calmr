@@ -2,12 +2,12 @@
 % Please edit documentation in R/model_plots.R
 \name{patch_plots}
 \alias{patch_plots}
-\title{Patch Calm plots}
+\title{Patch Calmr plots}
 \usage{
-patch_plots(plots, selection = NULL, plot_options = get_plot_opts())
+patch_plots(plots, selection = names(plots), plot_options = get_plot_opts())
 }
 \arguments{
-\item{plots}{A list of named plots, as returned by \code{calm::plot}}
+\item{plots}{A list of named plots, as returned by \code{calmr::plot}}
 
 \item{selection}{A character or numeric vector determining the plots to patch}
 

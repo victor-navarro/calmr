@@ -1,9 +1,9 @@
 ---
-title: "calm_basics"
+title: "calmr_basics"
 author: "Victor Navarro"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{calm_basics}
+  %\VignetteIndexEntry{calmr_basics}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -30,7 +30,7 @@ To perform your first simulation you will need:
 For this example we will use a blocking design.
 
 ```{r}
-library(calm)
+library(calmr)
 
 my_blocking <- data.frame(
   Group = c("Exp", "Control"),
@@ -101,7 +101,7 @@ trial <- phase_parser("10A(US1)/10B(US2)")
 
 Now we need to pick a model and its parameters.
 
-To get the models currently supported in `calm`, you can call `supported_models()`.
+To get the models currently supported in `calmr`, you can call `supported_models()`.
 
 ```{r}
 supported_models()
@@ -130,9 +130,9 @@ my_experiment <- run_experiment(
   parameters = my_pars,
   iterations = 5
 )
-# returns an CalmExperiment object
+# returns an CalmrExperiment object
 class(my_experiment)
-# CalmExperiment is an S4 class, so it has slots
+# CalmrExperiment is an S4 class, so it has slots
 slotNames(my_experiment)
 # the experience given to group Exp on the first iteration
 my_experiment@experiences[[1]]
@@ -199,7 +199,7 @@ graph(my_experiment, t = 20, graph_opts = my_graph_opts)
 
 ## Final thoughts
 
-The `calm` package was designed to simulate quickly: 
+The `calmr` package was designed to simulate quickly: 
 write your design and get a glance at model predictions. 
 
 Yet, the package also has some features for advanced R users, 

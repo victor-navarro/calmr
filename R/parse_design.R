@@ -2,7 +2,7 @@
 #' @param df A data.frame of dimensions Groups, 2*Phases+1
 #' @param model An optional model to augment the design. See ??augment design
 #' @param ... Other arguments passed to augment
-#' @return A CalmDesign object
+#' @return A CalmrDesign object
 #' @note
 #' \itemize{
 #' \item{
@@ -21,10 +21,10 @@
 
 parse_design <- function(df, model = NULL, ...) {
   if (!is.null(model)) {
-    .calm_assert("length", 1, model = model)
+    .calmr_assert("length", 1, model = model)
   }
   # if already parsed, skip
-  if ("CalmDesign" %in% class(df)) {
+  if ("CalmrDesign" %in% class(df)) {
     design_obj <- df
     # augment if design hasn't been augmented
     if (!is.null(model) && !df@augmented) {
@@ -50,7 +50,7 @@ parse_design <- function(df, model = NULL, ...) {
     map <- .get_mapping(design)
 
     # create design object
-    design_obj <- methods::new("CalmDesign",
+    design_obj <- methods::new("CalmrDesign",
       design = design, mapping = map, raw_design = df
     )
     # augment design if required

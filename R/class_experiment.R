@@ -1,29 +1,29 @@
-#' S4 class for calm experiments.
+#' S4 class for calmr experiments.
 #' @section Slots:
 #' \describe{
-#' \item{\code{design}:}{A CalmDesign object.}
+#' \item{\code{design}:}{A CalmrDesign object.}
 #' \item{\code{model}:}{A string specifying the model used.}
 #' \item{\code{groups}:}{A string specifying the groups in the design.}
 #' \item{\code{parameters}:}{A list with the parameters used, per group.}
 #' \item{\code{experiences}:}{A list with the experiences for the model.}
-#' \item{\code{results}:}{A CalmExperimentResult object.}
+#' \item{\code{results}:}{A CalmrExperimentResult object.}
 #' \item{\code{.model}:}{Internal. The model associated with the iteration.}
 #' \item{\code{.group}:}{Internal. The group associated with the iteration.}
 #' \item{\code{.iter}:}{Internal. The iteration number.}
 #' }
-#' @rdname CalmExperiment
-#' @exportClass CalmExperiment
-#' @seealso CalmExperiment-methods
+#' @rdname CalmrExperiment
+#' @exportClass CalmrExperiment
+#' @seealso CalmrExperiment-methods
 
 methods::setClass(
-  "CalmExperiment",
+  "CalmrExperiment",
   representation(
-    design = "CalmDesign",
+    design = "CalmrDesign",
     model = "character",
     groups = "character",
     parameters = "list",
     experiences = "list",
-    results = "CalmExperimentResult",
+    results = "CalmrExperimentResult",
     .model = "character",
     .group = "character",
     .iter = "integer"
@@ -31,57 +31,66 @@ methods::setClass(
 )
 
 show <- methods::show
-#' @title CalmExperiment methods
-#' @param object A CalmExperiment object
-#' @rdname CalmExperiment-methods
+#' @title CalmrExperiment methods
+#' @param object A CalmrExperiment object
+#' @rdname CalmrExperiment-methods
 #' @export
-setMethod("show", "CalmExperiment", function(object) {
-  cat("-----------------------------\n")
-  cat("CalmExperiment with model:\n")
-  cat(object@model, "\n")
-  cat("-----------------------------\n")
-  cat("For design:\n")
-  print(object@design@raw_design)
-  cat("-----------------------------\n")
-  cat("With parameters:\n")
-  print(object@parameters)
+setMethod("show", "CalmrExperiment", function(object) {
+  message(
+    "-----------------------------\n",
+    "CalmrExperiment with model:\n",
+    object@model, "\n",
+    "-----------------------------\n",
+    "Design:\n",
+    paste0(capture.output(object@design@raw_design), collapse = "\n"),
+    "\n",
+    "-----------------------------\n",
+    "Parameters:\n",
+    paste0(capture.output(object@parameters), collapse = "\n")
+  )
 })
 
-methods::setGeneric("design", function(x) methods::standardGeneric("design"))
+methods::setGeneric( # nocov start
+  "design",
+  function(x) methods::standardGeneric("design")
+) # nocov end
 #' @export
 #' @aliases design
-#' @rdname CalmExperiment-methods
-methods::setMethod("design", "CalmExperiment", function(x) {
+#' @rdname CalmrExperiment-methods
+methods::setMethod("design", "CalmrExperiment", function(x) {
   x@design
 })
 
 #' @export
-#' @rdname CalmExperiment-methods
-methods::setMethod("trials", "CalmExperiment", function(object) {
+#' @rdname CalmrExperiment-methods
+methods::setMethod("trials", "CalmrExperiment", function(object) {
   trials(object@design)
 })
 
-methods::setGeneric("parameters", function(x) standardGeneric("parameters"))
-#' @rdname CalmExperiment-methods
+methods::setGeneric(
+  "parameters",
+  function(x) standardGeneric("parameters")
+) # nocov
+#' @rdname CalmrExperiment-methods
 #' @aliases parameters
 #' @export
 methods::setGeneric(
   "parameters<-",
-  function(x, value) standardGeneric("parameters<-")
+  function(x, value) standardGeneric("parameters<-") # nocov
 )
-#' @rdname CalmExperiment-methods
-#' @param x A CalmExperiment
+#' @rdname CalmrExperiment-methods
+#' @param x A CalmrExperiment
 #' @aliases parameters
 #' @export
 methods::setMethod(
-  "parameters", "CalmExperiment",
+  "parameters", "CalmrExperiment",
   function(x) x@parameters
 )
-#' @param x A CalmExperiment
+#' @param x A CalmrExperiment
 #' @param value A list of parameter lists.
-#' @rdname CalmExperiment-methods
+#' @rdname CalmrExperiment-methods
 #' @export
-methods::setMethod("parameters<-", "CalmExperiment", function(x, value) {
+methods::setMethod("parameters<-", "CalmrExperiment", function(x, value) {
   newpars <- NULL
   oldpars <- parameters(x)
   gnames <- names(oldpars)
@@ -116,69 +125,69 @@ methods::setMethod("parameters<-", "CalmExperiment", function(x, value) {
 
 methods::setGeneric(
   "experiences",
-  function(x) standardGeneric("experiences")
+  function(x) standardGeneric("experiences") # nocov
 )
-#' @rdname CalmExperiment-methods
+#' @rdname CalmrExperiment-methods
 #' @aliases experiences
 #' @export
 methods::setMethod(
-  "experiences", "CalmExperiment",
+  "experiences", "CalmrExperiment",
   function(x) x@experiences
 )
 
 methods::setGeneric(
   "results",
-  function(object) methods::standardGeneric("results")
+  function(object) methods::standardGeneric("results") # nocov
 )
-#' @rdname CalmExperiment-methods
+#' @rdname CalmrExperiment-methods
 #' @aliases results
 #' @export
-methods::setMethod("results", "CalmExperiment", function(object) {
+methods::setMethod("results", "CalmrExperiment", function(object) {
   # Returns aggregated results
   object@results@aggregated_results
 })
 
 methods::setGeneric(
   "raw_results",
-  function(object) methods::standardGeneric("raw_results")
+  function(object) methods::standardGeneric("raw_results") # nocov
 )
-#' @rdname CalmExperiment-methods
+#' @rdname CalmrExperiment-methods
 #' @aliases raw_results
 #' @export
-methods::setMethod("raw_results", "CalmExperiment", function(object) {
+methods::setMethod("raw_results", "CalmrExperiment", function(object) {
   # Returns raw results
   object@results@raw_results
 })
 
 methods::setGeneric(
   "parsed_results",
-  function(object) methods::standardGeneric("parsed_results")
+  function(object) methods::standardGeneric("parsed_results") # nocov
 )
-#' @rdname CalmExperiment-methods
+#' @rdname CalmrExperiment-methods
 #' @aliases parsed_results
 #' @export
-methods::setMethod("parsed_results", "CalmExperiment", function(object) {
+methods::setMethod("parsed_results", "CalmrExperiment", function(object) {
   # Returns raw results
   object@results@parsed_results
 })
 
-#' @rdname CalmExperiment-methods
+#' @rdname CalmrExperiment-methods
 #' @export
-methods::setMethod("length", "CalmExperiment", function(x) {
+methods::setMethod("length", "CalmrExperiment", function(x) {
   length(x@experiences)
 })
 
-#' @rdname CalmExperiment-methods
+#' @rdname CalmrExperiment-methods
 #' @aliases parse
 #' @export
-setGeneric(
+setGeneric( # nocov start
   "parse",
   function(object) methods::standardGeneric("parse")
-)
-#' @rdname CalmExperiment-methods
+) # nocov end
+#' @rdname CalmrExperiment-methods
 #' @export
 methods::setMethod(
-  "parse", "CalmExperiment",
+  "parse", "CalmrExperiment",
   function(object) {
     if (!is.null(object@results@raw_results)) {
       # we gotta parse
@@ -203,11 +212,11 @@ methods::setMethod(
   }
 )
 
-#' @rdname CalmExperiment-methods
+#' @rdname CalmrExperiment-methods
 #' @param ... Extra parameters.
 #' @export
 methods::setMethod(
-  "aggregate", "CalmExperiment",
+  "aggregate", "CalmrExperiment",
   function(x, ...) {
     if (is.null(x@results@parsed_results)) {
       x <- parse(x)
@@ -222,21 +231,21 @@ methods::setMethod(
 )
 
 
-setGeneric("plot", function(x, y, ...) methods::standardGeneric("plot"))
-#' Plot CalmExperiment
+setGeneric("plot", function(x, y, ...) methods::standardGeneric("plot")) # nocov
+#' Plot CalmrExperiment
 #'
-#' Creates plots (or plot) with aggregated results in CalmExperiment
+#' Creates plots (or plot) with aggregated results in CalmrExperiment
 #'
-#' @param x An object of class \code{\link{CalmExperiment-class}}.
+#' @param x An object of class \code{\link{CalmrExperiment-class}}.
 #' @param type character vector specifying the types of plots to create.
 #' See ??supported_plots. Defaults to NULL.
 #' @return A ggplot object
 #' @note With type = NULL, all supported plots are returned.
 #' @export
 #' @aliases plot
-#' @rdname CalmExperiment-methods
+#' @rdname CalmrExperiment-methods
 setMethod(
-  "plot", "CalmExperiment",
+  "plot", "CalmrExperiment",
   function(x, type = NULL, ...) {
     if (is.null(x@results@aggregated_results)) {
       stop("Experiment does not contain aggregated results.
@@ -250,7 +259,7 @@ setMethod(
     for (m in models) {
       model_plots <- supported_plots(m)
       if (!is.null(type)) {
-        sapply(type, .calm_assert, supported = model_plots)
+        sapply(type, .calmr_assert, supported = model_plots)
         model_plots <- type
       }
       for (p in model_plots) {
@@ -259,7 +268,7 @@ setMethod(
         groups <- unique(pdat$group)
         for (g in groups) {
           plot_name <- sprintf("%s - %s (%s)", g, .get_prettyname(p), m)
-          plots[[plot_name]] <- calm_model_plot(pdat[pdat$group == g, ],
+          plots[[plot_name]] <- calmr_model_plot(pdat[pdat$group == g, ],
             type = p
           )
         }
@@ -268,15 +277,15 @@ setMethod(
     plots
   }
 )
-#' Graph CalmExperiment
-#' @param x A CalmExperiment
-#' @param ... Additional parameters passed to `graph_calm_model`
-#' @rdname CalmExperiment-methods
-setGeneric("graph", function(x, ...) standardGeneric("graph"))
-#' @rdname CalmExperiment-methods
-#' @aliases graph,CalmExperiment
+#' Graph CalmrExperiment
+#' @param x A CalmrExperiment
+#' @param ... Additional parameters passed to `graph_calmr_model`
+#' @rdname CalmrExperiment-methods
+setGeneric("graph", function(x, ...) standardGeneric("graph")) # nocov
+#' @rdname CalmrExperiment-methods
+#' @aliases graph,CalmrExperiment
 #' @export
-setMethod("graph", "CalmExperiment", function(x, ...) {
+setMethod("graph", "CalmrExperiment", function(x, ...) {
   if (is.null(x@results@aggregated_results)) {
     stop("Experiment does not contain aggregated results.
       Please parse and aggregate results beforehand.")
@@ -299,7 +308,7 @@ setMethod("graph", "CalmExperiment", function(x, ...) {
     mgraphs <- list()
     for (g in groups) {
       graph_name <- sprintf("%s - Associations (%s)", g, m)
-      mgraphs[[graph_name]] <- calm_model_graph(
+      mgraphs[[graph_name]] <- calmr_model_graph(
         weights[weights$group == g, ], ...
       ) + ggplot2::labs(title = graph_name)
     }

@@ -9,17 +9,17 @@
 #' to the fit call are found to be identical to those in the file,
 #' the model just gets loaded.
 #' @param ... Extra parameters passed to the optimizer call
-#' @return A CalmFit object
-#' @note See the calm_fits vignette for examples
+#' @return A CalmrFit object
+#' @note See the calmr_fits vignette for examples
 #' @export
 #' @seealso \code{\link{get_optimizer_opts}}, \code{\link{make_experiment}}
 fit_model <- function(
     data, model_function,
     optimizer_options, file = NULL, ...) {
   # check if the user passed lower and upper limits
-  .calm_assert("limits", optimizer_options)
+  .calmr_assert("limits", optimizer_options)
   # check if user wants to save the fit in a file
-  if (!is.null(file)) .calm_assert("filepath_OK", file)
+  if (!is.null(file)) .calmr_assert("filepath_OK", file)
 
   # split the parameters
   model_par_pointers <- which(
@@ -30,9 +30,9 @@ fit_model <- function(
   )
 
   # get link function
-  link_function <- .get_calm_link(optimizer_options$family)
+  link_function <- .get_calmr_link(optimizer_options$family)
   # get the log likelihood function
-  ll_function <- .get_calm_loglikelihood(optimizer_options$family)
+  ll_function <- .get_calmr_loglikelihood(optimizer_options$family)
 
   # define the objective function
   objective_function <- function(pars, ...) {
@@ -48,10 +48,7 @@ fit_model <- function(
     # return the negative sum of log likehood
     nll <- -sum(model_likelihood)
     if (optimizer_options$verbose) {
-      cat("Parameters", format(pars, digits = 3), "\n")
-    }
-    if (optimizer_options$verbose) {
-      cat("NLL:", nll, "\n")
+      message("Parameters", format(pars, digits = 3), "\n", "NLL:", nll, "\n")
     }
     return(nll)
   }
@@ -87,17 +84,17 @@ fit_model <- function(
     )
     best_pars <- as.numeric(opt_res@solution)
     best_nloglik <- -1 * opt_res@fitnessValue
-    if (!is.null(nrow(best_pars))) {
+    if (!is.null(nrow(best_pars))) { # nocov start
       warning("More than one solution yielded the best fit.
       Returning the first solution.")
       best_pars <- best_pars[1, ]
-    }
+    } # nocov end
     names(best_pars) <- unlist(
       optimizer_options[c("stim_names", "family_pars")]
     )
   }
 
-  fit <- methods::new("CalmFit",
+  fit <- methods::new("CalmrFit",
     nloglik = best_nloglik,
     best_pars = stats::setNames(best_pars, optimizer_options$all_pars),
     model_pars = best_pars[model_par_pointers],

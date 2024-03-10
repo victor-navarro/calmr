@@ -30,9 +30,31 @@ optim_opts <- do.call(get_optimizer_opts, c(def_opts,
 ))
 optim_opts$initial_pars[] <- rep(.6, 3)
 
-test_that("can fit with optim", {
-  expect_no_error(fit_model(rs, model_fun, optim_opts,
+test_that("can fit with optim and print verbosity", {
+  optim_opts$verbose <- TRUE
+  expect_no_error(capture_message(fit_model(rs, model_fun, optim_opts,
     ex = exper, method = "L-BFGS-B", control = list(maxit = 1)
+  )))
+})
+
+# test extra families
+pois_opts <- do.call(get_optimizer_opts, c(def_opts,
+  optimizer = "optim", family = "poisson"
+))
+pois_opts$initial_pars[] <- rep(.6, 3)
+
+test_that("can fit poisson and can create fit file", {
+  expect_no_error(fit_model(ceiling(rs * 10), model_fun, pois_opts,
+    ex = exper, method = "L-BFGS-B", control = list(maxit = 1),
+    file = "pois_test.rds"
+  ))
+})
+
+test_that("can load a fit from file", {
+  on.exit(file.remove("pois_test.rds"))
+  expect_no_error(fit_model(ceiling(rs * 10), model_fun, pois_opts,
+    ex = exper, method = "L-BFGS-B", control = list(maxit = 1),
+    file = "pois_test.rds"
   ))
 })
 
@@ -49,6 +71,10 @@ test_that("can fit with GA", {
 opt <- fit_model(rs, model_fun, optim_opts,
   ex = exper, method = "L-BFGS-B", control = list(maxit = 1)
 )
+
+test_that("show method works", {
+  expect_no_error(capture_message(show(opt)))
+})
 
 test_that("NLL method works", {
   expect_no_error(NLL(opt))
@@ -67,5 +93,5 @@ test_that("predict method works", {
 })
 
 test_that("show method works", {
-  expect_silent(opt)
+  expect_no_error(capture_message(show(opt)))
 })

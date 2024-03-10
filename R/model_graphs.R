@@ -1,4 +1,4 @@
-#' Create a graph with calm data
+#' Create a graph with calmr data
 #'
 #' @param x A data.frame-like with data to use in the plot
 #' @param loops Logical. Whether to draw arrows back and forth
@@ -12,12 +12,12 @@
 #' @param ... Additional named arguments
 #' @return A ggplot object
 #' @note You should probably be getting graphs via
-#' the `graph` method for CalmExperiments.
+#' the `graph` method for CalmrExperiments.
 #' @export
 #' @rdname graph
 #' @importFrom rlang .data
 
-calm_model_graph <- function(
+calmr_model_graph <- function(
     x, loops = TRUE,
     limits = max(abs(x$value)) * c(-1, 1),
     colour_key = FALSE,
@@ -34,11 +34,6 @@ calm_model_graph <- function(
     list("value" = mean(value)),
     by = "s1,s2"
   ]
-  # determine limits
-  if (is.null(limits)) {
-    limits <- max(abs(x$value)) * c(-1, 1)
-  }
-
   net <- ggnetwork::ggnetwork(network::as.network(x, loops = loops),
     layout = "circle",
     arrow.gap = options$arrow.gap
@@ -78,10 +73,10 @@ calm_model_graph <- function(
   p
 }
 
-#' Patch Calm graphs
+#' Patch Calmr graphs
 #'
 #' @description Convenience function to patch graphs with `patchwork`
-#' @param graphs A list of named graphs, as returned by `calm::graph`
+#' @param graphs A list of named graphs, as returned by `calmr::graph`
 #' @param selection A character or numeric vector determining the plots to patch
 #' @export
 
@@ -99,7 +94,7 @@ patch_graphs <- function(graphs, selection = names(graphs)) {
   patch
 }
 
-#' Get options for calm graph
+#' Get options for calmr graph
 #' @param graph_size A character (one of "small" or "large")
 #' to return default values for small or large graphs
 #' @return A list with graph options, to be passed to `ggnetwork::geom_nodes`

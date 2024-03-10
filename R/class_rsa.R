@@ -1,4 +1,4 @@
-#' S4 class for Calm representational similarity analysis
+#' S4 class for Calmr representational similarity analysis
 #'
 #' @section Slots:
 #' \describe{
@@ -8,9 +8,9 @@
 #' \item{\code{test_data}:}{List.
 #' Test data, populated after testing the object.}
 #' }
-#' @exportClass CalmRSA
+#' @exportClass CalmrRSA
 setClass(
-  "CalmRSA",
+  "CalmrRSA",
   representation(
     corr_mat = "array",
     distances = "list",
@@ -19,52 +19,59 @@ setClass(
   )
 )
 
-#' CalmRSA Methods
-#' @param object A CalmRSA object
+#' CalmrRSA Methods
+#' @param object A CalmrRSA object
 #' @export
-#' @rdname CalmRSA-methods
-setMethod("show", "CalmRSA", function(object) {
-  cat("CalmRSA object\n")
-  cat("---------------\n")
-  cat("Correlation matrix:\n")
-  print(object@corr_mat)
+#' @rdname CalmrRSA-methods
+setMethod("show", "CalmrRSA", function(object) {
+  msg <- c(
+    "CalmrRSA object\n",
+    "---------------\n",
+    "Correlation matrix:\n",
+    paste0(capture.output(object@corr_mat), collapse = "\n")
+  )
   if (length(object@test_data)) {
-    cat("\nSignificance matrix:\n\n")
-    print(object@test_data$sig_mat)
-    cat(sprintf(
-      "\n%d permutation samples, two-tailed test with alpha = %1.2f.\n",
-      object@test_data$n_samples, 1 - object@test_data$p
-    ))
+    msg <- c(
+      msg, "\n", "---------------\n",
+      "Significance matrix:\n",
+      paste0(capture.output(object@test_data$sig_mat), collapse = "\n"),
+      "\n",
+      paste0(sprintf(
+        "From %d permutation samples, two-tailed test with alpha = %1.2f.",
+        object@test_data$n_samples, 1 - object@test_data$p
+      ))
+    )
   }
+  message(msg)
 })
 
-#' Test CalmRSA object via permutation test
+#' Test CalmrRSA object via permutation test
 #'
-#' @param object A CalmRSA object
+#' @param object A CalmrRSA object
 #' @param n_samples The number of samples for the permutation test
 #' (default = 1e3)
 #' @param p The critical threshold level for the permutation test
 #' (default = 0.95)
-#' @return A CalmRSA object with the test results
-#' @rdname CalmRSA-methods
+#' @return A CalmrRSA object with the test results
+#' @rdname CalmrRSA-methods
 methods::setGeneric(
   "test",
   function(object, n_samples = 1e3, p = .95) standardGeneric("test")
 )
-#' @rdname CalmRSA-methods
+#' @rdname CalmrRSA-methods
 #' @export
-methods::setMethod("test", "CalmRSA", function(
+methods::setMethod("test", "CalmrRSA", function(
     object, n_samples, p) {
   .rsa_test(object, n_samples = n_samples, p = p)
 })
 
-#' @param x A CalmRSA object to plot
+#' @param x A CalmrRSA object to plot
 #' @param y Unused.
 #' @param ... Extra parameters passed to the plot call
-#' @rdname CalmRSA-methods
+#' @rdname CalmrRSA-methods
 #' @export
 setMethod(
-  "plot", "CalmRSA",
+  "plot", "CalmrRSA",
   function(x, y, ...) {
     p <- NULL
     corrmat <- x@corr_mat
@@ -77,7 +84,7 @@ setMethod(
     )) +
       ggplot2::geom_tile(na.rm = TRUE) +
       ggplot2::geom_text(na.rm = TRUE) +
-      .calm_scales("fill_c", limits = c(-1, 1)) +
+      .calmr_scales("fill_c", limits = c(-1, 1)) +
       ggplot2::theme(
         axis.title = ggplot2::element_blank(),
         panel.background = ggplot2::element_blank()

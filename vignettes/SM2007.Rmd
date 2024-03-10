@@ -137,14 +137,14 @@ the learning rate for the operator switches related to stimulus $j$.
 
 
 [^note1]: 
-The `calm` implementation of the SOCR model specifies 
+The `calmr` implementation of the SOCR model specifies 
 different $\omega$, $\rho$, $\gamma$, and $\tau$ parameters 
 for each stimulus, but the authors of the model meant these 
 parameters as global parameters.
 
 [^note2]:
 In the aim of generality, the SOCR implementation 
-in `calm` does not distinguish between relative activation 
+in `calmr` does not distinguish between relative activation 
 and response generation. The published formalizations of SOCR 
 made a special distinction (and adopted a different notation) 
 for calculating US responding [e.g., @witnauer_performance_2012], 

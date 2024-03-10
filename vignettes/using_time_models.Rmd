@@ -24,15 +24,15 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Time models in calm
+## Time models in calmr
 
-Version 0.5 of `calm` introduced its first time-based model, 
+Version 0.5 of `calmr` introduced its first time-based model, 
 ANCCR [@jeong_mesolimbic_2022], and with it, 
 I wrote several additional tools for future models.
 
 #### Changes to trial-based models
 
-The biggest change in calm version 0.5 is the use of the ">" character and its effect on trial-based models. Before, the ">" character was used to specify a single split within a trial.
+The biggest change in calmr version 0.5 is the use of the ">" character and its effect on trial-based models. Before, the ">" character was used to specify a single split within a trial.
 For example, "A>(US)" would encode the typical situation in which stimulus A is followed by the US. This was used to mimic the traditional situation in which we expect an organism
 to start (conditionally) responding before the US is delivered. And so, all trial-based models had two steps within each trial: an expectation step in which the first half of the trial 
 retrieved absent stimuli, and a learning step, in which all stimuli in the trial were associated with each other. The first pass is no more 
@@ -44,7 +44,7 @@ The designs for time-based models are nearly identical to those for trial-based 
 enrich the parameter list. Let's specify a serial feature discrimination experiment:
 
 ```{r}
-library(calm)
+library(calmr)
 fpfn <- data.frame(
   group = c("FP", "FN"),
   phase1 = c("100F>T>(US)/100T", "100F>T/100T>(US)"),

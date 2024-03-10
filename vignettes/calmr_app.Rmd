@@ -1,9 +1,9 @@
 ---
-title: "calm_app"
+title: "calmr_app"
 author: "Victor Navarro"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{calm_app}
+  %\VignetteIndexEntry{calmr_app}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,20 +18,20 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Using the calm app
+# Using the calmr app
 
 If you are a beginner useR or simply want to simulate an experimental design to see what a 
-model does, you might be interested in using the calm application.
+model does, you might be interested in using the calmr application.
 
-The calm application offers a GUI that allows you to simulate 
+The calmr application offers a GUI that allows you to simulate 
 experiments without writing any code. If you want to use the online app, 
-you can find it at: [https://victor-navarro.shinyapps.io/calm_app/](https://victor-navarro.shinyapps.io/calm_app/). Alternatively, if you have installed the calm package, you can launch the app via `calm::calm_app()`.
+you can find it at: [https://victor-navarro.shinyapps.io/calmr_app/](https://victor-navarro.shinyapps.io/calmr_app/). Alternatively, if you have installed the calmr package, you can launch the app via `calmr::calmr_app()`.
 The rest of the tutorial assumes that you have the app open and ready to run. 
 Let's break down the GUI.
 
 # The GUI
 
-![The calm app GUI upon launch](calm_app_clean_app.png){width=600px}
+![The calmr app GUI upon launch](calmr_app_clean_app.png){width=600px}
 
 
 ## Design Table
@@ -44,7 +44,7 @@ which is a required step to run the simulation. More on that later.
 The P1 and P2 columns above specify the phases in the experiment and are 
 simulated from left to right. Each entry in those columns specifies the trials 
 given to the corresponding groups (G1 or G2, in this case).
-These entries must obey a special syntax (see [calm_basics](calm_basics.html) for additional information).
+These entries must obey a special syntax (see [calmr_basics](calmr_basics.html) for additional information).
 For now, it will suffice to say that:
 
 * The number of trials is specified via digits to the left of each trial. For example, 10A(US) specifies ten "A(US)" trials.
@@ -71,7 +71,7 @@ Go ahead and parse the design. Some new things will appear on the GUI.
 
 ## Parameters
 
-![The calm app GUI after parsing](calm_app_parsed_app.png){width=600px}
+![The calmr app GUI after parsing](calmr_app_parsed_app.png){width=600px}
 
 After parsing a valid design. The user can set up the parameters for the experiment 
 (including all stimulus-related and global parameters). 
@@ -79,7 +79,7 @@ In this case, the Rescorla-Wagner model has 4 parameters per stimulus.
 The default values are fairly sensible, but you can modify each parameter by hand
 as you would in your favorite spreadsheet software.
 
-The parametrization of each model in calm can sometimes differ from what appears in the literature.
+The parametrization of each model in calmr can sometimes differ from what appears in the literature.
 The following table contains links to the documentation pages for each model.
 
 | Citation                        | Name       | Model page              |
@@ -98,9 +98,9 @@ A final click on that button will run the model and populate the
 "Results" and "Association Graphs" portions of the app. Go ahead and run the experiment.
 After you do, a new button will appear, allowing you to download the results as a spreadsheet.
 
-![The calm app GUI after running the model](calm_app_ran_app.png){width=600px}
+![The calmr app GUI after running the model](calmr_app_ran_app.png){width=600px}
 
-In the calm app, the results are shown visually. 
+In the calmr app, the results are shown visually. 
 Clicking the bar above the graph 
 (the one containing "Blocking - Response Strength ..." above) 
 will show you all the plots available. The first portion of each plot's name denotes 
@@ -126,7 +126,7 @@ in the model change across the experiment.
 
 ## Other bits
 
-The sections above implement the bulk of the functionalities in the calm app. 
+The sections above implement the bulk of the functionalities in the calmr app. 
 The following sections describe additional options convenience functions that I found useful.
 
 ### Options

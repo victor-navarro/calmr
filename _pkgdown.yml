@@ -1,4 +1,4 @@
-url: https://victornavarro.org/calm/
+url: https://victornavarro.org/calmr/
 template:
   bootstrap: 5
 
@@ -16,9 +16,9 @@ articles:
 - title: Demos
   navbar: Demos
   contents:
-  - calm_basics
-  - calm_app
-  - calm_fits
+  - calmr_basics
+  - calmr_app
+  - calmr_fits
   - heidi_similarity
   - using_time_models
-  - parallelism_in_calm
+  - parallelism_in_calmr

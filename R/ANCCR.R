@@ -74,8 +74,7 @@ ANCCR <- function(
   numsampling <- 0
 
   for (timestep in seq_len(nt)) {
-    if (debug) print(timestep)
-
+    if (debug) print(timestep) # nocov
     skip <- FALSE
     event <- experience[timestep, "stimulus"] # event
     absents <- fsnames[!(fsnames == event)]
@@ -195,7 +194,7 @@ ANCCR <- function(
           parameters$betas[event] * parameters$add_beta
       } else {
         # TODO: Optolog related stuff
-        das[event, , timestep] <- optolog[timestep, 2]
+        # das[event, , timestep] <- optolog[timestep, 2]
       }
       # # TODO: Do some extra calculations for omission
       # if (event %in% omidx[, 1]) {
@@ -222,11 +221,11 @@ ANCCR <- function(
             (experience[timestep, "reward_mag"] - r[, event])
       } else {
         # Negative DA response update rule (overprediction)
-        if (any(i_edge)) {
+        if (any(i_edge)) { # nocov start
           r[i_edge, event] <- r[i_edge, event] -
             parameters$alpha_reward * r[i_edge, event] *
               ((delta[i_edge, timestep] / numevents[i_edge, ]) /
-                sum((delta[i_edge, timestep] / numevents[i_edge, ])))
+                sum((delta[i_edge, timestep] / numevents[i_edge, ]))) # nocov end
         } else {
           r[, event] <- r[, event] # ??? Must be vestigial
         }
@@ -282,7 +281,7 @@ ANCCR <- function(
       }
       numsampling <- numsampling + length(subsamplingtime)
     }
-    if (timestep == debug_t) browser()
+    if (timestep == debug_t) browser() # nocov
   }
 
   # calculate q values

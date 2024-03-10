@@ -22,13 +22,13 @@ the model just gets loaded.}
 \item{...}{Extra parameters passed to the optimizer call}
 }
 \value{
-A CalmFit object
+A CalmrFit object
 }
 \description{
 Obtain MLE estimates for model, given data
 }
 \note{
-See the calm_fits vignette for examples
+See the calmr_fits vignette for examples
 }
 \seealso{
 \code{\link{get_optimizer_opts}}, \code{\link{make_experiment}}

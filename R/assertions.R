@@ -1,4 +1,4 @@
-.calm_assert <- function(what, given, ...) { # nolint: cyclocomp_linter.
+.calmr_assert <- function(what, given, ...) { # nolint: cyclocomp_linter.
   nargs <- list(...)
   switch(what,
     "supported_model" = {
@@ -100,9 +100,9 @@
 }
 
 is_experiment <- function(object) {
-  inherits(object, "CalmExperiment")
+  inherits(object, "CalmrExperiment")
 }
 
 is_design <- function(object) {
-  inherits(object, "CalmDesign")
+  inherits(object, "CalmrDesign")
 }

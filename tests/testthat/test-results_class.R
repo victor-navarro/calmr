@@ -10,9 +10,9 @@ noagg <- run_experiment(df,
 )
 
 test_that("show method works with aggregated_results", {
-  expect_silent(exp@results)
+  expect_no_error(capture_message(show(exp@results)))
 })
 
 test_that("show method works with sans aggregated_results", {
-  expect_silent(noagg@results)
+  expect_no_error(capture_message(show(noagg@results)))
 })

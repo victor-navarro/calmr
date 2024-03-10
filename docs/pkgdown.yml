@@ -3,20 +3,20 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   ANCCR: ANCCR.html
-  calm_app: calm_app.html
-  calm_basics: calm_basics.html
-  calm_fits: calm_fits.html
+  calmr_app: calmr_app.html
+  calmr_basics: calmr_basics.html
+  calmr_fits: calmr_fits.html
   HD2022: HD2022.html
   heidi_similarity: heidi_similarity.html
   MAC1975: MAC1975.html
-  parallelism_in_calm: parallelism_in_calm.html
+  parallelism_in_calmr: parallelism_in_calmr.html
   PKH1982: PKH1982.html
   RAND: RAND.html
   RW1972: RW1972.html
   SM2007: SM2007.html
   using_time_models: using_time_models.html
-last_built: 2024-03-10T11:43Z
+last_built: 2024-03-10T23:40Z
 urls:
-  reference: https://victornavarro.org/calm/reference
-  article: https://victornavarro.org/calm/articles
+  reference: https://victornavarro.org/calmr/reference
+  article: https://victornavarro.org/calmr/articles
 

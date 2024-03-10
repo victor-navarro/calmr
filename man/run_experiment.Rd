@@ -7,7 +7,7 @@
 run_experiment(x, parse = TRUE, aggregate = TRUE, ...)
 }
 \arguments{
-\item{x}{A CalmExperiment or design data.frame}
+\item{x}{A CalmrExperiment or design data.frame}
 
 \item{parse}{A logical specifying whether the raw results
 should be parsed. Default = TRUE.}
@@ -18,7 +18,7 @@ should be aggregated. Default = TRUE.}
 \item{...}{Arguments passed to other functions}
 }
 \value{
-A CalmExperiment with results.
+A CalmrExperiment with results.
 }
 \description{
 Runs an experiment with minimal parameters.

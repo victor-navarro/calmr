@@ -1,14 +1,14 @@
-#' Create a plot with calm data
+#' Create a plot with calmr data
 #'
 #' @param dat A data.frame-like with data to use in the plot
 #' @param type A character specifying the type of plot
 #' @return A ggplot object
 #' @note You should probably be getting plots via
-#' the `plot` method for CalmExperiments.
+#' the `plot` method for CalmrExperiments.
 #' @export
 #' @importFrom rlang .data
 
-calm_model_plot <- function(dat, type) {
+calmr_model_plot <- function(dat, type) {
   # define some big categories
   # exceptions are dealt with individually
   targetted <- c(
@@ -71,8 +71,8 @@ calm_model_plot <- function(dat, type) {
 
   # Assemble scales
   scales <- c(
-    .calm_scales("colour_d"),
-    .calm_scales("fill_d"),
+    .calmr_scales("colour_d"),
+    .calmr_scales("fill_d"),
     ggplot2::scale_x_continuous(breaks = NULL)
   )
 
@@ -126,7 +126,7 @@ calm_model_plot <- function(dat, type) {
 }
 
 # internal function to define and make scales available
-.calm_scales <- function(which, ...) {
+.calmr_scales <- function(which, ...) {
   switch(which,
     "colour_d" = {
       ggplot2::scale_colour_viridis_d(begin = .1, end = .9, ...)
@@ -135,7 +135,7 @@ calm_model_plot <- function(dat, type) {
       ggplot2::scale_fill_viridis_d(begin = .1, end = .9, ...)
     },
     "colour_c" = {
-      ggplot2::scale_colour_viridis_c(begin = .1, end = .9, ...)
+      ggplot2::scale_colour_viridis_c(begin = .1, end = .9, ...) # nocov
     },
     "fill_c" = {
       ggplot2::scale_fill_viridis_c(begin = .1, end = .9, ...)
@@ -187,23 +187,19 @@ get_plot_opts <- function(common_scale = TRUE) {
   return(list(common_scale = common_scale))
 }
 
-#' Patch Calm plots
+#' Patch Calmr plots
 #'
 #' @description Convenience function to patch plots with `patchwork`
-#' @param plots A list of named plots, as returned by `calm::plot`
+#' @param plots A list of named plots, as returned by `calmr::plot`
 #' @param selection A character or numeric vector determining the plots to patch
 #' @param plot_options A list of plot options as returned by `get_plot_opts`
 #' @export
 
 patch_plots <- function(
-    plots, selection = NULL,
+    plots, selection = names(plots),
     plot_options = get_plot_opts()) {
   # unlist plots
   pnames <- names(plots)
-
-  if (is.null(selection)) {
-    selection <- pnames
-  }
   if (all(is.character(selection))) {
     if (!all(selection %in% pnames)) {
       stop("Selection must match names in plots")

@@ -18,10 +18,10 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
 }
 
 
-#' Augment CalmDesign to be used with the ANCCR model.
-#' @param object A CalmDesign
+#' Augment CalmrDesign to be used with the ANCCR model.
+#' @param object A CalmrDesign
 #' @export
-#' @rdname CalmDesign-methods
+#' @rdname CalmrDesign-methods
 .anccrize_design <- function(object) {
   # After refactoring the parser, this became unnecessary
   object
@@ -129,9 +129,5 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
   if (t1 > t2) {
     return(numeric(0))
   }
-  s <- seq(t1, t2, res)
-  if (s[length(s)] == t2) {
-    s <- s[1:(length(s) - 1)]
-  }
-  s
+  seq(t1, t2, res)
 }

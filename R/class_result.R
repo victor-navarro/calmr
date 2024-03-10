@@ -1,15 +1,15 @@
-#' S4 class for Calm Results
-#' @rdname CalmResult
+#' S4 class for Calmr Results
+#' @rdname CalmrResult
 #' @section Slots:
 #' \describe{
 #' \item{aggregated_results}{A list with fully aggregated results.}
 #' \item{parsed_results}{A list with parsed results, i.e., fn(model_output).}
 #' \item{raw_results}{A list with model outputs.}
 #' }
-#' @exportClass CalmResult
-#' @seealso CalmResults-methods
+#' @exportClass CalmrResult
+#' @seealso CalmrResults-methods
 methods::setClass(
-  "CalmResult",
+  "CalmrResult",
   representation(
     aggregated_results = "list",
     parsed_results = "list",
@@ -22,18 +22,18 @@ methods::setClass(
   )
 )
 
-methods::setClass("CalmExperimentResult",
-  contains = "CalmResult"
+methods::setClass("CalmrExperimentResult",
+  contains = "CalmrResult"
 )
 
-#' Methods for CalmResult
-#' @param object A CalmResult object
-#' @rdname CalmResult-methods
+#' Methods for CalmrResult
+#' @param object A CalmrResult object
+#' @rdname CalmrResult-methods
 #' @export
-methods::setMethod("show", "CalmResult", function(object) {
+methods::setMethod("show", "CalmrResult", function(object) {
   if (!is.null(object@aggregated_results)) {
-    print(object@aggregated_results)
+    message(paste0(capture.output(object@aggregated_results), collapse = "\n"))
   } else {
-    print(object@raw_results)
+    message(paste0(capture.output(object@raw_results), collapse = "\n"))
   }
 })

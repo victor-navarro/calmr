@@ -1,10 +1,10 @@
-#' Set verbosity options for calm
+#' Set verbosity options for calmr
 #' @description Whether to show verbosity messages and progress bars
 #' @param verbose A logical
 #' @note Progress bars are handled by the progressr package.
 #' This is just a convenience function.
 #' @export
-calm_verbosity <- function(verbose) {
+calmr_verbosity <- function(verbose) {
   if (verbose) {
     progressr::handlers("progress")
     progressr::handlers(global = TRUE)

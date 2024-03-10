@@ -105,7 +105,7 @@
   full_dat
 }
 
-# experiment is a CalmExperiment
+# experiment is a CalmrExperiment
 # returns a list of tibbles
 .aggregate_experiment <- function(
     experiment,
@@ -121,7 +121,7 @@
     pb <- progressr::progressor(length(outputs))
     agg_dat[[m]] <- sapply(outputs, function(o) {
       pb(message = sprintf("Aggregating model %s", m))
-      if (!is.null(.callback_fn)) .callback_fn()
+      if (!is.null(.callback_fn)) .callback_fn() # nocov
       # put data together
       big_dat <- data.table::rbindlist(lapply(mod_dat, "[[", o))
       # aggregate

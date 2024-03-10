@@ -21,8 +21,8 @@ get_optimizer_opts <- function(model_pars,
                                ll = rep(NA, length(model_pars)),
                                ul = rep(NA, length(model_pars)),
                                optimizer = NULL, family = NULL) {
-  optimizer <- .calm_assert("supported_optimizer", optimizer)
-  family <- .calm_assert("supported_family", family)
+  optimizer <- .calmr_assert("supported_optimizer", optimizer)
+  family <- .calmr_assert("supported_family", family)
 
   # family-specific
   family_pars <- NULL
@@ -49,9 +49,9 @@ get_optimizer_opts <- function(model_pars,
   )
 }
 
-.get_calm_link <- function(family) {
+.get_calmr_link <- function(family) {
   link_f <- NULL
-  if (family %in% c("identity", "OLS")) {
+  if (family %in% c("identity")) {
     link_f <- function(y, c) y
   }
   if (family == "normal") {
@@ -68,16 +68,13 @@ get_optimizer_opts <- function(model_pars,
   link_f
 }
 
-.get_calm_loglikelihood <- function(family) {
+.get_calmr_loglikelihood <- function(family) {
   like_f <- NULL
-  if (family == "OLS") {
-    like_f <- function(dat, mod) -sum((dat - mod)^2)
-  }
   if (family %in% c("identity", "normal")) {
-    like_f <- function(dat, mod) stats::dnorm(dat - mod, log = T)
+    like_f <- function(dat, mod) stats::dnorm(dat - mod, log = TRUE)
   }
   if (family == "poisson") {
-    like_f <- function(dat, mod) stats::dpois(dat, mod + 1e-9, log = T)
+    like_f <- function(dat, mod) stats::dpois(dat, mod + 1e-9, log = TRUE)
   } # note the adjustment, the poisson needs positive rates
   if (is.null(like_f)) {
     stop(sprintf("Couldn't find a likelihood function when

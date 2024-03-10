@@ -13,3 +13,11 @@ test_that("get_parameters works with parameter_info", {
     length(sapply(mods, function(m) get_parameters(df, model = m))) > 0
   ))
 })
+
+test_that("supported_plots returns full information", {
+  expect_true(length(supported_plots()) > 6)
+})
+
+test_that("model_outputs returns full information", {
+  expect_true(length(model_outputs()) > 6)
+})

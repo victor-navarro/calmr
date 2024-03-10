@@ -15,11 +15,10 @@ gen_os_values <- function(stims, default_val = -1) {
 
 
 # Carries out a comparison process in a recursive manner
-.comparator_proc <- function(act, i, j, K, o, gammas, order, debug = FALSE) {
+.comparator_proc <- function(
+    act, i, j, K, o,
+    gammas, order, debug = FALSE) {
   ks <- setdiff(K, c(i, j))
-  if (!length(ks)) {
-    return(act[i, j])
-  } # early exit if there are no comparators available
   if (order) { # order > 0
     val <- act[i, j] -
       sum(gammas[ks] * o[i, ks, j] *
@@ -54,8 +53,13 @@ gen_os_values <- function(stims, default_val = -1) {
     val <- act[i, j] -
       sum(gammas[ks] * o[i, ks, j] * act[i, ks] * act[ks, j])
   }
-  if (debug) cat("Order:", order, "\n", "To", j, "via", i, "against", ks, "\n")
-  if (debug) cat("Link value:", val, "\n")
+  if (debug) {
+    message(
+      "Order:", order, "\n", "To ", j, " via ",
+      i, " against ", ks, "\n"
+    )
+  }
+  if (debug) message("Link value:", val, "\n")
 
   val
 }
@@ -66,15 +70,12 @@ gen_os_values <- function(stims, default_val = -1) {
     act, i, j, K, o,
     gammas, order, debug = FALSE) {
   ks <- setdiff(K, c(i, j))
-  if (!length(ks)) {
-    return(act[i, j])
-  } # early exit if there are no comparators available
   if (order) { # order > 0
     val <- act[i, j] -
       sum(gammas[ks] * o[i, ks, j] *
         # recursion from i to k (link 2)
         sapply(ks, function(x) {
-          .comparator_proc(
+          .witnauer_comparator_proc(
             act = act,
             i = i,
             j = x,
@@ -87,7 +88,7 @@ gen_os_values <- function(stims, default_val = -1) {
         }) *
         # recursion from k to j (link 3)
         sapply(ks, function(x) {
-          .comparator_proc(
+          .witnauer_comparator_proc(
             act = act,
             i = x,
             j = j,
@@ -103,8 +104,13 @@ gen_os_values <- function(stims, default_val = -1) {
     val <- act[i, j] -
       sum(gammas[ks] * o[i, ks, j] * act[i, ks] * act[ks, j])
   }
-  if (debug) cat("Order:", order, "\n", "To", j, "via", i, "against", ks, "\n")
-  if (debug) cat("Link value:", val, "\n")
+  if (debug) {
+    message(
+      "Order:", order, "\n", "To ", j,
+      " via ", i, " against ", ks, "\n"
+    )
+  }
+  if (debug) message("Link value:", val, "\n")
 
   val
 }

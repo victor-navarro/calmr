@@ -1,9 +1,9 @@
 ---
-title: "calm_fits"
+title: "calmr_fits"
 author: "Victor Navarro"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{calm_fits}
+  %\VignetteIndexEntry{calmr_fits}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(calm)
+library(calmr)
 library(ggplot2)
 library(data.table)
 theme_set(theme_bw())
@@ -239,9 +239,9 @@ the_fit <- fit_model(pati_summ$rpert,
 ```
 
 ```{r, include = F, echo = F}
-# save("the_fit", file = "vignettes/calm_fits_fit.rda")
-# load(file = "vignettes/calm_fits_fit.rda")
-load(file = "calm_fits_fit.rda")
+# save("the_fit", file = "vignettes/calmr_fits_fit.rda")
+# load(file = "vignettes/calmr_fits_fit.rda")
+load(file = "calmr_fits_fit.rda")
 ```
 
 
@@ -271,7 +271,7 @@ pati_summ |>
 ```
 
 This looks pretty good! Save from some blatant misfits, of course. Now you know 
-everything you need to fit calm to your empirical data. Go forth!
+everything you need to fit calmr to your empirical data. Go forth!
 
 ### A final note
 This vignette was pre-generated, as I don't want the user to fit the 

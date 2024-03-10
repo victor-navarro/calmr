@@ -4,12 +4,12 @@ inst/doc
 .Rdata
 .httr-oauth
 .DS_Store
-/inst/calm_app/rsconnect/
+/inst/calmr_app/rsconnect/
 /doc/
 /Meta/
 -Victor’s MacBook Air.Rhistory
-calm-Victor's MacBook Air.Rproj
-calm.Rproj
+calmr-Victor's MacBook Air.Rproj
+calmr.Rproj
 /sketches/
 /article/
 sketch.R

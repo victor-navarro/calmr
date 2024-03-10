@@ -35,7 +35,7 @@ supported_optimizers <- function() {
 #' @rdname model_info
 #' @export
 supported_families <- function() {
-  c("identity", "normal", "poisson", "OLS")
+  c("identity", "normal", "poisson")
 }
 
 #' @rdname model_info
@@ -58,7 +58,7 @@ supported_plots <- function(model = NULL) {
   if (is.null(model)) {
     plot_info
   } else {
-    model <- .calm_assert("supported_model", model)
+    model <- .calmr_assert("supported_model", model)
     plot_info[[model]]
   }
 }
@@ -67,20 +67,8 @@ supported_plots <- function(model = NULL) {
 #' @export
 get_model <- function(model) {
   # Check model is supported
-  .calm_assert("supported_model", model)
+  .calmr_assert("supported_model", model)
   get(model)
-}
-
-
-# Internal function to get parameter names
-.get_model_parnames <- function(model) {
-  # TODO: Hard-code this information
-  # TODO: Write test
-  pars <- get_parameters(
-    design = data.frame(g = "X", p1 = "X", r1 = TRUE),
-    model = model
-  )
-  names(pars)[-1]
 }
 
 parameter_info <- function(model = NULL) {
@@ -216,7 +204,7 @@ model_outputs <- function(model = NULL) {
   if (is.null(model)) {
     output_info
   } else {
-    model <- .calm_assert("supported_model", model)
+    model <- .calmr_assert("supported_model", model)
     output_info[[model]]
   }
 }

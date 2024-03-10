@@ -2,12 +2,12 @@
 % Please edit documentation in R/rsa_functions.R
 \name{rsa}
 \alias{rsa}
-\title{Perform representational similarity analysis on CalmExperiment}
+\title{Perform representational similarity analysis on CalmrExperiment}
 \usage{
 rsa(x, comparisons, test = FALSE, ...)
 }
 \arguments{
-\item{x}{A list of CalmExperiment objects}
+\item{x}{A list of CalmrExperiment objects}
 
 \item{comparisons}{A model-named list containing the model
 outputs to compare.}
@@ -18,10 +18,10 @@ outputs to compare.}
 and \code{stats::cor}}
 }
 \value{
-A CalmRSA object
+A CalmrRSA object
 }
 \description{
-Perform representational similarity analysis on CalmExperiment
+Perform representational similarity analysis on CalmrExperiment
 }
 \note{
 The object returned by this function

@@ -1,12 +1,12 @@
-#' Perform representational similarity analysis on CalmExperiment
+#' Perform representational similarity analysis on CalmrExperiment
 #'
-#' @param x A list of CalmExperiment objects
+#' @param x A list of CalmrExperiment objects
 #' @param comparisons A model-named list containing the model
 #' outputs to compare.
 #' @param test Whether to test the RSA via permutation test. Default = FALSE.
 #' @param ... Additional parameters passed to `stats::dist`
 #' and `stats::cor`
-#' @returns A CalmRSA object
+#' @returns A CalmrRSA object
 #' @note The object returned by this function
 #' can be later tested via its own `test` method.
 #' @export
@@ -75,8 +75,8 @@ rsa <- function(x, comparisons, test = FALSE, ...) {
   # calculate correlation matrix
   corr_mat <- stats::cor(data.frame(lapply(trial_dists, as.numeric)))
 
-  # create CalmRSA object
-  obj <- methods::new("CalmRSA",
+  # create CalmrRSA object
+  obj <- methods::new("CalmrRSA",
     corr_mat = corr_mat,
     distances = trial_dists,
     args = list(comparisons = comparisons, ...)
@@ -88,8 +88,8 @@ rsa <- function(x, comparisons, test = FALSE, ...) {
   obj
 }
 
-# implements a permutation test for CalmRSA object
-# object is a CalmRSA object
+# implements a permutation test for CalmrRSA object
+# object is a CalmrRSA object
 # n_samples is a integer
 # p is a float
 .rsa_test <- function(object, n_samples = 1e3, p = 0.95) {

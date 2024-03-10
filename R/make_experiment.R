@@ -1,6 +1,6 @@
-#' Make CalmExperiment
+#' Make CalmrExperiment
 #'
-#' @description Makes a CalmExperiment object containing
+#' @description Makes a CalmrExperiment object containing
 #' the arguments necessary to run models
 #' @param design A design data.frame
 #' @param parameters Parameters for a  model as
@@ -10,7 +10,7 @@
 #' @param miniblocks Whether to organize trials in miniblocks.
 #' @param .callback_fn A function for keeping track of progress. Internal use.
 #' @param ... Extra parameters passed to other functions
-#' @return A CalmExperiment object
+#' @return A CalmrExperiment object
 #' @seealso \code{\link{parse_design}},
 #' @note The miniblocks option will direct the sampling function to create
 #' equally-sized miniblocks with random trials within a phase.
@@ -42,11 +42,11 @@ make_experiment <- function(
   )
   group_names <- design@raw_design[, 1]
 
-  .calm_assert("length", 1, model = model)
+  .calmr_assert("length", 1, model = model)
   # assert model
-  model <- .calm_assert("supported_model", model)
+  model <- .calmr_assert("supported_model", model)
   # assert parameters
-  parameters <- .calm_assert("parameters", parameters,
+  parameters <- .calmr_assert("parameters", parameters,
     design = design, model = model
   )
 
@@ -55,7 +55,7 @@ make_experiment <- function(
   .parallel_standby(pb) # print parallel backend message
   pb(amount = 0, message = "Building experiment")
   allexps <- future.apply::future_sapply(seq_len(iterations), function(x) {
-    if (!is.null(.callback_fn)) .callback_fn() # for shiny
+    if (!is.null(.callback_fn)) .callback_fn() # nocov
     exper <- .build_experiment(
       design = design,
       model = model,
@@ -74,7 +74,7 @@ make_experiment <- function(
   # unnest once
   allexps <- unlist(allexps, recursive = FALSE)
   # return experiment
-  methods::new("CalmExperiment",
+  methods::new("CalmrExperiment",
     design = design,
     model = model,
     groups = group_names,
@@ -83,7 +83,7 @@ make_experiment <- function(
       length(group_names)
     ), group_names),
     experiences = allexps,
-    results = methods::new("CalmExperimentResult"),
+    results = methods::new("CalmrExperimentResult"),
     .model = rep(model, length(allexps)),
     .group = rep(group_names, iterations),
     .iter = rep(seq_len(iterations), each = length(group_names))

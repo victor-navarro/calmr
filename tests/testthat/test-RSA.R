@@ -9,6 +9,18 @@ comparisons <- list(
   "PKH1982" = c("eivs")
 )
 
+test_that("rsa fails if comparisons is unnamed", {
+  expect_error(rsa(comp, unname(comparisons)))
+})
+
+test_that("rsa fails with inconsistent model outputs", {
+  expect_error(rsa(comp, list("HD2022" = c("acts", "vs"))))
+})
+
+test_that("rsa can be ran with test = TRUE", {
+  expect_no_error(rsa(comp, comparisons, test = TRUE))
+})
+
 res <- rsa(comp, comparisons = comparisons)
 
 test_that("rsa method works with many models", {
@@ -33,7 +45,7 @@ test_that("rsa method stops with bad model outputs", {
 })
 
 test_res <- test(res, n_samples = 20)
-test_that("test method for CalmRSA works", {
+test_that("test method for CalmrRSA works", {
   expect_named(test_res@test_data)
 })
 
@@ -45,4 +57,12 @@ test_that("plotting RSA works", {
 test_that("plotting RSA with a test works", {
   plt <- plot(test_res)
   expect_named(plt)
+})
+
+test_that("show method works without test results", {
+  expect_no_error(capture_message(show(res)))
+})
+
+test_that("show method works with test results", {
+  expect_no_error(capture_message(show(test_res)))
 })

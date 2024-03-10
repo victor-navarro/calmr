@@ -1,4 +1,4 @@
-#' S4 class for Calm designs
+#' S4 class for Calmr designs
 #'
 #' @section Slots:
 #' \describe{
@@ -7,9 +7,9 @@
 #' \item{\code{raw_design}:}{The original data.frame.}
 #' \item{\code{augmented}:}{Whether the object has been augmented.}
 #' }
-#' @exportClass CalmDesign
+#' @exportClass CalmrDesign
 methods::setClass(
-  "CalmDesign",
+  "CalmrDesign",
   representation(
     design = "list",
     mapping = "list",
@@ -18,44 +18,47 @@ methods::setClass(
   ),
   prototype(augmented = FALSE)
 )
-#' CalmDesign methods
+#' CalmrDesign methods
 #' @export
-#' @rdname CalmDesign-methods
+#' @rdname CalmrDesign-methods
 methods::setMethod(
-  "show", "CalmDesign",
+  "show", "CalmrDesign",
   function(object) {
-    cat("CalmDesign built from data.frame:\n")
-    print(object@raw_design)
-    cat("----------------\n")
-    cat("Trials detected:\n")
-    print(trials(object))
+    message(
+      "CalmrDesign built from data.frame:\n",
+      paste0(capture.output(object@raw_design), collapse = "\n"),
+      "\n",
+      "----------------\n",
+      "Trials detected:\n",
+      paste0(capture.output(trials(object)), collapse = "\n")
+    )
   }
 )
 
-#' @rdname CalmDesign-methods
+#' @rdname CalmrDesign-methods
 methods::setGeneric(
   "mapping",
-  function(object) methods::standardGeneric("mapping")
+  function(object) methods::standardGeneric("mapping") # nocov
 )
-#' CalmDesign methods
+#' CalmrDesign methods
 #' @description Methods mapping, and trials, are extractor functions.
-#' @param object A CalmDesign, as returned by parse_design
+#' @param object A CalmrDesign, as returned by parse_design
 #' @export
-#' @rdname CalmDesign-methods
+#' @rdname CalmrDesign-methods
 methods::setMethod(
-  "mapping", "CalmDesign",
+  "mapping", "CalmrDesign",
   function(object) object@mapping
 )
 #' @export
-#' @rdname CalmDesign-methods
+#' @rdname CalmrDesign-methods
 methods::setGeneric(
   "trials",
-  function(object) methods::standardGeneric("trials")
+  function(object) methods::standardGeneric("trials") # nocov
 )
 #' @export
-#' @rdname CalmDesign-methods
+#' @rdname CalmrDesign-methods
 methods::setMethod(
-  "trials", "CalmDesign",
+  "trials", "CalmrDesign",
   function(object) {
     des <- object@design
     trial_dat <- data.frame()
@@ -80,17 +83,17 @@ methods::setMethod(
 
 methods::setGeneric(
   "augment",
-  function(object, model, ...) methods::standardGeneric("augment")
+  function(object, model, ...) methods::standardGeneric("augment") # nocov
 )
-#' Augment CalmDesign
-#' @param object A CalmDesign, as returned by parse_design
+#' Augment CalmrDesign
+#' @param object A CalmrDesign, as returned by parse_design
 #' @param model A modelname string. One of supported_models()
 #' @param ... Additional parameters depending on the model.
-#' @rdname CalmDesign-methods
+#' @rdname CalmrDesign-methods
 #' @aliases augment
 #' @order 1
 #' @export
-methods::setMethod("augment", "CalmDesign", function(object, model, ...) {
+methods::setMethod("augment", "CalmrDesign", function(object, model, ...) {
   if (model %in% c("ANCCR")) {
     # creates eventlogs
     object <- .anccrize_design(object, ...)

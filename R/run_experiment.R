@@ -1,12 +1,12 @@
 #' @title Run experiment
 #' @description Runs an experiment with minimal parameters.
-#' @param x A CalmExperiment or design data.frame
+#' @param x A CalmrExperiment or design data.frame
 #' @param parse A logical specifying whether the raw results
 #' should be parsed. Default = TRUE.
 #' @param aggregate A logical specifying whether the parsed results
 #' should be aggregated. Default = TRUE.
 #' @param ... Arguments passed to other functions
-#' @return A CalmExperiment with results.
+#' @return A CalmrExperiment with results.
 #' @examples
 #' # Using a data.frame only (throws warning)
 #' df <- get_design("relative_validity")
@@ -49,7 +49,7 @@ run_experiment <- function(
   ))]
 
   # check if experiment needs (can) to be run
-  .calm_assert("good_experiment", given = experiment)
+  .calmr_assert("good_experiment", given = experiment)
 
   # now run the experiment
   exp_length <- length(experiment)
@@ -58,7 +58,7 @@ run_experiment <- function(
   # get results
   all_results <- future.apply::future_sapply(
     seq_len(exp_length), function(i) {
-      if (!is.null(nargs$.callback_fn)) nargs$.callback_fn()
+      if (!is.null(nargs$.callback_fn)) nargs$.callback_fn() # nocov
       # bundle arguments
       args <- c(list(
         experience = experiment@experiences[[i]],

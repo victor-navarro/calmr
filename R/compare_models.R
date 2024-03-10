@@ -1,9 +1,9 @@
 #' @title Run models given a set of parameters
-#' @param x A list of CalmExperiment objects or a design data.frame
+#' @param x A list of CalmrExperiment objects or a design data.frame
 #' @param models A character vector of length m, specifying the models to run.
-#' Ignored if x is a list of CalmExperiment objects.
+#' Ignored if x is a list of CalmrExperiment objects.
 #' @param ... Arguments passed to `make_experiment`
-#' @returns A list of CalmExperiment objects
+#' @returns A list of CalmrExperiment objects
 #' @export
 #' @examples
 #' # By making experiment beforehand (recommended)
@@ -29,7 +29,7 @@ compare_models <- function(
   } else {
     # assert models
     if (!is.null(models)) {
-      models <- sapply(models, .calm_assert, what = "supported_model")
+      models <- sapply(models, .calmr_assert, what = "supported_model")
       stopifnot(
         "Argument `models` must contain unique model names." =
           length(models) == length(unique(models))
