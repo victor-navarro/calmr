@@ -9,14 +9,14 @@ articles:
   RAND: RAND.html
   RW1972: RW1972.html
   SM2007: SM2007.html
-  calm_app: calm_app.html
-  calm_basics: calm_basics.html
-  calm_fits: calm_fits.html
+  calmr_app: calmr_app.html
+  calmr_basics: calmr_basics.html
+  calmr_fits: calmr_fits.html
   heidi_similarity: heidi_similarity.html
-  parallelism_in_calm: parallelism_in_calm.html
+  parallelism_in_calmr: parallelism_in_calmr.html
   using_time_models: using_time_models.html
-last_built: 2024-03-10T11:50Z
+last_built: 2024-03-10T23:46Z
 urls:
-  reference: https://victornavarro.org/calm/reference
-  article: https://victornavarro.org/calm/articles
+  reference: https://victornavarro.org/calmr/reference
+  article: https://victornavarro.org/calmr/articles
 
