@@ -21,8 +21,7 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(calm)
 library(ggplot2)
-library(dplyr)
-library(tidyr)
+library(data.table)
 theme_set(theme_bw())
 data(pati)
 set.seed(2022)
@@ -43,7 +42,7 @@ were trained to associate each of two levers to one of two
 unconditioned stimuli (pellets or sucrose). Let's take a look at it.
 
 ```{r}
-glimpse(pati)
+summary(pati)
 pati |> ggplot(aes(x = block, y = rpert, colour = us)) +
   geom_line(aes(group = interaction(us, subject)), alpha = .3) +
   stat_summary(geom = "line", fun = "mean", linewidth = 1) +
@@ -59,26 +58,29 @@ relevant (see ahead).
 ## Writing the model function
 
 The biggest hurdle in fitting the model to empirical data is to write a function 
-that, given a vector of parameters and model arguments, generates responses that 
-are organized as the empirical data. Let's begin by summarizing the group data first, 
+that, given a vector of parameters and an experiment generates responses that 
+are organized as the empirical data. Let's begin by summarizing the data first, 
 so we know what to aim for.
 
 ```{r}
-pati_summ <- pati |>
-  group_by(block, us, response) |>
-  summarise(rpert = mean(rpert), .groups = "drop")
+pati_summ <- setDT(pati)[,
+  list("rpert" = mean(rpert)),
+  by = "block,us,response"
+]
+# set order (relevant for the future)
+setorder(pati_summ, block, response, us)
 head(pati_summ)
 ```
 
-We now prepare the arguments for the model function 
-(as you would pass to `run_experiment`experiment.
+We now will prepare the experiment 
+as you would pass to `run_experiment`experiment.
 
-This is no minor issue because the HeiDI is sensitive to order 
-effects. Hence, the arguments we prepare here must
+This is not a trivial issue because HeiDI, like many models, 
+is sensitive to order effects. Hence, the arguments we prepare here must
 reflect the behavior of the model after a "general" experimental 
 procedure, and not the quirks of an unfortunate run of trials. Here, 
-we simply address this issue by running several iterations of the model 
-(with random trial orders) and averaging all models before evaluating the 
+we simply address this issue by running several iterations of the experiment 
+(with random trial orders) and averaging all experiments before evaluating the 
 likelihood of the parameters.
 
 So what do we have to design? The experiment presented by Patittuci 
@@ -86,7 +88,7 @@ et al. (2016) was fairly simple, and it can be reduced to the
 presentations of two levers, each followed by a different appetitive 
 outcome. Here, we will assume that the two outcomes are independent 
 from each other. We will also take some liberties with the number of trials 
-we specify, to reduce computing time.
+we specify to reduce computing time.
 
 
 ```{r}
@@ -97,7 +99,7 @@ des_df <- data.frame(
     "12L>(Pellet)/12R>(Sucrose)",
     "12L>(Sucrose)/12R>(Pellet)"
   ),
-  rand_train = TRUE
+  rand_train = FALSE
 )
 # The parameters
 # the actual parameter values don't matter,
@@ -110,6 +112,7 @@ experiment <- make_experiment(des_df,
   parameters = parameters, model = "HD2022",
   iterations = 4
 )
+experiment
 ```
 
 Note we specified two counterbalancings as groups. 
@@ -129,32 +132,30 @@ exp_res <- run_experiment(experiment)
 results(exp_res)
 ```
 
-Although the `run_experiment` function returns an S4 class with many things, 
+Although `results` returns many model outputs, 
 we only care about one of them: `rs` (the model responses).
 With them, we can write our model function.
 
 ```{r}
-my_model_function <- function(parameters, experiment) {
-  # manipulating parameters
-  new_parameters <- parameters(experiment)[[1]]
-  new_parameters$alphas[] <- parameters
-  parameters(experiment) <- new_parameters # note parameters method
+my_model_function <- function(pars, exper) {
+  # extract the parameters from the model
+  new_parameters <- parameters(exper)[[1]]
+  # assign alphas
+  new_parameters$alphas[] <- pars
+  # reassign parameters to the experiment
+  parameters(exper) <- new_parameters # note parameters method
   # running the model and selecting rs
-  exp_res <- run_experiment(experiment)
+  exp_res <- run_experiment(exper)
   # summarizing the model
-  rs <- results(exp_res)$rs |>
-    filter(s2 %in% c("Pellet", "Sucrose")) |>
-    mutate(
-      response = ifelse(s1 %in% c("Pellet", "Sucrose"), "np", "lp"),
-      block = ceiling(trial / 4)
-    ) |>
-    rowwise() |>
-    # note this filter below;
-    # we do not allow lever presses if the lever was not presented on the trial
-    filter(response == "np" | (response == "lp" & grepl(s1, trial_type))) |>
-    mutate(us = ifelse(grepl("Pellet", trial_type), "P", "S")) |>
-    group_by(block, us, response) |>
-    summarise(value = mean(value), .groups = "drop")
+  rs <- results(exp_res)$rs
+  # calculate extra variables
+  rs$response <- ifelse(rs$s1 %in% c("Pellet", "Sucrose"), "np", "lp")
+  rs$block <- ceiling(rs$trial / 4)
+  # filtering
+  rs <- rs[s2 %in% c("Pellet", "Sucrose") &
+    (response == "np" | (response == "lp" &
+      mapply(grepl, s1, trial_type)))]
+  rs <- rs[, list(value = mean(value)), by = "block,s2,response"]
   rs$value
 }
 ```
@@ -171,8 +172,9 @@ experiment using the `parameters` method.
 Let's see the function in action.
 
 ```{r}
-my_model_function(c(.1, .2, .4, .3), experiment = experiment)
+my_model_function(c(.1, .2, .4, .3), experiment)
 ```
+
 The order of the empirical data and model responses must match. 
 I cannot emphasize this point enough: there is nothing within the fit function that checks 
 or reorders the data for you. You are the sole responsible for making sure both of these 
@@ -229,7 +231,7 @@ And with that, we can fit the model! (be patient if you are following along)
 ```{r, eval=FALSE, include=TRUE}
 the_fit <- fit_model(pati_summ$rpert,
   model_function = my_model_function,
-  experiment = experiment,
+  exper = experiment,
   optimizer_options = my_optimizer_opts,
   maxiter = 10,
   parallel = TRUE
@@ -254,15 +256,15 @@ the_fit
 That's good and all, but how well does a model run with those parameters "visually" fit the data? We can obtain the predictions from the model via the `predict` function.
 
 ```{r}
-pati_summ$prediction <- predict(the_fit, experiment = experiment)
+pati_summ$prediction <- predict(the_fit, exper = experiment)
+pati_summ[, data := rpert][, rpert := NULL]
+pati_summ <- melt(pati_summ, measure.vars = c("prediction", "data"))
 pati_summ |>
-  rename("data" = "rpert") |>
-  pivot_longer(
-    cols = c("prediction", "data"),
-    names_to = "type",
-    values_to = "value"
-  ) |>
-  ggplot(ggplot2::aes(x = block, y = value, colour = us, linetype = type)) +
+  ggplot(ggplot2::aes(
+    x = block, y = value,
+    colour = us,
+    linetype = variable
+  )) +
   geom_line() +
   theme_bw() +
   facet_grid(us ~ response)
