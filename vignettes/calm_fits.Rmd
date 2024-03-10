@@ -21,7 +21,6 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(calm)
 library(ggplot2)
-library(magrittr)
 library(dplyr)
 library(tidyr)
 theme_set(theme_bw())
@@ -45,7 +44,7 @@ unconditioned stimuli (pellets or sucrose). Let's take a look at it.
 
 ```{r}
 glimpse(pati)
-pati %>% ggplot(aes(x = block, y = rpert, colour = us)) +
+pati |> ggplot(aes(x = block, y = rpert, colour = us)) +
   geom_line(aes(group = interaction(us, subject)), alpha = .3) +
   stat_summary(geom = "line", fun = "mean", linewidth = 1) +
   labs(x = "Block", y = "Responses per trial", colour = "US") +
@@ -65,8 +64,8 @@ are organized as the empirical data. Let's begin by summarizing the group data f
 so we know what to aim for.
 
 ```{r}
-pati_summ <- pati %>%
-  group_by(block, us, response) %>%
+pati_summ <- pati |>
+  group_by(block, us, response) |>
   summarise(rpert = mean(rpert), .groups = "drop")
 head(pati_summ)
 ```
@@ -106,12 +105,10 @@ des_df <- data.frame(
 parameters <- get_parameters(des_df,
   model = "HD2022"
 )
-# The options
-options <- get_exp_opts(iterations = 4)
 # The arguments
 experiment <- make_experiment(des_df,
   parameters = parameters, model = "HD2022",
-  options = options
+  iterations = 4
 )
 ```
 
@@ -145,18 +142,18 @@ my_model_function <- function(parameters, experiment) {
   # running the model and selecting rs
   exp_res <- run_experiment(experiment)
   # summarizing the model
-  rs <- results(exp_res)$rs %>%
-    filter(s2 %in% c("Pellet", "Sucrose")) %>%
+  rs <- results(exp_res)$rs |>
+    filter(s2 %in% c("Pellet", "Sucrose")) |>
     mutate(
       response = ifelse(s1 %in% c("Pellet", "Sucrose"), "np", "lp"),
       block = ceiling(trial / 4)
-    ) %>%
-    rowwise() %>%
+    ) |>
+    rowwise() |>
     # note this filter below;
     # we do not allow lever presses if the lever was not presented on the trial
-    filter(response == "np" | (response == "lp" & grepl(s1, trial_type))) %>%
-    mutate(us = ifelse(grepl("Pellet", trial_type), "P", "S")) %>%
-    group_by(block, us, response) %>%
+    filter(response == "np" | (response == "lp" & grepl(s1, trial_type))) |>
+    mutate(us = ifelse(grepl("Pellet", trial_type), "P", "S")) |>
+    group_by(block, us, response) |>
     summarise(value = mean(value), .groups = "drop")
   rs$value
 }
@@ -258,13 +255,13 @@ That's good and all, but how well does a model run with those parameters "visual
 
 ```{r}
 pati_summ$prediction <- predict(the_fit, experiment = experiment)
-pati_summ %>%
-  rename("data" = "rpert") %>%
+pati_summ |>
+  rename("data" = "rpert") |>
   pivot_longer(
     cols = c("prediction", "data"),
     names_to = "type",
     values_to = "value"
-  ) %>%
+  ) |>
   ggplot(ggplot2::aes(x = block, y = value, colour = us, linetype = type)) +
   geom_line() +
   theme_bw() +

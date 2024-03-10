@@ -26,7 +26,6 @@
 #'   iterations = 4
 #' )
 #' run_experiment(exper)
-#' @seealso \code{\link{get_exp_opts}}
 #' @export
 
 run_experiment <- function(

@@ -4,7 +4,7 @@
 #' \describe{
 #' \item{\code{corr_mat}:}{Array. Correlation matrix}
 #' \item{\code{distances}:}{List. Pairwise distance matrices}
-#' \item{\code{arguments}:}{List. Arguments used to create the object.}
+#' \item{\code{args}:}{List. Arguments used to create the object.}
 #' \item{\code{test_data}:}{List.
 #' Test data, populated after testing the object.}
 #' }
@@ -38,11 +38,6 @@ setMethod("show", "CalmRSA", function(object) {
   }
 })
 
-
-methods::setGeneric(
-  "test",
-  function(object, n_samples = 1e3, p = .95) standardGeneric("test")
-)
 #' Test CalmRSA object via permutation test
 #'
 #' @param object A CalmRSA object
@@ -51,31 +46,35 @@ methods::setGeneric(
 #' @param p The critical threshold level for the permutation test
 #' (default = 0.95)
 #' @return A CalmRSA object with the test results
-#' @rdname rsa
+#' @rdname CalmRSA-methods
+methods::setGeneric(
+  "test",
+  function(object, n_samples = 1e3, p = .95) standardGeneric("test")
+)
+#' @rdname CalmRSA-methods
 #' @export
 methods::setMethod("test", "CalmRSA", function(
     object, n_samples, p) {
   .rsa_test(object, n_samples = n_samples, p = p)
 })
 
-#' @param object A CalmRSA object
+#' @param x A CalmRSA object to plot
+#' @param y Unused.
 #' @param ... Extra parameters passed to the plot call
-#' @rdname rsa
+#' @rdname CalmRSA-methods
 #' @export
 setMethod(
   "plot", "CalmRSA",
-  function(x, ...) {
+  function(x, y, ...) {
     p <- NULL
     corrmat <- x@corr_mat
     corrmat[lower.tri(corrmat)] <- NA
-    dat <- data.frame(as.table(corrmat))
+    dat <- stats::na.omit(data.frame(as.table(corrmat)))
     dat$label <- round(dat$Freq, 2)
-    p <- dat %>%
-      stats::na.omit() %>%
-      ggplot2::ggplot(ggplot2::aes(
-        x = .data$Var1, y = .data$Var2,
-        fill = .data$Freq, label = .data$label
-      )) +
+    p <- ggplot2::ggplot(dat, ggplot2::aes(
+      x = .data$Var1, y = .data$Var2,
+      fill = .data$Freq, label = .data$label
+    )) +
       ggplot2::geom_tile(na.rm = TRUE) +
       ggplot2::geom_text(na.rm = TRUE) +
       .calm_scales("fill_c", limits = c(-1, 1)) +
@@ -89,7 +88,7 @@ setMethod(
       sigmat <- x@test_data$sig_mat
       sigmat[lower.tri(sigmat)] <- NA
       dat <- p$data
-      dat$sig <- na.omit(data.frame(as.table(sigmat)))$Freq
+      dat$sig <- stats::na.omit(data.frame(as.table(sigmat)))$Freq
       p <- p + ggplot2::geom_label(
         data = stats::na.omit(dat[dat$sig, ]), fill = "white"
       )

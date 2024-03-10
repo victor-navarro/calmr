@@ -12,7 +12,7 @@ S4 class for Calm representational similarity analysis
 \describe{
 \item{\code{corr_mat}:}{Array. Correlation matrix}
 \item{\code{distances}:}{List. Pairwise distance matrices}
-\item{\code{arguments}:}{List. Arguments used to create the object.}
+\item{\code{args}:}{List. Arguments used to create the object.}
 \item{\code{test_data}:}{List.
 Test data, populated after testing the object.}
 }

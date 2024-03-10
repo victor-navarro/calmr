@@ -12,43 +12,76 @@ vignette: >
 
 # The mathematics behind MAC1975
 
-A grand departure from global error term models such as RW1972 [@rescorla_theory_1972], the MAC1975 model [@mackintosh_theory_1975] uses local error terms, and changes stimulus associability ($\alpha$) via an error comparison mechanism that promotes learning about uncertain stimuli:
+A grand departure from global error term models such as 
+RW1972 [@rescorla_theory_1972], the MAC1975 model 
+[@mackintosh_theory_1975] uses local error terms
+and changes stimulus associability ($\alpha$) via an error 
+comparison mechanism that promotes learning about uncertain stimuli:
 
 ## 1 - Generating expectations
 
-Let $v_{k,j}$ denote the associative strength from stimulus $k$ to stimulus $j$. On any given trial, the expectation of stimulus $j$, $e_j$, is given by:
+Let $v_{k,j}$ denote the associative strength 
+from stimulus $k$ to stimulus $j$. On any given 
+trial, the expectation of stimulus $j$, $e_j$, is given by:
 
 $$
 \tag{Eq.1}
 e_j = \sum_{k}^{K}x_k v_{k,j}
 $$
 
-$x_k$ denotes the presence (1) or absence (0) of stimulus $k$, and the set $K$ represents all stimuli in the design.
+$x_k$ denotes the presence (1) or absence (0) of stimulus $k$, 
+and the set $K$ represents all stimuli in the design.
 
 ## 2 - Learning associations
 
-Changes to the association from stimulus $i$ to $j$, $v_{i,j}$, are given by:
+Changes to the association from stimulus $i$ to $j$, 
+$v_{i,j}$, are given by:
 
 $$
 \tag{Eq.2}
 \Delta v_{i,j} = x_i \alpha_i \beta_j (\lambda_j - v_{i,j})
 $$
 
-where $\alpha_i$ is the associability of (or attention devoted to) stimulus $i$, $\beta_j$ is a learning rate parameter determined by the properties of $j$, and $\lambda_j$ is a the maximum association strength supported by $j$ (the asymptote).
+where $\alpha_i$ is the associability of 
+(or attention devoted to) stimulus $i$, $\beta_j$ is 
+a learning rate parameter determined by the properties 
+of $j$, and $\lambda_j$ is a the maximum association 
+strength supported by $j$ (the asymptote).
 
 ## 3 - Learning to attend
 
-The parameter $\alpha_i$ changes as a function of learning, proportionally to the difference between the absolute errors conveyed by $i$ and all the other predictors[^note1], via:
+The parameter $\alpha_i$ changes as a function 
+of learning, proportionally to the difference between 
+the absolute errors conveyed by $i$ and all the other 
+predictors[^note1], via:
 
 $$
 \tag{Eq.3}
 \Delta \alpha_{i} = x_i\theta_i \sum_{j}^{K}\gamma_j(|\lambda_j - \sum_{k \ne i}^{K}v_{k,j}|-|\lambda_j -  v_{i,j}|)
 $$
-where $\theta_i$ is an attentional learning rate parameter for stimulus $i$ (usually fixed across all stimuli). Although  Mackintosh (1975) did not extend their model to account for the predictive power of within-compound associations, the implementation of the model in this package does. This can sometimes result in unexpected behaviour, and as such, Eq. 3 above includes an extra parameter $\gamma_j$ (defaulting to 1/K) that denotes whether the expectation of stimulus $j$ contributes to attentional learning. As such, the user can set these parameters manually in order to reflect contribution of the different experimental stimuli. For example, in a simple "AB>(US)" design, setting $\gamma_{US}$ = 1 and $\gamma_{A} = \gamma_{B} = 0$ leads to the behaviour of the original model.
+where $\theta_i$ is an attentional learning 
+rate parameter for stimulus $i$ (usually fixed 
+across all stimuli). Although  Mackintosh (1975) did not 
+extend their model to account for the predictive power 
+of within-compound associations, the implementation of the 
+model in this package does. This can sometimes result in 
+unexpected behavior, and as such, Eq. 3 above includes 
+an extra parameter $\gamma_j$ (defaulting to 1/K) that 
+denotes whether the expectation of stimulus $j$ contributes 
+to attentional learning. As such, the user can set these 
+parameters manually to reflect the contribution of the 
+different experimental stimuli. For example, in a simple 
+"AB>(US)" design, 
+setting $\gamma_{US}$ = 1 and $\gamma_{A} = \gamma_{B} = 0$ leads 
+to the behavior of the original model.
 
 ## 4 - Generating responses
 
-There is no specification of response-generating mechanisms in MAC1975. However, the simplest response function that can be adopted is the identity function on stimulus expectations. If so, the responses reflecting the nature of $j$, $r_j$, are given by:
+There is no specification of response-generating
+mechanisms in MAC1975. However, the simplest response 
+function that can be adopted is the identity function on 
+stimulus expectations. If so, the responses reflecting
+ the nature of $j$, $r_j$, are given by:
 
 $$
 \tag{Eq.4}
@@ -56,6 +89,9 @@ r_j = e_j
 $$
 
 [^note1]: 
-Mackintosh (1975) did not fully specify the equations governing the change in stimulus associability. Instead, we adopt here the equation @le_pelley_attention_2016 used in their implementation of the model.
+Mackintosh (1975) did not fully specify the equations 
+governing the change in stimulus associability. Instead, 
+we adopt here the equation @le_pelley_attention_2016 used 
+in their implementation of the model.
 
 ### References

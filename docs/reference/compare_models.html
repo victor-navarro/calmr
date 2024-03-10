@@ -72,48 +72,46 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">compare_models</span><span class="op">(</span><span class="va">design</span>, <span class="va">models</span>, parameters <span class="op">=</span> <span class="cn">NULL</span>, options <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">compare_models</span><span class="op">(</span><span class="va">x</span>, models <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>design</dt>
-<dd><p>A design data.frame or CalmDesign</p></dd>
+    <dl><dt>x</dt>
+<dd><p>A list of CalmExperiment objects or a design data.frame</p></dd>
 
 
 <dt>models</dt>
-<dd><p>A character vector of length m, specifying the models to run.</p></dd>
+<dd><p>A character vector of length m, specifying the models to run.
+Ignored if x is a list of CalmExperiment objects.</p></dd>
 
 
-<dt>parameters</dt>
-<dd><p>A list of length m,
-with each entry containing a list with model parameters,
-as returned by <code>get_parameters</code></p></dd>
-
-
-<dt>options</dt>
-<dd><p>A list of options, as returned by get_exp_opts.</p></dd>
+<dt>...</dt>
+<dd><p>Arguments passed to <code>make_experiment</code></p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A CalmExperiment object</p>
+<p>A list of CalmExperiment objects</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">exp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  Group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  P1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"10(A)&gt;(US)/5B&gt;(US)"</span>, <span class="st">"5(A)&gt;(US)/10B&gt;(US)"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  R1 <span class="op">=</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">exp</span> <span class="op">&lt;-</span> <span class="fu"><a href="parse_design.html">parse_design</a></span><span class="op">(</span><span class="va">exp</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># By making experiment beforehand (recommended)</span></span></span>
+<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_design.html">get_design</a></span><span class="op">(</span><span class="st">"blocking"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"HD2022"</span>, <span class="st">"RW1972"</span>, <span class="st">"PKH1982"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">models</span>, <span class="va">get_parameters</span>, design <span class="op">=</span> <span class="va">exp</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">comp</span> <span class="op">&lt;-</span> <span class="fu">compare_models</span><span class="op">(</span><span class="va">exp</span>, models <span class="op">=</span> <span class="va">models</span>, parameters <span class="op">=</span> <span class="va">parameters</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>No experiment options passed. Using default options.</span>
+<span class="r-in"><span><span class="va">exps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">models</span>, <span class="kw">function</span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="make_experiment.html">make_experiment</a></span><span class="op">(</span><span class="va">df</span>,</span></span>
+<span class="r-in"><span>    parameters <span class="op">=</span> <span class="fu"><a href="get_parameters.html">get_parameters</a></span><span class="op">(</span><span class="va">df</span>, model <span class="op">=</span> <span class="va">m</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    model <span class="op">=</span> <span class="va">m</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">comp</span> <span class="op">&lt;-</span> <span class="fu">compare_models</span><span class="op">(</span><span class="va">exps</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># By passing minimal arguments (not recommended; default parameters)</span></span></span>
+<span class="r-in"><span><span class="va">comp</span> <span class="op">&lt;-</span> <span class="fu">compare_models</span><span class="op">(</span><span class="va">df</span>, models <span class="op">=</span> <span class="va">models</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

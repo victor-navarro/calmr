@@ -12,33 +12,47 @@ vignette: >
 
 # The mathematics behind RW1972
 
-The most influential associative learning model, RW1972 [@rescorla_theory_1972], learns from global error and posits no changes in stimulus associability.
+The most influential associative learning model, 
+RW1972 [@rescorla_theory_1972], learns from global error 
+and posits no changes in stimulus associability.
 
 ## 1 - Generating expectations
 
-Let $v_{k,j}$ denote the associative strength from stimulus $k$ to stimulus $j$. On any given trial, the expectation of stimulus $j$, $e_j$, is given by:
+Let $v_{k,j}$ denote the associative strength from 
+stimulus $k$ to stimulus $j$. On any given trial, the 
+expectation of stimulus $j$, $e_j$, is given by:
 
 $$
 \tag{Eq.1}
 e_j = \sum_{k}^{K}x_k v_{k,j}
 $$
 
-$x_k$ denotes the presence (1) or absence (0) of stimulus $k$, and the set $K$ represents all stimuli in the design.
+$x_k$ denotes the presence (1) or absence (0) of 
+stimulus $k$, and the set $K$ represents all stimuli 
+in the design.
 
 ## 2 - Learning associations
 
-Changes to the association from stimulus $i$ to $j$, $v_{i,j}$, are given by:
+Changes to the association from stimulus $i$ to $j$, 
+$v_{i,j}$, are given by:
 
 $$
 \tag{Eq.2}
 \Delta v_{i,j} = \alpha_i \beta_j (\lambda_j - e_j)
 $$
 
-where $\alpha_i$ is the associability of  stimulus $i$, $\beta_j$ is a learning rate parameter determined by the properties of $j$[^note1], and $\lambda_j$ is a the maximum association strength supported by $j$ (the asymptote).
+where $\alpha_i$ is the associability of  stimulus $i$, 
+$\beta_j$ is a learning rate parameter determined by the 
+properties of $j$[^note1], and $\lambda_j$ is a the maximum 
+association strength supported by $j$ (the asymptote).
 
 ## 3 - Generating responses
 
-There is no specification of response-generating mechanisms in RW1972. However, the simplest response function that can be adopted is the identity function on stimulus expectations. If so, the responses reflecting the nature of $j$, $r_j$, are given by:
+There is no specification of response-generating 
+mechanisms in RW1972. However, the simplest response function 
+that can be adopted is the identity function on stimulus 
+expectations. If so, the responses reflecting the nature 
+of $j$, $r_j$, are given by:
 
 $$
 \tag{Eq.3}
@@ -46,6 +60,8 @@ r_j = e_j
 $$
 
 [^note1]: 
-The implementation of RW1972 allows the specification of independent $\beta$ values for present and absent stimuli (`beta_on` and `beta_off`, respectively).
+The implementation of RW1972 allows the specification 
+of independent $\beta$ values for present and absent 
+stimuli (`beta_on` and `beta_off`, respectively).
 
 ### References

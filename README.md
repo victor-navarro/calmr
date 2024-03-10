@@ -1,6 +1,6 @@
 # calm
 
-Canonical Associative Learning Models in R
+Canonical Associative Learning Models
 
 ## Installation
 
@@ -8,7 +8,7 @@ You will need devtools to install this package from github. If you do not have i
 
 `install.packages("devtools")`
 
-Afterwards, you can install directly from this repository via:
+Afterward, you can install directly from this repository via:
 
 `devtools::install_github("victor-navarro/calm", build_vignettes = TRUE)`
 
@@ -16,11 +16,11 @@ If you managed to build the vignettes, there's a vignette showing the basics of 
 
 `vignette("calm_basics", package = "calm")`
 
-If you just want to do some quick simulating, launch the visual interface via:
+If you want to do some simulations using the companion app, you must install the `calm.app` package and then launch the app.
 
 ```
-library(calm)
-app()
+devtools::install_github("victor-navarro/calm.app")
+calm.app::launch_app()
 ```
 
 ## Try the online Shiny app

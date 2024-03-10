@@ -43,6 +43,3 @@ exper <- make_experiment(df,
 )
 run_experiment(exper)
 }
-\seealso{
-\code{\link{get_exp_opts}}
-}

@@ -17,12 +17,10 @@
 #'   P1 = c("2(A)>(US)/1B>(US)", "1(A)>(US)/2B>(US)"),
 #'   R1 = TRUE
 #' )
-#' exp <- parse_design(exp)
 #' models <- c("HD2022", "RW1972", "PKH1982")
 #' parameters <- sapply(models, get_parameters, design = exp)
 #' exp_res <- compare_models(exp,
-#'   models = models,
-#'   parameters = parameters
+#'   models = models
 #' )
 #' comparisons <- list(
 #'   "HD2022" = c("vs"),
@@ -31,7 +29,7 @@
 #' )
 #' res <- rsa(exp_res, comparisons = comparisons)
 #' test(res, n_samples = 100)
-rsa <- function(x, comparisons, .test = FALSE, ...) {
+rsa <- function(x, comparisons, test = FALSE, ...) {
   # Assert the comparisons list is named
   modnames <- names(comparisons)
   if (!length(modnames)) {
@@ -84,7 +82,7 @@ rsa <- function(x, comparisons, .test = FALSE, ...) {
     args = list(comparisons = comparisons, ...)
   )
 
-  if (.test) {
+  if (test) {
     obj <- .rsa_test(obj)
   }
   obj

@@ -4,6 +4,7 @@
 \alias{show,CalmFit-method}
 \alias{predict,CalmFit-method}
 \alias{NLL}
+\alias{NLL,CalmFit-method}
 \alias{AIC,CalmFit-method}
 \alias{BIC,CalmFit-method}
 \title{CalmFit Methods}
@@ -14,6 +15,8 @@
 
 NLL(object)
 
+\S4method{NLL}{CalmFit}(object)
+
 \S4method{AIC}{CalmFit}(object, k = 2)
 
 \S4method{BIC}{CalmFit}(object)
@@ -23,10 +26,14 @@ NLL(object)
 
 \item{type}{A string specifying the type of prediction to generate}
 
+\item{...}{Additional arguments}
+
 \item{k}{Penalty term}
 }
 \description{
 CalmFit Methods
+
+CalmFit methods
 }
 \details{
 The AIC is defined as \code{2*k - 2*-NLL}, where k is a penalty

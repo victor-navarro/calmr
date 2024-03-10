@@ -45,10 +45,11 @@ pav_inhib <- data.frame(
 )
 # set options to introduce more randomness
 pars <- get_parameters(pav_inhib, model = "HDI2020")
-opts <- get_exp_opts(iterations = 100, miniblocks = FALSE)
 exp <- make_experiment(pav_inhib,
   parameters = pars,
-  model = "HDI2020", options = opts
+  model = "HDI2020",
+  iterations = 100,
+  miniblocks = FALSE
 )
 
 # time it
@@ -58,7 +59,8 @@ end <- proc.time() - start
 end
 ```
 
-You can see the timings above, under the `elapsed` column. Let's try parallelizing now.
+You can see the timings above, under the `elapsed` column. 
+Let's try parallelizing now.
 
 ### Running an experiment in parallel
 
@@ -80,8 +82,10 @@ plan(sequential)
 ```
 
 In this case, the parallel evaluation was slower.
-The `future` package trades off ease-of-use for bulkier overheads. As those overheads tend to be constant, 
-the parallelization will have a better payoff once you run more iterations.
+The `future` package trades off ease of use for bulkier overheads. 
+As those overheads tend to be constant, 
+the parallelization will have a better payoff once you run 
+more iterations.
 
 
 

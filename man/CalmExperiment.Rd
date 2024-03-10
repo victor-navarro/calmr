@@ -10,9 +10,15 @@ S4 class for calm experiments.
 \section{Slots}{
 
 \describe{
-\item{\code{arguments}:}{A list containing arguments to run models.}
 \item{\code{design}:}{A CalmDesign object.}
+\item{\code{model}:}{A string specifying the model used.}
+\item{\code{groups}:}{A string specifying the groups in the design.}
+\item{\code{parameters}:}{A list with the parameters used, per group.}
+\item{\code{experiences}:}{A list with the experiences for the model.}
 \item{\code{results}:}{A CalmExperimentResult object.}
+\item{\code{.model}:}{Internal. The model associated with the iteration.}
+\item{\code{.group}:}{Internal. The group associated with the iteration.}
+\item{\code{.iter}:}{Internal. The iteration number.}
 }
 }
 

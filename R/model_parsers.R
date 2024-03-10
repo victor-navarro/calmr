@@ -80,13 +80,9 @@
     # renaming
     if (type %in% c("os")) {
       # the only model output that does not follow Var1 = s1, Var2 = s2
-      full_dat <- dplyr::rename(full_dat,
-        "s1" = "V2", "comp" = "V3", "s2" = "V4"
-      )
+      full_dat <- .rename(full_dat, c("V2", "V3", "V4"), c("s1", "comp", "s2"))
     } else {
-      full_dat <- dplyr::rename(full_dat,
-        "s1" = "V2", "s2" = "V3"
-      )
+      full_dat <- .rename(full_dat, c("V2", "V3"), c("s1", "s2"))
     }
   } else {
     # need to melt, but no need to name
@@ -98,7 +94,7 @@
     )
   }
   # renaming
-  full_dat <- dplyr::rename(full_dat, "trial_type" = "tn")
+  full_dat <- .rename(full_dat, "tn", "trial_type")
   # get rid of tie columns
   full_dat <- full_dat[, -c("tie")]
   # get rid of V1 if around
@@ -161,4 +157,11 @@
   }
   form <- paste0(terms, collapse = ",")
   data.table::setDT(dat)[, list("value" = mean(value)), by = form]
+}
+
+.rename <- function(x, from, to) {
+  onames <- names(x)
+  onames[onames %in% from] <- to
+  names(x) <- onames
+  x
 }

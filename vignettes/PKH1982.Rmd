@@ -12,24 +12,38 @@ vignette: >
 
 # The mathematics behind PKH1982
 
-Another departure from global error term models such as RW1972 [@rescorla_theory_1972], the PKH1982 model [@pearce_predictive_1982] does not use an error term for learning excitatory associations (but does for inhibitory associations), and ties stimulus associability ($\alpha$) to absolute global prediction error.
+Another departure from global error term models such 
+as RW1972 [@rescorla_theory_1972], the PKH1982 model 
+[@pearce_predictive_1982] does not use an error term 
+for learning excitatory associations (but does for inhibitory 
+associations), and ties stimulus associability ($\alpha$) 
+to absolute global prediction error.
 
-*note: The implementation of this model closely follows the technical note from the [CAL-R](https://www.cal-r.org/index.php?id=PHsim) group where possible. Divergences are noted.*
+*note: The implementation of this model closely 
+follows the technical note from the 
+[CAL-R](https://www.cal-r.org/index.php?id=PHsim) group where possible. 
+Divergences are noted.*
 
 ## 1 - Generating expectations
 
-Let $v_{k,j}$ denote the excitatory strength from stimulus $k$ to stimulus $j$, and $v_{k,\overline j}$ the inhibitory strength from stimulus $k$ to stimulus $j$ (effectively, a "no j" representation). On any given trial, the net expectation of stimulus $j$, $e_j$, is given by:
+Let $v_{k,j}$ denote the excitatory strength from 
+stimulus $k$ to stimulus $j$, and $v_{k,\overline j}$ the 
+inhibitory strength from stimulus $k$ to stimulus $j$ 
+(effectively, a "no j" representation). On any given trial, 
+the net expectation of stimulus $j$, $e_j$, is given by:
 
 $$
 \tag{Eq.1}
 e_j = \sum_{k}^{K}x_k v_{k,j} - \sum_{k}^{K}x_k v_{k,\overline j}
 $$
 
-where $x_k$ denotes the presence (1) or absence (0) of stimulus $k$, and the set $K$ represents all stimuli in the design.
+where $x_k$ denotes the presence (1) or absence (0) of stimulus 
+$k$, and the set $K$ represents all stimuli in the design.
 
 ## 2 - Learning associations
 
-Changes to the excitatory and inhibitory associations between stimuli are given by:
+Changes to the excitatory and inhibitory associations 
+between stimuli are given by:
 
 $$
 \tag{Eq.2a}
@@ -40,23 +54,59 @@ $$
 \Delta v_{i,\overline j} = x_i \beta_{in,j} \alpha_i  |\overline{\lambda_j}|
 $$
 
-where $\beta_{ex,j}$ and $\beta_{in,j}$ represent learning rates for excitatory and inhibitory associations, respectively, as determined by stimulus $j$, $\alpha_i$ is the associability of stimulus $i$, respectively, and $\lambda_j$ and $\overline {\lambda_j}$ are the excitatory asymptote and the overexpectation of stimulus $j$, respectively.
+where $\beta_{ex,j}$ and $\beta_{in,j}$ represent learning 
+rates for excitatory and inhibitory associations, respectively, 
+as determined by stimulus $j$, $\alpha_i$ is the associability of 
+stimulus $i$, respectively, and $\lambda_j$ and $\overline {\lambda_j}$ 
+are the excitatory asymptote and the overexpectation of stimulus $j$, 
+respectively.
 
-Importantly, $\delta_j$ in Eq.2a is a parameter that is equal to 1 if the expectation of stimulus $j$, is lower than its excitatory asymptote (i.e., $e_j < \lambda_j$), but 0 if not. This implies that the model stops strengthening $v_{i,j}$ if the expectation of $j$ is higher than its excitatory assymptote.
+Importantly, $\delta_j$ in Eq.2a is a parameter that is equal to 
+1 if the expectation of stimulus $j$, is lower than its excitatory 
+asymptote (i.e., $e_j < \lambda_j$), but 0 if not. This implies 
+that the model stops strengthening $v_{i,j}$ if the expectation of 
+$j$ is higher than its excitatory asymptote.
 
-As mentioned in the introductory note, the PKH1982 model does not learn excitatory associations via correction error. However, the model **does** learn inhibitory associations via correction error, as the overexpectation term above, $\overline {\lambda_j}$ is equal to $min(\lambda_j - e_j, 0)$, where $min$ is the minimum function. This implies $\overline {\lambda_j}$ only takes non-zero values when the expectation of $j$ is higher than its intensity on the trial ($\lambda_j$).
+As mentioned in the introductory note, the PKH1982 model 
+does not learn excitatory associations via correction error. 
+However, the model **does** learn inhibitory associations via 
+correction error, as the overexpectation term above, $\overline 
+{\lambda_j}$ is equal to $min(\lambda_j - e_j, 0)$, where $min$ 
+is the minimum function. This implies $\overline {\lambda_j}$ 
+only takes non-zero values when the expectation of $j$ is higher 
+than its intensity on the trial ($\lambda_j$).
 
 ## 3 - Learning to attend
 
-The associability parameter $\alpha_i$ changes completely from trial to trial as a function of learning (note the lack of $\Delta$ below), with the change being equal to the difference of the absolute global error, via:
+The associability parameter $\alpha_i$ changes completely 
+from trial to trial as a function of learning (note the lack 
+of $\Delta$ below), with the change being equal to the difference 
+of the absolute global error, via:
 
 $$
 \tag{Eq.3}
 \Delta \alpha_{i} = x_i \sum_{j}^{K}\gamma_j(|\lambda_j - e_j|)
 $$
-where $\gamma_j$ denotes the contribution of the prediction error based on the jth stimulus. To this regard, it is important to note that @pearce_predictive_1982 did not extend their model to account for the predictive power of within-compound associations, yet the implementation of the model in this package does. This can sometimes result in unexpected behaviour, and as such, Eq. 3 above includes the extra parameter $\gamma_j$ (defaulting to 1/K) that denotes whether the expectation of stimulus $j$ contributes to attentional learning. As such, the user can set these parameters manually in order to reflect contribution of the different experimental stimuli. For example, in a simple "AB>(US)" design, setting $\gamma_{US}$ = 1 and $\gamma_{A} = \gamma_{B} = 0$ leads to the behaviour of the original model.
+where $\gamma_j$ denotes the contribution of the 
+prediction error based on the jth stimulus. In this regard, 
+it is important to note that @pearce_predictive_1982 did not extend 
+their model to account for the predictive power of within-compound 
+associations, yet the implementation of the model in this package does. 
+This can sometimes result in unexpected behaviour, 
+and as such, Eq. 3 above includes the extra parameter 
+$\gamma_j$ (defaulting to 1/K) that denotes whether the expectation 
+of stimulus $j$ contributes to attentional learning. As such, the 
+user can set these parameters manually to reflect the contribution 
+of the different experimental stimuli. For example, in a simple 
+"AB>(US)" design, setting $\gamma_{US}$ = 1 and $\gamma_{A} = 
+\gamma_{B} = 0$ leads to the behavior of the original model.
 
-The PKH1982 model improves upon the @pearce_model_1980 model by adding an extra parameter that controls the rate at which associability changes. If we qualify the changes in associability determined by Eq.3 via $\Delta\alpha_{i}^{n}$ (meaning they happened after trial $n$), then we can quantify the total associability of stimulus $i$ after trial $n$ via:
+The PKH1982 model improves upon the @pearce_model_1980 
+model by adding an extra parameter that controls the rate 
+at which associability changes. If we qualify the changes 
+in associability determined by Eq.3 via $\Delta\alpha_{i}^{n}$ 
+(meaning they happened after trial $n$), then we can quantify the 
+total associability of stimulus $i$ after trial $n$ via:
 
 $$
 \tag{Eq.4}
@@ -66,12 +116,18 @@ $$
   \alpha_{i}^{n} & \text{, otherwise}
 \end{cases}
 $$
-where $\theta_i$ is a parameter determining both the rate at which associability decays (via $1-\theta_i$), and the rate at which increments in attention occur. Note that changes in associability only apply to stimuli presented on the trial (i.e., $x_i = 1$); attention to absent stimuli remains unchanged.
+where $\theta_i$ is a parameter determining both the 
+rate at which associability decays (via $1-\theta_i$), and the 
+rate at which increments in attention occur. Note that changes 
+in associability only apply to stimuli presented on the trial 
+(i.e., $x_i = 1$); attention to absent stimuli remains unchanged.
 
 ## 4 - Generating responses
 
-There is no specification of response-generating mechanisms in PKH1982. However, the simplest response function that can be adopted is the identity function on stimulus expectations. If so, the responses reflecting the nature of $j$, $r_j$, are given by:
-
+There is no specification of response-generating mechanisms in 
+PKH1982. However, the simplest response function that can be 
+adopted is the identity function on stimulus expectations. If so, 
+the responses reflecting the nature of $j$, $r_j$, are given by:
 
 $$
 \tag{Eq.5}

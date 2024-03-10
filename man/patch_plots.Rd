@@ -14,5 +14,5 @@ patch_plots(plots, selection = NULL, plot_options = get_plot_opts())
 \item{plot_options}{A list of plot options as returned by \code{get_plot_opts}}
 }
 \description{
-Convenience function to patch plots with cowplot
+Convenience function to patch plots with \code{patchwork}
 }

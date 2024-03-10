@@ -26,7 +26,8 @@ knitr::opts_chunk$set(
 
 ## Time models in calm
 
-Version 0.5 of `calm` introduced its first time-based model, ANCCR [@jeong_mesolimbic_2022], and with it, 
+Version 0.5 of `calm` introduced its first time-based model, 
+ANCCR [@jeong_mesolimbic_2022], and with it, 
 I wrote several additional tools for future models.
 
 #### Changes to trial-based models
@@ -59,7 +60,7 @@ pars <- get_parameters(fpfn, model = "ANCCR")
 # increase learning rates
 pars$alpha_reward <- 0.8
 pars$alpha <- 0.08
-# increase sampling interval
+# increase sampling interval to speed up the model
 pars$sampling_interval <- 5
 pars
 ```

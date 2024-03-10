@@ -50,6 +50,7 @@ setMethod("show", "CalmFit", function(object) {
 
 #' @param object A CalmFit
 #' @param type A string specifying the type of prediction to generate
+#' @param ... Additional arguments
 #' @rdname CalmFit-methods
 #' @export
 setMethod(
@@ -64,11 +65,14 @@ setMethod(
 )
 
 #### GOF methods ####
+#' CalmFit methods
+#' @param object A CalmFit
+#' @rdname CalmFit-methods
 setGeneric("NLL", function(object, ...) standardGeneric("NLL"))
+NLL <- function(object) NULL # nolint: object_name_linter.
 #' @param object A CalmFit
 #' @rdname CalmFit-methods
 #' @export
-NLL <- function(object) NULL # nolint: object_name_linter.
 setMethod("NLL", "CalmFit", function(object) {
   object@nloglik
 })

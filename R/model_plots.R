@@ -23,7 +23,7 @@ calm_model_plot <- function(dat, type) {
     ggplot2::stat_summary(geom = "line", fun = "mean"),
     ggplot2::stat_summary(
       geom = "point",
-      fun = "mean", position = ggbeeswarm::position_quasirandom()
+      fun = "mean"
     )
   )
 
@@ -189,7 +189,7 @@ get_plot_opts <- function(common_scale = TRUE) {
 
 #' Patch Calm plots
 #'
-#' @description Convenience function to patch plots with cowplot
+#' @description Convenience function to patch plots with `patchwork`
 #' @param plots A list of named plots, as returned by `calm::plot`
 #' @param selection A character or numeric vector determining the plots to patch
 #' @param plot_options A list of plot options as returned by `get_plot_opts`
@@ -216,14 +216,14 @@ patch_plots <- function(
     selection <- pnames[selection]
   }
 
-  cow <- NULL
+  patch <- NULL
   if (length(selection)) {
     plots <- plots[selection]
     # if we want common scales
     if (plot_options$common_scale && length(selection) > 1) {
       plots <- plot_common_scale(plots)
     }
-    cow <- cowplot::plot_grid(plotlist = plots)
+    patch <- patchwork::wrap_plots(plots)
   }
-  cow
+  patch
 }

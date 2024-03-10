@@ -1,9 +1,15 @@
 #' S4 class for calm experiments.
 #' @section Slots:
 #' \describe{
-#' \item{\code{arguments}:}{A list containing arguments to run models.}
 #' \item{\code{design}:}{A CalmDesign object.}
+#' \item{\code{model}:}{A string specifying the model used.}
+#' \item{\code{groups}:}{A string specifying the groups in the design.}
+#' \item{\code{parameters}:}{A list with the parameters used, per group.}
+#' \item{\code{experiences}:}{A list with the experiences for the model.}
 #' \item{\code{results}:}{A CalmExperimentResult object.}
+#' \item{\code{.model}:}{Internal. The model associated with the iteration.}
+#' \item{\code{.group}:}{Internal. The group associated with the iteration.}
+#' \item{\code{.iter}:}{Internal. The iteration number.}
 #' }
 #' @rdname CalmExperiment
 #' @exportClass CalmExperiment
@@ -26,6 +32,7 @@ methods::setClass(
 
 show <- methods::show
 #' @title CalmExperiment methods
+#' @param object A CalmExperiment object
 #' @rdname CalmExperiment-methods
 #' @export
 setMethod("show", "CalmExperiment", function(object) {
@@ -49,7 +56,6 @@ methods::setMethod("design", "CalmExperiment", function(x) {
 })
 
 #' @export
-#' @aliases trials
 #' @rdname CalmExperiment-methods
 methods::setMethod("trials", "CalmExperiment", function(object) {
   trials(object@design)
@@ -108,9 +114,12 @@ methods::setMethod("parameters<-", "CalmExperiment", function(x, value) {
   x
 })
 
-methods::setGeneric("experiences", function(x) standardGeneric("experiences"))
+methods::setGeneric(
+  "experiences",
+  function(x) standardGeneric("experiences")
+)
 #' @rdname CalmExperiment-methods
-#' @aliases experience
+#' @aliases experiences
 #' @export
 methods::setMethod(
   "experiences", "CalmExperiment",
@@ -195,6 +204,7 @@ methods::setMethod(
 )
 
 #' @rdname CalmExperiment-methods
+#' @param ... Extra parameters.
 #' @export
 methods::setMethod(
   "aggregate", "CalmExperiment",
@@ -211,8 +221,8 @@ methods::setMethod(
   }
 )
 
-setGeneric("plot", function(x, y, ...) methods::standardGeneric("plot"))
 
+setGeneric("plot", function(x, y, ...) methods::standardGeneric("plot"))
 #' Plot CalmExperiment
 #'
 #' Creates plots (or plot) with aggregated results in CalmExperiment
@@ -258,13 +268,14 @@ setMethod(
     plots
   }
 )
-
-setGeneric("graph", function(x, ...) standardGeneric("graph"))
 #' Graph CalmExperiment
 #' @param x A CalmExperiment
 #' @param ... Additional parameters passed to `graph_calm_model`
+#' @rdname CalmExperiment-methods
+setGeneric("graph", function(x, ...) standardGeneric("graph"))
+#' @rdname CalmExperiment-methods
+#' @aliases graph,CalmExperiment
 #' @export
-#' @rdname graph
 setMethod("graph", "CalmExperiment", function(x, ...) {
   if (is.null(x@results@aggregated_results)) {
     stop("Experiment does not contain aggregated results.

@@ -5,13 +5,12 @@
 \alias{design,CalmExperiment-method}
 \alias{design}
 \alias{trials,CalmExperiment-method}
-\alias{trials}
 \alias{parameters<-}
 \alias{parameters}
 \alias{parameters,CalmExperiment-method}
 \alias{parameters<-,CalmExperiment-method}
 \alias{experiences,CalmExperiment-method}
-\alias{experience}
+\alias{experiences}
 \alias{results,CalmExperiment-method}
 \alias{results}
 \alias{raw_results,CalmExperiment-method}
@@ -24,6 +23,9 @@
 \alias{aggregate,CalmExperiment-method}
 \alias{plot,CalmExperiment-method}
 \alias{plot}
+\alias{graph}
+\alias{graph,CalmExperiment-method}
+\alias{graph,CalmExperiment}
 \title{CalmExperiment methods}
 \usage{
 \S4method{show}{CalmExperiment}(object)
@@ -55,11 +57,19 @@ parse(object)
 \S4method{aggregate}{CalmExperiment}(x, ...)
 
 \S4method{plot}{CalmExperiment}(x, type = NULL, ...)
+
+graph(x, ...)
+
+\S4method{graph}{CalmExperiment}(x, ...)
 }
 \arguments{
-\item{x}{An object of class \code{\link{CalmExperiment-class}}.}
+\item{object}{A CalmExperiment object}
+
+\item{x}{A CalmExperiment}
 
 \item{value}{A list of parameter lists.}
+
+\item{...}{Additional parameters passed to \code{graph_calm_model}}
 
 \item{type}{character vector specifying the types of plots to create.
 See ??supported_plots. Defaults to NULL.}

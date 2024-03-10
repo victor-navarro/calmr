@@ -9,24 +9,23 @@ URL: https://github.com/victor-navarro/calm, https://victornavarro.org/calm/
 BugReports: https://github.com/victor-navarro/calm/issues
 Imports: 
     data.table,
-    dplyr,
     future,
     future.apply,
     GA,
-    methods,
-    progress,
     progressr,
-    rlang
+    rlang,
+    patchwork,
+    ggnetwork,
+    ggplot2,
+    network,
+    methods
 Suggests: 
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
-    cowplot,
-    ggbeeswarm,
-    ggnetwork,
-    ggplot2,
-    network,
-    spelling
+    spelling,
+    dplyr,
+    tidyr
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3
@@ -44,7 +43,6 @@ Collate:
     'rsa_functions.R'
     'RW1972.R'
     'SM2007.R'
-    'app.R'
     'compare_models.R'
     'data.R'
     'fit_helpers.R'
@@ -56,7 +54,6 @@ Collate:
     'parse_design.R'
     'run_experiment.R'
     'phase_parser.R'
-    'utils-pipe.R'
     'information_functions.R'
     'make_experiment.R'
     'assertions.R'

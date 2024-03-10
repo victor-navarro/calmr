@@ -1,6 +1,6 @@
 df <- data.frame(
   Group = "X",
-  P1 = "2AB(US)",
+  P1 = "2A(US)",
   R1 = TRUE
 )
 df <- parse_design(df)
@@ -28,14 +28,14 @@ for (m in models) {
 plots <- plot(res)
 pnames <- names(plots)
 test_that("patch_plot works with names", {
-  expect_named(patch_plots(plots, pnames))
+  expect_true(inherits(patch_plots(plots, pnames), "patchwork"))
 })
 test_that("patch_plot works with numbers", {
-  expect_named(patch_plots(plots, c(1, 1)))
+  expect_true(inherits(patch_plots(plots, c(1, 1)), "patchwork"))
 })
 test_that("patch_plot works with singles", {
-  expect_named(patch_plots(plots, pnames[1]))
-  expect_named(patch_plots(plots, 2))
+  expect_true(inherits(patch_plots(plots, pnames[1]), "patchwork"))
+  expect_true(inherits(patch_plots(plots, 2), "patchwork"))
 })
 test_that("patch_plot throws error with bad names", {
   expect_error(patch_plots(plots, c("bad_name", "my_plot")))

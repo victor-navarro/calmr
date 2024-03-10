@@ -24,7 +24,7 @@ methods::setClass(
 methods::setMethod(
   "show", "CalmDesign",
   function(object) {
-    cat("CalmrDesign built from data.frame:\n")
+    cat("CalmDesign built from data.frame:\n")
     print(object@raw_design)
     cat("----------------\n")
     cat("Trials detected:\n")

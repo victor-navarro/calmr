@@ -19,17 +19,21 @@
 
 calm_model_graph <- function(
     x, loops = TRUE,
-    limits = max(abs(x$value)) * c(-1, 1), colour_key = FALSE,
+    limits = max(abs(x$value)) * c(-1, 1),
+    colour_key = FALSE,
     t = max(x$trial),
     options = get_graph_opts(), ...) {
+  trial <- value <- NULL # local binding
   # check if trial is valid
   if (t > max(x$trial)) {
     warning("Requested trial exceeds that found in data. Using last trial.")
     t <- max(x$trial)
   }
   # aggregate data
-  x <- stats::aggregate(value ~ s1 + s2, mean, data = x[x$trial == t, ])
-  x <- dplyr::rename(x, "from" = "s1", "to" = "s2")
+  x <- data.table::setDT(x)[trial == t,
+    list("value" = mean(value)),
+    by = "s1,s2"
+  ]
   # determine limits
   if (is.null(limits)) {
     limits <- max(abs(x$value)) * c(-1, 1)
@@ -76,7 +80,7 @@ calm_model_graph <- function(
 
 #' Patch Calm graphs
 #'
-#' @description Convenience function to patch graphs with cowplot
+#' @description Convenience function to patch graphs with `patchwork`
 #' @param graphs A list of named graphs, as returned by `calm::graph`
 #' @param selection A character or numeric vector determining the plots to patch
 #' @export
@@ -91,12 +95,12 @@ patch_graphs <- function(graphs, selection = names(graphs)) {
     ), gnames
   )
   graphs <- graphs[selection]
-  cow <- cowplot::plot_grid(plotlist = graphs)
-  cow
+  patch <- patchwork::wrap_plots(graphs)
+  patch
 }
 
 #' Get options for calm graph
-#' @param size A character (one of "small" or "large")
+#' @param graph_size A character (one of "small" or "large")
 #' to return default values for small or large graphs
 #' @return A list with graph options, to be passed to `ggnetwork::geom_nodes`
 #' @export
