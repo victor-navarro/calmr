@@ -14,4 +14,5 @@ Whether to show verbosity messages and progress bars
 }
 \note{
 Progress bars are handled by the progressr package.
+This is just a convenience function.
 }

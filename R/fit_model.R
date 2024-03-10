@@ -1,23 +1,15 @@
 #' Fit model to data
 #' @description Obtain MLE estimates for model, given data
 #' @param data A numeric vector containing data to fit model against.
-#' @param model_function A function that runs the model and returns data.frame of r-values, organized as data.
-#' @param optimizer_options A list with options for the optimizer, as returned by get_optimizer_opts.
-#' @param file A path to save the model fit. If the arguments to the fit call are found to be identical to those in the file, the model just gets loaded.
+#' @param model_function A function that runs the model and
+#' returns data.frame of r-values, organized as data.
+#' @param optimizer_options A list with options for the
+#' optimizer, as returned by get_optimizer_opts.
+#' @param file A path to save the model fit. If the arguments
+#' to the fit call are found to be identical to those in the file,
+#' the model just gets loaded.
 #' @param ... Extra parameters passed to the optimizer call
-#' @return A list with
-#' \itemize{
-#' \item {nloglik: the negative log-likelihood of the model}
-#' \item {best_pars: the MLE parameters}
-#' \item {model_pars: the model-specific MLE parameters}
-#' \item {link_pars: the link-specific MLE parameters}
-#' \item {data: the data used to fit the model}
-#' \item {model_function: the model function supplied by the user}
-#' \item {link_function: the link function used during the process}
-#' \item {ll_function: the log-likelihood function used during the search process}
-#' \item {optimizer_options: the optimizer options supplied by the user}
-#' \item {extra_pars: any extra parameters passed to the optimizer call via ...}
-#' }
+#' @return A CalmFit object
 #' @note See the calm_fits vignette for examples
 #' @export
 #' @seealso \code{\link{get_optimizer_opts}}, \code{\link{make_experiment}}

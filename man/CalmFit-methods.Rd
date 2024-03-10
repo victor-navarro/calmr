@@ -13,7 +13,7 @@
 
 \S4method{predict}{CalmFit}(object, type = "response", ...)
 
-NLL(object)
+NLL(object, ...)
 
 \S4method{NLL}{CalmFit}(object)
 

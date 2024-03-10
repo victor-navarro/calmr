@@ -69,7 +69,6 @@ setMethod(
 #' @param object A CalmFit
 #' @rdname CalmFit-methods
 setGeneric("NLL", function(object, ...) standardGeneric("NLL"))
-NLL <- function(object) NULL # nolint: object_name_linter.
 #' @param object A CalmFit
 #' @rdname CalmFit-methods
 #' @export

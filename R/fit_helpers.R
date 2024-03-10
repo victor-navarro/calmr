@@ -28,6 +28,7 @@ get_optimizer_opts <- function(model_pars,
   family_pars <- NULL
   if (family %in% c("normal", "poisson")) {
     family_pars <- paste0(family, "_scale")
+    initial_pars <- c(initial_pars, 1)
     ll <- c(ll, 0)
     ul <- c(ul, 100)
   }

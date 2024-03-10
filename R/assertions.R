@@ -6,7 +6,7 @@
         warning("No model passed. Using RW1972.")
         return("RW1972")
       } else {
-        if (!given %in% supported_models()) {
+        if (!(given %in% supported_models())) {
           stop("Model is not supported. Must be one returned by
            supported_models()")
         }
@@ -86,13 +86,6 @@
       if (length(given@design@mapping$unique_nominal_stimuli) == 1) {
         stop("Experiment is too simple to run for one or more groups.
         Please check your design.")
-      }
-    },
-    "comparator_order" = {
-      if (length(unique(given)) > 1) {
-        stop("Multiple orders for comparison process are
-        not currently supported. Please make sure the
-        orders column only contains one value.")
       }
     },
     "length" = {
