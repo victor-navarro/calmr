@@ -154,11 +154,12 @@ asymptote and the overexpectation of stimulus <span class="math inline">\(j\)</s
 is a parameter that is equal to 1 if the expectation of stimulus <span class="math inline">\(j\)</span>, is lower than its excitatory asymptote
 (i.e., <span class="math inline">\(e_j &lt; \lambda_j\)</span>), but 0
 if not. This implies that the model stops strengthening <span class="math inline">\(v_{i,j}\)</span> if the expectation of <span class="math inline">\(j\)</span> is higher than its excitatory
-assymptote.</p>
+asymptote.</p>
 <p>As mentioned in the introductory note, the PKH1982 model does not
 learn excitatory associations via correction error. However, the model
 <strong>does</strong> learn inhibitory associations via correction
-error, as the overexpectation term above, <span class="math inline">\(\overline {\lambda_j}\)</span> is equal to <span class="math inline">\(min(\lambda_j - e_j, 0)\)</span>, where <span class="math inline">\(min\)</span> is the minimum function. This implies
+error, as the overexpectation term above, <span class="math inline">\(\overline
+{\lambda_j}\)</span> is equal to <span class="math inline">\(min(\lambda_j - e_j, 0)\)</span>, where <span class="math inline">\(min\)</span> is the minimum function. This implies
 <span class="math inline">\(\overline {\lambda_j}\)</span> only takes
 non-zero values when the expectation of <span class="math inline">\(j\)</span> is higher than its intensity on the
 trial (<span class="math inline">\(\lambda_j\)</span>).</p>
@@ -173,7 +174,7 @@ equal to the difference of the absolute global error, via:</p>
 \tag{Eq.3}
 \Delta \alpha_{i} = x_i \sum_{j}^{K}\gamma_j(|\lambda_j - e_j|)
 \]</span> where <span class="math inline">\(\gamma_j\)</span> denotes
-the contribution of the prediction error based on the jth stimulus. To
+the contribution of the prediction error based on the jth stimulus. In
 this regard, it is important to note that <span class="citation">Pearce
 et al. (1982)</span> did not extend their model to account for the
 predictive power of within-compound associations, yet the implementation
@@ -181,10 +182,10 @@ of the model in this package does. This can sometimes result in
 unexpected behaviour, and as such, Eq. 3 above includes the extra
 parameter <span class="math inline">\(\gamma_j\)</span> (defaulting to
 1/K) that denotes whether the expectation of stimulus <span class="math inline">\(j\)</span> contributes to attentional learning. As
-such, the user can set these parameters manually in order to reflect
+such, the user can set these parameters manually to reflect the
 contribution of the different experimental stimuli. For example, in a
-simple “AB&gt;(US)” design, setting <span class="math inline">\(\gamma_{US}\)</span> = 1 and <span class="math inline">\(\gamma_{A} = \gamma_{B} = 0\)</span> leads to the
-behaviour of the original model.</p>
+simple “AB&gt;(US)” design, setting <span class="math inline">\(\gamma_{US}\)</span> = 1 and <span class="math inline">\(\gamma_{A} =
+\gamma_{B} = 0\)</span> leads to the behavior of the original model.</p>
 <p>The PKH1982 model improves upon the <span class="citation">Pearce
 &amp; Hall (1980)</span> model by adding an extra parameter that
 controls the rate at which associability changes. If we qualify the

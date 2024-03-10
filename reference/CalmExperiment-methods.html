@@ -79,10 +79,7 @@
 <span><span class="fu">design</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for CalmExperiment</span></span>
-<span><span class="fu">arguments</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for CalmExperiment</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, recursive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="CalmDesign-methods.html">trials</a></span><span class="op">(</span><span class="va">object</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">parameters</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
 <span></span>
@@ -92,13 +89,8 @@
 <span><span class="co"># S4 method for CalmExperiment</span></span>
 <span><span class="fu">parameters</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
 <span></span>
-<span><span class="fu">experience</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
-<span></span>
 <span><span class="co"># S4 method for CalmExperiment</span></span>
-<span><span class="fu">experience</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for CalmExperiment</span></span>
-<span><span class="fu">experience</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
+<span><span class="fu">experiences</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for CalmExperiment</span></span>
 <span><span class="fu">results</span><span class="op">(</span><span class="va">object</span><span class="op">)</span></span>
@@ -121,25 +113,30 @@
 <span><span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for CalmExperiment</span></span>
-<span><span class="fu">plot</span><span class="op">(</span><span class="va">x</span>, type <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">plot</span><span class="op">(</span><span class="va">x</span>, type <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">graph</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for CalmExperiment</span></span>
+<span><span class="fu">graph</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
-<dd><p>An object of class <code><a href="CalmExperiment.html">CalmExperiment-class</a></code>.</p></dd>
+    <dl><dt>object</dt>
+<dd><p>A CalmExperiment object</p></dd>
 
 
-<dt>...</dt>
-<dd><p>Objects to concatenate</p></dd>
-
-
-<dt>recursive</dt>
-<dd><p>Unused</p></dd>
+<dt>x</dt>
+<dd><p>A CalmExperiment</p></dd>
 
 
 <dt>value</dt>
-<dd><p>A list of experiences.</p></dd>
+<dd><p>A list of parameter lists.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Additional parameters passed to <code>graph_calm_model</code></p></dd>
 
 
 <dt>type</dt>
@@ -158,27 +155,6 @@ See ??supported_plots. Defaults to NULL.</p></dd>
     <p>With type = NULL, all supported plots are returned.</p>
     </div>
 
-    <div class="section level2">
-    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Concatenate experiments</span></span></span>
-<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_design.html">get_design</a></span><span class="op">(</span><span class="st">"blocking"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">mods</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RW1972"</span>, <span class="st">"MAC1975"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">exs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">mods</span>, <span class="kw">function</span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="make_experiment.html">make_experiment</a></span><span class="op">(</span><span class="va">df</span>, parameters <span class="op">=</span> <span class="fu"><a href="get_parameters.html">get_parameters</a></span><span class="op">(</span><span class="va">df</span>, model <span class="op">=</span> <span class="va">m</span><span class="op">)</span>, model <span class="op">=</span> <span class="va">m</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># joining separate experiments</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">exs</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="va">exs</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   iteration model   group    experience    mapping           parameters      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>         1 RW1972  Blocking <span style="color: #949494;">&lt;df [21 × 7]&gt;</span> <span style="color: #949494;">&lt;named list [12]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>         1 RW1972  Control  <span style="color: #949494;">&lt;df [11 × 7]&gt;</span> <span style="color: #949494;">&lt;named list [12]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>         1 MAC1975 Blocking <span style="color: #949494;">&lt;df [21 × 7]&gt;</span> <span style="color: #949494;">&lt;named list [12]&gt;</span> <span style="color: #949494;">&lt;named list [8]&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>         1 MAC1975 Control  <span style="color: #949494;">&lt;df [11 × 7]&gt;</span> <span style="color: #949494;">&lt;named list [12]&gt;</span> <span style="color: #949494;">&lt;named list [8]&gt;</span></span>
-<span class="r-in"><span><span class="co"># joining a list of experiments</span></span></span>
-<span class="r-in"><span><span class="va">joint</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">c</span>, <span class="va">exs</span><span class="op">)</span></span></span>
-</code></pre></div>
-    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

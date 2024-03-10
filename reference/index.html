@@ -92,7 +92,7 @@
         <dd>Augment CalmDesign</dd>
       </dl><dl><dt>
           
-          <code><a href="CalmExperiment-methods.html">show(<i>&lt;CalmExperiment&gt;</i>)</a></code> <code><a href="CalmExperiment-methods.html">design(<i>&lt;CalmExperiment&gt;</i>)</a></code> <code><a href="CalmExperiment-methods.html">arguments(<i>&lt;CalmExperiment&gt;</i>)</a></code> <code><a href="CalmExperiment-methods.html">c(<i>&lt;CalmExperiment&gt;</i>)</a></code> <code><a href="CalmExperiment-methods.html">`parameters&lt;-`()</a></code> <code><a href="CalmExperiment-methods.html">parameters(<i>&lt;CalmExperiment&gt;</i>)</a></code> <code><a href="CalmExperiment-methods.html">`experience&lt;-`()</a></code> <code><a href="CalmExperiment-methods.html">experience(<i>&lt;CalmExperiment&gt;</i>)</a></code> <code><a href="CalmExperiment-methods.html">results(<i>&lt;CalmExperiment&gt;</i>)</a></code> <code><a href="CalmExperiment-methods.html">raw_results(<i>&lt;CalmExperiment&gt;</i>)</a></code> <code><a href="CalmExperiment-methods.html">parsed_results(<i>&lt;CalmExperiment&gt;</i>)</a></code> <code><a href="CalmExperiment-methods.html">length(<i>&lt;CalmExperiment&gt;</i>)</a></code> <code><a href="CalmExperiment-methods.html">parse()</a></code> <code><a href="CalmExperiment-methods.html">aggregate(<i>&lt;CalmExperiment&gt;</i>)</a></code> <code><a href="CalmExperiment-methods.html">plot(<i>&lt;CalmExperiment&gt;</i>)</a></code> 
+          <code><a href="CalmExperiment-methods.html">show(<i>&lt;CalmExperiment&gt;</i>)</a></code> <code><a href="CalmExperiment-methods.html">design(<i>&lt;CalmExperiment&gt;</i>)</a></code> <code><a href="CalmExperiment-methods.html">trials(<i>&lt;CalmExperiment&gt;</i>)</a></code> <code><a href="CalmExperiment-methods.html">`parameters&lt;-`()</a></code> <code><a href="CalmExperiment-methods.html">parameters(<i>&lt;CalmExperiment&gt;</i>)</a></code> <code><a href="CalmExperiment-methods.html">experiences(<i>&lt;CalmExperiment&gt;</i>)</a></code> <code><a href="CalmExperiment-methods.html">results(<i>&lt;CalmExperiment&gt;</i>)</a></code> <code><a href="CalmExperiment-methods.html">raw_results(<i>&lt;CalmExperiment&gt;</i>)</a></code> <code><a href="CalmExperiment-methods.html">parsed_results(<i>&lt;CalmExperiment&gt;</i>)</a></code> <code><a href="CalmExperiment-methods.html">length(<i>&lt;CalmExperiment&gt;</i>)</a></code> <code><a href="CalmExperiment-methods.html">parse()</a></code> <code><a href="CalmExperiment-methods.html">aggregate(<i>&lt;CalmExperiment&gt;</i>)</a></code> <code><a href="CalmExperiment-methods.html">plot(<i>&lt;CalmExperiment&gt;</i>)</a></code> <code><a href="CalmExperiment-methods.html">graph()</a></code> 
         </dt>
         <dd>CalmExperiment methods</dd>
       </dl><dl><dt>
@@ -122,12 +122,12 @@
         <dd>S4 class for Calm representational similarity analysis</dd>
       </dl><dl><dt>
           
-          <code><a href="CalmRSA-methods.html">show(<i>&lt;CalmRSA&gt;</i>)</a></code> 
+          <code><a href="CalmRSA-methods.html">show(<i>&lt;CalmRSA&gt;</i>)</a></code> <code><a href="CalmRSA-methods.html">test()</a></code> <code><a href="CalmRSA-methods.html">plot(<i>&lt;CalmRSA&gt;</i>)</a></code> 
         </dt>
         <dd>CalmRSA Methods</dd>
       </dl><dl><dt>
           
-          <code><a href="CalmResult-methods.html">show(<i>&lt;CalmResult&gt;</i>)</a></code> <code><a href="CalmResult-methods.html">c(<i>&lt;CalmExperimentResult&gt;</i>)</a></code> 
+          <code><a href="CalmResult-methods.html">show(<i>&lt;CalmResult&gt;</i>)</a></code> 
         </dt>
         <dd>Methods for CalmResult</dd>
       </dl><dl><dt>
@@ -162,9 +162,9 @@
         <dd>Train the RAND model</dd>
       </dl><dl><dt>
           
-          <code><a href="RSA.html">test(<i>&lt;CalmRSA&gt;</i>)</a></code> <code><a href="RSA.html">plot(<i>&lt;CalmRSA&gt;</i>)</a></code> 
+          <code><a href="RSA.html">rsa()</a></code> 
         </dt>
-        <dd>Test CalmRSA object via permutation test</dd>
+        <dd>Perform representational similarity analysis on CalmExperiment</dd>
       </dl><dl><dt>
           
           <code><a href="RW1972.html">RW1972()</a></code> 
@@ -175,11 +175,6 @@
           <code><a href="SM2007.html">SM2007()</a></code> 
         </dt>
         <dd>Train the SM2007 model</dd>
-      </dl><dl><dt>
-          
-          <code><a href="app.html">app()</a></code> 
-        </dt>
-        <dd>Run the calm shiny application</dd>
       </dl><dl><dt>
           
           <code><a href="calm_model_plot.html">calm_model_plot()</a></code> 
@@ -207,11 +202,6 @@
         <dd>Get basic designs</dd>
       </dl><dl><dt>
           
-          <code><a href="get_exp_opts.html">get_exp_opts()</a></code> 
-        </dt>
-        <dd>Get options for an experiment</dd>
-      </dl><dl><dt>
-          
           <code><a href="get_graph_opts.html">get_graph_opts()</a></code> 
         </dt>
         <dd>Get options for calm graph</dd>
@@ -227,7 +217,7 @@
         <dd>Get model parameters</dd>
       </dl><dl><dt>
           
-          <code><a href="graph.html">calm_model_graph()</a></code> <code><a href="graph.html">graph(<i>&lt;CalmExperiment&gt;</i>)</a></code> 
+          <code><a href="graph.html">calm_model_graph()</a></code> 
         </dt>
         <dd>Create a graph with calm data</dd>
       </dl><dl><dt>
@@ -265,11 +255,6 @@
           <code><a href="phase_parser.html">phase_parser()</a></code> 
         </dt>
         <dd>Parses a phase string</dd>
-      </dl><dl><dt>
-          
-          <code><a href="rsa-CalmExperiment-method.html">rsa(<i>&lt;CalmExperiment&gt;</i>)</a></code> 
-        </dt>
-        <dd>Perform representational similarity analysis on CalmExperiment</dd>
       </dl><dl><dt>
           
           <code><a href="run_experiment.html">run_experiment()</a></code> 

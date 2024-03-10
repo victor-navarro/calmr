@@ -192,7 +192,7 @@ c<strong>h</strong>ained associative strength towards stimulus <span class="math
 <h4 id="combined-associative-strength">2.1 - Combined associative strength<a class="anchor" aria-label="anchor" href="#combined-associative-strength"></a>
 </h4>
 <p>The quantity <span class="math inline">\(o_{j,M}\)</span> is the
-result of combining the associative strength of forwards and backwards
+result of combining the associative strength of forward and backward
 associations to and from stimulus <span class="math inline">\(j\)</span>
 as</p>
 <p><span class="math display">\[
@@ -200,14 +200,14 @@ as</p>
 o_{j,M} = \sum_{m \neq j}^{M}v_{m,j} + \left(\frac{\sum_{m \neq
 j}^{M}v_{m,j} \sum_{m \neq j}^{M}v_{j,m}}{c}\right)
 \]</span></p>
-<p>where each of the sums above run over all stimuli <span class="math inline">\(M\)</span> presented in the trial, that are also
-different from stimulus <span class="math inline">\(j\)</span>.<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;An alternative formulation of this equation could be
+<p>where each of the sums above run over all stimuli <span class="math inline">\(M\)</span> presented in the trial, different from
+stimulus <span class="math inline">\(j\)</span>.<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;An alternative formulation of this equation could be
 &lt;span class="math inline"&gt;\(\sum_{m \neq j}^{M} v_{m,j} + (v_{m,j}
 v_{j,m})\)&lt;/span&gt; but, although this alternative formulation is
 positively related to Eq. 5, we have not compared their behavior
-exhaustively.&lt;/p&gt;'><sup>2</sup></a> The left
-hand term describes how the forward associations from stimuli <span class="math inline">\(M\)</span> to <span class="math inline">\(j\)</span> affect the representation of <span class="math inline">\(j\)</span>, whereas the right hand term describes
-how the backward associations that <span class="math inline">\(j\)</span> has with stimuli <span class="math inline">\(M\)</span> affect its own representation (although
+exhaustively.&lt;/p&gt;'><sup>2</sup></a> The left-hand term
+describes how the forward associations from stimuli <span class="math inline">\(M\)</span> to <span class="math inline">\(j\)</span> affect the representation of <span class="math inline">\(j\)</span>, whereas the right-hand term describes
+how the backward associations that <span class="math inline">\(j\)</span> has with stimuli <span class="math inline">\(M\)</span> affect its representation (although
 these are modulated by the forward associations themselves).</p>
 </div>
 <div class="section level4">
@@ -226,17 +226,19 @@ stimulus <span class="math inline">\(j\)</span>, as long as they have an
 association with present stimuli <span class="math inline">\(M\)</span>.</p>
 <p>In Honey and Dwyer (2022), the authors specify a similarity-based
 mechanism that modulates the effect of associative chains according to
-the similarity of the salience of nominal and retrieved stimuli. As
-such, Eq. 6a is expanded as:</p>
+the similarity of the salience of nominal and retrieved stimuli<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;This mechanism is in model &lt;code&gt;HD2022&lt;/code&gt; but not
+in model &lt;code&gt;HDI2020&lt;/code&gt;&lt;/p&gt;"><sup>3</sup></a>. As such,
+Eq. 6a is expanded as:</p>
 <p><span class="math display">\[
 \tag{Eq. 6b}
 h_{j,M} = \sum_{m \neq j}^{M} \sum_{n}^{N}S(\alpha_{n},
 \alpha'_n)\frac{v_{m,n}o_{j,n}}{c}
 \]</span></p>
 <p>where <span class="math inline">\(S\)</span> is a similarity function
-that takes the nominal salience of stimulus n, <span class="math inline">\(\alpha_n\)</span> (as perceived when <span class="math inline">\(n\)</span> is actually presented on a trial) and
-its retrieved salience, <span class="math inline">\(\alpha'_n\)</span> (as perceived when <span class="math inline">\(n\)</span> is retrieved via other stimuli M, see
-ahead). This function is defined as:</p>
+that takes the nominal salience of stimulus n, <span class="math inline">\(\alpha_n\)</span> (as perceived when <span class="math inline">\(n\)</span> is presented on a trial) and its
+retrieved salience, <span class="math inline">\(\alpha'_n\)</span>
+(as perceived when <span class="math inline">\(n\)</span> is retrieved
+via other stimuli M, see ahead). This function is defined as:</p>
 <p><span class="math display">\[
 \tag{Eq. 7}
 S(\alpha_n, \alpha'_n) = \frac{\alpha_n}{\alpha_n +
@@ -273,19 +275,19 @@ k}^{N}\frac{v_{m,n}v_{n,k}}{c}\right) \right|,&amp; \text{if } k \in N\\
     \alpha_k, &amp; \text{otherwise}
 \end{cases}
 \]</span></p>
-<p>Note that the quantity for absent stimuli is absolute, in order to
-prevent negative <span class="math inline">\(\theta\)</span> values due
-to inhibitory associations<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;An alternative, and perhaps more naturalistic
+<p>Note that the quantity for absent stimuli is absolute, to prevent
+negative <span class="math inline">\(\theta\)</span> values due to
+inhibitory associations<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;An alternative and perhaps more naturalistic
 parametrization of this rule would be to use &lt;span class="math inline"&gt;\(min[0,\theta(n)]\)&lt;/span&gt;, where &lt;span class="math inline"&gt;\(min\)&lt;/span&gt; is the minimum function and &lt;span class="math inline"&gt;\(n\)&lt;/span&gt; is an absent stimulus; ReLUs are
-extensively used in neural networks. Another alternative that avoids
-both the use of absolute values or a rectifying mechanism would be to
-use quantities of &lt;span class="math inline"&gt;\(e^{\theta(k)}\)&lt;/span&gt;
-instead of &lt;span class="math inline"&gt;\(\theta(k)\)&lt;/span&gt;.&lt;/p&gt;'><sup>3</sup></a>. Also note a summation term is used on the
+extensively used in neural networks. Another alternative that avoids the
+use of absolute values or a rectifying mechanism would be to use
+quantities of &lt;span class="math inline"&gt;\(e^{\theta(k)}\)&lt;/span&gt; instead
+of &lt;span class="math inline"&gt;\(\theta(k)\)&lt;/span&gt;.&lt;/p&gt;'><sup>4</sup></a>. Also, note a summation term is used on the
 left-hand side of the expression for an absent stimulus. It implies that
 all the present stimuli <span class="math inline">\(M\)</span>
-contribute to the salience of stimulus <span class="math inline">\(k\)</span>. Finally, note on the right side of the
-same expression that the present stimuli contribute not only via the
-direct association each of them have with <span class="math inline">\(k\)</span>, <span class="math inline">\(v_{m,k}\)</span>, but also through associative
+contribute to the salience of stimulus <span class="math inline">\(k\)</span>. Finally, note on the right-hand side
+of the same expression that the present stimuli contribute not only via
+the direct association each of them has with <span class="math inline">\(k\)</span>, <span class="math inline">\(v_{m,k}\)</span> but also through associative
 chains with other absent stimuli (c.f., Eq. 6a).</p>
 </div>
 <div class="section level3">

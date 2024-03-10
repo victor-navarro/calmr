@@ -108,7 +108,7 @@ Navarro</h4>
 <h2 id="the-mathematics-behind-mac1975">The mathematics behind MAC1975<a class="anchor" aria-label="anchor" href="#the-mathematics-behind-mac1975"></a>
 </h2>
 <p>A grand departure from global error term models such as RW1972 <span class="citation">(Rescorla &amp; Wagner, 1972)</span>, the MAC1975 model
-<span class="citation">(Mackintosh, 1975)</span> uses local error terms,
+<span class="citation">(Mackintosh, 1975)</span> uses local error terms
 and changes stimulus associability (<span class="math inline">\(\alpha\)</span>) via an error comparison mechanism
 that promotes learning about uncertain stimuli:</p>
 <div class="section level3">
@@ -160,12 +160,12 @@ attentional learning rate parameter for stimulus <span class="math inline">\(i\)
 Although Mackintosh (1975) did not extend their model to account for the
 predictive power of within-compound associations, the implementation of
 the model in this package does. This can sometimes result in unexpected
-behaviour, and as such, Eq. 3 above includes an extra parameter <span class="math inline">\(\gamma_j\)</span> (defaulting to 1/K) that denotes
+behavior, and as such, Eq. 3 above includes an extra parameter <span class="math inline">\(\gamma_j\)</span> (defaulting to 1/K) that denotes
 whether the expectation of stimulus <span class="math inline">\(j\)</span> contributes to attentional learning. As
-such, the user can set these parameters manually in order to reflect
+such, the user can set these parameters manually to reflect the
 contribution of the different experimental stimuli. For example, in a
 simple “AB&gt;(US)” design, setting <span class="math inline">\(\gamma_{US}\)</span> = 1 and <span class="math inline">\(\gamma_{A} = \gamma_{B} = 0\)</span> leads to the
-behaviour of the original model.</p>
+behavior of the original model.</p>
 </div>
 <div class="section level3">
 <h3 id="generating-responses">4 - Generating responses<a class="anchor" aria-label="anchor" href="#generating-responses"></a>

@@ -113,11 +113,15 @@ a string formatted as per phase_parser.</p></li>
 <span class="r-in"><span>  P1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"10AB(US)"</span>, <span class="st">"10A(US)"</span><span class="op">)</span>, R1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">parse_design</span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   group   phase parse_string randomize phase_info      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Group 1 P1    10AB(US)     TRUE      <span style="color: #949494;">&lt;named list [2]&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Group 2 P1    10A(US)      TRUE      <span style="color: #949494;">&lt;named list [2]&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CalmDesign built from data.frame:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Group       P1   R1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Group 1 10AB(US) TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Group 2  10A(US) TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Trials detected:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     group phase trial_names trial_repeats is_test stimuli</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Group 1    P1      AB(US)            10   FALSE  A;B;US</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Group 2    P1       A(US)            10   FALSE    A;US</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

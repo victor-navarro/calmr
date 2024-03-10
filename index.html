@@ -93,19 +93,19 @@
 <img src="logo.png" class="logo" alt=""><h1 id="calm">calm<a class="anchor" aria-label="anchor" href="#calm"></a>
 </h1>
 </div>
-<p>Canonical Associative Learning Models in R</p>
+<p>Canonical Associative Learning Models</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>You will need devtools to install this package from github. If you do not have it, run:</p>
 <p><code>install.packages("devtools")</code></p>
-<p>Afterwards, you can install directly from this repository via:</p>
+<p>Afterward, you can install directly from this repository via:</p>
 <p><code>devtools::install_github("victor-navarro/calm", build_vignettes = TRUE)</code></p>
 <p>If you managed to build the vignettes, there’s a vignette showing the basics of the package in</p>
 <p><code><a href="articles/calm_basics.html">vignette("calm_basics", package = "calm")</a></code></p>
-<p>If you just want to do some quick simulating, launch the visual interface via:</p>
-<pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/victor-navarro/calm" class="external-link">calm</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/app.html">app</a></span><span class="op">(</span><span class="op">)</span></span></code></pre>
+<p>If you want to do some simulations using the companion app, you must install the <code>calm.app</code> package and then launch the app.</p>
+<pre><code><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"victor-navarro/calm.app"</span><span class="op">)</span></span>
+<span><span class="fu">calm.app</span><span class="fu">::</span><span class="fu">launch_app</span><span class="op">(</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="try-the-online-shiny-app">Try the online Shiny app<a class="anchor" aria-label="anchor" href="#try-the-online-shiny-app"></a>

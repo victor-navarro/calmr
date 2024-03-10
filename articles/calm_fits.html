@@ -107,7 +107,6 @@ Navarro</h4>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/victor-navarro/calm" class="external-link">calm</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -140,7 +139,7 @@ sucrose). Let’s take a look at it.</p>
 <span><span class="co">#&gt; $ us       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "P", "P", "P", "P", "P", "P", "S", "S", "S", "S", "S", "S", "…</span></span>
 <span><span class="co">#&gt; $ response <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> lp, lp, lp, lp, lp, lp, lp, lp, lp, lp, lp, lp, np, np, np, n…</span></span>
 <span><span class="co">#&gt; $ rpert    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.9000, 1.5500, 3.3500, 4.1500, 4.6500, 4.3250, 0.4000, 0.162…</span></span>
-<span><span class="va">pati</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">block</span>, y <span class="op">=</span> <span class="va">rpert</span>, colour <span class="op">=</span> <span class="va">us</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="va">pati</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">block</span>, y <span class="op">=</span> <span class="va">rpert</span>, colour <span class="op">=</span> <span class="va">us</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interaction.html" class="external-link">interaction</a></span><span class="op">(</span><span class="va">us</span>, <span class="va">subject</span><span class="op">)</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/stat_summary.html" class="external-link">stat_summary</a></span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"line"</span>, fun <span class="op">=</span> <span class="st">"mean"</span>, linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Block"</span>, y <span class="op">=</span> <span class="st">"Responses per trial"</span>, colour <span class="op">=</span> <span class="st">"US"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -160,8 +159,8 @@ generates responses that are organized as the empirical data. Let’s
 begin by summarizing the group data first, so we know what to aim
 for.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pati_summ</span> <span class="op">&lt;-</span> <span class="va">pati</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">block</span>, <span class="va">us</span>, <span class="va">response</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">pati_summ</span> <span class="op">&lt;-</span> <span class="va">pati</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">block</span>, <span class="va">us</span>, <span class="va">response</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>rpert <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">rpert</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pati_summ</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 4</span></span></span>
@@ -175,19 +174,19 @@ for.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>     2 P     np       3.51</span></span></code></pre></div>
 <p>We now prepare the arguments for the model function (as you would
 pass to <code>run_experiment</code>experiment.</p>
-<p>This is no minor issue, because the HeiDI is sensitive to order
-effects. Hence, it is important that the arguments we prepare here
-reflect the behavior of the model after an “general” experimental
-procedure, and not the quirks of an unfortunate run of tials. Here, we
-simply address this issue by running several iterations of the model
-(with random trial orders) and average all models before evaluating the
-likelihood of the parameters.</p>
-<p>So what do we have to design? The experiment presented in Patittuci
+<p>This is no minor issue because the HeiDI is sensitive to order
+effects. Hence, the arguments we prepare here must reflect the behavior
+of the model after a “general” experimental procedure, and not the
+quirks of an unfortunate run of trials. Here, we simply address this
+issue by running several iterations of the model (with random trial
+orders) and averaging all models before evaluating the likelihood of the
+parameters.</p>
+<p>So what do we have to design? The experiment presented by Patittuci
 et al. (2016) was fairly simple, and it can be reduced to the
 presentations of two levers, each followed by a different appetitive
 outcome. Here, we will assume that the two outcomes are independent from
 each other. We will also take some liberties with the number of trials
-we specify, in order to reduce computing time.</p>
+we specify, to reduce computing time.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># The design data.frame</span></span>
 <span><span class="va">des_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
@@ -204,89 +203,109 @@ we specify, in order to reduce computing time.</p>
 <span><span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_parameters.html">get_parameters</a></span><span class="op">(</span><span class="va">des_df</span>,</span>
 <span>  model <span class="op">=</span> <span class="st">"HD2022"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co"># The options</span></span>
-<span><span class="va">options</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_exp_opts.html">get_exp_opts</a></span><span class="op">(</span>iterations <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="co"># The arguments</span></span>
 <span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_experiment.html">make_experiment</a></span><span class="op">(</span><span class="va">des_df</span>,</span>
 <span>  parameters <span class="op">=</span> <span class="va">parameters</span>, model <span class="op">=</span> <span class="st">"HD2022"</span>,</span>
-<span>  options <span class="op">=</span> <span class="va">options</span></span>
+<span>  iterations <span class="op">=</span> <span class="fl">4</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Note we specified two counterbalancings as groups. It is very
-important that we reproduce the counterbalancings in the data we are
-trying to fit as close as possible. Otherwise, the optimization process
-might latch onto experimentally-irrelevant variables. For example, it
-can be seen in <code>pati</code> that there was more lever pressing
-whenever a lever was paired with pellets. If we didn’t counterbalance
-the identities of the levers and USs, the optimization might result into
-one of the levers being less salient than the other.</p>
+<p>Note we specified two counterbalancings as groups. We must reproduce
+the counterbalancings in the data we are trying to fit as close as
+possible. Otherwise, the optimization process might latch onto
+experimentally-irrelevant variables. For example, it can be seen in
+<code>pati</code> that there was more lever pressing whenever a lever
+was paired with pellets. If we didn’t counterbalance the identities of
+the levers and USs, the optimization might result in one of the levers
+being less salient than the other.</p>
 <p>We can now begin to write the model function. First, it would be a
-good idea to see what results <code>run_experiment</code> returns.</p>
+good to see what results <code>run_experiment</code> returns.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">exp_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_experiment.html">run_experiment</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/CalmExperiment-methods.html">results</a></span><span class="op">(</span><span class="va">exp_res</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $as</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 344 × 8</span></span></span>
-<span><span class="co">#&gt;    model  group phase    trial_type  trial s1    block_size value</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> HD2022 CB1   training L&gt;(Pellet)      1 L              2   0.4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> HD2022 CB1   training R&gt;(Sucrose)     2 L              2   0  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> HD2022 CB1   training R&gt;(Sucrose)     3 L              2   0  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> HD2022 CB1   training L&gt;(Pellet)      4 L              2   0.4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> HD2022 CB1   training R&gt;(Sucrose)     5 L              2   0  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> HD2022 CB1   training L&gt;(Pellet)      6 L              2   0.4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> HD2022 CB1   training L&gt;(Pellet)      7 L              2   0.4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> HD2022 CB1   training R&gt;(Sucrose)     8 L              2   0  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> HD2022 CB1   training R&gt;(Sucrose)     9 L              2   0  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> HD2022 CB1   training L&gt;(Pellet)     10 L              2   0.4</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 334 more rows</span></span></span>
+<span><span class="co">#&gt;       group    phase  trial_type trial      s1 block_size value  model</span></span>
+<span><span class="co">#&gt;      &lt;char&gt;   &lt;char&gt;      &lt;char&gt; &lt;int&gt;  &lt;fctr&gt;      &lt;num&gt; &lt;num&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt;   1:    CB1 training  L&gt;(Pellet)     1       L          2   0.4 HD2022</span></span>
+<span><span class="co">#&gt;   2:    CB1 training R&gt;(Sucrose)     2       L          2   0.0 HD2022</span></span>
+<span><span class="co">#&gt;   3:    CB1 training R&gt;(Sucrose)     3       L          2   0.0 HD2022</span></span>
+<span><span class="co">#&gt;   4:    CB1 training  L&gt;(Pellet)     4       L          2   0.4 HD2022</span></span>
+<span><span class="co">#&gt;   5:    CB1 training R&gt;(Sucrose)     5       L          2   0.0 HD2022</span></span>
+<span><span class="co">#&gt;  ---                                                                  </span></span>
+<span><span class="co">#&gt; 340:    CB2 training  R&gt;(Pellet)    10  Pellet          2   0.4 HD2022</span></span>
+<span><span class="co">#&gt; 341:    CB2 training L&gt;(Sucrose)     9       R          2   0.0 HD2022</span></span>
+<span><span class="co">#&gt; 342:    CB2 training  R&gt;(Pellet)    10       R          2   0.4 HD2022</span></span>
+<span><span class="co">#&gt; 343:    CB2 training L&gt;(Sucrose)     9 Sucrose          2   0.4 HD2022</span></span>
+<span><span class="co">#&gt; 344:    CB2 training  R&gt;(Pellet)    10 Sucrose          2   0.0 HD2022</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $acts</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,272 × 10</span></span></span>
-<span><span class="co">#&gt;    model  group phase    trial_type  trial s1      s2     block_size type  value</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> HD2022 CB1   training L&gt;(Pellet)      1 LPellet L               2 comb…     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> HD2022 CB1   training L&gt;(Pellet)      1 LPellet Pellet          2 comb…     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> HD2022 CB1   training L&gt;(Pellet)      1 LPellet R               2 comb…     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> HD2022 CB1   training L&gt;(Pellet)      1 LPellet Sucro…          2 comb…     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> HD2022 CB1   training R&gt;(Sucrose)     2 LPellet L               2 comb…     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> HD2022 CB1   training R&gt;(Sucrose)     2 LPellet Pellet          2 comb…     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> HD2022 CB1   training R&gt;(Sucrose)     2 LPellet R               2 comb…     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> HD2022 CB1   training R&gt;(Sucrose)     2 LPellet Sucro…          2 comb…     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> HD2022 CB1   training R&gt;(Sucrose)     3 LPellet L               2 comb…     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> HD2022 CB1   training R&gt;(Sucrose)     3 LPellet Pellet          2 comb…     0</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,262 more rows</span></span></span>
+<span><span class="co">#&gt;        group    phase  trial_type trial      s1      s2 block_size    type</span></span>
+<span><span class="co">#&gt;       &lt;char&gt;   &lt;char&gt;      &lt;char&gt; &lt;int&gt;  &lt;char&gt;  &lt;char&gt;      &lt;num&gt;  &lt;char&gt;</span></span>
+<span><span class="co">#&gt;    1:    CB1 training  L&gt;(Pellet)     1 LPellet       L          2  combvs</span></span>
+<span><span class="co">#&gt;    2:    CB1 training  L&gt;(Pellet)     1 LPellet  Pellet          2  combvs</span></span>
+<span><span class="co">#&gt;    3:    CB1 training  L&gt;(Pellet)     1 LPellet       R          2  combvs</span></span>
+<span><span class="co">#&gt;    4:    CB1 training  L&gt;(Pellet)     1 LPellet Sucrose          2  combvs</span></span>
+<span><span class="co">#&gt;    5:    CB1 training R&gt;(Sucrose)     2 LPellet       L          2  combvs</span></span>
+<span><span class="co">#&gt;   ---                                                                     </span></span>
+<span><span class="co">#&gt; 1268:    CB2 training  R&gt;(Pellet)    10       L Sucrose          2 chainvs</span></span>
+<span><span class="co">#&gt; 1269:    CB2 training  R&gt;(Pellet)    10 Sucrose       L          2 chainvs</span></span>
+<span><span class="co">#&gt; 1270:    CB2 training  R&gt;(Pellet)    10 Sucrose  Pellet          2 chainvs</span></span>
+<span><span class="co">#&gt; 1271:    CB2 training  R&gt;(Pellet)    10 Sucrose       R          2 chainvs</span></span>
+<span><span class="co">#&gt; 1272:    CB2 training  R&gt;(Pellet)    10 Sucrose Sucrose          2 chainvs</span></span>
+<span><span class="co">#&gt;       value  model</span></span>
+<span><span class="co">#&gt;       &lt;num&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt;    1:     0 HD2022</span></span>
+<span><span class="co">#&gt;    2:     0 HD2022</span></span>
+<span><span class="co">#&gt;    3:     0 HD2022</span></span>
+<span><span class="co">#&gt;    4:     0 HD2022</span></span>
+<span><span class="co">#&gt;    5:     0 HD2022</span></span>
+<span><span class="co">#&gt;   ---             </span></span>
+<span><span class="co">#&gt; 1268:     0 HD2022</span></span>
+<span><span class="co">#&gt; 1269:     0 HD2022</span></span>
+<span><span class="co">#&gt; 1270:     0 HD2022</span></span>
+<span><span class="co">#&gt; 1271:     0 HD2022</span></span>
+<span><span class="co">#&gt; 1272:     0 HD2022</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $rs</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,376 × 9</span></span></span>
-<span><span class="co">#&gt;    model  group phase    trial_type trial s1     s2      block_size value</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> HD2022 CB1   training L&gt;(Pellet)     1 L      L                2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> HD2022 CB1   training L&gt;(Pellet)     1 L      Pellet           2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> HD2022 CB1   training L&gt;(Pellet)     1 L      R                2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> HD2022 CB1   training L&gt;(Pellet)     1 L      Sucrose          2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> HD2022 CB1   training L&gt;(Pellet)     1 Pellet L                2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> HD2022 CB1   training L&gt;(Pellet)     1 Pellet Pellet           2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> HD2022 CB1   training L&gt;(Pellet)     1 Pellet R                2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> HD2022 CB1   training L&gt;(Pellet)     1 Pellet Sucrose          2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> HD2022 CB1   training L&gt;(Pellet)     1 R      L                2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> HD2022 CB1   training L&gt;(Pellet)     1 R      Pellet           2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,366 more rows</span></span></span>
+<span><span class="co">#&gt;        group    phase trial_type trial      s1      s2 block_size value  model</span></span>
+<span><span class="co">#&gt;       &lt;char&gt;   &lt;char&gt;     &lt;char&gt; &lt;int&gt;  &lt;char&gt;  &lt;char&gt;      &lt;num&gt; &lt;num&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt;    1:    CB1 training L&gt;(Pellet)     1       L       L          2     0 HD2022</span></span>
+<span><span class="co">#&gt;    2:    CB1 training L&gt;(Pellet)     1       L  Pellet          2     0 HD2022</span></span>
+<span><span class="co">#&gt;    3:    CB1 training L&gt;(Pellet)     1       L       R          2     0 HD2022</span></span>
+<span><span class="co">#&gt;    4:    CB1 training L&gt;(Pellet)     1       L Sucrose          2     0 HD2022</span></span>
+<span><span class="co">#&gt;    5:    CB1 training L&gt;(Pellet)     1  Pellet       L          2     0 HD2022</span></span>
+<span><span class="co">#&gt;   ---                                                                         </span></span>
+<span><span class="co">#&gt; 1372:    CB2 training R&gt;(Pellet)    10       R Sucrose          2     0 HD2022</span></span>
+<span><span class="co">#&gt; 1373:    CB2 training R&gt;(Pellet)    10 Sucrose       L          2     0 HD2022</span></span>
+<span><span class="co">#&gt; 1374:    CB2 training R&gt;(Pellet)    10 Sucrose  Pellet          2     0 HD2022</span></span>
+<span><span class="co">#&gt; 1375:    CB2 training R&gt;(Pellet)    10 Sucrose       R          2     0 HD2022</span></span>
+<span><span class="co">#&gt; 1376:    CB2 training R&gt;(Pellet)    10 Sucrose Sucrose          2     0 HD2022</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $vs</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,376 × 9</span></span></span>
-<span><span class="co">#&gt;    model  group phase    trial_type trial s1     s2      block_size value</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> HD2022 CB1   training L&gt;(Pellet)     1 L      L                2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> HD2022 CB1   training L&gt;(Pellet)     1 L      Pellet           2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> HD2022 CB1   training L&gt;(Pellet)     1 L      R                2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> HD2022 CB1   training L&gt;(Pellet)     1 L      Sucrose          2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> HD2022 CB1   training L&gt;(Pellet)     1 Pellet L                2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> HD2022 CB1   training L&gt;(Pellet)     1 Pellet Pellet           2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> HD2022 CB1   training L&gt;(Pellet)     1 Pellet R                2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> HD2022 CB1   training L&gt;(Pellet)     1 Pellet Sucrose          2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> HD2022 CB1   training L&gt;(Pellet)     1 R      L                2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> HD2022 CB1   training L&gt;(Pellet)     1 R      Pellet           2     0</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1,366 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt;        group    phase trial_type trial      s1      s2 block_size    value</span></span>
+<span><span class="co">#&gt;       &lt;char&gt;   &lt;char&gt;     &lt;char&gt; &lt;int&gt;  &lt;char&gt;  &lt;char&gt;      &lt;num&gt;    &lt;num&gt;</span></span>
+<span><span class="co">#&gt;    1:    CB1 training L&gt;(Pellet)     1       L       L          2 0.000000</span></span>
+<span><span class="co">#&gt;    2:    CB1 training L&gt;(Pellet)     1       L  Pellet          2 0.000000</span></span>
+<span><span class="co">#&gt;    3:    CB1 training L&gt;(Pellet)     1       L       R          2 0.000000</span></span>
+<span><span class="co">#&gt;    4:    CB1 training L&gt;(Pellet)     1       L Sucrose          2 0.000000</span></span>
+<span><span class="co">#&gt;    5:    CB1 training L&gt;(Pellet)     1  Pellet       L          2 0.000000</span></span>
+<span><span class="co">#&gt;   ---                                                                     </span></span>
+<span><span class="co">#&gt; 1372:    CB2 training R&gt;(Pellet)    10       R Sucrose          2 0.000000</span></span>
+<span><span class="co">#&gt; 1373:    CB2 training R&gt;(Pellet)    10 Sucrose       L          2 0.368896</span></span>
+<span><span class="co">#&gt; 1374:    CB2 training R&gt;(Pellet)    10 Sucrose  Pellet          2 0.000000</span></span>
+<span><span class="co">#&gt; 1375:    CB2 training R&gt;(Pellet)    10 Sucrose       R          2 0.000000</span></span>
+<span><span class="co">#&gt; 1376:    CB2 training R&gt;(Pellet)    10 Sucrose Sucrose          2 0.000000</span></span>
+<span><span class="co">#&gt;        model</span></span>
+<span><span class="co">#&gt;       &lt;char&gt;</span></span>
+<span><span class="co">#&gt;    1: HD2022</span></span>
+<span><span class="co">#&gt;    2: HD2022</span></span>
+<span><span class="co">#&gt;    3: HD2022</span></span>
+<span><span class="co">#&gt;    4: HD2022</span></span>
+<span><span class="co">#&gt;    5: HD2022</span></span>
+<span><span class="co">#&gt;   ---       </span></span>
+<span><span class="co">#&gt; 1372: HD2022</span></span>
+<span><span class="co">#&gt; 1373: HD2022</span></span>
+<span><span class="co">#&gt; 1374: HD2022</span></span>
+<span><span class="co">#&gt; 1375: HD2022</span></span>
+<span><span class="co">#&gt; 1376: HD2022</span></span></code></pre></div>
 <p>Although the <code>run_experiment</code> function returns an S4 class
 with many things, we only care about one of them: <code>rs</code> (the
 model responses). With them, we can write our model function.</p>
@@ -299,18 +318,18 @@ model responses). With them, we can write our model function.</p>
 <span>  <span class="co"># running the model and selecting rs</span></span>
 <span>  <span class="va">exp_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_experiment.html">run_experiment</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span></span>
 <span>  <span class="co"># summarizing the model</span></span>
-<span>  <span class="va">rs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CalmExperiment-methods.html">results</a></span><span class="op">(</span><span class="va">exp_res</span><span class="op">)</span><span class="op">$</span><span class="va">rs</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">s2</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pellet"</span>, <span class="st">"Sucrose"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="va">rs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CalmExperiment-methods.html">results</a></span><span class="op">(</span><span class="va">exp_res</span><span class="op">)</span><span class="op">$</span><span class="va">rs</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">s2</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pellet"</span>, <span class="st">"Sucrose"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>      response <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">s1</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pellet"</span>, <span class="st">"Sucrose"</span><span class="op">)</span>, <span class="st">"np"</span>, <span class="st">"lp"</span><span class="op">)</span>,</span>
 <span>      block <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">trial</span> <span class="op">/</span> <span class="fl">4</span><span class="op">)</span></span>
-<span>    <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rowwise.html" class="external-link">rowwise</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rowwise.html" class="external-link">rowwise</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="co"># note this filter below;</span></span>
 <span>    <span class="co"># we do not allow lever presses if the lever was not presented on the trial</span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">response</span> <span class="op">==</span> <span class="st">"np"</span> <span class="op">|</span> <span class="op">(</span><span class="va">response</span> <span class="op">==</span> <span class="st">"lp"</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="va">s1</span>, <span class="va">trial_type</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>us <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"Pellet"</span>, <span class="va">trial_type</span><span class="op">)</span>, <span class="st">"P"</span>, <span class="st">"S"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">block</span>, <span class="va">us</span>, <span class="va">response</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">response</span> <span class="op">==</span> <span class="st">"np"</span> <span class="op">|</span> <span class="op">(</span><span class="va">response</span> <span class="op">==</span> <span class="st">"lp"</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="va">s1</span>, <span class="va">trial_type</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>us <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"Pellet"</span>, <span class="va">trial_type</span><span class="op">)</span>, <span class="st">"P"</span>, <span class="st">"S"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">block</span>, <span class="va">us</span>, <span class="va">response</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
 <span>  <span class="va">rs</span><span class="op">$</span><span class="va">value</span></span>
 <span><span class="op">}</span></span></code></pre></div>
@@ -446,13 +465,13 @@ parameters “visually” fit the data? We can obtain the predictions from
 the model via the <code>predict</code> function.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pati_summ</span><span class="op">$</span><span class="va">prediction</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">the_fit</span>, experiment <span class="op">=</span> <span class="va">experiment</span><span class="op">)</span></span>
-<span><span class="va">pati_summ</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span><span class="st">"data"</span> <span class="op">=</span> <span class="st">"rpert"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="va">pati_summ</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span><span class="st">"data"</span> <span class="op">=</span> <span class="st">"rpert"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span></span>
 <span>    cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"prediction"</span>, <span class="st">"data"</span><span class="op">)</span>,</span>
 <span>    names_to <span class="op">=</span> <span class="st">"type"</span>,</span>
 <span>    values_to <span class="op">=</span> <span class="st">"value"</span></span>
-<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">block</span>, y <span class="op">=</span> <span class="va">value</span>, colour <span class="op">=</span> <span class="va">us</span>, linetype <span class="op">=</span> <span class="va">type</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>

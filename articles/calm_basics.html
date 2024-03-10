@@ -116,28 +116,41 @@ Navarro</h4>
 <div class="section level2">
 <h2 id="the-design-data-frame">The design data.frame<a class="anchor" aria-label="anchor" href="#the-design-data-frame"></a>
 </h2>
-<p>We will use a data.frame to specify our experimental design. Let’s
-specify a blocking design.</p>
+<p>For this example we will use a blocking design.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/victor-navarro/calm" class="external-link">calm</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">my_blocking</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  Group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Exp"</span>, <span class="st">"Control"</span><span class="op">)</span>,</span>
-<span>  Phase1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"10A&gt;(US)"</span>, <span class="st">"10C&gt;(US)"</span><span class="op">)</span>,</span>
+<span>  Phase1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"10A(US)"</span>, <span class="st">"10C(US)"</span><span class="op">)</span>,</span>
 <span>  R1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
-<span>  Phase2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"10AB&gt;(US)"</span>, <span class="st">"10AB&gt;(US)"</span><span class="op">)</span>,</span>
+<span>  Phase2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"10AB(US)"</span>, <span class="st">"10AB(US)"</span><span class="op">)</span>,</span>
 <span>  R2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
-<span>  Test <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1A#/1B#"</span>, <span class="st">"1A#/1B#"</span><span class="op">)</span>,</span>
+<span>  Test <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1#A/1#B"</span>, <span class="st">"1#A/1#B"</span><span class="op">)</span>,</span>
 <span>  R3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">my_blocking</span></span>
-<span><span class="co">#&gt;     Group   Phase1    R1    Phase2    R2    Test    R3</span></span>
-<span><span class="co">#&gt; 1     Exp 10A&gt;(US) FALSE 10AB&gt;(US) FALSE 1A#/1B# FALSE</span></span>
-<span><span class="co">#&gt; 2 Control 10C&gt;(US) FALSE 10AB&gt;(US) FALSE 1A#/1B# FALSE</span></span></code></pre></div>
+<span><span class="co"># parsing the design and showing the original and what was detected</span></span>
+<span><span class="va">parsed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/parse_design.html">parse_design</a></span><span class="op">(</span><span class="va">my_blocking</span><span class="op">)</span></span>
+<span><span class="va">parsed</span></span>
+<span><span class="co">#&gt; CalmDesign built from data.frame:</span></span>
+<span><span class="co">#&gt;     Group  Phase1    R1   Phase2    R2    Test    R3</span></span>
+<span><span class="co">#&gt; 1     Exp 10A(US) FALSE 10AB(US) FALSE 1#A/1#B FALSE</span></span>
+<span><span class="co">#&gt; 2 Control 10C(US) FALSE 10AB(US) FALSE 1#A/1#B FALSE</span></span>
+<span><span class="co">#&gt; ----------------</span></span>
+<span><span class="co">#&gt; Trials detected:</span></span>
+<span><span class="co">#&gt;     group  phase trial_names trial_repeats is_test stimuli</span></span>
+<span><span class="co">#&gt; 1     Exp Phase1       A(US)            10   FALSE    A;US</span></span>
+<span><span class="co">#&gt; 2     Exp Phase2      AB(US)            10   FALSE  A;B;US</span></span>
+<span><span class="co">#&gt; 3     Exp   Test          #A             1    TRUE       A</span></span>
+<span><span class="co">#&gt; 4     Exp   Test          #B             1    TRUE       B</span></span>
+<span><span class="co">#&gt; 5 Control Phase1       C(US)            10   FALSE    C;US</span></span>
+<span><span class="co">#&gt; 6 Control Phase2      AB(US)            10   FALSE  A;B;US</span></span>
+<span><span class="co">#&gt; 7 Control   Test          #A             1    TRUE       A</span></span>
+<span><span class="co">#&gt; 8 Control   Test          #B             1    TRUE       B</span></span></code></pre></div>
 <p>A few rules about the design data.frame:</p>
 <ol style="list-style-type: decimal">
 <li>Each row represents a group.</li>
-<li>Its first column contains the group labels.</li>
+<li>The first column contains the group labels.</li>
 <li>The remaining columns are organized in pairs (trials in a phase, and
 whether to randomize them)</li>
 </ol>
@@ -145,8 +158,8 @@ whether to randomize them)</li>
 notation. A few observations about it:</p>
 <ol style="list-style-type: decimal">
 <li>Trials are preceded by a number. That number represents the number
-of times that trial will be given in each phase. “10A&gt;(US)” means
-that the “A&gt;(US)” trial will be given 10 times.</li>
+of times that trial will be given in each phase. “10A(US)” means that
+the “A(US)” trial will be given 10 times.</li>
 <li>The presence and absence of the unconditioned stimulus are not
 denoted with the traditional “+” and “-” symbols. Instead, here we use
 parenthesis to denote “complex” stimuli. These can be thought of as an
@@ -155,10 +168,6 @@ such, “(US)” specifies a single element to represent the US.</li>
 <li>In the same vein, multiple characters with no parentheses denote
 individual elements. For example, “AB” implies the presence of two
 stimuli, A and B.</li>
-<li>The “&gt;” character is used as a separator of the “expectations”
-and “correction” steps within the trial. “10A&gt;(US)” means that the
-model generates an expectation with A only, but learns from the
-co-occurrence of A and the US.</li>
 <li>The “/” character is used as a trial separator (it does not imply
 randomization by itself). Thus, “1A/1B” specifies that a single “A”
 trial and a single “B” trial will be given during that phase. Recall
@@ -170,25 +179,21 @@ associations. As such, probe trials can be used to track the development
 of key associations, with no repercussion to what the model learns on
 normal training trials.</li>
 </ol>
-<p>If you want to check whether your trial string will work with the
+<p>If you want to check whether your phase string will work with the
 simulator, you can use <code>phase_parser</code>. The function returns a
 list with a lot of information, so let’s print only some of the
 fields.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># not specifying a number of AB trials. Bad practice!</span></span>
-<span><span class="va">trial</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/phase_parser.html">phase_parser</a></span><span class="op">(</span><span class="st">"AB/10AC"</span><span class="op">)</span></span>
-<span><span class="va">trial</span><span class="op">$</span><span class="va">general_info</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"trial_names"</span>, <span class="st">"trial_repeats"</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="co">#&gt; $trial_names</span></span>
-<span><span class="co">#&gt; [1] "AB" "AC"</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $trial_repeats</span></span>
-<span><span class="co">#&gt; [1]  1 10</span></span>
+<code class="sourceCode R"><span><span class="co"># not specifying a number of AB trials. Error!</span></span>
+<span><span class="fu"><a href="../reference/phase_parser.html">phase_parser</a></span><span class="op">(</span><span class="st">"AB/10AC"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in if (is.na(treps)) 1 else treps: argument is of length zero</span></span>
+<span><span class="co"># putting the probe symbol out of order. Error!</span></span>
+<span><span class="fu"><a href="../reference/phase_parser.html">phase_parser</a></span><span class="op">(</span><span class="st">"#10A"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in if (is.na(treps)) 1 else treps: argument is of length zero</span></span>
 <span><span class="co"># considering a configural cue for elements AB</span></span>
 <span><span class="va">trial</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/phase_parser.html">phase_parser</a></span><span class="op">(</span><span class="st">"10AB(AB)(US)"</span><span class="op">)</span></span>
-<span><span class="va">trial</span><span class="op">$</span><span class="va">general_info</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"func2nomi"</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="co">#&gt; $func2nomi</span></span>
-<span><span class="co">#&gt;    A    B   AB   US </span></span>
-<span><span class="co">#&gt;  "A"  "B" "AB" "US"</span></span></code></pre></div>
+<span><span class="co"># different USs</span></span>
+<span><span class="va">trial</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/phase_parser.html">phase_parser</a></span><span class="op">(</span><span class="st">"10A(US1)/10B(US2)"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="the-parameters-list">The parameters list<a class="anchor" aria-label="anchor" href="#the-parameters-list"></a>
@@ -200,8 +205,8 @@ call <code><a href="../reference/model_info.html">supported_models()</a></code>.
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/model_info.html">supported_models</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "HDI2020" "HD2022"  "RW1972"  "MAC1975" "PKH1982" "SM2007"  "RAND"   </span></span>
 <span><span class="co">#&gt; [8] "ANCCR"</span></span></code></pre></div>
-<p>After picking a model, you can get default parameters for your design
-with <code>get_parameters</code>.</p>
+<p>After choosing a model, you can get default parameters for your
+design with <code>get_parameters</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_parameters.html">get_parameters</a></span><span class="op">(</span><span class="va">my_blocking</span>, model <span class="op">=</span> <span class="st">"RW1972"</span><span class="op">)</span></span>
 <span><span class="co"># Increasing the beta parameter for US presentations</span></span>
@@ -223,91 +228,98 @@ with <code>get_parameters</code>.</p>
 <span><span class="co">#&gt;  A  B  C US </span></span>
 <span><span class="co">#&gt;  1  1  1  1</span></span></code></pre></div>
 <div class="section level3">
-<h3 id="the-optional-additional-options">The (optional) additional options<a class="anchor" aria-label="anchor" href="#the-optional-additional-options"></a>
-</h3>
-<p>If you opt to, you can also pass a list with simulation options.
-Simulation options are entirely optional, and if you don’t pass them you
-will just get a warning.</p>
-<p>We can get a default one with <code>get_exp_opts</code>, and modify
-them accordingly.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">my_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_exp_opts.html">get_exp_opts</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co"># Increase number of simulations to average out randomization effects</span></span>
-<span><span class="va">my_opts</span><span class="op">$</span><span class="va">iterations</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
-<span><span class="va">my_opts</span></span>
-<span><span class="co">#&gt; $iterations</span></span>
-<span><span class="co">#&gt; [1] 5</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $miniblocks</span></span>
-<span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
-</div>
-<div class="section level3">
 <h3 id="simulating">Simulating<a class="anchor" aria-label="anchor" href="#simulating"></a>
 </h3>
 <p>With all of the above, we can run our simulation using the
-<code>run_experiment</code> function.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code>run_experiment</code> function. This function also takes extra
+arguments to manipulate the number of iterations to run the experiment
+for, and whether to organize trials in miniblocks (see
+<code><a href="../reference/make_experiment.html">help(make_experiment)</a></code> for additional details). Below, we
+run the experiment for 5 iterations.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_experiment.html">run_experiment</a></span><span class="op">(</span></span>
-<span>  <span class="va">my_blocking</span>,</span>
+<span>  <span class="va">my_blocking</span>, <span class="co"># note we do not need to pass the parsed design</span></span>
 <span>  model <span class="op">=</span> <span class="st">"RW1972"</span>,</span>
 <span>  parameters <span class="op">=</span> <span class="va">my_pars</span>,</span>
-<span>  options <span class="op">=</span> <span class="va">my_opts</span>,</span>
+<span>  iterations <span class="op">=</span> <span class="fl">5</span></span>
 <span><span class="op">)</span></span>
+<span><span class="co"># returns an CalmExperiment object</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">my_experiment</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "CalmExperiment"</span></span>
+<span><span class="co">#&gt; attr(,"package")</span></span>
+<span><span class="co">#&gt; [1] "calm"</span></span>
+<span><span class="co"># CalmExperiment is an S4 class, so it has slots</span></span>
 <span><span class="fu">slotNames</span><span class="op">(</span><span class="va">my_experiment</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "arguments" "design"    "results"</span></span>
-<span><span class="co"># access arguments (see how many iterations we ran?)</span></span>
-<span><span class="va">my_experiment</span><span class="op">@</span><span class="va">arguments</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 6</span></span></span>
-<span><span class="co">#&gt;    iteration model  group   experience    mapping           parameters      </span></span>
-<span><span class="co">#&gt;        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>         1 RW1972 Control <span style="color: #949494;">&lt;df [22 × 7]&gt;</span> <span style="color: #949494;">&lt;named list [12]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>         1 RW1972 Exp     <span style="color: #949494;">&lt;df [22 × 7]&gt;</span> <span style="color: #949494;">&lt;named list [12]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>         2 RW1972 Control <span style="color: #949494;">&lt;df [22 × 7]&gt;</span> <span style="color: #949494;">&lt;named list [12]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>         2 RW1972 Exp     <span style="color: #949494;">&lt;df [22 × 7]&gt;</span> <span style="color: #949494;">&lt;named list [12]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>         3 RW1972 Control <span style="color: #949494;">&lt;df [22 × 7]&gt;</span> <span style="color: #949494;">&lt;named list [12]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>         3 RW1972 Exp     <span style="color: #949494;">&lt;df [22 × 7]&gt;</span> <span style="color: #949494;">&lt;named list [12]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>         4 RW1972 Control <span style="color: #949494;">&lt;df [22 × 7]&gt;</span> <span style="color: #949494;">&lt;named list [12]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>         4 RW1972 Exp     <span style="color: #949494;">&lt;df [22 × 7]&gt;</span> <span style="color: #949494;">&lt;named list [12]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>         5 RW1972 Control <span style="color: #949494;">&lt;df [22 × 7]&gt;</span> <span style="color: #949494;">&lt;named list [12]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>         5 RW1972 Exp     <span style="color: #949494;">&lt;df [22 × 7]&gt;</span> <span style="color: #949494;">&lt;named list [12]&gt;</span> <span style="color: #949494;">&lt;named list [4]&gt;</span></span></span>
-<span><span class="co"># access results</span></span>
+<span><span class="co">#&gt; [1] "design"      "model"       "groups"      "parameters"  "experiences"</span></span>
+<span><span class="co">#&gt; [6] "results"     ".model"      ".group"      ".iter"</span></span>
+<span><span class="co"># the experience given to group Exp on the first iteration</span></span>
+<span><span class="va">my_experiment</span><span class="op">@</span><span class="va">experiences</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="co">#&gt;     model group  phase tp     tn is_test block_size trial</span></span>
+<span><span class="co">#&gt; 1  RW1972   Exp Phase1  1  A(US)   FALSE          1     1</span></span>
+<span><span class="co">#&gt; 2  RW1972   Exp Phase1  1  A(US)   FALSE          1     2</span></span>
+<span><span class="co">#&gt; 3  RW1972   Exp Phase1  1  A(US)   FALSE          1     3</span></span>
+<span><span class="co">#&gt; 4  RW1972   Exp Phase1  1  A(US)   FALSE          1     4</span></span>
+<span><span class="co">#&gt; 5  RW1972   Exp Phase1  1  A(US)   FALSE          1     5</span></span>
+<span><span class="co">#&gt; 6  RW1972   Exp Phase1  1  A(US)   FALSE          1     6</span></span>
+<span><span class="co">#&gt; 7  RW1972   Exp Phase1  1  A(US)   FALSE          1     7</span></span>
+<span><span class="co">#&gt; 8  RW1972   Exp Phase1  1  A(US)   FALSE          1     8</span></span>
+<span><span class="co">#&gt; 9  RW1972   Exp Phase1  1  A(US)   FALSE          1     9</span></span>
+<span><span class="co">#&gt; 10 RW1972   Exp Phase1  1  A(US)   FALSE          1    10</span></span>
+<span><span class="co">#&gt; 11 RW1972   Exp Phase2  2 AB(US)   FALSE          1    11</span></span>
+<span><span class="co">#&gt; 12 RW1972   Exp Phase2  2 AB(US)   FALSE          1    12</span></span>
+<span><span class="co">#&gt; 13 RW1972   Exp Phase2  2 AB(US)   FALSE          1    13</span></span>
+<span><span class="co">#&gt; 14 RW1972   Exp Phase2  2 AB(US)   FALSE          1    14</span></span>
+<span><span class="co">#&gt; 15 RW1972   Exp Phase2  2 AB(US)   FALSE          1    15</span></span>
+<span><span class="co">#&gt; 16 RW1972   Exp Phase2  2 AB(US)   FALSE          1    16</span></span>
+<span><span class="co">#&gt; 17 RW1972   Exp Phase2  2 AB(US)   FALSE          1    17</span></span>
+<span><span class="co">#&gt; 18 RW1972   Exp Phase2  2 AB(US)   FALSE          1    18</span></span>
+<span><span class="co">#&gt; 19 RW1972   Exp Phase2  2 AB(US)   FALSE          1    19</span></span>
+<span><span class="co">#&gt; 20 RW1972   Exp Phase2  2 AB(US)   FALSE          1    20</span></span>
+<span><span class="co">#&gt; 21 RW1972   Exp   Test  3     #A    TRUE          2    21</span></span>
+<span><span class="co">#&gt; 22 RW1972   Exp   Test  4     #B    TRUE          2    22</span></span>
+<span><span class="co"># the number of times we ran the model (groups x iterations)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="../reference/CalmExperiment-methods.html">experiences</a></span><span class="op">(</span><span class="va">my_experiment</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 10</span></span>
+<span><span class="co"># an experiment has results with different levels of aggregation</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">my_experiment</span><span class="op">@</span><span class="va">results</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "CalmExperimentResult"</span></span>
+<span><span class="co">#&gt; attr(,"package")</span></span>
+<span><span class="co">#&gt; [1] "calm"</span></span>
+<span><span class="fu">slotNames</span><span class="op">(</span><span class="va">my_experiment</span><span class="op">@</span><span class="va">results</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "aggregated_results" "parsed_results"     "raw_results"</span></span>
+<span><span class="co"># shorthand method to access aggregated_results</span></span>
 <span><span class="fu"><a href="../reference/CalmExperiment-methods.html">results</a></span><span class="op">(</span><span class="va">my_experiment</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $rs</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 704 × 9</span></span></span>
-<span><span class="co">#&gt;    model  group   phase  trial_type trial s1    s2    block_size value</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> RW1972 Control Phase1 C&gt;(US)         1 A     A              1     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> RW1972 Control Phase1 C&gt;(US)         1 A     B              1     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> RW1972 Control Phase1 C&gt;(US)         1 A     C              1     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> RW1972 Control Phase1 C&gt;(US)         1 A     US             1     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> RW1972 Control Phase1 C&gt;(US)         1 B     A              1     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> RW1972 Control Phase1 C&gt;(US)         1 B     B              1     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> RW1972 Control Phase1 C&gt;(US)         1 B     C              1     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> RW1972 Control Phase1 C&gt;(US)         1 B     US             1     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> RW1972 Control Phase1 C&gt;(US)         1 C     A              1     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> RW1972 Control Phase1 C&gt;(US)         1 C     B              1     0</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 694 more rows</span></span></span>
+<span><span class="co">#&gt;        group  phase trial_type trial     s1     s2 block_size value  model</span></span>
+<span><span class="co">#&gt;       &lt;char&gt; &lt;char&gt;     &lt;char&gt; &lt;int&gt; &lt;char&gt; &lt;char&gt;      &lt;num&gt; &lt;num&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt;   1:     Exp Phase1      A(US)     1      A      A          1     0 RW1972</span></span>
+<span><span class="co">#&gt;   2:     Exp Phase1      A(US)     1      A      B          1     0 RW1972</span></span>
+<span><span class="co">#&gt;   3:     Exp Phase1      A(US)     1      A      C          1     0 RW1972</span></span>
+<span><span class="co">#&gt;   4:     Exp Phase1      A(US)     1      A     US          1     0 RW1972</span></span>
+<span><span class="co">#&gt;   5:     Exp Phase1      A(US)     1      B      A          1     0 RW1972</span></span>
+<span><span class="co">#&gt;  ---                                                                      </span></span>
+<span><span class="co">#&gt; 700: Control   Test         #B    22      C     US          2     0 RW1972</span></span>
+<span><span class="co">#&gt; 701: Control   Test         #B    22     US      A          2     0 RW1972</span></span>
+<span><span class="co">#&gt; 702: Control   Test         #B    22     US      B          2     0 RW1972</span></span>
+<span><span class="co">#&gt; 703: Control   Test         #B    22     US      C          2     0 RW1972</span></span>
+<span><span class="co">#&gt; 704: Control   Test         #B    22     US     US          2     0 RW1972</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $vs</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 704 × 9</span></span></span>
-<span><span class="co">#&gt;    model  group   phase  trial_type trial s1    s2    block_size value</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> RW1972 Control Phase1 C&gt;(US)         1 A     A              1     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> RW1972 Control Phase1 C&gt;(US)         1 A     B              1     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> RW1972 Control Phase1 C&gt;(US)         1 A     C              1     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> RW1972 Control Phase1 C&gt;(US)         1 A     US             1     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> RW1972 Control Phase1 C&gt;(US)         1 B     A              1     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> RW1972 Control Phase1 C&gt;(US)         1 B     B              1     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> RW1972 Control Phase1 C&gt;(US)         1 B     C              1     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> RW1972 Control Phase1 C&gt;(US)         1 B     US             1     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> RW1972 Control Phase1 C&gt;(US)         1 C     A              1     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> RW1972 Control Phase1 C&gt;(US)         1 C     B              1     0</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 694 more rows</span></span></span></code></pre></div>
-<p>The run_experiment returns a lot of information. The <code>str</code>
-function will be your best friend, and there is plenty of documentation
-to go about.</p>
-<p>Of course, if you are an advanced R user you will be able to dig into
-the data straight away.</p>
+<span><span class="co">#&gt;        group  phase trial_type trial     s1     s2 block_size     value  model</span></span>
+<span><span class="co">#&gt;       &lt;char&gt; &lt;char&gt;     &lt;char&gt; &lt;int&gt; &lt;char&gt; &lt;char&gt;      &lt;num&gt;     &lt;num&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt;   1:     Exp Phase1      A(US)     1      A      A          1 0.0000000 RW1972</span></span>
+<span><span class="co">#&gt;   2:     Exp Phase1      A(US)     1      A      B          1 0.0000000 RW1972</span></span>
+<span><span class="co">#&gt;   3:     Exp Phase1      A(US)     1      A      C          1 0.0000000 RW1972</span></span>
+<span><span class="co">#&gt;   4:     Exp Phase1      A(US)     1      A     US          1 0.0000000 RW1972</span></span>
+<span><span class="co">#&gt;   5:     Exp Phase1      A(US)     1      B      A          1 0.0000000 RW1972</span></span>
+<span><span class="co">#&gt;  ---                                                                          </span></span>
+<span><span class="co">#&gt; 700: Control   Test         #B    22      C     US          2 0.9939534 RW1972</span></span>
+<span><span class="co">#&gt; 701: Control   Test         #B    22     US      A          2 0.4999999 RW1972</span></span>
+<span><span class="co">#&gt; 702: Control   Test         #B    22     US      B          2 0.4999999 RW1972</span></span>
+<span><span class="co">#&gt; 703: Control   Test         #B    22     US      C          2 0.6626356 RW1972</span></span>
+<span><span class="co">#&gt; 704: Control   Test         #B    22     US     US          2 0.0000000 RW1972</span></span></code></pre></div>
+<p>If you are an advanced R user you will be able to dig into the data
+straight away.</p>
 <p>However, the package also includes some methods to get a quick look
 at the results.</p>
 </div>
@@ -318,19 +330,19 @@ at the results.</p>
 <p>Let’s use <code>plot</code> method to create some plots. Each model
 supports different types of plots according to the results they can
 produce (e.g., associations, responses, saliences, etc.)</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get all the plots for the experiment</span></span>
 <span><span class="va">plots</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CalmExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">my_experiment</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">plots</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Control - Response Strength (RW1972)"   </span></span>
-<span><span class="co">#&gt; [2] "Exp - Response Strength (RW1972)"       </span></span>
-<span><span class="co">#&gt; [3] "Control - Association Strength (RW1972)"</span></span>
-<span><span class="co">#&gt; [4] "Exp - Association Strength (RW1972)"</span></span>
+<span><span class="co">#&gt; [1] "Exp - Response Strength (RW1972)"       </span></span>
+<span><span class="co">#&gt; [2] "Control - Response Strength (RW1972)"   </span></span>
+<span><span class="co">#&gt; [3] "Exp - Association Strength (RW1972)"    </span></span>
+<span><span class="co">#&gt; [4] "Control - Association Strength (RW1972)"</span></span>
 <span><span class="co"># or get a specific type of plot</span></span>
 <span><span class="va">specific_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CalmExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">my_experiment</span>, type <span class="op">=</span> <span class="st">"vs"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">specific_plot</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Control - Association Strength (RW1972)"</span></span>
-<span><span class="co">#&gt; [2] "Exp - Association Strength (RW1972)"</span></span>
+<span><span class="co">#&gt; [1] "Exp - Association Strength (RW1972)"    </span></span>
+<span><span class="co">#&gt; [2] "Control - Association Strength (RW1972)"</span></span>
 <span><span class="co"># show which plots are supported by the model we are using</span></span>
 <span><span class="fu"><a href="../reference/model_info.html">supported_plots</a></span><span class="op">(</span><span class="st">"RW1972"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "rs" "vs"</span></span></code></pre></div>
@@ -342,51 +354,51 @@ responses.</p>
 <p>The columns below are the phases of the design and the rows denote
 the source of the association. The colors within each panel determine
 the target of the association.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/CalmExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">my_experiment</span>, type <span class="op">=</span> <span class="st">"vs"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $`Control - Association Strength (RW1972)`</span></span></code></pre></div>
-<p><img src="calm_basics_files/figure-html/unnamed-chunk-9-1.png" width="384"></p>
+<span><span class="co">#&gt; $`Exp - Association Strength (RW1972)`</span></span></code></pre></div>
+<p><img src="calm_basics_files/figure-html/unnamed-chunk-8-1.png" width="384"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $`Exp - Association Strength (RW1972)`</span></span></code></pre>
-<p><img src="calm_basics_files/figure-html/unnamed-chunk-9-2.png" width="384"></p>
+<span><span class="co">#&gt; $`Control - Association Strength (RW1972)`</span></span></code></pre>
+<p><img src="calm_basics_files/figure-html/unnamed-chunk-8-2.png" width="384"></p>
 </div>
 <div class="section level3">
 <h3 id="responding">Responding<a class="anchor" aria-label="anchor" href="#responding"></a>
 </h3>
 <p>Fairly similar to the above, but this time responding is a function
 of the stimuli presented on a trial.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/CalmExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">my_experiment</span>, type <span class="op">=</span> <span class="st">"rs"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $`Control - Response Strength (RW1972)`</span></span></code></pre></div>
-<p><img src="calm_basics_files/figure-html/unnamed-chunk-10-1.png" width="384"></p>
+<span><span class="co">#&gt; $`Exp - Response Strength (RW1972)`</span></span></code></pre></div>
+<p><img src="calm_basics_files/figure-html/unnamed-chunk-9-1.png" width="384"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $`Exp - Response Strength (RW1972)`</span></span></code></pre>
-<p><img src="calm_basics_files/figure-html/unnamed-chunk-10-2.png" width="384"></p>
+<span><span class="co">#&gt; $`Control - Response Strength (RW1972)`</span></span></code></pre>
+<p><img src="calm_basics_files/figure-html/unnamed-chunk-9-2.png" width="384"></p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="graphing">Graphing<a class="anchor" aria-label="anchor" href="#graphing"></a>
 </h2>
 <p>You can also take a look at the state of the model’s associations at
-any point during training, using the <code>graph</code> method on your
+any point during training, using the <code>graph</code> method in your
 experiment.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_graph_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_graph_opts.html">get_graph_opts</a></span><span class="op">(</span><span class="st">"small"</span><span class="op">)</span></span>
-<span><span class="fu">graph</span><span class="op">(</span><span class="va">my_experiment</span>, t <span class="op">=</span> <span class="fl">20</span>, graph_opts <span class="op">=</span> <span class="va">my_graph_opts</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/CalmExperiment-methods.html">graph</a></span><span class="op">(</span><span class="va">my_experiment</span>, t <span class="op">=</span> <span class="fl">20</span>, graph_opts <span class="op">=</span> <span class="va">my_graph_opts</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $RW1972</span></span>
-<span><span class="co">#&gt; $RW1972$`Control - Associations (RW1972)`</span></span></code></pre></div>
-<p><img src="calm_basics_files/figure-html/unnamed-chunk-11-1.png" width="384"></p>
+<span><span class="co">#&gt; $RW1972$`Exp - Associations (RW1972)`</span></span></code></pre></div>
+<p><img src="calm_basics_files/figure-html/unnamed-chunk-10-1.png" width="384"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $RW1972$`Exp - Associations (RW1972)`</span></span></code></pre>
-<p><img src="calm_basics_files/figure-html/unnamed-chunk-11-2.png" width="384"></p>
+<span><span class="co">#&gt; $RW1972$`Control - Associations (RW1972)`</span></span></code></pre>
+<p><img src="calm_basics_files/figure-html/unnamed-chunk-10-2.png" width="384"></p>
 </div>
 <div class="section level2">
 <h2 id="final-thoughts">Final thoughts<a class="anchor" aria-label="anchor" href="#final-thoughts"></a>
 </h2>
 <p>The <code>calm</code> package was designed to simulate quickly: write
-your design and get a glance at model predictions. That said, the
-package also has some features for advanced R users, so make sure to
-check more advanced vignettes when you are ready.</p>
+your design and get a glance at model predictions.</p>
+<p>Yet, the package also has some features for advanced R users, so make
+sure to check the other vignettes when you are ready.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

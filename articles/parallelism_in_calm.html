@@ -133,10 +133,11 @@ package.</p>
 <span><span class="op">)</span></span>
 <span><span class="co"># set options to introduce more randomness</span></span>
 <span><span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_parameters.html">get_parameters</a></span><span class="op">(</span><span class="va">pav_inhib</span>, model <span class="op">=</span> <span class="st">"HDI2020"</span><span class="op">)</span></span>
-<span><span class="va">opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_exp_opts.html">get_exp_opts</a></span><span class="op">(</span>iterations <span class="op">=</span> <span class="fl">100</span>, miniblocks <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">exp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_experiment.html">make_experiment</a></span><span class="op">(</span><span class="va">pav_inhib</span>,</span>
 <span>  parameters <span class="op">=</span> <span class="va">pars</span>,</span>
-<span>  model <span class="op">=</span> <span class="st">"HDI2020"</span>, options <span class="op">=</span> <span class="va">opts</span></span>
+<span>  model <span class="op">=</span> <span class="st">"HDI2020"</span>,</span>
+<span>  iterations <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  miniblocks <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># time it</span></span>
@@ -145,7 +146,7 @@ package.</p>
 <span><span class="va">end</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html" class="external-link">proc.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">start</span></span>
 <span><span class="va">end</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   6.050   0.050   4.365</span></span></code></pre></div>
+<span><span class="co">#&gt;   4.892   0.063   3.611</span></span></code></pre></div>
 <p>You can see the timings above, under the <code>elapsed</code> column.
 Let’s try parallelizing now.</p>
 </div>
@@ -167,12 +168,12 @@ on a single computer, you’ll be using
 <span><span class="va">end</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html" class="external-link">proc.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">start</span></span>
 <span><span class="va">end</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.779   0.104   4.349</span></span>
+<span><span class="co">#&gt;   0.718   0.124   3.351</span></span>
 <span></span>
 <span><span class="co"># go back to non-parallel evaluations</span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">sequential</span><span class="op">)</span></span></code></pre></div>
 <p>In this case, the parallel evaluation was slower. The
-<code>future</code> package trades off ease-of-use for bulkier
+<code>future</code> package trades off ease of use for bulkier
 overheads. As those overheads tend to be constant, the parallelization
 will have a better payoff once you run more iterations.</p>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0" line-spacing="2">

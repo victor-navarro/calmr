@@ -129,7 +129,7 @@ the association from stimulus <span class="math inline">\(i\)</span> to
 trial <span class="math inline">\(t\)</span>. As such, the SOCR model
 only learns about stimuli that are presented. The parameters <span class="math inline">\(\alpha_i\)</span> and <span class="math inline">\(\alpha_j\)</span> are the saliencies of stimuli i
 and j, respectively, and <span class="math inline">\(\lambda_j\)</span>
-is a the maximum association strength supported by <span class="math inline">\(j\)</span> (the asymptote).</p>
+is the maximum association strength supported by <span class="math inline">\(j\)</span> (the asymptote).</p>
 <p>Whenever stimulus <span class="math inline">\(i\)</span> is presented
 alone (i.e., stimulus <span class="math inline">\(j\)</span> is absent),
 the weakening of that association is given by:</p>
@@ -197,11 +197,11 @@ corresponding instantiations of Eq. 3. That is, they involve comparison
 processes themselves. The number of potential comparison processes is
 technically infinite (each comparison process can nest two extra
 comparison processes itself), so the user must determine the order of
-model using an extra global parameter (<code>order</code>). For all n-th
-order models (with <span class="math inline">\(n &gt; 0\)</span>), the
-model will behave like the extended comparator hypothesis <span class="citation">(Denniston et al., 2001)</span>, implementing <span class="math inline">\(n\)</span> comparison processes each time the
+the model using an extra global parameter (<code>order</code>). For all
+n-th order models (with <span class="math inline">\(n &gt; 0\)</span>),
+the model will behave like the extended comparator hypothesis <span class="citation">(Denniston et al., 2001)</span>, implementing <span class="math inline">\(n\)</span> comparison processes each time the
 relative activations are calculated. With <code>order = 0</code>, SM2007
-will behave like it was originally written, and only consider one
+will behave like it was originally written and only consider one
 comparison process. Indeed, n-th order models are accomplished via
 recursion using the 0-th order model as the stopping condition. When
 such a condition is reached, the <span class="math inline">\(r^k_i\)</span> and <span class="math inline">\(r^j_k\)</span> terms in Eq. 3 become <span class="math inline">\(act_{i,k}\)</span> and <span class="math inline">\(act_{k,j}\)</span>, respectively.</p>
