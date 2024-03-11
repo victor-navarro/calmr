@@ -85,7 +85,7 @@ SM2007 <- function(v = NULL, # nolint
     absent <- setdiff(fsnames, present)
     for (j in absent) {
       for (i in present) {
-        if (debug) cat("\nActivating", j, "via", i, "\n\n")
+        if (debug) message("\nActivating", j, "via", i, "\n\n")
         relact[i, j] <- comparator_func(
           act = act, i = i, j = j,
           K = fsnames, o = o,
