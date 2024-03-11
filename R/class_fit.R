@@ -41,7 +41,7 @@ setMethod("show", "CalmrFit", function(object) {
     "Calmr model fit\n",
     "--------------\n",
     "Parameters:\n",
-    paste0(capture.output(object@best_pars), collapse = "\n"),
+    paste0(utils::capture.output(object@best_pars), collapse = "\n"),
     "--------------\n",
     "\nnLogLik: ", round(object@nloglik, 4)
   )

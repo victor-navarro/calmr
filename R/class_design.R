@@ -26,11 +26,11 @@ methods::setMethod(
   function(object) {
     message(
       "CalmrDesign built from data.frame:\n",
-      paste0(capture.output(object@raw_design), collapse = "\n"),
+      paste0(utils::capture.output(object@raw_design), collapse = "\n"),
       "\n",
       "----------------\n",
       "Trials detected:\n",
-      paste0(capture.output(trials(object)), collapse = "\n")
+      paste0(utils::capture.output(trials(object)), collapse = "\n")
     )
   }
 )

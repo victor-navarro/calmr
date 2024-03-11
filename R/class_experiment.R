@@ -42,11 +42,11 @@ setMethod("show", "CalmrExperiment", function(object) {
     object@model, "\n",
     "-----------------------------\n",
     "Design:\n",
-    paste0(capture.output(object@design@raw_design), collapse = "\n"),
+    paste0(utils::capture.output(object@design@raw_design), collapse = "\n"),
     "\n",
     "-----------------------------\n",
     "Parameters:\n",
-    paste0(capture.output(object@parameters), collapse = "\n")
+    paste0(utils::capture.output(object@parameters), collapse = "\n")
   )
 })
 

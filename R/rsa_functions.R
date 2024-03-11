@@ -1,4 +1,4 @@
-#' Perform representational similarity analysis on CalmrExperiment
+#' Perform representational similarity analysis
 #'
 #' @param x A list of CalmrExperiment objects
 #' @param comparisons A model-named list containing the model

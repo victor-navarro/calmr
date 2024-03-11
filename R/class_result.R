@@ -32,8 +32,8 @@ methods::setClass("CalmrExperimentResult",
 #' @export
 methods::setMethod("show", "CalmrResult", function(object) {
   if (!is.null(object@aggregated_results)) {
-    message(paste0(capture.output(object@aggregated_results), collapse = "\n"))
+    message(paste0(utils::capture.output(object@aggregated_results), collapse = "\n"))
   } else {
-    message(paste0(capture.output(object@raw_results), collapse = "\n"))
+    message(paste0(utils::capture.output(object@raw_results), collapse = "\n"))
   }
 })

@@ -28,13 +28,13 @@ setMethod("show", "CalmrRSA", function(object) {
     "CalmrRSA object\n",
     "---------------\n",
     "Correlation matrix:\n",
-    paste0(capture.output(object@corr_mat), collapse = "\n")
+    paste0(utils::capture.output(object@corr_mat), collapse = "\n")
   )
   if (length(object@test_data)) {
     msg <- c(
       msg, "\n", "---------------\n",
       "Significance matrix:\n",
-      paste0(capture.output(object@test_data$sig_mat), collapse = "\n"),
+      paste0(utils::capture.output(object@test_data$sig_mat), collapse = "\n"),
       "\n",
       paste0(sprintf(
         "From %d permutation samples, two-tailed test with alpha = %1.2f.",

@@ -2,7 +2,7 @@
 % Please edit documentation in R/rsa_functions.R
 \name{rsa}
 \alias{rsa}
-\title{Perform representational similarity analysis on CalmrExperiment}
+\title{Perform representational similarity analysis}
 \usage{
 rsa(x, comparisons, test = FALSE, ...)
 }
@@ -21,7 +21,7 @@ and \code{stats::cor}}
 A CalmrRSA object
 }
 \description{
-Perform representational similarity analysis on CalmrExperiment
+Perform representational similarity analysis
 }
 \note{
 The object returned by this function
