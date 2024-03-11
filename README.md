@@ -2,7 +2,7 @@
 
 Canonical Associative Learning Models and their Representations
 
-## Installation
+## Installing the latest version
 
 You will need devtools to install this package from github. If you do not have it, run:
 
