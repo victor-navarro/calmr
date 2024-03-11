@@ -10,8 +10,9 @@
 #' @param debug_t Whether to invoke a `browser` at
 #' the end of a timestep equal to debug_t.
 #' @param ... Additional named arguments
-#' @returns A list with raw results
+#' @return A list with raw results
 #' @note This model is in a highly experimental state. Use with caution.
+#' @noRd
 ANCCR <- function(
     parameters, experience,
     mapping, debug = FALSE, debug_t = -1, ...) {

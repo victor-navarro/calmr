@@ -11,6 +11,9 @@ patch_graphs(graphs, selection = names(graphs))
 
 \item{selection}{A character or numeric vector determining the plots to patch}
 }
+\value{
+A \code{patchwork} object
+}
 \description{
 Convenience function to patch graphs with \code{patchwork}
 }

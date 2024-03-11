@@ -4,6 +4,7 @@
 # args is the list of arguments used to fit the model
 # raw are the raw results
 # returns a list
+#' @noRd
 .parse_model <- function(raw, experience, model) {
   outputs <- model_outputs(model)
   sapply(outputs, function(o) {

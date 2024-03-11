@@ -19,6 +19,7 @@
 #' @name information_functions
 #' @rdname model_info
 #' @export
+#' @return A character vector
 supported_models <- function() {
   c(
     "HDI2020", "HD2022", "RW1972", "MAC1975",
@@ -28,18 +29,22 @@ supported_models <- function() {
 
 #' @rdname model_info
 #' @export
+#' @return A character vector
 supported_optimizers <- function() {
   c("optim", "ga")
 }
 
 #' @rdname model_info
 #' @export
+#' @return A character vector
 supported_families <- function() {
   c("identity", "normal", "poisson")
 }
 
 #' @rdname model_info
 #' @export
+#' @return A character vector if model is not NULL. A list otherwise.
+
 supported_plots <- function(model = NULL) {
   plot_info <- list(
     "HDI2020" = c("as", "acts", "rs", "vs"),
@@ -65,12 +70,17 @@ supported_plots <- function(model = NULL) {
 
 #' @rdname model_info
 #' @export
+#' @return A function
 get_model <- function(model) {
   # Check model is supported
   .calmr_assert("supported_model", model)
   get(model)
 }
 
+#' @rdname model_info
+#' @export
+#' @return A list with "name" (a character vector with parameter names
+#' and "default_value" (a numeric vector with parameter values)
 parameter_info <- function(model = NULL) {
   parameter_map <- list(
     "HDI2020" = list(
@@ -186,6 +196,7 @@ parameter_info <- function(model = NULL) {
 
 #' @rdname model_info
 #' @export
+#' @return A character vector if model is not NULL. A list otherwise.
 model_outputs <- function(model = NULL) {
   output_info <- list(
     "HDI2020" = c("as", "acts", "rs", "vs"),

@@ -7,6 +7,7 @@
 \alias{supported_families}
 \alias{supported_plots}
 \alias{get_model}
+\alias{parameter_info}
 \alias{model_outputs}
 \title{Miscellaneous information functions}
 \usage{
@@ -20,10 +21,28 @@ supported_plots(model = NULL)
 
 get_model(model)
 
+parameter_info(model = NULL)
+
 model_outputs(model = NULL)
 }
 \arguments{
 \item{model}{A string specifying a model. One from \code{supported_models()}}
+}
+\value{
+A character vector
+
+A character vector
+
+A character vector
+
+A character vector if model is not NULL. A list otherwise.
+
+A function
+
+A list with "name" (a character vector with parameter names
+and "default_value" (a numeric vector with parameter values)
+
+A character vector if model is not NULL. A list otherwise.
 }
 \description{
 \describe{

@@ -3,7 +3,7 @@ Title: Canonical Associative Learning Models and their Representations
 Version: 0.5.1
 Authors@R: 
     person("Victor", "Navarro", , "navarrov@cardiff.ac.uk", role = c("aut", "cre"))
-Description: A package with implementations of canonical associative learning models, and tools to run model simulations, estimate model parameters, and analize model representations.
+Description: Implementations of canonical associative learning models, and tools to run model simulations, estimate model parameters, and analyze model representations.
 License: GPL (>= 3)
 URL: https://github.com/victor-navarro/calmr,
     https://victornavarro.org/calmr/

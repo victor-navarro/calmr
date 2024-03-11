@@ -9,7 +9,8 @@
 #' @param mapping A named list specifying trial and stimulus mapping,
 #' as returned by `make_experiment`
 #' @param ... Additional named arguments
-#' @returns A list with raw results
+#' @return A list with raw results
+#' @noRd
 RAND <- function(v = NULL, # nolint: object_name_linter.
                  parameters,
                  experience,

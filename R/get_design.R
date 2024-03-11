@@ -1,7 +1,7 @@
 #' Get basic designs
 #'
 #' @param design_name A string specifying a design name (default = NULL)
-#' @returns If design_name != NULL, a data.frame containing the design.
+#' @return If design_name != NULL, a data.frame containing the design.
 #' Otherwise, a list containing all available designs.
 #' @export
 
@@ -20,6 +20,13 @@ get_design <- function(design_name = NULL) {
       R1 = c(TRUE, TRUE),
       P2 = c("1#A", "1#A"),
       R2 = c(TRUE, TRUE)
+    ),
+    "controlled_blocking" = data.frame(
+      Group = c("Blocking", "Control"),
+      P1 = c("10N>(US)", "10C>(US)"),
+      R1 = FALSE,
+      P2 = c("10NL>(US)/10#L", "10NL>(US)/10#L"),
+      R2 = FALSE
     )
   )
   if (is.null(design_name)) {

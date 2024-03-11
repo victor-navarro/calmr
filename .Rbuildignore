@@ -8,3 +8,5 @@
 ^pkgdown$
 ^\.github$
 ^vignettes/articles$
+^revdep$
+^cran-comments\.md$

@@ -3,7 +3,7 @@
 #' @param models A character vector of length m, specifying the models to run.
 #' Ignored if x is a list of CalmrExperiment objects.
 #' @param ... Arguments passed to `make_experiment`
-#' @returns A list of CalmrExperiment objects
+#' @return A list of CalmrExperiment objects
 #' @export
 #' @examples
 #' # By making experiment beforehand (recommended)

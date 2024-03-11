@@ -16,6 +16,7 @@
 #' the end of the relevant lists.
 #' @seealso \code{\link{fit_model}}, \code{\link{make_experiment}}
 #' @export
+#' @return A list.
 get_optimizer_opts <- function(model_pars,
                                initial_pars = rep(NA, length(model_pars)),
                                ll = rep(NA, length(model_pars)),

@@ -13,6 +13,9 @@ patch_plots(plots, selection = names(plots), plot_options = get_plot_opts())
 
 \item{plot_options}{A list of plot options as returned by \code{get_plot_opts}}
 }
+\value{
+A \code{patchwork} object
+}
 \description{
 Convenience function to patch plots with \code{patchwork}
 }

@@ -194,6 +194,7 @@ get_plot_opts <- function(common_scale = TRUE) {
 #' @param selection A character or numeric vector determining the plots to patch
 #' @param plot_options A list of plot options as returned by `get_plot_opts`
 #' @export
+#' @return A `patchwork` object
 
 patch_plots <- function(
     plots, selection = names(plots),

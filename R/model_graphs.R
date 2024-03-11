@@ -79,6 +79,7 @@ calmr_model_graph <- function(
 #' @param graphs A list of named graphs, as returned by `calmr::graph`
 #' @param selection A character or numeric vector determining the plots to patch
 #' @export
+#' @return A `patchwork` object
 
 patch_graphs <- function(graphs, selection = names(graphs)) {
   # unlist graphs

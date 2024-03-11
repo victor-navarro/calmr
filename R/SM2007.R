@@ -15,7 +15,7 @@
 #' @param comparator_func A function to be used in the comparison
 #' process. Either `.witnauer_comparator_func`or `.comparator_func`.
 #' @param ... Additional named arguments
-#' @returns A list with raw results
+#' @return A list with raw results
 #' @note
 #' Correct usage of the v and o parameters requires the
 #' matrices to adhere to a specific format.
@@ -23,7 +23,7 @@
 #' stimulus i to stimulus j.
 #' For o, entry i,k,j represents the operator switch
 #' between stimulus i and comparator k with respect to stimulus j.
-
+#' @noRd
 SM2007 <- function(v = NULL, # nolint
                    o = NULL,
                    parameters,

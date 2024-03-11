@@ -21,8 +21,10 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
 #' Augment CalmrDesign to be used with the ANCCR model.
 #' @param object A CalmrDesign
 #' @rdname CalmrDesign-methods
+#' @noRd
 .anccrize_design <- function(object) {
-  # After refactoring the parser, this became unnecessary
+  # VN: After rewriting parse_design, this became unnecessary
+  # Leaving it here for the future.
   object
 }
 

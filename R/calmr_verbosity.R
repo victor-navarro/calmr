@@ -4,6 +4,8 @@
 #' @note Progress bars are handled by the progressr package.
 #' This is just a convenience function.
 #' @export
+#' @return The list of progressr handlers (invisibly).
+#' @note See package `progressr` for further details.
 calmr_verbosity <- function(verbose) {
   if (verbose) {
     progressr::handlers("progress")

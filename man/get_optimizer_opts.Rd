@@ -31,6 +31,9 @@ One from \code{c("optim", "ga")}}
 generate responses (and calculate the likelihood function with).
 One from \code{c("identity", "normal", "poisson")}.}
 }
+\value{
+A list.
+}
 \description{
 Get optimizer options
 }

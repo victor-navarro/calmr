@@ -6,7 +6,7 @@
 #' @param test Whether to test the RSA via permutation test. Default = FALSE.
 #' @param ... Additional parameters passed to `stats::dist`
 #' and `stats::cor`
-#' @returns A CalmrRSA object
+#' @return A CalmrRSA object
 #' @note The object returned by this function
 #' can be later tested via its own `test` method.
 #' @export

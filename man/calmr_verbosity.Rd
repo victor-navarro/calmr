@@ -9,10 +9,15 @@ calmr_verbosity(verbose)
 \arguments{
 \item{verbose}{A logical}
 }
+\value{
+The list of progressr handlers (invisibly).
+}
 \description{
 Whether to show verbosity messages and progress bars
 }
 \note{
 Progress bars are handled by the progressr package.
 This is just a convenience function.
+
+See package \code{progressr} for further details.
 }
