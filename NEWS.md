@@ -1,3 +1,5 @@
+# calmr 0.6.0
+
 # calmr 0.5.1
 * Added parallelization and progress bars via `future`, `future.apply`, and `progressr`.
 * Function `calmr_verbosity` can set the verbosity of the package.
