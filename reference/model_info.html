@@ -76,7 +76,7 @@ model (or all of them if model = NULL)
     
     <a class="navbar-brand me-2" href="../index.html">calmr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -178,6 +178,8 @@ argument <code>model</code>.</p></dd>
 <span></span>
 <span><span class="fu">get_model</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">parameter_info</span><span class="op">(</span>model <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">model_outputs</span><span class="op">(</span>model <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -187,6 +189,31 @@ argument <code>model</code>.</p></dd>
 <dd><p>A string specifying a model. One from <code>supported_models()</code></p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
+
+<p>A character vector</p>
+
+
+<p>A character vector</p>
+
+
+<p>A character vector</p>
+
+
+<p>A character vector if model is not NULL. A list otherwise.</p>
+
+
+<p>A function</p>
+
+
+<p>A list with "name" (a character vector with parameter names
+and "default_value" (a numeric vector with parameter values)</p>
+
+
+<p>A character vector if model is not NULL. A list otherwise.</p>
+    </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>

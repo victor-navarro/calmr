@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">calmr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,35 +66,45 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.6.0" id="calmr-060">calmr 0.6.0<a class="anchor" aria-label="anchor" href="#calmr-060"></a></h2>
+<ul><li>Added dependency on <code>data.table</code> resulting in great speedups for large experiments.</li>
+<li>Replaced dependency on <code>cowplot</code> with dependency on <code>patchwork</code>.</li>
+<li>Removed dependencies on <code>tibble</code>, <code>dplyr</code>, <code>tidyr</code>, and other packages from the <code>tidyverse</code>.</li>
+<li>Removed <code>shiny</code> app from the package.</li>
+<li>The previous app is now distributed separately via the <code>calmr.app</code> package available on GitHub.</li>
+<li>Test coverage has reached 100%.</li>
+<li>The package is now ready for CRAN submission.</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.1" id="calmr-051">calmr 0.5.1<a class="anchor" aria-label="anchor" href="#calmr-051"></a></h2>
 <ul><li>Added parallelization and progress bars via <code>future</code>, <code>future.apply</code>, and <code>progressr</code>.</li>
 <li>Function <code>calmr_verbosity</code> can set the verbosity of the package.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.0" id="calmr-050">calmr 0.5.0<a class="anchor" aria-label="anchor" href="#calmr-050"></a></h2>
-<ul><li>Implementation of ANCCR (Jeong et al., 2022), the first time-based model included in calmr.</li>
+<ul><li>Implementation of ANCCR (Jeong et al., 2022), the first time-based model included in <code>calmr</code>.</li>
 <li>Added parameter distinction between trial-wise and period-wise parameters.</li>
 <li>Added internal augmentation of design/arguments depending on the model.</li>
 <li>All trial-based models do not use pre/post distinctions anymore. Using the “&gt;” special character does not affect these models anymore.</li>
-<li>The “&gt;” special character is used to specify periods within a trial. For example, “A&gt;B&gt;C” implies A is followed by B which is followed by C. See “using_time_models” vignette for additional information.</li>
+<li>The “&gt;” special character is used to specify periods within a trial. For example, “A&gt;B&gt;C” implies A is followed by B which is followed by C. See the <code>using_time_models</code> vignette for additional information.</li>
 <li>Named stimuli now support numbers trailing characters (e.g., “(US1)” is valid now.)</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.0" id="calmr-040">calmr 0.4.0<a class="anchor" aria-label="anchor" href="#calmr-040"></a></h2>
 <ul><li>Major refactoring of classes and models. This should help development moving forward.</li>
-<li>Added several methods for access to CalmrExperiment contents, including <code>c</code> (to bind experiments) <code>results</code>, <code>plot</code>, <code>graph</code>, <code>design</code> and <code>parameters</code>.</li>
+<li>Added several methods for access to CalmrExperiment contents, including <code>c</code> (to bind experiments) <code>results</code>, <code>plot</code>, <code>graph</code>, <code>design</code>, and <code>parameters</code>.</li>
 <li>Created CalmrDesign and CalmrResult classes.</li>
-<li>Rewrote parsers to be less verbose and to rely less on the tidyverse suite and piping.</li>
+<li>Rewrote parsers to be less verbose and to rely less on the <code>tidyverse</code> suite and piping.</li>
 <li>Substantially reduced the complexity of <code>make_experiment</code> function (previous <code>make_experiment</code>).</li>
 <li>Introduced distinction between stimulus-specific and global parameters.</li>
 <li>Parameters are now lists instead of data.frames.</li>
-<li>Modified UI for calmr app to include a sidebar (to reduce clutter).</li>
+<li>Modified UI for calmr app to include a sidebar.</li>
 <li>Simplified the app by removing some of the options.</li>
 <li>Nearly duplicated the number of tests.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.0" id="calmr-030">calmr 0.3.0<a class="anchor" aria-label="anchor" href="#calmr-030"></a></h2>
-<ul><li>Added first version of the SOCR model (SM2007) as well as two vignettes explaining the math behind the implementation and some quick simulations. Warning: EXPERIMENTAL.</li>
+<ul><li>Added first version of the SOCR model (SM2007) as well as two vignettes explaining the math behind the implementation and some quick simulations.</li>
 <li>Documentation progress.</li>
 </ul></div>
     <div class="section level2">
@@ -107,7 +117,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="calmr-010">calmr 0.1.0<a class="anchor" aria-label="anchor" href="#calmr-010"></a></h2>
-<ul><li>heidi is now calmr: Canonical Associative Learning Models in R. The package now aims to maintain several associative learning models and implement tools for their use.</li>
+<ul><li>
+<code>heidi</code> is now <code>calmr</code>. The package now aims to maintain several associative learning models and implement tools for their use.</li>
 <li>Major overhaul of the training function (train_pav_model). All relevant calculations are now done as a function of all functional stimuli instead of just the US.</li>
 <li>Support for the specification of expectation/correction steps within the trial via “&gt;”. For example, the trial “A&gt;(US)” will use only A to generate the expectation, but will learn about both stimuli during the correction step.</li>
 <li>The previous plotting function for R-values has been revamped to allow both simple and complex versions. The complex version facets r-values on a predictor basis, and uses colour lines for each target.</li>
