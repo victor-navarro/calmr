@@ -2,6 +2,11 @@
 
 Canonical Associative Learning Models and their Representations
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/victor-navarro/calmr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/victor-navarro/calmr/actions/workflows/R-CMD-check.yaml)
+[![codecov](https://codecov.io/gh/victor-navarro/calmr/graph/badge.svg?token=8VTS3MQX51)](https://codecov.io/gh/victor-navarro/calmr)
+<!-- badges: end -->
+
 ## Installing the latest stable version
 
 You may install the latest stable version from CRAN:
