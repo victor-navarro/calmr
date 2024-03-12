@@ -7,9 +7,6 @@
     <loc>https://victornavarro.org/calmr/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://victornavarro.org/calmr/articles/ANCCR.html</loc>
-  </url>
-  <url>
     <loc>https://victornavarro.org/calmr/articles/HD2022.html</loc>
   </url>
   <url>
@@ -70,13 +67,13 @@
     <loc>https://victornavarro.org/calmr/reference/CalmrExperiment.html</loc>
   </url>
   <url>
+    <loc>https://victornavarro.org/calmr/reference/CalmrExperimentResult.html</loc>
+  </url>
+  <url>
     <loc>https://victornavarro.org/calmr/reference/CalmrFit-class.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/CalmrFit-methods.html</loc>
-  </url>
-  <url>
-    <loc>https://victornavarro.org/calmr/reference/CalmrModel-class.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/CalmrRSA-class.html</loc>
@@ -127,7 +124,7 @@
     <loc>https://victornavarro.org/calmr/reference/make_experiment.html</loc>
   </url>
   <url>
-    <loc>https://victornavarro.org/calmr/reference/model_info.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/model_information.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/parse_design.html</loc>

@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">calmr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,7 +55,6 @@
     <a class="dropdown-item" href="../articles/SM2007.html">SM2007</a>
     <a class="dropdown-item" href="../articles/HD2022.html">HD2022</a>
     <a class="dropdown-item" href="../articles/RAND.html">RAND</a>
-    <a class="dropdown-item" href="../articles/ANCCR.html">ANCCR</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Demos</h6>
     <a class="dropdown-item" href="../articles/calmr_basics.html">calmr_basics</a>
@@ -245,7 +244,7 @@ good to see what results <code>run_experiment</code> returns.</p>
 <span><span class="co">#&gt; 191:    CB2 training L&gt;(Sucrose)    23 Sucrose          2   0.4 HD2022</span></span>
 <span><span class="co">#&gt; 192:    CB2 training  R&gt;(Pellet)    24 Sucrose          2   0.0 HD2022</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $acts</span></span>
+<span><span class="co">#&gt; $heidi_acts</span></span>
 <span><span class="co">#&gt;       group    phase  trial_type trial      s1      s2 block_size    type value</span></span>
 <span><span class="co">#&gt;      &lt;char&gt;   &lt;char&gt;      &lt;char&gt; &lt;int&gt;  &lt;char&gt;  &lt;char&gt;      &lt;num&gt;  &lt;char&gt; &lt;num&gt;</span></span>
 <span><span class="co">#&gt;   1:    CB1 training  L&gt;(Pellet)     1 LPellet       L          2  combvs     0</span></span>
@@ -464,7 +463,7 @@ negative log likelihood, given the data:</p>
 parameters “visually” fit the data? We can obtain the predictions from
 the model via the <code>predict</code> function.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pati_summ</span><span class="op">$</span><span class="va">prediction</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">the_fit</span>, exper <span class="op">=</span> <span class="va">experiment</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">pati_summ</span><span class="op">$</span><span class="va">prediction</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CalmrFit-methods.html">predict</a></span><span class="op">(</span><span class="va">the_fit</span>, exper <span class="op">=</span> <span class="va">experiment</span><span class="op">)</span></span>
 <span><span class="va">pati_summ</span><span class="op">[</span>, <span class="va">data</span> <span class="op">:=</span> <span class="va">rpert</span><span class="op">]</span><span class="op">[</span>, <span class="va">rpert</span> <span class="op">:=</span> <span class="cn">NULL</span><span class="op">]</span></span>
 <span><span class="va">pati_summ</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span><span class="va">pati_summ</span>, measure.vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"prediction"</span>, <span class="st">"data"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">pati_summ</span> <span class="op">|&gt;</span></span>

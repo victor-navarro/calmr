@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">calmr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,7 +31,6 @@
     <a class="dropdown-item" href="../articles/SM2007.html">SM2007</a>
     <a class="dropdown-item" href="../articles/HD2022.html">HD2022</a>
     <a class="dropdown-item" href="../articles/RAND.html">RAND</a>
-    <a class="dropdown-item" href="../articles/ANCCR.html">ANCCR</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Demos</h6>
     <a class="dropdown-item" href="../articles/calmr_basics.html">calmr_basics</a>
@@ -78,16 +77,99 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>phase_string</dt>
-<dd><p>A string</p></dd>
+<dd><p>A string specifying trials within a phase.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A named list</p>
+<p>A named list with:</p><dl><dt>trial_info:</dt>
+<dd><p>A trial-named list of lists.</p></dd>
+
+<dt>general_info:</dt>
+<dd><p>General phase information.</p></dd>
+
+
+</dl></div>
+    <div class="section level2">
+    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
+    <p>This function is meant for internal use only,
+but we expose it so you can test your strings.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="parse_design.html">parse_design()</a></code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># A silly (but valid) string</span></span></span>
+<span class="r-in"><span><span class="fu">phase_parser</span><span class="op">(</span><span class="st">"10#Rescorla&gt;Wagner"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_info</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_info$`10#Rescorla&gt;Wagner`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_info$`10#Rescorla&gt;Wagner`$name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#Rescorla&gt;Wagner"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_info$`10#Rescorla&gt;Wagner`$repetitions</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_info$`10#Rescorla&gt;Wagner`$is_test</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_info$`10#Rescorla&gt;Wagner`$periods</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Rescorla" "Wagner"  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_info$`10#Rescorla&gt;Wagner`$nominals</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_info$`10#Rescorla&gt;Wagner`$nominals$Rescorla</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "R" "e" "s" "c" "o" "r" "l" "a"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_info$`10#Rescorla&gt;Wagner`$nominals$Wagner</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "W" "a" "g" "n" "e" "r"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_info$`10#Rescorla&gt;Wagner`$functionals</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_info$`10#Rescorla&gt;Wagner`$functionals$Rescorla</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "R" "e" "s" "c" "o" "r" "l" "a"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_info$`10#Rescorla&gt;Wagner`$functionals$Wagner</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "W" "a" "g" "n" "e" "r"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_info$`10#Rescorla&gt;Wagner`$all_nominals</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "R" "e" "s" "c" "o" "r" "l" "a" "W" "a" "g" "n" "e" "r"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $trial_info$`10#Rescorla&gt;Wagner`$all_functionals</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "R" "e" "s" "c" "o" "r" "l" "a" "W" "a" "g" "n" "e" "r"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $general_info</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $general_info$trial_names</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#Rescorla&gt;Wagner"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $general_info$trial_repeats</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $general_info$is_test</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $general_info$nomi2func</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   R   e   s   c   o   r   l   a   W   g   n </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "R" "e" "s" "c" "o" "r" "l" "a" "W" "g" "n" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $general_info$func2nomi</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   R   e   s   c   o   r   l   a   W   g   n </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "R" "e" "s" "c" "o" "r" "l" "a" "W" "g" "n" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># An invalid string that needs trial repetitions for one of trials.</span></span></span>
+<span class="r-in"><span><span class="fu">phase_parser</span><span class="op">(</span><span class="st">"10#Rescorla/Wagner"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

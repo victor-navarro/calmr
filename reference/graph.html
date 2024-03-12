@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">calmr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,7 +31,6 @@
     <a class="dropdown-item" href="../articles/SM2007.html">SM2007</a>
     <a class="dropdown-item" href="../articles/HD2022.html">HD2022</a>
     <a class="dropdown-item" href="../articles/RAND.html">RAND</a>
-    <a class="dropdown-item" href="../articles/ANCCR.html">ANCCR</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Demos</h6>
     <a class="dropdown-item" href="../articles/calmr_basics.html">calmr_basics</a>
@@ -78,15 +77,15 @@
 <span>  limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  colour_key <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">trial</span><span class="op">)</span>,</span>
-<span>  options <span class="op">=</span> <span class="fu"><a href="get_graph_opts.html">get_graph_opts</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  <span class="va">...</span></span>
+<span>  options <span class="op">=</span> <span class="fu"><a href="get_graph_opts.html">get_graph_opts</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
-<dd><p>A data.frame-like with data to use in the plot</p></dd>
+<dd><p>A <code>data.frame</code>-like with data to use in the plot.
+Contains a column named <code>value</code>.</p></dd>
 
 
 <dt>loops</dt>
@@ -94,8 +93,8 @@
 
 
 <dt>limits</dt>
-<dd><p>Numerical. Limits for color scale. Defaults to NULL,
-in which case, limits are set to be max(abs(x$value))*c(-1,1)</p></dd>
+<dd><p>Numerical. Limits for color scale.
+Defaults to max(abs(x$value))*c(-1,1).</p></dd>
 
 
 <dt>colour_key</dt>
@@ -104,15 +103,11 @@ in which case, limits are set to be max(abs(x$value))*c(-1,1)</p></dd>
 
 <dt>t</dt>
 <dd><p>The trial from which weights are obtained
-(defaults to the maximum trial in the design)</p></dd>
+(defaults to the maximum trial in the data).</p></dd>
 
 
 <dt>options</dt>
-<dd><p>A list with graph options, as returned by <code>get_graph_opts</code></p></dd>
-
-
-<dt>...</dt>
-<dd><p>Additional named arguments</p></dd>
+<dd><p>A list with graph options, as returned by <code><a href="get_graph_opts.html">get_graph_opts()</a></code>.</p></dd>
 
 
 <dt>trial</dt>
@@ -123,12 +118,12 @@ in which case, limits are set to be max(abs(x$value))*c(-1,1)</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A ggplot object</p>
+<p>A 'ggplot' object</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>You should probably be getting graphs via
-the <code>graph</code> method for CalmrExperiments.</p>
+the <code><a href="CalmrExperiment-methods.html">graph()</a></code> method for <a href="CalmrExperiment.html">CalmrExperiment</a>.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
