@@ -2,19 +2,28 @@
 
 Canonical Associative Learning Models and their Representations
 
+## Installing the latest stable version
+
+You may install the latest stable version from CRAN:
+
+```
+install.packages("calmr")
+```
+
 ## Installing the latest version
 
-You will need devtools to install this package from github. If you do not have it, run:
+If you are feeling more daring, you can install the latest version of the package. You will need devtools to install this package from GitHub.
 
-`install.packages("devtools")`
+```
+install.packages("devtools")
+devtools::install_github("victor-navarro/calmr")
+```
 
-Afterward, you can install directly from this repository via:
+If you managed to build the vignettes, there's a vignette showing the basics of the package. (Worry not, the package's [website](www.victornavarro.org/calmr) also has it).
 
-`devtools::install_github("victor-navarro/calmr", build_vignettes = TRUE)`
-
-If you managed to build the vignettes, there's a vignette showing the basics of the package in
-
-`vignette("calmr_basics", package = "calmr")`
+```
+vignette("calmr_basics", package = "calmr")
+```
 
 If you want to do some simulations using the companion app, you must install the `calmr.app` package and then launch the app.
 

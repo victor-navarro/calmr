@@ -27,10 +27,8 @@ but we expose it so you can test your strings.
 # A silly (but valid) string
 phase_parser("10#Rescorla>Wagner")
 
-\dontrun{
 # An invalid string that needs trial repetitions for one of trials.
-phase_parser("10#Rescorla/Wagner")
-}
+try(phase_parser("10#Rescorla/Wagner"))
 }
 \seealso{
 \code{\link[=parse_design]{parse_design()}}

@@ -12,10 +12,8 @@
 #' # A silly (but valid) string
 #' phase_parser("10#Rescorla>Wagner")
 #'
-#' \dontrun{
 #' # An invalid string that needs trial repetitions for one of trials.
-#' phase_parser("10#Rescorla/Wagner")
-#' }
+#' try(phase_parser("10#Rescorla/Wagner"))
 #' @seealso [parse_design()]
 #' @export
 phase_parser <- function(phase_string) {
