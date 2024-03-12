@@ -83,7 +83,7 @@ we simply address this issue by running several iterations of the experiment
 (with random trial orders) and averaging all experiments before evaluating the 
 likelihood of the parameters.
 
-So what do we have to design? The experiment presented by Patittuci 
+So what do we have to design? The experiment presented by Patitucci 
 et al. (2016) was fairly simple, and it can be reduced to the 
 presentations of two levers, each followed by a different appetitive 
 outcome. Here, we will assume that the two outcomes are independent 

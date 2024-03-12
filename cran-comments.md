@@ -1,18 +1,6 @@
 ## Comments
 
-### Third submission
-
->Thanks, we see:
-Found the following (possibly) invalid file URI:
-     URI: www.victornavarro.org/calmr
-       From: README.md
-Pls specify the URL completely and start with the protocol, e.g. https://...
-Please fix and resubmit.
-
-Fixed to include the protocol. Apologies for the inconvenience.
-
-
-### Second submission (calmr 0.6.0 -> 0.6.1)
+### Resubmission (calmr 0.6.0 -> 0.6.1)
 
 Thank you very much for the feedback and my apologies for the oversights. See my comments below.
 

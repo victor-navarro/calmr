@@ -3,6 +3,7 @@ ABAB
 ALC
 ANCCR
 Bugfix
+CMD
 CalmrDesign
 CalmrExperiment
 CalmrFit
@@ -42,6 +43,7 @@ asymptote
 attentional
 behaviour
 cardiff
+codecov
 colour
 comparator
 containign

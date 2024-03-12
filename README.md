@@ -4,7 +4,7 @@ Canonical Associative Learning Models and their Representations
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/victor-navarro/calmr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/victor-navarro/calmr/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/gh/victor-navarro/calmr/graph/badge.svg?token=8VTS3MQX51)](https://codecov.io/gh/victor-navarro/calmr)
+[![codecov](https://app.codecov.io/gh/victor-navarro/calmr/graph/badge.svg?token=8VTS3MQX51)](https://app.codecov.io/gh/victor-navarro/calmr)
 <!-- badges: end -->
 
 ## Installing the latest stable version
@@ -24,7 +24,7 @@ install.packages("devtools")
 devtools::install_github("victor-navarro/calmr")
 ```
 
-If you managed to build the vignettes, there's a vignette showing the basics of the package. (Worry not, the package's [website](https://www.victornavarro.org/calmr) also has it).
+If you managed to build the vignettes, there's a vignette showing the basics of the package. (Worry not, the package's [website](https://victornavarro.org/calmr/) also has it).
 
 ```
 vignette("calmr_basics", package = "calmr")

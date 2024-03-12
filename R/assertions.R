@@ -7,8 +7,7 @@
         return("RW1972")
       } else {
         if (!(given %in% supported_models())) {
-          stop("Model is not supported. Must be one returned by
-           supported_models()")
+          stop("Model is not supported. Must be one returned by supported_models()")
         }
         return(given)
       }
@@ -36,8 +35,7 @@
         return("optim")
       } else {
         if (!given %in% supported_optimizers()) {
-          stop("Optimizer is not supported. Must be one
-          returned by supported_optimizers()")
+          stop("Optimizer is not supported. Must be one returned by supported_optimizers()")
         } else {
           return(given)
         }
@@ -49,8 +47,7 @@
         return("identity")
       } else {
         if (!(given %in% supported_families())) {
-          stop("Family is not supported. Must be one
-          returned by supported_families()")
+          stop("Family is not supported. Must be one returned by supported_families()")
         } else {
           return(given)
         }
@@ -58,8 +55,7 @@
     },
     "limits_OK" = {
       if (any(is.na(given$ll)) | any(is.na(given$ul))) {
-        stop("Did not supply limits for all parameters estimated.
-        Count your parameters. Please see ?fit_model")
+        stop("Did not supply limits for all parameters estimated. Count your parameters. Please see ?fit_model")
       }
     },
     "filepath_OK" = {
@@ -72,20 +68,17 @@
         length(given$unique_nominal_stimuli) >
           length(given$unique_functional_stimuli)
       ) {
-        stop("The model does not support functional/nominal
-          stimuli specifications.")
+        stop("The model does not support functional/nominal stimuli specifications.")
       }
     },
     "supported_plot" = {
       if (!(given %in% nargs$supported)) {
-        stop(sprintf("Plot not supported. The model does
-        not contain '%s' in model results.", given))
+        stop(sprintf("Plot not supported. The model does not contain '%s' in model results.", given))
       }
     },
     "good_experiment" = {
       if (length(given@design@mapping$unique_nominal_stimuli) == 1) {
-        stop("Experiment is too simple to run for one or more groups.
-        Please check your design.")
+        stop("Experiment is too simple to run for one or more groups. Please check your design.")
       }
     },
     "length" = {
