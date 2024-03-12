@@ -7,17 +7,18 @@
 calmr_model_plot(dat, type)
 }
 \arguments{
-\item{dat}{A data.frame-like with data to use in the plot}
+\item{dat}{An \code{data.table} containing aggregated
+data from a \linkS4class{CalmrExperiment}}
 
-\item{type}{A character specifying the type of plot}
+\item{type}{A character specifying the type of plot.}
 }
 \value{
-A ggplot object
+A 'ggplot' object.
 }
 \description{
 Create a plot with calmr data
 }
 \note{
 You should probably be getting plots via
-the \code{plot} method for CalmrExperiments.
+the \code{\link[=plot]{plot()}} method for \linkS4class{CalmrExperiment}.
 }

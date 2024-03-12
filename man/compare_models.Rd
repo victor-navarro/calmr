@@ -7,15 +7,15 @@
 compare_models(x, models = NULL, ...)
 }
 \arguments{
-\item{x}{A list of CalmrExperiment objects or a design data.frame}
+\item{x}{A list of \linkS4class{CalmrExperiment} objects or a design \link{data.frame}.}
 
 \item{models}{A character vector of length m, specifying the models to run.
-Ignored if x is a list of CalmrExperiment objects.}
+Ignored if x is a list of \linkS4class{CalmrExperiment} objects.}
 
-\item{...}{Arguments passed to \code{make_experiment}}
+\item{...}{Arguments passed to \link{make_experiment}.}
 }
 \value{
-A list of CalmrExperiment objects
+A list of \linkS4class{CalmrExperiment} objects
 }
 \description{
 Run models given a set of parameters

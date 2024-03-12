@@ -97,7 +97,7 @@ HDI2020 <- function(v = NULL, # nolint: object_name_linter.
     vs = vs,
     rs = rs,
     as = as,
-    acts = list(combvs = combvs, chainvs = chainvs)
+    heidi_acts = list(combvs = combvs, chainvs = chainvs)
   )
   results
 }

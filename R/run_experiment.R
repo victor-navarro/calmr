@@ -1,12 +1,15 @@
 #' @title Run experiment
 #' @description Runs an experiment with minimal parameters.
-#' @param x A CalmrExperiment or design data.frame
+#' @param x A [CalmrExperiment-class] or design `data.frame`
+#' @param outputs A character vector specifying which outputs to
+#' parse and aggregate. Defaults to NULL, in which case
+#' all model outputs are parsed/aggregated.
 #' @param parse A logical specifying whether the raw results
 #' should be parsed. Default = TRUE.
 #' @param aggregate A logical specifying whether the parsed results
 #' should be aggregated. Default = TRUE.
 #' @param ... Arguments passed to other functions
-#' @return A CalmrExperiment with results.
+#' @return A [CalmrExperiment-class] with results.
 #' @examples
 #' # Using a data.frame only (throws warning)
 #' df <- get_design("relative_validity")
@@ -26,12 +29,16 @@
 #'   iterations = 4
 #' )
 #' run_experiment(exper)
+#'
+#' # Only parsing the associations in the model, without aggregation
+#' run_experiment(exper, outputs = "vs", aggregate = FALSE)
 #' @export
 
 run_experiment <- function(
-    x, parse = TRUE, aggregate = TRUE, ...) {
+    x, outputs = NULL,
+    parse = TRUE,
+    aggregate = TRUE, ...) {
   nargs <- list(...)
-  # start parallel cluster if required
   if (!is_experiment(x)) {
     # parse design
     parsed_design <- parse_design(x)
@@ -47,6 +54,8 @@ run_experiment <- function(
     "parameters",
     "experience", "mapping"
   ))]
+  # sanitize outputs
+  outputs <- .sanitize_outputs(outputs, experiment@model)
 
   # check if experiment needs (can) to be run
   .calmr_assert("good_experiment", given = experiment)
@@ -71,7 +80,8 @@ run_experiment <- function(
         parsed <- .parse_model(
           raw = raw,
           experience = args$experience,
-          model = experiment@.model[i]
+          model = experiment@.model[i],
+          outputs = outputs
         )
       }
       pb(message = "Running experiment")
@@ -86,7 +96,7 @@ run_experiment <- function(
   }
   # aggregate
   if (aggregate) {
-    experiment <- aggregate(experiment)
+    experiment <- aggregate(experiment, outputs = outputs)
   }
 
   return(experiment)

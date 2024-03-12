@@ -7,9 +7,9 @@
 get_parameters(design, model = NULL)
 }
 \arguments{
-\item{design}{An data.frame containing the experimental design.}
+\item{design}{An \code{data.frame} containing the experimental design.}
 
-\item{model}{A string specifying a model. One in \code{supported_models()}.}
+\item{model}{A string specifying a model. One in \code{\link[=supported_models]{supported_models()}}.}
 }
 \value{
 A list with model parameters depending on model
@@ -20,7 +20,4 @@ Get model parameters
 \examples{
 block <- get_design("blocking")
 get_parameters(block, model = "SM2007")
-}
-\seealso{
-\code{\link{supported_models}}
 }

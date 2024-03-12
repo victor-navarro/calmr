@@ -1,18 +1,18 @@
 #' Create a graph with calmr data
 #'
-#' @param x A data.frame-like with data to use in the plot
+#' @param x A `data.frame`-like with data to use in the plot.
+#' Contains a column named `value`.
 #' @param loops Logical. Whether to draw arrows back and forth
-#' @param limits Numerical. Limits for color scale. Defaults to NULL,
-#' in which case, limits are set to be max(abs(x$value))*c(-1,1)
+#' @param limits Numerical. Limits for color scale.
+#' Defaults to max(abs(x$value))*c(-1,1).
 #' @param colour_key Logical. Whether to show the color key
 #' @param trial Numerical. The trial to graph.
-#' @param options A list with graph options, as returned by `get_graph_opts`
+#' @param options A list with graph options, as returned by [get_graph_opts()].
 #' @param t The trial from which weights are obtained
-#' (defaults to the maximum trial in the design)
-#' @param ... Additional named arguments
-#' @return A ggplot object
+#' (defaults to the maximum trial in the data).
+#' @return A 'ggplot' object
 #' @note You should probably be getting graphs via
-#' the `graph` method for CalmrExperiments.
+#' the [graph()] method for [CalmrExperiment-class].
 #' @export
 #' @rdname graph
 #' @importFrom rlang .data
@@ -22,7 +22,7 @@ calmr_model_graph <- function(
     limits = max(abs(x$value)) * c(-1, 1),
     colour_key = FALSE,
     t = max(x$trial),
-    options = get_graph_opts(), ...) {
+    options = get_graph_opts()) {
   trial <- value <- NULL # local binding
   # check if trial is valid
   if (t > max(x$trial)) {
@@ -75,11 +75,13 @@ calmr_model_graph <- function(
 
 #' Patch Calmr graphs
 #'
-#' @description Convenience function to patch graphs with `patchwork`
-#' @param graphs A list of named graphs, as returned by `calmr::graph`
-#' @param selection A character or numeric vector determining the plots to patch
+#' @description Convenience function to patch graphs with 'patchwork'
+#' @param graphs A list of named graphs, as returned by [graph()] or
+#' [calmr_model_graph()]
+#' @param selection A character or numeric vector
+#' determining the plots to patch.
 #' @export
-#' @return A `patchwork` object
+#' @return A 'patchwork' object
 
 patch_graphs <- function(graphs, selection = names(graphs)) {
   # unlist graphs
@@ -96,9 +98,9 @@ patch_graphs <- function(graphs, selection = names(graphs)) {
 }
 
 #' Get options for calmr graph
-#' @param graph_size A character (one of "small" or "large")
+#' @param graph_size A string (either "small" or "large").
 #' to return default values for small or large graphs
-#' @return A list with graph options, to be passed to `ggnetwork::geom_nodes`
+#' @return A list with graph options, to be passed to `ggnetwork::geom_nodes()`.
 #' @export
 get_graph_opts <- function(graph_size = "small") {
   if (graph_size == "large") {

@@ -7,11 +7,31 @@
 phase_parser(phase_string)
 }
 \arguments{
-\item{phase_string}{A string}
+\item{phase_string}{A string specifying trials within a phase.}
 }
 \value{
-A named list
+A named list with:
+\describe{
+\item{trial_info:}{A trial-named list of lists.}
+\item{general_info:}{General phase information.}
+}
 }
 \description{
 Parses a phase string
+}
+\note{
+This function is meant for internal use only,
+but we expose it so you can test your strings.
+}
+\examples{
+# A silly (but valid) string
+phase_parser("10#Rescorla>Wagner")
+
+\dontrun{
+# An invalid string that needs trial repetitions for one of trials.
+phase_parser("10#Rescorla/Wagner")
+}
+}
+\seealso{
+\code{\link[=parse_design]{parse_design()}}
 }

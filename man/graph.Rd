@@ -10,36 +10,34 @@ calmr_model_graph(
   limits = max(abs(x$value)) * c(-1, 1),
   colour_key = FALSE,
   t = max(x$trial),
-  options = get_graph_opts(),
-  ...
+  options = get_graph_opts()
 )
 }
 \arguments{
-\item{x}{A data.frame-like with data to use in the plot}
+\item{x}{A \code{data.frame}-like with data to use in the plot.
+Contains a column named \code{value}.}
 
 \item{loops}{Logical. Whether to draw arrows back and forth}
 
-\item{limits}{Numerical. Limits for color scale. Defaults to NULL,
-in which case, limits are set to be max(abs(x$value))*c(-1,1)}
+\item{limits}{Numerical. Limits for color scale.
+Defaults to max(abs(x$value))*c(-1,1).}
 
 \item{colour_key}{Logical. Whether to show the color key}
 
 \item{t}{The trial from which weights are obtained
-(defaults to the maximum trial in the design)}
+(defaults to the maximum trial in the data).}
 
-\item{options}{A list with graph options, as returned by \code{get_graph_opts}}
-
-\item{...}{Additional named arguments}
+\item{options}{A list with graph options, as returned by \code{\link[=get_graph_opts]{get_graph_opts()}}.}
 
 \item{trial}{Numerical. The trial to graph.}
 }
 \value{
-A ggplot object
+A 'ggplot' object
 }
 \description{
 Create a graph with calmr data
 }
 \note{
 You should probably be getting graphs via
-the \code{graph} method for CalmrExperiments.
+the \code{\link[=graph]{graph()}} method for \linkS4class{CalmrExperiment}.
 }

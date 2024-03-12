@@ -1,12 +1,12 @@
-#' S4 class for Calmr representational similarity analysis
+#' S4 class for calmr representational similarity analysis
 #'
 #' @section Slots:
 #' \describe{
-#' \item{\code{corr_mat}:}{Array. Correlation matrix}
-#' \item{\code{distances}:}{List. Pairwise distance matrices}
-#' \item{\code{args}:}{List. Arguments used to create the object.}
-#' \item{\code{test_data}:}{List.
-#' Test data, populated after testing the object.}
+#' \item{\code{corr_mat}:}{An array containing the correlation matrix}
+#' \item{\code{distances}:}{A list of pairwise distance matrices}
+#' \item{\code{args}:}{A list of the arguments used to create the object.}
+#' \item{\code{test_data}:}{A list with permutation data,
+#' only populated after testing the object.}
 #' }
 #' @exportClass CalmrRSA
 setClass(
@@ -19,8 +19,22 @@ setClass(
   )
 )
 
-#' CalmrRSA Methods
-#' @param object A CalmrRSA object
+#' CalmrRSA methods
+#' @description S4 methods for `CalmrRSA` class.
+#' @param object,x A `CalmrRSA` object.
+#' @param n_samples The number of samples for the permutation test
+#' (default = 1e3)
+#' @param p The critical threshold level for the permutation test
+#' (default = 0.95)
+#' @name CalmrRSA-methods
+#' @returns
+#' * `show()` returns NULL (invisibly).
+#' * `test()` returns the `CalmrRSA` object with permutation test data.
+#' * `plot()` returns a list of 'ggplot' plot objects.
+NULL
+#> NULL
+
+
 #' @export
 #' @rdname CalmrRSA-methods
 setMethod("show", "CalmrRSA", function(object) {
@@ -45,34 +59,24 @@ setMethod("show", "CalmrRSA", function(object) {
   message(msg)
 })
 
-#' Test CalmrRSA object via permutation test
-#'
-#' @param object A CalmrRSA object
-#' @param n_samples The number of samples for the permutation test
-#' (default = 1e3)
-#' @param p The critical threshold level for the permutation test
-#' (default = 0.95)
-#' @return A CalmrRSA object with the test results
-#' @rdname CalmrRSA-methods
+#' @noRd
 methods::setGeneric(
   "test",
   function(object, n_samples = 1e3, p = .95) standardGeneric("test")
 )
 #' @rdname CalmrRSA-methods
+#' @aliases test
 #' @export
 methods::setMethod("test", "CalmrRSA", function(
     object, n_samples, p) {
   .rsa_test(object, n_samples = n_samples, p = p)
 })
 
-#' @param x A CalmrRSA object to plot
-#' @param y Unused.
-#' @param ... Extra parameters passed to the plot call
 #' @rdname CalmrRSA-methods
 #' @export
 setMethod(
   "plot", "CalmrRSA",
-  function(x, y, ...) {
+  function(x) {
     p <- NULL
     corrmat <- x@corr_mat
     corrmat[lower.tri(corrmat)] <- NA

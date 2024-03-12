@@ -106,3 +106,26 @@ is_experiment <- function(object) {
 is_design <- function(object) {
   inherits(object, "CalmrDesign")
 }
+
+#' Sanitize model outputs
+#' @param os Given outputs. Character vector
+#' @param m A model name
+#' @return A character vector
+#' @note If os is not NULL, cuts extraneous outputs.
+#' @noRd
+.sanitize_outputs <- function(os, m) {
+  moutputs <- model_outputs(m)
+  if (is.null(os)) {
+    return(moutputs)
+  }
+  # extra parameters
+  extra <- setdiff(os, moutputs)
+  throw_warn <- length(extra) > 0
+  os <- os[!(os %in% extra)]
+  # final parameters
+  if (!length(os)) {
+    stop("Ended with zero outputs after sanitization. Check your outputs.")
+  }
+  if (throw_warn) warning("Found unsupported outputs. Trimming...")
+  os
+}

@@ -1,5 +1,5 @@
 #' Set reward parameters for ANCCR model
-#' @param parameters A list of parameters, as returned by `get_parameters`
+#' @param parameters A list of parameters, as returned by [get_parameters()]
 #' @param rewards A character vector specifying the reward stimuli.
 #' Default = `c("US")`
 #' @return A list of parameters

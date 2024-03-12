@@ -14,7 +14,7 @@ test_that("rsa fails if comparisons is unnamed", {
 })
 
 test_that("rsa fails with inconsistent model outputs", {
-  expect_error(rsa(comp, list("HD2022" = c("acts", "vs"))))
+  expect_error(rsa(comp, list("HD2022" = c("heidi_acts", "vs"))))
 })
 
 test_that("rsa can be ran with test = TRUE", {

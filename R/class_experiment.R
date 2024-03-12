@@ -1,12 +1,12 @@
 #' S4 class for calmr experiments.
 #' @section Slots:
 #' \describe{
-#' \item{\code{design}:}{A CalmrDesign object.}
+#' \item{\code{design}:}{A [CalmrDesign-class] object.}
 #' \item{\code{model}:}{A string specifying the model used.}
 #' \item{\code{groups}:}{A string specifying the groups in the design.}
 #' \item{\code{parameters}:}{A list with the parameters used, per group.}
 #' \item{\code{experiences}:}{A list with the experiences for the model.}
-#' \item{\code{results}:}{A CalmrExperimentResult object.}
+#' \item{\code{results}:}{A [CalmrExperimentResult-class] object.}
 #' \item{\code{.model}:}{Internal. The model associated with the iteration.}
 #' \item{\code{.group}:}{Internal. The group associated with the iteration.}
 #' \item{\code{.iter}:}{Internal. The iteration number.}
@@ -30,11 +30,23 @@ methods::setClass(
   )
 )
 
+#' CalmrExperiment methods
+#' @description S4 methods for `CalmrExperiment` class.
+#' @param object,x A `CalmrExperiment` object.
+#' @param outputs A character vector specifying the model outputs to parse.
+#' @param type A character vector specifying the type(s) of plots to create.
+#' Defaults to NULL. See [supported_plots].
+#' @param value A list of parameters (or list of parameter lists).
+#' @param ... Extra arguments passed to [calmr_model_graph()].
+#' @name CalmrExperiment-methods
+NULL
+#> NULL
+
+#' @noRd
 show <- methods::show
-#' @title CalmrExperiment methods
-#' @param object A CalmrExperiment object
-#' @rdname CalmrExperiment-methods
 #' @export
+#' @return `show()` returns NULL (invisibly).
+#' @rdname CalmrExperiment-methods
 setMethod("show", "CalmrExperiment", function(object) {
   message(
     "-----------------------------\n",
@@ -49,12 +61,13 @@ setMethod("show", "CalmrExperiment", function(object) {
     paste0(utils::capture.output(object@parameters), collapse = "\n")
   )
 })
-
+#' @noRd
 methods::setGeneric( # nocov start
   "design",
   function(x) methods::standardGeneric("design")
 ) # nocov end
 #' @export
+#' @return `design()` returns the `CalmrDesign` contained in the object.
 #' @aliases design
 #' @rdname CalmrExperiment-methods
 methods::setMethod("design", "CalmrExperiment", function(x) {
@@ -62,33 +75,34 @@ methods::setMethod("design", "CalmrExperiment", function(x) {
 })
 
 #' @export
+#' @return `trials()` returns NULL (invisibly).
+#' @aliases trials
 #' @rdname CalmrExperiment-methods
 methods::setMethod("trials", "CalmrExperiment", function(object) {
   trials(object@design)
 })
-
+#' @noRd
 methods::setGeneric(
   "parameters",
   function(x) standardGeneric("parameters")
 ) # nocov
-#' @rdname CalmrExperiment-methods
-#' @aliases parameters
-#' @export
+#' @noRd
 methods::setGeneric(
   "parameters<-",
   function(x, value) standardGeneric("parameters<-") # nocov
 )
 #' @rdname CalmrExperiment-methods
-#' @param x A CalmrExperiment
+#' @return `parameters()` returns the list of parameters
+#' contained in the object.
 #' @aliases parameters
 #' @export
 methods::setMethod(
   "parameters", "CalmrExperiment",
   function(x) x@parameters
 )
-#' @param x A CalmrExperiment
-#' @param value A list of parameter lists.
 #' @rdname CalmrExperiment-methods
+#' @return `parameters()<-` returns the object after updating parameters.
+#' @aliases parameters<-
 #' @export
 methods::setMethod("parameters<-", "CalmrExperiment", function(x, value) {
   newpars <- NULL
@@ -122,106 +136,125 @@ methods::setMethod("parameters<-", "CalmrExperiment", function(x, value) {
   x@parameters <- newpars
   x
 })
-
+#' @noRd
 methods::setGeneric(
   "experiences",
   function(x) standardGeneric("experiences") # nocov
 )
 #' @rdname CalmrExperiment-methods
 #' @aliases experiences
+#' @return `experiences()` returns a list of `data.frame` objects
+#' containing model training routines.
 #' @export
 methods::setMethod(
   "experiences", "CalmrExperiment",
   function(x) x@experiences
 )
-
+#' @noRd
 methods::setGeneric(
   "results",
   function(object) methods::standardGeneric("results") # nocov
 )
 #' @rdname CalmrExperiment-methods
+#' @return `results()` returns a `data.table` objects with aggregated results.
 #' @aliases results
 #' @export
 methods::setMethod("results", "CalmrExperiment", function(object) {
-  # Returns aggregated results
   object@results@aggregated_results
 })
-
+#' @noRd
 methods::setGeneric(
   "raw_results",
   function(object) methods::standardGeneric("raw_results") # nocov
 )
 #' @rdname CalmrExperiment-methods
+#' @return `raw_results()` returns a list with raw model results.
 #' @aliases raw_results
 #' @export
 methods::setMethod("raw_results", "CalmrExperiment", function(object) {
-  # Returns raw results
   object@results@raw_results
 })
-
+#' @noRd
 methods::setGeneric(
   "parsed_results",
   function(object) methods::standardGeneric("parsed_results") # nocov
 )
 #' @rdname CalmrExperiment-methods
 #' @aliases parsed_results
+#' @return `parsed_results()` returns a list of `data.table`
+#' objects with parsed results.
 #' @export
 methods::setMethod("parsed_results", "CalmrExperiment", function(object) {
-  # Returns raw results
   object@results@parsed_results
 })
 
 #' @rdname CalmrExperiment-methods
+#' @return `length()` returns an integer specifying the total length
+#' of the experiment (groups by iterations).
 #' @export
 methods::setMethod("length", "CalmrExperiment", function(x) {
   length(x@experiences)
 })
 
-#' @rdname CalmrExperiment-methods
-#' @aliases parse
-#' @export
+#' @noRd
 setGeneric( # nocov start
   "parse",
-  function(object) methods::standardGeneric("parse")
+  function(object, ...) methods::standardGeneric("parse")
 ) # nocov end
 #' @rdname CalmrExperiment-methods
+#' @return `parse()` returns the object after parsing raw results.
+#' @aliases parse
 #' @export
 methods::setMethod(
   "parse", "CalmrExperiment",
-  function(object) {
-    if (!is.null(object@results@raw_results)) {
-      # we gotta parse
-      n <- length(object)
-      pb <- progressr::progressor(n)
-      .parallel_standby(pb) # print parallel backend message
-      object@results@parsed_results <- future.apply::future_sapply(
-        seq_len(n), function(r) {
-          pb("Parsing results")
-          .parse_model(
-            raw = object@results@raw_results[[r]],
-            experience = object@experiences[[r]],
-            model = object@model
-          )
-        },
-        simplify = FALSE
-      )
-    } else {
+  function(object, outputs = NULL) {
+    if (is.null(object@results@raw_results)) {
       stop("Found no raw_results to parse.")
     }
+    # Sanitize outputs
+    outputs <- .sanitize_outputs(outputs, object@model)
+
+    n <- length(object)
+    pb <- progressr::progressor(n)
+    .parallel_standby(pb) # print parallel backend message
+    object@results@parsed_results <- future.apply::future_sapply(
+      seq_len(n), function(r) {
+        existing <- parsed_results(object)[[r]]
+        to_parse <- outputs
+        if (length(existing)) {
+          # only parse what's missing
+          already_parsed <- names(existing)
+          to_parse <- setdiff(outputs, already_parsed)
+        }
+        # parse
+        pp <- list()
+        if (length(to_parse) > 0) {
+          pp <- .parse_model(
+            raw = object@results@raw_results[[r]],
+            experience = object@experiences[[r]],
+            model = object@model,
+            outputs = to_parse
+          )
+        }
+        pb("Parsing results")
+        c(existing, pp)
+      },
+      simplify = FALSE
+    )
+
     object
   }
 )
 
+#' @return `aggregate()` returns the object after aggregating parsed results.
 #' @rdname CalmrExperiment-methods
-#' @param ... Extra parameters.
+#' @aliases aggregate
 #' @export
 methods::setMethod(
   "aggregate", "CalmrExperiment",
-  function(x, ...) {
-    if (is.null(x@results@parsed_results)) {
-      x <- parse(x)
-    }
-    res <- .aggregate_experiment(x, ...)
+  function(x, outputs = NULL) {
+    outputs <- .sanitize_outputs(outputs, x@model)
+    res <- .aggregate_experiment(x, outputs)
     # unnest_once to leave at output level
     x@results@aggregated_results <- unlist(unname(res),
       recursive = FALSE
@@ -230,60 +263,60 @@ methods::setMethod(
   }
 )
 
-
 setGeneric("plot", function(x, y, ...) methods::standardGeneric("plot")) # nocov
-#' Plot CalmrExperiment
-#'
-#' Creates plots (or plot) with aggregated results in CalmrExperiment
-#'
-#' @param x An object of class \code{\link{CalmrExperiment-class}}.
-#' @param type character vector specifying the types of plots to create.
-#' See ??supported_plots. Defaults to NULL.
-#' @return A ggplot object
-#' @note With type = NULL, all supported plots are returned.
 #' @export
+#' @return `plot()` returns a list of 'ggplot' plot objects.
 #' @aliases plot
 #' @rdname CalmrExperiment-methods
 setMethod(
   "plot", "CalmrExperiment",
-  function(x, type = NULL, ...) {
+  function(x, type = NULL) {
+    # Assert type is valid
+    throw_warn <- FALSE
+    model_plots <- .sanitize_outputs(type, x@model)
+    # Check aggregated results are available
     if (is.null(x@results@aggregated_results)) {
-      stop("Experiment does not contain aggregated results.
-      Please parse and aggregate results beforehand.")
+      stop(c(
+        "Experiment must have aggregated results. ",
+        "Use `aggregate` on your experiment first."
+      ))
     }
-    # get aggregated results
     res <- results(x)
+    # Check if outputs are in aggregated results
+    # (relevant to partially aggregated experiment)
+    if (!all(model_plots %in% names(res))) {
+      throw_warn <- TRUE
+      to_agg <- setdiff(model_plots, names(res))
+      res <- results(aggregate(x, outputs = to_agg))
+    }
     plots <- list()
-    models <- unique(x@model)
-    # Go through each row
-    for (m in models) {
-      model_plots <- supported_plots(m)
-      if (!is.null(type)) {
-        sapply(type, .calmr_assert, supported = model_plots)
-        model_plots <- type
+    for (p in model_plots) {
+      odat <- res[[p]]
+      pdat <- odat[odat$model == x@model, ]
+      groups <- unique(pdat$group)
+      for (g in groups) {
+        plot_name <- sprintf("%s - %s (%s)", g, .get_prettyname(p), x@model)
+        plots[[plot_name]] <- calmr_model_plot(pdat[pdat$group == g, ],
+          type = p
+        )
       }
-      for (p in model_plots) {
-        odat <- res[[p]]
-        pdat <- odat[odat$model == m, ]
-        groups <- unique(pdat$group)
-        for (g in groups) {
-          plot_name <- sprintf("%s - %s (%s)", g, .get_prettyname(p), m)
-          plots[[plot_name]] <- calmr_model_plot(pdat[pdat$group == g, ],
-            type = p
-          )
-        }
-      }
+    }
+    if (throw_warn) {
+      warning(c(
+        "Some aggregated results not found.",
+        "Those results were temporarily added for plotting, but now are gone.",
+        "You should call aggregate on your experiment if",
+        "you want to keep them around."
+      ))
     }
     plots
   }
 )
-#' Graph CalmrExperiment
-#' @param x A CalmrExperiment
-#' @param ... Additional parameters passed to `graph_calmr_model`
-#' @rdname CalmrExperiment-methods
+#' @noRd
 setGeneric("graph", function(x, ...) standardGeneric("graph")) # nocov
 #' @rdname CalmrExperiment-methods
-#' @aliases graph,CalmrExperiment
+#' @return `graph()` returns a list of 'ggplot' plot objects.
+#' @aliases graph
 #' @export
 setMethod("graph", "CalmrExperiment", function(x, ...) {
   if (is.null(x@results@aggregated_results)) {

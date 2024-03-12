@@ -1,4 +1,4 @@
-#' S4 class for Calmr Models
+#' S4 class for calmr Models
 #'
 #' @section Slots:
 #' \describe{
@@ -10,7 +10,7 @@
 #' @name CalmrModel-class
 #' @rdname CalmrModel-class
 #' @note Currently unused.
-#' @exportClass CalmrModel
+#' @noRd
 
 setClass(
   "CalmrModel",
@@ -22,7 +22,7 @@ setClass(
   )
 )
 
-# Note: This class will have its own "forward" method that takes
+# Future note: This class will have its own "forward" method that takes
 # a mapping and experience parameter and returns result.
 # That way one can save the state of the model and retrain it. In fact,
 # that might be a more elegant way of dealing with phases.

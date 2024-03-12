@@ -15,12 +15,12 @@ make_experiment(
 )
 }
 \arguments{
-\item{design}{A design data.frame}
+\item{design}{A design \code{data.frame}.}
 
 \item{parameters}{Parameters for a  model as
-returned by \code{get_parameters}}
+returned by \code{\link[=get_parameters]{get_parameters()}}.}
 
-\item{model}{A string specifying the model name. One of \code{supported_models()}}
+\item{model}{A string specifying the model name. One of \code{\link[=supported_models]{supported_models()}}.}
 
 \item{iterations}{An integer specifying the number of iterations per group.}
 
@@ -28,14 +28,14 @@ returned by \code{get_parameters}}
 
 \item{.callback_fn}{A function for keeping track of progress. Internal use.}
 
-\item{...}{Extra parameters passed to other functions}
+\item{...}{Extra parameters passed to other functions.}
 }
 \value{
-A CalmrExperiment object
+A \linkS4class{CalmrExperiment} object.
 }
 \description{
-Makes a CalmrExperiment object containing
-the arguments necessary to run models
+Makes a \code{CalmrExperiment} object containing
+the arguments necessary to run an experiment.
 }
 \note{
 The miniblocks option will direct the sampling function to create
@@ -52,8 +52,7 @@ make_experiment(
   design = des, parameters = ps,
   model = "HD2022", iterations = 2
 )
-
 }
 \seealso{
-\code{\link{parse_design}},
+\code{\link[=parse_design]{parse_design()}},
 }

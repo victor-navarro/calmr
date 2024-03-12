@@ -1,4 +1,4 @@
-#' S4 class for Calmr Fit
+#' S4 class for calmr Fit
 #'
 #' @section Slots:
 #' \describe{
@@ -32,8 +32,33 @@ setClass("CalmrFit",
   )
 )
 
-#' CalmrFit Methods
-#' @param object A CalmrFit
+#' CalmrFit methods
+#' @description S4 methods for `CalmrFit` class.
+#' @param object A `CalmrFit` object.
+#' @param k Penalty term for `AIC` method.
+#' @param type A string specifying the type of prediction to generate.
+#' @param ... Extra named arguments.
+#' @name CalmrFit-methods
+#' @details
+#' With `type = "response"`, the `predict()` function
+#' passed model responses to the link function used to fit the model.
+#'
+#' The AIC is defined as `2*k - 2*-NLL`, where k is a penalty
+#' term and NLL is the negative log likelihood of the model.
+#'
+#' The BIC is defined as `p*log(n) - 2*-NLL`, where p is the number
+#' of parameters in the model and n is the number of observations
+#' @returns
+#' * `show()` returns NULL (invisibly).
+#' * `predict()` returns a numeric vector.
+#' * `NLL()` returns the negative log likelihood of the model.
+#' * `AIC()` returns the Akaike Information Criterion (AIC) of the model.
+#' * `BIC()` returns the Bayesian Information Criterion (BIC) of the model.
+NULL
+#> NULL
+
+
+
 #' @rdname CalmrFit-methods
 #' @export
 setMethod("show", "CalmrFit", function(object) {
@@ -42,15 +67,14 @@ setMethod("show", "CalmrFit", function(object) {
     "--------------\n",
     "Parameters:\n",
     paste0(utils::capture.output(object@best_pars), collapse = "\n"),
+    "\n",
     "--------------\n",
     "\nnLogLik: ", round(object@nloglik, 4)
   )
 })
 
-#' @param object A CalmrFit
-#' @param type A string specifying the type of prediction to generate
-#' @param ... Additional arguments
 #' @rdname CalmrFit-methods
+#' @aliases predict
 #' @export
 setMethod(
   "predict", "CalmrFit",
@@ -63,23 +87,16 @@ setMethod(
   }
 )
 
-#### GOF methods ####
-#' CalmrFit methods
-#' @param object A CalmrFit
+setGeneric("NLL", function(object) standardGeneric("NLL"))
 #' @rdname CalmrFit-methods
-setGeneric("NLL", function(object, ...) standardGeneric("NLL"))
-#' @param object A CalmrFit
-#' @rdname CalmrFit-methods
+#' @aliases NLL
 #' @export
 setMethod("NLL", "CalmrFit", function(object) {
   object@nloglik
 })
 
-#' @param object A CalmrFit
-#' @param k Penalty term
-#' @details The AIC is defined as `2*k - 2*-NLL`, where k is a penalty
-#' term and NLL is the negative log likelihood of the model.
 #' @rdname CalmrFit-methods
+#' @aliases AIC
 #' @export
 setMethod(
   "AIC", "CalmrFit",
@@ -88,10 +105,8 @@ setMethod(
   }
 )
 
-#' @param object A CalmrFit
-#' @details The BIC is defined as `k*log(n) - 2*-NLL`, where k is the number
-#' of parameters in the model and n is the number of observations
 #' @rdname CalmrFit-methods
+#' @aliases BIC
 #' @export
 setMethod(
   "BIC", "CalmrFit",

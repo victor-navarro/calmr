@@ -194,7 +194,7 @@ point during training, using the `graph` method in your experiment.
 
 ```{r}
 my_graph_opts <- get_graph_opts("small")
-graph(my_experiment, t = 20, graph_opts = my_graph_opts)
+graph(my_experiment, t = 20, options = my_graph_opts)
 ```
 
 ## Final thoughts

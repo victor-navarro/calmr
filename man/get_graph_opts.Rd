@@ -7,11 +7,11 @@
 get_graph_opts(graph_size = "small")
 }
 \arguments{
-\item{graph_size}{A character (one of "small" or "large")
+\item{graph_size}{A string (either "small" or "large").
 to return default values for small or large graphs}
 }
 \value{
-A list with graph options, to be passed to \code{ggnetwork::geom_nodes}
+A list with graph options, to be passed to \code{ggnetwork::geom_nodes()}.
 }
 \description{
 Get options for calmr graph

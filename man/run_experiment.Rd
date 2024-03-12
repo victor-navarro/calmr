@@ -4,10 +4,14 @@
 \alias{run_experiment}
 \title{Run experiment}
 \usage{
-run_experiment(x, parse = TRUE, aggregate = TRUE, ...)
+run_experiment(x, outputs = NULL, parse = TRUE, aggregate = TRUE, ...)
 }
 \arguments{
-\item{x}{A CalmrExperiment or design data.frame}
+\item{x}{A \linkS4class{CalmrExperiment} or design \code{data.frame}}
+
+\item{outputs}{A character vector specifying which outputs to
+parse and aggregate. Defaults to NULL, in which case
+all model outputs are parsed/aggregated.}
 
 \item{parse}{A logical specifying whether the raw results
 should be parsed. Default = TRUE.}
@@ -18,7 +22,7 @@ should be aggregated. Default = TRUE.}
 \item{...}{Arguments passed to other functions}
 }
 \value{
-A CalmrExperiment with results.
+A \linkS4class{CalmrExperiment} with results.
 }
 \description{
 Runs an experiment with minimal parameters.
@@ -42,4 +46,7 @@ exper <- make_experiment(df,
   iterations = 4
 )
 run_experiment(exper)
+
+# Only parsing the associations in the model, without aggregation
+run_experiment(exper, outputs = "vs", aggregate = FALSE)
 }

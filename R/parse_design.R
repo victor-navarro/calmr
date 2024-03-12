@@ -1,22 +1,17 @@
 #' Parse design data.frame
-#' @param df A data.frame of dimensions Groups, 2*Phases+1
-#' @param model An optional model to augment the design. See ??augment design
-#' @param ... Other arguments passed to augment
-#' @return A CalmrDesign object
-#' @note
-#' \itemize{
-#' \item{
-#' Each entry in even-numbered columns of df is
-#' a string formatted as per phase_parser.
-#' }
-#' }
+#' @param df A `data.frame` of dimensions (groups) by (2*phases+1).
+#' @param model (Optional) model to augment the design.
+#' @param ... Other arguments passed to augment function.
+#' @return A [CalmrDesign-class] object.
+#' @note Each entry in even-numbered columns of df is
+#' a string formatted as per [phase_parser()].
 #' @examples
 #' df <- data.frame(
 #'   Group = c("Group 1", "Group 2"),
 #'   P1 = c("10AB(US)", "10A(US)"), R1 = c(TRUE, TRUE)
 #' )
 #' parse_design(df)
-#' @seealso \code{\link{phase_parser}}
+#' @seealso [phase_parser()]
 #' @export
 
 parse_design <- function(df, model = NULL, ...) {

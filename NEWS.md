@@ -1,3 +1,7 @@
+# calmr 0.6.1
+* Added `outputs` argument to `run_experiment()`, `parse()`, and `aggregate()`, allowing the user to parse/aggregate only some model outputs.
+* Documentation corrections for CRAN resubmission.
+
 # calmr 0.6.0
 * Added dependency on `data.table` resulting in great speedups for large experiments.
 * Replaced dependency on `cowplot` with dependency on `patchwork`.

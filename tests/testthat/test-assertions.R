@@ -45,3 +45,15 @@ test_that(".calmr_assert throws error for unsupported plot", {
     supported = letters[1:3]
   ))
 })
+
+test_that(".sanitize_outputs returns all outputs if outputs are null", {
+  expect_setequal(model_outputs("ANCCR"), .sanitize_outputs(NULL, "ANCCR"))
+})
+
+test_that(".sanitize_outputs throws warning for extra outputs", {
+  expect_warning(.sanitize_outputs(c("vs", "acts"), "RW1972"))
+})
+
+test_that(".sanitize_outputs does not add extra outputs", {
+  expect_setequal(.sanitize_outputs(c("vs"), "RW1972"), "vs")
+})

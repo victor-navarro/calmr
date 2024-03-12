@@ -1,8 +1,7 @@
 #' Get model parameters
-#' @param design An data.frame containing the experimental design.
-#' @param model A string specifying a model. One in `supported_models()`.
+#' @param design An `data.frame` containing the experimental design.
+#' @param model A string specifying a model. One in [supported_models()].
 #' @return A list with model parameters depending on model
-#' @seealso \code{\link{supported_models}}
 #' @export
 #' @examples
 #' block <- get_design("blocking")

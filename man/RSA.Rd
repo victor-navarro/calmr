@@ -7,15 +7,15 @@
 rsa(x, comparisons, test = FALSE, ...)
 }
 \arguments{
-\item{x}{A list of CalmrExperiment objects}
+\item{x}{A list of \linkS4class{CalmrExperiment} objects}
 
 \item{comparisons}{A model-named list containing the model
 outputs to compare.}
 
 \item{test}{Whether to test the RSA via permutation test. Default = FALSE.}
 
-\item{...}{Additional parameters passed to \code{stats::dist}
-and \code{stats::cor}}
+\item{...}{Additional parameters passed to \code{stats::dist()}
+and \code{stats::cor()}}
 }
 \value{
 A CalmrRSA object
@@ -25,7 +25,7 @@ Perform representational similarity analysis
 }
 \note{
 The object returned by this function
-can be later tested via its own \code{test} method.
+can be later tested via its own \code{\link[=test]{test()}} method.
 }
 \examples{
 # Comparing the associations in three models
@@ -45,5 +45,5 @@ comparisons <- list(
   "PKH1982" = c("eivs")
 )
 res <- rsa(exp_res, comparisons = comparisons)
-test(res, n_samples = 100)
+test(res, n_samples = 20)
 }

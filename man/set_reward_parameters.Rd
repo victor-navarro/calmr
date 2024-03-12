@@ -7,7 +7,7 @@
 set_reward_parameters(parameters, rewards = c("US"))
 }
 \arguments{
-\item{parameters}{A list of parameters, as returned by \code{get_parameters}}
+\item{parameters}{A list of parameters, as returned by \code{\link[=get_parameters]{get_parameters()}}}
 
 \item{rewards}{A character vector specifying the reward stimuli.
 Default = \code{c("US")}}

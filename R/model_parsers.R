@@ -1,12 +1,13 @@
-#' @import data.table
-
-# Parses model raw results
-# args is the list of arguments used to fit the model
-# raw are the raw results
-# returns a list
+#' Parse raw model results
+#' @param raw A list with raw model results as returned by model functions
+#' @param experience A data.frame containing the model experience
+#'  (from CalmrExperiment)
+#' @param model A model name string.
+#' @param outputs A character vector specifying the model outputs to parse.
+#' @return A list with each parsed model output
 #' @noRd
-.parse_model <- function(raw, experience, model) {
-  outputs <- model_outputs(model)
+#' @import data.table
+.parse_model <- function(raw, experience, model, outputs) {
   sapply(outputs, function(o) {
     .parse_raw_data_table(raw[[o]],
       type = o,
@@ -38,7 +39,7 @@
   # outputs containing three dimensional arrays (trial, s, s)
   threes <- c(
     "es", "vs", "eivs",
-    "acts", "relacts", "rs", "os",
+    "acts", "heidi_acts", "relacts", "rs", "os",
     "m_ij", "ncs", "anccrs", "cws",
     "psrcs", "das", "qs", "ps"
   )
@@ -54,7 +55,8 @@
       )]
     }
   } else {
-    if (model %in% c("HDI2020", "HD2022") && type == "acts") {
+    # special treatment for ragged arrays
+    if (type == "heidi_acts") {
       raw2d <- data.table::rbindlist(
         sapply(names(raw), function(r) {
           hold <- .unnest_raw_list(raw[[r]])
@@ -106,31 +108,43 @@
   full_dat
 }
 
-# experiment is a CalmrExperiment
-# returns a list of tibbles
+#' Aggregate CalmrExperiment results
+#' @param experiment A CalmrExperiment object
+#' @param outputs A character vector specifying which outputs to aggregate
+#' @param .callback_fn A function to call on each succesful aggregation.
+#' @return A CalmrExperiment object
+#' @noRd
 .aggregate_experiment <- function(
-    experiment,
-    .callback_fn = NULL, ...) {
-  # Aggregation is done on a model by model basis
-  models <- unique(experiment@model)
-  agg_dat <- list()
-  for (m in models) {
-    outputs <- model_outputs(m)
-    mod_dat <- experiment@results@parsed_results[
-      experiment@.model == m
-    ]
-    pb <- progressr::progressor(length(outputs))
-    agg_dat[[m]] <- sapply(outputs, function(o) {
-      pb(message = sprintf("Aggregating model %s", m))
-      if (!is.null(.callback_fn)) .callback_fn() # nocov
-      # put data together
-      big_dat <- data.table::rbindlist(lapply(mod_dat, "[[", o))
-      # aggregate
-      agg_dat <- .aggregate_results_data_table(big_dat, type = o)
-      agg_dat$model <- m
-      agg_dat
-    }, simplify = FALSE)
+    experiment, outputs,
+    .callback_fn = NULL) {
+  # throw error if outputs requested are not in parsed_results
+  # or if parsed_results do not exist
+  res <- experiment@results@parsed_results
+  if (
+    !all(sapply(
+      res,
+      function(i) all(outputs %in% names(i))
+    )) ||
+      is.null(res)) {
+    stop(c(
+      "Cannot aggregate requested outputs ",
+      "because some do not exist in object@results@parsed_results. ",
+      "Use `parse` on your object with the appropriate outputs first."
+    ))
   }
+
+  pb <- progressr::progressor(length(outputs))
+  agg_dat <- list()
+  agg_dat[[experiment@model]] <- sapply(outputs, function(o) {
+    pb(message = sprintf("Aggregating model %s", experiment@model))
+    if (!is.null(.callback_fn)) .callback_fn() # nocov
+    # put data together
+    big_dat <- data.table::rbindlist(lapply(res, "[[", o))
+    # aggregate
+    agg_dat <- .aggregate_results_data_table(big_dat, type = o)
+    agg_dat$model <- experiment@model
+    agg_dat
+  }, simplify = FALSE)
   agg_dat
 }
 

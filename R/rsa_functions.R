@@ -1,14 +1,14 @@
 #' Perform representational similarity analysis
 #'
-#' @param x A list of CalmrExperiment objects
+#' @param x A list of [CalmrExperiment-class] objects
 #' @param comparisons A model-named list containing the model
 #' outputs to compare.
 #' @param test Whether to test the RSA via permutation test. Default = FALSE.
-#' @param ... Additional parameters passed to `stats::dist`
-#' and `stats::cor`
+#' @param ... Additional parameters passed to `stats::dist()`
+#' and `stats::cor()`
 #' @return A CalmrRSA object
 #' @note The object returned by this function
-#' can be later tested via its own `test` method.
+#' can be later tested via its own [test()] method.
 #' @export
 #' @examples
 #' # Comparing the associations in three models
@@ -28,7 +28,7 @@
 #'   "PKH1982" = c("eivs")
 #' )
 #' res <- rsa(exp_res, comparisons = comparisons)
-#' test(res, n_samples = 100)
+#' test(res, n_samples = 20)
 rsa <- function(x, comparisons, test = FALSE, ...) {
   # Assert the comparisons list is named
   modnames <- names(comparisons)

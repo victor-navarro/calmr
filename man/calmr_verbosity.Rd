@@ -19,5 +19,5 @@ Whether to show verbosity messages and progress bars
 Progress bars are handled by the progressr package.
 This is just a convenience function.
 
-See package \code{progressr} for further details.
+See package 'progressr' for further details.
 }

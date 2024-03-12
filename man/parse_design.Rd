@@ -7,25 +7,21 @@
 parse_design(df, model = NULL, ...)
 }
 \arguments{
-\item{df}{A data.frame of dimensions Groups, 2*Phases+1}
+\item{df}{A \code{data.frame} of dimensions (groups) by (2*phases+1).}
 
-\item{model}{An optional model to augment the design. See ??augment design}
+\item{model}{(Optional) model to augment the design.}
 
-\item{...}{Other arguments passed to augment}
+\item{...}{Other arguments passed to augment function.}
 }
 \value{
-A CalmrDesign object
+A \linkS4class{CalmrDesign} object.
 }
 \description{
 Parse design data.frame
 }
 \note{
-\itemize{
-\item{
 Each entry in even-numbered columns of df is
-a string formatted as per phase_parser.
-}
-}
+a string formatted as per \code{\link[=phase_parser]{phase_parser()}}.
 }
 \examples{
 df <- data.frame(
@@ -35,5 +31,5 @@ df <- data.frame(
 parse_design(df)
 }
 \seealso{
-\code{\link{phase_parser}}
+\code{\link[=phase_parser]{phase_parser()}}
 }

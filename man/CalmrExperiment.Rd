@@ -10,12 +10,12 @@ S4 class for calmr experiments.
 \section{Slots}{
 
 \describe{
-\item{\code{design}:}{A CalmrDesign object.}
+\item{\code{design}:}{A \linkS4class{CalmrDesign} object.}
 \item{\code{model}:}{A string specifying the model used.}
 \item{\code{groups}:}{A string specifying the groups in the design.}
 \item{\code{parameters}:}{A list with the parameters used, per group.}
 \item{\code{experiences}:}{A list with the experiences for the model.}
-\item{\code{results}:}{A CalmrExperimentResult object.}
+\item{\code{results}:}{A \linkS4class{CalmrExperimentResult} object.}
 \item{\code{.model}:}{Internal. The model associated with the iteration.}
 \item{\code{.group}:}{Internal. The group associated with the iteration.}
 \item{\code{.iter}:}{Internal. The iteration number.}

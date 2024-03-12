@@ -1,18 +1,47 @@
 #' Fit model to data
-#' @description Obtain MLE estimates for model, given data
+#' @description Obtain MLE estimates for model, given data.
 #' @param data A numeric vector containing data to fit model against.
 #' @param model_function A function that runs the model and
-#' returns data.frame of r-values, organized as data.
+#' returns data.frame of value, organized as in `data`.
 #' @param optimizer_options A list with options for the
-#' optimizer, as returned by get_optimizer_opts.
+#' optimizer, as returned by [get_optimizer_opts].
 #' @param file A path to save the model fit. If the arguments
 #' to the fit call are found to be identical to those in the file,
 #' the model just gets loaded.
-#' @param ... Extra parameters passed to the optimizer call
-#' @return A CalmrFit object
+#' @param ... Extra parameters passed to the optimizer call.
+#' @return A [CalmrFit-class] object
 #' @note See the calmr_fits vignette for examples
 #' @export
-#' @seealso \code{\link{get_optimizer_opts}}, \code{\link{make_experiment}}
+#' @seealso [get_optimizer_opts()]
+#' @examples
+#' # Make some fake data
+#' df <- data.frame(g = "g", p1 = "3A>(US)", r1 = TRUE)
+#' pars <- get_parameters(df, model = "RW1972")
+#' pars$alphas["US"] <- 0.9
+#' exper <- make_experiment(df, parameters = pars, model = "RW1972")
+#' res <- run_experiment(exper, outputs = "rs")
+#' rs <- results(res)$rs$value
+#'
+#' # define model function
+#' model_fun <- function(p, ex) {
+#'   np <- parameters(ex)
+#'   np[[1]]$alphas[] <- p
+#'   parameters(ex) <- np
+#'   results(run_experiment(ex))$rs$value
+#' }
+#'
+#' # Get optimizer options
+#' optim_opts <- get_optimizer_opts(
+#'   model_pars = names(pars$alphas),
+#'   ll = rep(.05, 2), ul = rep(.95, 2),
+#'   optimizer = "optim", family = "identity"
+#' )
+#' optim_opts$initial_pars[] <- rep(.6, 2)
+#'
+#' fit_model(rs, model_fun, optim_opts,
+#'   ex = exper, method = "L-BFGS-B",
+#'   control = list(maxit = 1)
+#' )
 fit_model <- function(
     data, model_function,
     optimizer_options, file = NULL, ...) {

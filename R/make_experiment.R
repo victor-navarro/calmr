@@ -1,23 +1,23 @@
 #' Make CalmrExperiment
 #'
-#' @description Makes a CalmrExperiment object containing
-#' the arguments necessary to run models
-#' @param design A design data.frame
+#' @description Makes a `CalmrExperiment` object containing
+#' the arguments necessary to run an experiment.
+#' @param design A design `data.frame`.
 #' @param parameters Parameters for a  model as
-#' returned by `get_parameters`
-#' @param model A string specifying the model name. One of `supported_models()`
+#' returned by [get_parameters()].
+#' @param model A string specifying the model name. One of [supported_models()].
 #' @param iterations An integer specifying the number of iterations per group.
 #' @param miniblocks Whether to organize trials in miniblocks.
 #' @param .callback_fn A function for keeping track of progress. Internal use.
-#' @param ... Extra parameters passed to other functions
-#' @return A CalmrExperiment object
-#' @seealso \code{\link{parse_design}},
+#' @param ... Extra parameters passed to other functions.
+#' @return A [CalmrExperiment-class] object.
+#' @seealso [parse_design()],
 #' @note The miniblocks option will direct the sampling function to create
 #' equally-sized miniblocks with random trials within a phase.
 #' For example, the phase string "2A/2B" will create two miniblocks
 #' with one of each trial. The phase string "2A/4B" will create two miniblocks
-#'  with one A trial, and 2 B trials. However, the phase string "2A/1B" will
-#'  not result in miniblocks, even if miniblocks here is set to TRUE.
+#' with one A trial, and 2 B trials. However, the phase string "2A/1B" will
+#' not result in miniblocks, even if miniblocks here is set to TRUE.
 #' @examples
 #' des <- data.frame(Group = "G1", P1 = "10A>(US)", R1 = TRUE)
 #' ps <- get_parameters(des, model = "HD2022")
@@ -25,9 +25,7 @@
 #'   design = des, parameters = ps,
 #'   model = "HD2022", iterations = 2
 #' )
-#'
 #' @export
-#' @importFrom rlang .data
 
 make_experiment <- function(
     design, parameters = NULL,

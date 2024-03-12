@@ -1,10 +1,12 @@
-#' S4 class for Calmr Results
+#' S4 class for calmr results
 #' @rdname CalmrResult
 #' @section Slots:
 #' \describe{
-#' \item{aggregated_results}{A list with fully aggregated results.}
-#' \item{parsed_results}{A list with parsed results, i.e., fn(model_output).}
-#' \item{raw_results}{A list with model outputs.}
+#' \item{aggregated_results}{A list of `data.table` objects
+#' with aggregated results.}
+#' \item{parsed_results}{A list containing `data.table` objects
+#' with parsed results.}
+#' \item{raw_results}{A list with raw model outputs.}
 #' }
 #' @exportClass CalmrResult
 #' @seealso CalmrResults-methods
@@ -21,18 +23,36 @@ methods::setClass(
     raw_results = NULL
   )
 )
-
+#' S4 class for calmr experiment results
+#' @rdname CalmrExperimentResult
+#' @section Slots:
+#' \describe{
+#' \item{aggregated_results}{A list of `data.table` objects
+#' with aggregated results.}
+#' \item{parsed_results}{A list containing `data.table` objects
+#' with parsed results.}
+#' \item{raw_results}{A list with raw model outputs.}
+#' }
+#' @exportClass CalmrExperimentResult
 methods::setClass("CalmrExperimentResult",
   contains = "CalmrResult"
 )
+#' CalmrResult methods
+#' @description S4 methods for `CalmrResults` class.
+#' @param object A `CalmrResults` object.
+#' @name CalmrResult-methods
+#' @returns
+#' * `show()` returns NULL (invisibly).
+NULL
+#> NULL
 
-#' Methods for CalmrResult
-#' @param object A CalmrResult object
 #' @rdname CalmrResult-methods
 #' @export
 methods::setMethod("show", "CalmrResult", function(object) {
   if (!is.null(object@aggregated_results)) {
-    message(paste0(utils::capture.output(object@aggregated_results), collapse = "\n"))
+    message(paste0(utils::capture.output(object@aggregated_results),
+      collapse = "\n"
+    ))
   } else {
     message(paste0(utils::capture.output(object@raw_results), collapse = "\n"))
   }

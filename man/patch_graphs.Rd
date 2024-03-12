@@ -7,13 +7,15 @@
 patch_graphs(graphs, selection = names(graphs))
 }
 \arguments{
-\item{graphs}{A list of named graphs, as returned by \code{calmr::graph}}
+\item{graphs}{A list of named graphs, as returned by \code{\link[=graph]{graph()}} or
+\code{\link[=calmr_model_graph]{calmr_model_graph()}}}
 
-\item{selection}{A character or numeric vector determining the plots to patch}
+\item{selection}{A character or numeric vector
+determining the plots to patch.}
 }
 \value{
-A \code{patchwork} object
+A 'patchwork' object
 }
 \description{
-Convenience function to patch graphs with \code{patchwork}
+Convenience function to patch graphs with 'patchwork'
 }

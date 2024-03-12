@@ -1,10 +1,13 @@
 #' Get basic designs
 #'
 #' @param design_name A string specifying a design name (default = NULL)
-#' @return If design_name != NULL, a data.frame containing the design.
+#' @return If design_name is not NULL, a data.frame containing the design.
 #' Otherwise, a list containing all available designs.
+#' @seealso [parse_design()]
 #' @export
-
+#' @examples
+#' names(get_design())
+#' get_design("blocking")
 get_design <- function(design_name = NULL) {
   calmr_designs <- list(
     "blocking" = data.frame(

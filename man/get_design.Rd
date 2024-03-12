@@ -10,9 +10,16 @@ get_design(design_name = NULL)
 \item{design_name}{A string specifying a design name (default = NULL)}
 }
 \value{
-If design_name != NULL, a data.frame containing the design.
+If design_name is not NULL, a data.frame containing the design.
 Otherwise, a list containing all available designs.
 }
 \description{
 Get basic designs
+}
+\examples{
+names(get_design())
+get_design("blocking")
+}
+\seealso{
+\code{\link[=parse_design]{parse_design()}}
 }

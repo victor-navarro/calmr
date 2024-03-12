@@ -5,7 +5,7 @@
 #' This is just a convenience function.
 #' @export
 #' @return The list of progressr handlers (invisibly).
-#' @note See package `progressr` for further details.
+#' @note See package 'progressr' for further details.
 calmr_verbosity <- function(verbose) {
   if (verbose) {
     progressr::handlers("progress")

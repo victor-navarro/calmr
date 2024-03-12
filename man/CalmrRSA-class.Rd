@@ -3,18 +3,18 @@
 \docType{class}
 \name{CalmrRSA-class}
 \alias{CalmrRSA-class}
-\title{S4 class for Calmr representational similarity analysis}
+\title{S4 class for calmr representational similarity analysis}
 \description{
-S4 class for Calmr representational similarity analysis
+S4 class for calmr representational similarity analysis
 }
 \section{Slots}{
 
 \describe{
-\item{\code{corr_mat}:}{Array. Correlation matrix}
-\item{\code{distances}:}{List. Pairwise distance matrices}
-\item{\code{args}:}{List. Arguments used to create the object.}
-\item{\code{test_data}:}{List.
-Test data, populated after testing the object.}
+\item{\code{corr_mat}:}{An array containing the correlation matrix}
+\item{\code{distances}:}{A list of pairwise distance matrices}
+\item{\code{args}:}{A list of the arguments used to create the object.}
+\item{\code{test_data}:}{A list with permutation data,
+only populated after testing the object.}
 }
 }
 

@@ -3,9 +3,9 @@
 \docType{class}
 \name{CalmrDesign-class}
 \alias{CalmrDesign-class}
-\title{S4 class for Calmr designs}
+\title{S4 class for calmr designs}
 \description{
-S4 class for Calmr designs
+S4 class for calmr designs
 }
 \section{Slots}{
 

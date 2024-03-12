@@ -5,8 +5,6 @@ ANCCR
 Bugfix
 CalmrDesign
 CalmrExperiment
-CalmrExperimentResult
-CalmrExperiments
 CalmrFit
 CalmrRSA
 CalmrResult
@@ -40,7 +38,6 @@ al
 appetitive
 associability
 associatively
-assymptote
 asymptote
 attentional
 behaviour
@@ -49,13 +46,11 @@ colour
 comparator
 containign
 counterbalancings
-cowplot
 deterministically
 devtools
 df
 et
 excitatory
-fn
 formalizations
 frac
 ggplot
@@ -70,19 +65,15 @@ jx
 kv
 le
 lp
-magrittr
 mbined
 miniblocks
-modelname
 navarrov
 ne
 neq
-nloglik
 nloglikelihood
 nosepokes
 np
 odot
-optimizers
 overexpectation
 overline
 parallelization
@@ -93,6 +84,7 @@ pav
 pre
 progressr
 px
+resubmission
 rightarrow
 saliences
 saliencies
@@ -101,8 +93,6 @@ specifiying
 summarise
 textbf
 th
-tials
-tidyverse
 uk
 ul
 underspecified

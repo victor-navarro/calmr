@@ -1,12 +1,23 @@
 #' Parses a phase string
 #'
-#' @param phase_string A string
-#' @return A named list
+#' @param phase_string A string specifying trials within a phase.
+#' @return A named list with:
+#' \describe{
+#' \item{trial_info:}{A trial-named list of lists.}
+#' \item{general_info:}{General phase information.}
+#' }
+#' @note This function is meant for internal use only,
+#' but we expose it so you can test your strings.
+#' @examples
+#' # A silly (but valid) string
+#' phase_parser("10#Rescorla>Wagner")
+#'
+#' \dontrun{
+#' # An invalid string that needs trial repetitions for one of trials.
+#' phase_parser("10#Rescorla/Wagner")
+#' }
+#' @seealso [parse_design()]
 #' @export
-
-# It returns a list of length two:
-# trial_info: is a trial-named list of lists
-# general_info: includes general information glanced from the string
 phase_parser <- function(phase_string) {
   # check for empty phase_strings
   if (!nchar(phase_string)) {
@@ -44,7 +55,6 @@ phase_parser <- function(phase_string) {
     general_info = ginfo
   )
 }
-
 # takes a trial string
 .parse_trial <- function(ts) {
   # remove repeats

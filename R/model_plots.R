@@ -1,10 +1,11 @@
 #' Create a plot with calmr data
 #'
-#' @param dat A data.frame-like with data to use in the plot
-#' @param type A character specifying the type of plot
-#' @return A ggplot object
+#' @param dat An `data.table` containing aggregated
+#' data from a [CalmrExperiment-class]
+#' @param type A character specifying the type of plot.
+#' @return A 'ggplot' object.
 #' @note You should probably be getting plots via
-#' the `plot` method for CalmrExperiments.
+#' the [plot()] method for [CalmrExperiment-class].
 #' @export
 #' @importFrom rlang .data
 
@@ -12,7 +13,7 @@ calmr_model_plot <- function(dat, type) {
   # define some big categories
   # exceptions are dealt with individually
   targetted <- c(
-    "vs", "rs", "acts", "relacts", "psrcs",
+    "vs", "rs", "acts", "heidi_acts", "relacts", "psrcs",
     "m_ij", "ncs", "anccrs", "cws", "das", "qs", "ps"
   )
   singles <- c("as", "e_ij", "e_i", "m_i", "delta")
@@ -84,7 +85,7 @@ calmr_model_plot <- function(dat, type) {
       scales = "free_x"
     )
   }
-  if (type %in% c("acts", "relacts")) {
+  if (type %in% c("acts", "heidi_acts", "relacts")) {
     grid <- ggplot2::facet_grid(
       .data$s2 ~ .data$phase + .data$trial_type,
       scales = "free_x"
@@ -152,6 +153,7 @@ calmr_model_plot <- function(dat, type) {
     "os" = "Switch Value",
     "eivs" = "Association Strength",
     "acts" = "Activation Strength",
+    "heidi_acts" = "Activation Strength",
     "relacts" = "Relative Activation",
     "e_ij" = "Event-contingent Eleg. Trace",
     "e_i" = "Eleg. Trace",

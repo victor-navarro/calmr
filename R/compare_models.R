@@ -1,9 +1,9 @@
 #' @title Run models given a set of parameters
-#' @param x A list of CalmrExperiment objects or a design data.frame
+#' @param x A list of [CalmrExperiment-class] objects or a design [data.frame].
 #' @param models A character vector of length m, specifying the models to run.
-#' Ignored if x is a list of CalmrExperiment objects.
-#' @param ... Arguments passed to `make_experiment`
-#' @return A list of CalmrExperiment objects
+#' Ignored if x is a list of [CalmrExperiment-class] objects.
+#' @param ... Arguments passed to [make_experiment].
+#' @return A list of [CalmrExperiment-class] objects
 #' @export
 #' @examples
 #' # By making experiment beforehand (recommended)

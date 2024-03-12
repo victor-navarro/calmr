@@ -1,4 +1,4 @@
-#' S4 class for Calmr designs
+#' S4 class for calmr designs
 #'
 #' @section Slots:
 #' \describe{
@@ -18,8 +18,16 @@ methods::setClass(
   ),
   prototype(augmented = FALSE)
 )
+
 #' CalmrDesign methods
+#' @description S4 methods for `CalmrDesign` class.
+#' @param object A `CalmrDesign` object
+#' @name CalmrDesign-methods
+NULL
+#> NULL
+
 #' @export
+#' @return `show()` returns NULL (invisibly).
 #' @rdname CalmrDesign-methods
 methods::setMethod(
   "show", "CalmrDesign",
@@ -35,27 +43,26 @@ methods::setMethod(
   }
 )
 
-#' @rdname CalmrDesign-methods
+#' @noRd
 methods::setGeneric(
   "mapping",
   function(object) methods::standardGeneric("mapping") # nocov
 )
-#' CalmrDesign methods
-#' @description Methods mapping, and trials, are extractor functions.
-#' @param object A CalmrDesign, as returned by parse_design
 #' @export
+#' @aliases mapping
+#' @return `mapping()` returns a list with trial mappings.
 #' @rdname CalmrDesign-methods
 methods::setMethod(
   "mapping", "CalmrDesign",
   function(object) object@mapping
 )
-#' @export
-#' @rdname CalmrDesign-methods
+#' @noRd
 methods::setGeneric(
   "trials",
   function(object) methods::standardGeneric("trials") # nocov
 )
 #' @export
+#' @return `trials()` returns NULL (invisibly).
 #' @rdname CalmrDesign-methods
 methods::setMethod(
   "trials", "CalmrDesign",
@@ -91,8 +98,7 @@ methods::setGeneric(
 #' @param ... Additional parameters depending on the model.
 #' @rdname CalmrDesign-methods
 #' @aliases augment
-#' @order 1
-#' @export
+#' @noRd
 methods::setMethod("augment", "CalmrDesign", function(object, model, ...) {
   if (model %in% c("ANCCR")) {
     # creates eventlogs

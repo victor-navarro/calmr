@@ -32,7 +32,7 @@ generate responses (and calculate the likelihood function with).
 One from \code{c("identity", "normal", "poisson")}.}
 }
 \value{
-A list.
+A list with optimizer options.
 }
 \description{
 Get optimizer options
@@ -43,5 +43,5 @@ the family-specific parameters will always be appended to
 the end of the relevant lists.
 }
 \seealso{
-\code{\link{fit_model}}, \code{\link{make_experiment}}
+\code{\link[=fit_model]{fit_model()}}
 }

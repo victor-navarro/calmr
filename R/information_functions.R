@@ -1,25 +1,24 @@
-#' Miscellaneous information functions
-#' @param model A string specifying a model. One from `supported_models()`
-#' @description
-#' \describe{
-#' \item{\code{supported_models}}{Returns the models supported in the package.}
-#' \item{\code{supported_plots, model_outputs}}{Returns the plots, outputs
-#' supported by argument `model`.}
-#' \item{\code{supported_families}}{Returns the families supported by
-#' \code{\link{fit_model}}.}
-#' \item{\code{supported_optimizers}}{returns the optimizers
-#' supported by \code{\link{fit_model}}.}
-#' \item{\code{supported_plots}}{returns the plots supported by
-#' argument `model`.}
-#' \item{\code{get_model}}{Returns the function specified by argument `model`.}
-#' \item{\code{parameter_info}}{Returns parameter information for a
-#' `model` (or all of them if model = NULL)}
-#' \item{\code{}}{}
-#' }
-#' @name information_functions
-#' @rdname model_info
+#' Model information functions
+#' @param model A string specifying a model. One from `supported_models()`.
+#' @description An assortment of functions to return model information.
+#' @name model_information
+#'
+#' @examples
+#' # Outputs and plots supported by the RW1972 model
+#' model_outputs("RW1972")
+#'
+#' # Getting the model function implementing the PKH1982 model
+#' pkh_func <- get_model("PKH1982")
+#' head(pkh_func, 10)
+#'
+#' # Getting the parameters required by SM2007
+#' parameter_info("SM2007")
+NULL
+#> NULL
+
+#' @rdname model_information
+#' @return `supported_models()` returns a character vector.
 #' @export
-#' @return A character vector
 supported_models <- function() {
   c(
     "HDI2020", "HD2022", "RW1972", "MAC1975",
@@ -27,28 +26,28 @@ supported_models <- function() {
   )
 }
 
-#' @rdname model_info
+#' @rdname model_information
+#' @return `supported_optimizers()` returns a character vector.
 #' @export
-#' @return A character vector
 supported_optimizers <- function() {
   c("optim", "ga")
 }
 
-#' @rdname model_info
+#' @rdname model_information
+#' @return `supported_families()` returns a character vector.
 #' @export
-#' @return A character vector
 supported_families <- function() {
   c("identity", "normal", "poisson")
 }
 
-#' @rdname model_info
+#' @rdname model_information
+#' @return `supported_plots()` returns a character vector or list
+#' (if model is NULL).
 #' @export
-#' @return A character vector if model is not NULL. A list otherwise.
-
 supported_plots <- function(model = NULL) {
   plot_info <- list(
-    "HDI2020" = c("as", "acts", "rs", "vs"),
-    "HD2022" = c("as", "acts", "rs", "vs"),
+    "HDI2020" = c("as", "heidi_acts", "rs", "vs"),
+    "HD2022" = c("as", "heidi_acts", "rs", "vs"),
     "RW1972" = c("rs", "vs"),
     "MAC1975" = c("as", "rs", "vs"),
     "SM2007" = c("acts", "relacts", "vs", "os"),
@@ -68,19 +67,19 @@ supported_plots <- function(model = NULL) {
   }
 }
 
-#' @rdname model_info
+#' @rdname model_information
+#' @return `get_model()` returns a model function.
 #' @export
-#' @return A function
 get_model <- function(model) {
   # Check model is supported
   .calmr_assert("supported_model", model)
   get(model)
 }
 
-#' @rdname model_info
+#' @rdname model_information
+#' @return `parameter_info()` returns a list or a
+#' list of lists (if model is NULL).
 #' @export
-#' @return A list with "name" (a character vector with parameter names
-#' and "default_value" (a numeric vector with parameter values)
 parameter_info <- function(model = NULL) {
   parameter_map <- list(
     "HDI2020" = list(
@@ -194,13 +193,14 @@ parameter_info <- function(model = NULL) {
   parameter %in% trans_pars[[model]]
 }
 
-#' @rdname model_info
+#' @rdname model_information
+#' @return `model_outputs()` returns a character vector or
+#' list (if model is NULL).
 #' @export
-#' @return A character vector if model is not NULL. A list otherwise.
 model_outputs <- function(model = NULL) {
   output_info <- list(
-    "HDI2020" = c("as", "acts", "rs", "vs"),
-    "HD2022" = c("as", "acts", "rs", "vs"),
+    "HDI2020" = c("as", "heidi_acts", "rs", "vs"),
+    "HD2022" = c("as", "heidi_acts", "rs", "vs"),
     "RW1972" = c("rs", "vs"),
     "MAC1975" = c("as", "rs", "vs"),
     "SM2007" = c("acts", "relacts", "vs", "os"),
