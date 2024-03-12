@@ -19,7 +19,7 @@ install.packages("devtools")
 devtools::install_github("victor-navarro/calmr")
 ```
 
-If you managed to build the vignettes, there's a vignette showing the basics of the package. (Worry not, the package's [website](www.victornavarro.org/calmr) also has it).
+If you managed to build the vignettes, there's a vignette showing the basics of the package. (Worry not, the package's [website](https://www.victornavarro.org/calmr) also has it).
 
 ```
 vignette("calmr_basics", package = "calmr")
