@@ -108,14 +108,14 @@ Navarro</h4>
 </h2>
 <p>To perform your first simulation you will need:</p>
 <ol style="list-style-type: decimal">
-<li>A data.frame specifiying the experiment design, and</li>
-<li>A list with the parameters for the model you’ll be using.</li>
+<li>A <code>data.frame</code> specifying the experiment design, and</li>
+<li>A list with the parameters for the model you will be using.</li>
 </ol>
 </div>
 <div class="section level2">
 <h2 id="the-design-data-frame">The design data.frame<a class="anchor" aria-label="anchor" href="#the-design-data-frame"></a>
 </h2>
-<p>For this example we will use a blocking design.</p>
+<p>Let’s specify a blocking design.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/victor-navarro/calmr" class="external-link">calmr</a></span><span class="op">)</span></span>
 <span></span>
@@ -164,11 +164,11 @@ of key associations, with no repercussion to what the model learns on
 normal training trials.</li>
 </ol>
 <p>If you want to check whether your phase string will work with the
-simulator, you can use <code>phase_parser</code>. The function returns a
+package, you can use <code><a href="../reference/phase_parser.html">phase_parser()</a></code>. The function returns a
 list with a lot of information, so let’s print only some of the
 fields.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># not specifying a number of AB trials. Error!</span></span>
+<code class="sourceCode R"><span><span class="co"># not specifying the number of AB trials. Error!</span></span>
 <span><span class="fu"><a href="../reference/phase_parser.html">phase_parser</a></span><span class="op">(</span><span class="st">"AB/10AC"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error in if (is.na(treps)) 1 else treps: argument is of length zero</span></span>
 <span><span class="co"># putting the probe symbol out of order. Error!</span></span>
@@ -177,7 +177,42 @@ fields.</p>
 <span><span class="co"># considering a configural cue for elements AB</span></span>
 <span><span class="va">trial</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/phase_parser.html">phase_parser</a></span><span class="op">(</span><span class="st">"10AB(AB)(US)"</span><span class="op">)</span></span>
 <span><span class="co"># different USs</span></span>
-<span><span class="va">trial</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/phase_parser.html">phase_parser</a></span><span class="op">(</span><span class="st">"10A(US1)/10B(US2)"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">trial</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/phase_parser.html">phase_parser</a></span><span class="op">(</span><span class="st">"10A(US1)/10B(US2)"</span><span class="op">)</span></span>
+<span><span class="co"># tons of information! Phase parser is meant for internal use only.</span></span>
+<span><span class="co"># you are better of using `parse_design()` on a design `data.frame`</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">trial</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 2</span></span>
+<span><span class="co">#&gt;  $ trial_info  :List of 2</span></span>
+<span><span class="co">#&gt;   ..$ 10A(US1):List of 8</span></span>
+<span><span class="co">#&gt;   .. ..$ name           : chr "A(US1)"</span></span>
+<span><span class="co">#&gt;   .. ..$ repetitions    : num 10</span></span>
+<span><span class="co">#&gt;   .. ..$ is_test        : logi FALSE</span></span>
+<span><span class="co">#&gt;   .. ..$ periods        : chr "A(US1)"</span></span>
+<span><span class="co">#&gt;   .. ..$ nominals       :List of 1</span></span>
+<span><span class="co">#&gt;   .. .. ..$ A(US1): chr [1:2] "A" "US1"</span></span>
+<span><span class="co">#&gt;   .. ..$ functionals    :List of 1</span></span>
+<span><span class="co">#&gt;   .. .. ..$ A(US1): chr [1:2] "A" "US1"</span></span>
+<span><span class="co">#&gt;   .. ..$ all_nominals   : chr [1:2] "A" "US1"</span></span>
+<span><span class="co">#&gt;   .. ..$ all_functionals: chr [1:2] "A" "US1"</span></span>
+<span><span class="co">#&gt;   ..$ 10B(US2):List of 8</span></span>
+<span><span class="co">#&gt;   .. ..$ name           : chr "B(US2)"</span></span>
+<span><span class="co">#&gt;   .. ..$ repetitions    : num 10</span></span>
+<span><span class="co">#&gt;   .. ..$ is_test        : logi FALSE</span></span>
+<span><span class="co">#&gt;   .. ..$ periods        : chr "B(US2)"</span></span>
+<span><span class="co">#&gt;   .. ..$ nominals       :List of 1</span></span>
+<span><span class="co">#&gt;   .. .. ..$ B(US2): chr [1:2] "B" "US2"</span></span>
+<span><span class="co">#&gt;   .. ..$ functionals    :List of 1</span></span>
+<span><span class="co">#&gt;   .. .. ..$ B(US2): chr [1:2] "B" "US2"</span></span>
+<span><span class="co">#&gt;   .. ..$ all_nominals   : chr [1:2] "B" "US2"</span></span>
+<span><span class="co">#&gt;   .. ..$ all_functionals: chr [1:2] "B" "US2"</span></span>
+<span><span class="co">#&gt;  $ general_info:List of 5</span></span>
+<span><span class="co">#&gt;   ..$ trial_names  : chr [1:2] "A(US1)" "B(US2)"</span></span>
+<span><span class="co">#&gt;   ..$ trial_repeats: num [1:2] 10 10</span></span>
+<span><span class="co">#&gt;   ..$ is_test      : logi [1:2] FALSE FALSE</span></span>
+<span><span class="co">#&gt;   ..$ nomi2func    : Named chr [1:4] "A" "US1" "B" "US2"</span></span>
+<span><span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:4] "A" "US1" "B" "US2"</span></span>
+<span><span class="co">#&gt;   ..$ func2nomi    : Named chr [1:4] "A" "US1" "B" "US2"</span></span>
+<span><span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:4] "A" "US1" "B" "US2"</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="the-parameters-list">The parameters list<a class="anchor" aria-label="anchor" href="#the-parameters-list"></a>
@@ -190,7 +225,7 @@ call <code><a href="../reference/model_information.html">supported_models()</a><
 <span><span class="co">#&gt; [1] "HDI2020" "HD2022"  "RW1972"  "MAC1975" "PKH1982" "SM2007"  "RAND"   </span></span>
 <span><span class="co">#&gt; [8] "ANCCR"</span></span></code></pre></div>
 <p>After choosing a model, you can get default parameters for your
-design with <code>get_parameters</code>.</p>
+design with <code><a href="../reference/get_parameters.html">get_parameters()</a></code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_parameters.html">get_parameters</a></span><span class="op">(</span><span class="va">my_blocking</span>, model <span class="op">=</span> <span class="st">"RW1972"</span><span class="op">)</span></span>
 <span><span class="co"># Increasing the beta parameter for US presentations</span></span>
@@ -215,11 +250,11 @@ design with <code>get_parameters</code>.</p>
 <h3 id="simulating">Simulating<a class="anchor" aria-label="anchor" href="#simulating"></a>
 </h3>
 <p>With all of the above, we can run our simulation using the
-<code>run_experiment</code> function. This function also takes extra
+<code><a href="../reference/run_experiment.html">run_experiment()</a></code> function. This function also takes extra
 arguments to manipulate the number of iterations to run the experiment
-for, and whether to organize trials in miniblocks (see
-<code><a href="../reference/make_experiment.html">help(make_experiment)</a></code> for additional details). Below, we
-run the experiment for 5 iterations.</p>
+for, and whether to organize trials in miniblocks (see the help page for
+<code><a href="../reference/make_experiment.html">make_experiment()</a></code> for additional details). Below, we run
+the experiment for 5 iterations.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_experiment.html">run_experiment</a></span><span class="op">(</span></span>
 <span>  <span class="va">my_blocking</span>, <span class="co"># note we do not need to pass the parsed design</span></span>
@@ -227,7 +262,7 @@ run the experiment for 5 iterations.</p>
 <span>  parameters <span class="op">=</span> <span class="va">my_pars</span>,</span>
 <span>  iterations <span class="op">=</span> <span class="fl">5</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co"># returns an CalmrExperiment object</span></span>
+<span><span class="co"># returns a `CalmrExperiment` object</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">my_experiment</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "CalmrExperiment"</span></span>
 <span><span class="co">#&gt; attr(,"package")</span></span>
@@ -303,9 +338,8 @@ run the experiment for 5 iterations.</p>
 <span><span class="co">#&gt; 703: Control   Test         #B    22     US      C          2 0.6626356 RW1972</span></span>
 <span><span class="co">#&gt; 704: Control   Test         #B    22     US     US          2 0.0000000 RW1972</span></span></code></pre></div>
 <p>If you are an advanced R user you will be able to dig into the data
-straight away.</p>
-<p>However, the package also includes some methods to get a quick look
-at the results.</p>
+straight away. However, the package also includes some methods to get a
+quick look at the results.</p>
 </div>
 </div>
 <div class="section level2">
@@ -330,14 +364,15 @@ produce (e.g., associations, responses, saliences, etc.)</p>
 <span><span class="co"># show which plots are supported by the model we are using</span></span>
 <span><span class="fu"><a href="../reference/model_information.html">supported_plots</a></span><span class="op">(</span><span class="st">"RW1972"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "rs" "vs"</span></span></code></pre></div>
-<p>In this case, the RW model supports both associations and
-responses.</p>
+<p>In this case, the RW model supports both associations (vs) and
+responses (rs).</p>
 <div class="section level3">
 <h3 id="stimulus-associations">Stimulus associations<a class="anchor" aria-label="anchor" href="#stimulus-associations"></a>
 </h3>
-<p>The columns below are the phases of the design and the rows denote
-the source of the association. The colors within each panel determine
-the target of the association.</p>
+<p>The columns in the plots below are the phases of the design and the
+rows denote the source of the association.</p>
+<p>The colors within each panel determine the target of the
+association.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">my_experiment</span>, type <span class="op">=</span> <span class="st">"vs"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $`Exp - Association Strength (RW1972)`</span></span></code></pre></div>
@@ -349,8 +384,8 @@ the target of the association.</p>
 <div class="section level3">
 <h3 id="responding">Responding<a class="anchor" aria-label="anchor" href="#responding"></a>
 </h3>
-<p>Fairly similar to the above, but this time responding is a function
-of the stimuli presented on a trial.</p>
+<p>Fairly similar to the above, but responding is a function of the
+stimuli presented in each trial.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">my_experiment</span>, type <span class="op">=</span> <span class="st">"rs"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $`Exp - Response Strength (RW1972)`</span></span></code></pre></div>
@@ -368,21 +403,23 @@ any point during training, using the <code>graph</code> method in your
 experiment.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_graph_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_graph_opts.html">get_graph_opts</a></span><span class="op">(</span><span class="st">"small"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">graph</a></span><span class="op">(</span><span class="va">my_experiment</span>, t <span class="op">=</span> <span class="fl">20</span>, options <span class="op">=</span> <span class="va">my_graph_opts</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $RW1972</span></span>
-<span><span class="co">#&gt; $RW1972$`Exp - Associations (RW1972)`</span></span></code></pre></div>
+<span><span class="co"># passing the argument t to specify the trial we're interested in.</span></span>
+<span><span class="co"># end of acquisition</span></span>
+<span><span class="fu"><a href="../reference/patch_graphs.html">patch_graphs</a></span><span class="op">(</span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">graph</a></span><span class="op">(</span><span class="va">my_experiment</span>, t <span class="op">=</span> <span class="fl">10</span>, options <span class="op">=</span> <span class="va">my_graph_opts</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="calmr_basics_files/figure-html/unnamed-chunk-10-1.png" width="384"></p>
-<pre><code><span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $RW1972$`Control - Associations (RW1972)`</span></span></code></pre>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># end of blocking</span></span>
+<span><span class="fu"><a href="../reference/patch_graphs.html">patch_graphs</a></span><span class="op">(</span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">graph</a></span><span class="op">(</span><span class="va">my_experiment</span>, t <span class="op">=</span> <span class="fl">20</span>, options <span class="op">=</span> <span class="va">my_graph_opts</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="calmr_basics_files/figure-html/unnamed-chunk-10-2.png" width="384"></p>
 </div>
 <div class="section level2">
 <h2 id="final-thoughts">Final thoughts<a class="anchor" aria-label="anchor" href="#final-thoughts"></a>
 </h2>
 <p>The <code>calmr</code> package was designed to simulate quickly:
-write your design and get a glance at model predictions.</p>
-<p>Yet, the package also has some features for advanced R users, so make
-sure to check the other vignettes when you are ready.</p>
+specify a design, parameters, and get a glance at model predictions.
+However, the package also has additional features for more advanced R
+users. If you’re one of them, make sure to check the other vignettes
+when you are ready.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

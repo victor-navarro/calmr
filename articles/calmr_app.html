@@ -106,16 +106,19 @@ Navarro</h4>
 <div class="section level2">
 <h2 id="using-the-calmr-app">Using the calmr app<a class="anchor" aria-label="anchor" href="#using-the-calmr-app"></a>
 </h2>
-<p>If you are a beginner useR or simply want to simulate an experimental
-design to see what a model does, you might be interested in using the
-calmr application.</p>
-<p>The calmr application offers a GUI that allows you to simulate
-experiments without writing any code. If you want to use the online app,
-you can find it at: <a href="https://victor-navarro.shinyapps.io/calmr_app/" class="external-link">https://victor-navarro.shinyapps.io/calmr_app/</a>.
-Alternatively, if you have installed the calmr package, you can launch
-the app via <code>calmr::calmr_app()</code>. The rest of the tutorial
-assumes that you have the app open and ready to run. Let’s break down
-the GUI.</p>
+<p>If you do not want to deal with the programming side of
+<code>calmr</code> or simply want to simulate an experimental design to
+see what a model does, you might be interested in using the
+<code>calmr</code> application.</p>
+<p>The <code>calmr</code> application offers a GUI that allows you to
+simulate experiments without writing any code. If you want to use the
+online app, you can find it at <a href="https://victor-navarro.shinyapps.io/calmr_app/" class="external-link">https://victor-navarro.shinyapps.io/calmr_app/</a>.</p>
+<p>Alternatively, you can install the <a href="https://github.com/victor-navarro/calmr.app" class="external-link"><code>calmr.app</code>
+companion package</a> and launch the app via
+<code>calmr.app::launch_app()</code>.</p>
+<p>The rest of the tutorial assumes that you have the app open and ready
+to run.</p>
+<p>Let’s break down the GUI.</p>
 </div>
 <div class="section level2">
 <h2 id="the-gui">The GUI<a class="anchor" aria-label="anchor" href="#the-gui"></a>
@@ -148,15 +151,14 @@ containing the elements “U” and “S”.</li>
 </ul>
 <p>Additionally, one can choose to randomize the trials within each
 phase by ticking the boxes in the R1 and R2 columns. It is important to
-note that whatever the user sets up here will interact with the “Create
-trial blocks” option in the <em>Options</em> tab in the sidebar (see
-ahead). Here’s the full breakdown of combinations and their
-behaviour:</p>
+note that whatever you set up here will interact with the “Create trial
+blocks” option in the <em>Options</em> tab in the sidebar (see ahead).
+Here’s the full breakdown of combinations and their behavior:</p>
 <ul>
 <li>Table checked and preferences checked: Trials will be shuffled
 within blocks if possible (based on the greater common factor). For
 example, 2A/2B gets shuffled into 2 blocks each containing one A and one
-B trial, but 2A/1B gets shuffled into 1 block containign two A trials
+B trial, but 2A/1B gets shuffled into 1 block containing two A trials
 and one B trial.</li>
 <li>Table unchecked and preferences checked: Trials will be
 deterministically intermixed within blocks if possible. For example,
@@ -176,15 +178,17 @@ GUI.</p>
 <div class="float">
 <img src="calmr_app_parsed_app.png" width="600" alt="The calmr app GUI after parsing"><div class="figcaption">The calmr app GUI after parsing</div>
 </div>
-<p>After parsing a valid design. The user can set up the parameters for
-the experiment (including all stimulus-related and global parameters).
-In this case, the Rescorla-Wagner model has 4 parameters per stimulus.
-The default values are fairly sensible, but you can modify each
+<p>After parsing a valid design, you can set up the parameters for the
+experiment. The number of parameters will change as a function of the
+model. In this case, the Rescorla-Wagner model has 4 parameters per
+stimulus.</p>
+<p>The default values are fairly sensible, but you can modify each
 parameter by hand as you would in your favorite spreadsheet
 software.</p>
-<p>The parametrization of each model in calmr can sometimes differ from
-what appears in the literature. The following table contains links to
-the documentation pages for each model.</p>
+<p>The parameterization of a model in <code>calmr</code> can sometimes
+differ from what appears in the literature. The following table contains
+links to the documentation pages for each model (warning:
+equations).</p>
 <table class="table">
 <colgroup>
 <col width="47%">
@@ -233,26 +237,27 @@ the documentation pages for each model.</p>
 <div class="section level3">
 <h3 id="results">Results<a class="anchor" aria-label="anchor" href="#results"></a>
 </h3>
-<p>A new button appears after parsing an experiment. A final click on
-that button will run the model and populate the “Results” and
-“Association Graphs” portions of the app. Go ahead and run the
-experiment. After you do, a new button will appear, allowing you to
-download the results as a spreadsheet.</p>
+<p>A new button will appear after parsing the experiment.</p>
+<p>A final click on that button will run the model and populate the
+“Results” and “Association Graphs” portions of the app. Go ahead and run
+the experiment. After you do a new button will allow you to download the
+results as a spreadsheet.</p>
 <div class="float">
 <img src="calmr_app_ran_app.png" width="600" alt="The calmr app GUI after running the model"><div class="figcaption">The calmr app GUI after running the model</div>
 </div>
-<p>In the calmr app, the results are shown visually. Clicking the bar
-above the graph (the one containing “Blocking - Response Strength …”
-above) will show you all the plots available. The first portion of each
-plot’s name denotes the group’s name. In the above, the plot shows the
-strength of the associations among all stimuli in the experiment across
-trials (or blocks), faceted with phases as columns, and origin stimuli
-as rows. For example, the yellow lines above denote the strength that A
-and B have with the US. The top column corresponds to A (look at the
-label to the right) and the middle column corresponds to B.</p>
-<p>Go ahead and explore all available plots. These are usually self
-explanatory, but you should consult the documentation of the package in
-case something is unclear (specially when using more obscure
+<p>In the <code>calmr</code> app, the results are shown visually.
+Clicking the bar above the graph (the one containing “Blocking -
+Response Strength …” above) will show you all the plots available. The
+first portion of each plot’s name denotes the group’s name. In the
+above, the plot shows the strength of the associations among all stimuli
+in the experiment across trials (or blocks), faceted with phases as
+columns, and origin stimuli as rows. For example, the yellow lines above
+denote the strength that A and B have with the US. The top column
+corresponds to A (look at the label to the right) and the middle column
+corresponds to B.</p>
+<p>Go ahead and explore all available plots. These are usually
+self-explanatory, but you should consult the documentation of the
+package in case something is unclear (especially when using more obscure
 models).</p>
 </div>
 <div class="section level3">
@@ -270,13 +275,13 @@ across the experiment.</p>
 <h3 id="other-bits">Other bits<a class="anchor" aria-label="anchor" href="#other-bits"></a>
 </h3>
 <p>The sections above implement the bulk of the functionalities in the
-calmr app. The following sections describe additional options
-convenience functions that I found useful.</p>
+<code>calmr</code> app. The following sections describe additional
+options that I found useful.</p>
 <div class="section level4">
 <h4 id="options">Options<a class="anchor" aria-label="anchor" href="#options"></a>
 </h4>
 <p>Here we set the number of iterations to run the experiment for
-(important if model behaviour is sensitive to trial order effects), and
+(important if model behavior is sensitive to trial order effects), and
 whether we want to create trial blocks. Here we also set Here we can
 choose to plot in a common scale for the y-axis (active by default).</p>
 </div>
@@ -286,7 +291,7 @@ choose to plot in a common scale for the y-axis (active by default).</p>
 </h3>
 <p>Hope you enjoy the app! If you do find any bugs, have comments, or
 would like something implemented, feel free to post a message on the
-package’s github repository or drop me a line at navarrov [at]
+package’s Github repository or drop me a line at navarrov [at]
 cardiff.ac.uk.</p>
 </div>
 </div>

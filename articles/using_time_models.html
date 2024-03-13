@@ -112,9 +112,9 @@ with it, I wrote several additional tools for future models.</p>
 <div class="section level4">
 <h4 id="changes-to-trial-based-models">Changes to trial-based models<a class="anchor" aria-label="anchor" href="#changes-to-trial-based-models"></a>
 </h4>
-<p>The biggest change in calmr version 0.5 is the use of the “&gt;”
-character and its effect on trial-based models. Before, the “&gt;”
-character was used to specify a single split within a trial. For
+<p>The biggest change in <code>calmr</code> version 0.5 is the use of
+the “&gt;” character and its effect on trial-based models. Before, the
+“&gt;” character was used to specify a single split within a trial. For
 example, “A&gt;(US)” would encode the typical situation in which
 stimulus A is followed by the US. This was used to mimic the traditional
 situation in which we expect an organism to start (conditionally)
@@ -257,26 +257,26 @@ entries.</p>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">experiences</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fl">20</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    model group  phase tp       tn is_test block_size trial stimulus      time reward_mag</span></span>
-<span><span class="co">#&gt; 1  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     1        F  74.10462          1</span></span>
-<span><span class="co">#&gt; 2  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     1        T  75.10462          1</span></span>
-<span><span class="co">#&gt; 3  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     1       US  76.10462          1</span></span>
-<span><span class="co">#&gt; 4  ANCCR    FP phase1  2        T   FALSE          2     2        T  80.58022          1</span></span>
-<span><span class="co">#&gt; 5  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     3        F  85.02244          1</span></span>
-<span><span class="co">#&gt; 6  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     3        T  86.02244          1</span></span>
-<span><span class="co">#&gt; 7  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     3       US  87.02244          1</span></span>
-<span><span class="co">#&gt; 8  ANCCR    FP phase1  2        T   FALSE          2     4        T  99.71311          1</span></span>
-<span><span class="co">#&gt; 9  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     5        F 141.47536          1</span></span>
-<span><span class="co">#&gt; 10 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     5        T 142.47536          1</span></span>
-<span><span class="co">#&gt; 11 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     5       US 143.47536          1</span></span>
-<span><span class="co">#&gt; 12 ANCCR    FP phase1  2        T   FALSE          2     6        T 151.83488          1</span></span>
-<span><span class="co">#&gt; 13 ANCCR    FP phase1  2        T   FALSE          2     7        T 186.43640          1</span></span>
-<span><span class="co">#&gt; 14 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     8        F 277.43640          1</span></span>
-<span><span class="co">#&gt; 15 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     8        T 278.43640          1</span></span>
-<span><span class="co">#&gt; 16 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     8       US 279.43640          1</span></span>
-<span><span class="co">#&gt; 17 ANCCR    FP phase1  2        T   FALSE          2     9        T 296.44076          1</span></span>
-<span><span class="co">#&gt; 18 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2    10        F 330.35380          1</span></span>
-<span><span class="co">#&gt; 19 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2    10        T 331.35380          1</span></span>
-<span><span class="co">#&gt; 20 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2    10       US 332.35380          1</span></span></code></pre></div>
+<span><span class="co">#&gt; 1  ANCCR    FP phase1  2        T   FALSE          2     1        T  67.46754          1</span></span>
+<span><span class="co">#&gt; 2  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     2        F  98.32637          1</span></span>
+<span><span class="co">#&gt; 3  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     2        T  99.32637          1</span></span>
+<span><span class="co">#&gt; 4  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     2       US 100.32637          1</span></span>
+<span><span class="co">#&gt; 5  ANCCR    FP phase1  2        T   FALSE          2     3        T 186.05272          1</span></span>
+<span><span class="co">#&gt; 6  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     4        F 189.95473          1</span></span>
+<span><span class="co">#&gt; 7  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     4        T 190.95473          1</span></span>
+<span><span class="co">#&gt; 8  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     4       US 191.95473          1</span></span>
+<span><span class="co">#&gt; 9  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     5        F 226.91850          1</span></span>
+<span><span class="co">#&gt; 10 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     5        T 227.91850          1</span></span>
+<span><span class="co">#&gt; 11 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     5       US 228.91850          1</span></span>
+<span><span class="co">#&gt; 12 ANCCR    FP phase1  2        T   FALSE          2     6        T 246.25640          1</span></span>
+<span><span class="co">#&gt; 13 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     7        F 337.25640          1</span></span>
+<span><span class="co">#&gt; 14 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     7        T 338.25640          1</span></span>
+<span><span class="co">#&gt; 15 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     7       US 339.25640          1</span></span>
+<span><span class="co">#&gt; 16 ANCCR    FP phase1  2        T   FALSE          2     8        T 404.38738          1</span></span>
+<span><span class="co">#&gt; 17 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     9        F 456.01312          1</span></span>
+<span><span class="co">#&gt; 18 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     9        T 457.01312          1</span></span>
+<span><span class="co">#&gt; 19 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     9       US 458.01312          1</span></span>
+<span><span class="co">#&gt; 20 ANCCR    FP phase1  2        T   FALSE          2    10        T 504.09377          1</span></span></code></pre></div>
 <p>As you can see above, there are several rows per trial, each
 specifying a different stimulus. Time-based models like ANCCR run over a
 time log because they make ample use of the time difference between
