@@ -32,7 +32,7 @@ because our design contains enough kinds of trials so that order effects are a w
 because we want to run the same model with different parameters.
 
 Let's run the HeiDI model [@honey_heidi_2020] over a long, random design.
-Let's also enable verbosity via `calmr_verbosity`, which uses the cool `progressr` package.
+Let's also enable verbosity via `calmr_verbosity()`, which uses the `progressr` package.
 
 ```{r setup}
 library(calmr)
@@ -59,7 +59,6 @@ end <- proc.time() - start
 end
 ```
 
-You can see the timings above, under the `elapsed` column. 
 Let's try parallelizing now.
 
 ### Running an experiment in parallel
@@ -81,8 +80,9 @@ end
 plan(sequential)
 ```
 
-In this case, the parallel evaluation was slower.
+In this case, the parallel was faster (see *user* time above).
 The `future` package trades off ease of use for bulkier overheads. 
+
 As those overheads tend to be constant, 
 the parallelization will have a better payoff once you run 
 more iterations.

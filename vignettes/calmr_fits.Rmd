@@ -31,15 +31,16 @@ set.seed(2022)
 
 In this demo, I fit HeiDI to some empirical data (Patitucci et al., 2016, Experiment 1). 
 This will involve writing a function that produces model responses organized as the empirical data, 
-and using that function for maximum likelihood estimation (MLE). We begin with a short 
-overview of the data, then move to the model function, and finally fit the model.
+so we can use that function for maximum likelihood estimation (MLE). We begin with a short 
+overview of the data, then move to the model function, and finally the fit.
 
 ## The data
 
 The data (`pati`) contains the responses (lever presses or lp, and nose pokes or np) 
-for 32 subjects (rats) across 6 blocks of training (2 sessions per block). The animals 
-were trained to associate each of two levers to one of two 
-unconditioned stimuli (pellets or sucrose). Let's take a look at it.
+for 32 rats, across 6 blocks of training (2 sessions per block). The animals 
+were trained to associate two levers to two different food rewards (pellets or sucrose).
+
+Let's have a glance.
 
 ```{r}
 summary(pati)
@@ -51,15 +52,15 @@ pati |> ggplot(aes(x = block, y = rpert, colour = us)) +
 ```
 
 The thicker lines are group averages; the rest are individual subjects. 
-We ignore the specific mapping between levers and USs here, because that was 
-counterbalanced across subjects. However, the counterbalancing will end up being 
-relevant (see ahead).
+We ignore the specific mapping between levers and USs here because that was 
+counterbalanced across subjects. However, we will not ignore the counterbalancing
+when writing the model function (see ahead).
 
 ## Writing the model function
 
 The biggest hurdle in fitting the model to empirical data is to write a function 
-that, given a vector of parameters and an experiment generates responses that 
-are organized as the empirical data. Let's begin by summarizing the data first, 
+that, **given a vector of parameters and an experiment, generates responses that 
+are organized as the empirical data**. Let's begin by summarizing the data first, 
 so we know what to aim for.
 
 ```{r}
@@ -72,23 +73,23 @@ setorder(pati_summ, block, response, us)
 head(pati_summ)
 ```
 
-We now will prepare the experiment 
-as you would pass to `run_experiment`experiment.
-
-This is not a trivial issue because HeiDI, like many models, 
-is sensitive to order effects. Hence, the arguments we prepare here must
-reflect the behavior of the model after a "general" experimental 
-procedure, and not the quirks of an unfortunate run of trials. Here, 
-we simply address this issue by running several iterations of the experiment 
-(with random trial orders) and averaging all experiments before evaluating the 
-likelihood of the parameters.
-
 So what do we have to design? The experiment presented by Patitucci 
 et al. (2016) was fairly simple, and it can be reduced to the 
 presentations of two levers, each followed by a different appetitive 
 outcome. Here, we will assume that the two outcomes are independent 
 from each other. We will also take some liberties with the number of trials 
 we specify to reduce computing time.
+
+But beware: HeiDI, like many learning models, 
+is sensitive to order effects. We do not want the model to misfit 
+the data because we happened to run our simulations with an unlucky run of trials. 
+The arguments we prepare must reflect the behavior of the model after a "general" experimental 
+procedure, and so, we address that issue by running several iterations of the experiment 
+(each with random order of trials) and averaging all experiments before evaluating the 
+likelihood of the parameters.
+
+With that in mind, we now will prepare the experiment as you would pass to `run_experiment()`.
+
 
 
 ```{r}
@@ -115,29 +116,30 @@ experiment <- make_experiment(des_df,
 experiment
 ```
 
-Note we specified two counterbalancings as groups. 
+Note we specified two counterbalancings as groups.
+
 We must reproduce the counterbalancings in 
 the data we are trying to fit as close as possible. Otherwise, 
 the optimization process might latch onto experimentally-irrelevant variables. 
 For example, it can be seen in `pati` that there was more lever pressing whenever 
 a lever was paired with pellets. If we didn't counterbalance the identities of the 
-levers and USs, the optimization might result in one of the levers being less 
-salient than the other.
+levers and food rewards, the optimization might result in one of the levers being less 
+salient than the other!
 
 We can now begin to write the model function. First, it would be a good 
-to see what results `run_experiment` returns.
+to see what results `run_experiment()` returns.
 
 ```{r}
 exp_res <- run_experiment(experiment)
 results(exp_res)
 ```
 
-Although `results` returns many model outputs, 
+Although `results()` returns many model outputs, as I said earlier,
 we only care about one of them: `rs` (the model responses).
 With them, we can write our model function.
 
 ```{r}
-my_model_function <- function(pars, exper) {
+my_model_function <- function(pars, exper, full = FALSE) {
   # extract the parameters from the model
   new_parameters <- parameters(exper)[[1]]
   # assign alphas
@@ -156,38 +158,58 @@ my_model_function <- function(pars, exper) {
     (response == "np" | (response == "lp" &
       mapply(grepl, s1, trial_type)))]
   rs <- rs[, list(value = mean(value)), by = "block,s2,response"]
+  if (full) {
+    return(rs)
+  }
   rs$value
 }
 ```
 
 Let's dissect the function above in its three parts. 
 
-1. We put `parameters` (the optimizer parameters) into the 
-experiment using the `parameters` method.
+1. We get the parameters from the experiment, via the `parameters()` method and
+store them in `new_parameters`.^[Note the `[[1]]` to get the first parameter lists; by default, 
+`parameters` returns a named list after each group]
 
-2. We run the model and select the relevant information (rs).
+2. We put `pars` (the parameters provided by the optimizer) into the `alphas` of `new_parameters`.
 
-3. We summarise the model responses and return them.[^1]
+3. We run the experiment and store it in `exp_res`.
 
-Let's see the function in action.
+4. We select the model responses (`rs`) from the model results and store them in `rs`.
+
+5. Lastly. We summarise the model responses and return them.[^1]
+
+That's a lot to digest, so let's see the function in action.
 
 ```{r}
 my_model_function(c(.1, .2, .4, .3), experiment)
 ```
 
+Just numbers!
+
 The order of the empirical data and model responses must match. 
 I cannot emphasize this point enough: there is nothing within the fit function that checks 
-or reorders the data for you. You are the sole responsible for making sure both of these 
+or reorders the data for you. 
+
+You are the sole responsible for making sure both of these 
 pieces of data are in the same order. A simple way would be to print the model results 
-before the return (see above). Once we have made sure everything is looking good, 
+before the return and compare them against the data. 
+That's the reason for the `full` parameter in the function definition.
+
+```{r}
+head(my_model_function(c(.1, .2, .4, .3), experiment, full = TRUE))
+head(pati_summ)
+```
+
+Once we have made sure everything is looking good, 
 we can fit the model.
 
 ## Fitting the model
 
-We fit models using the `fit_model` function. This function requires 4 arguments: 
+We fit models using the `fit_model()` function. This function requires 4 arguments: 
 
-1. The (empirical) data
-2. A model function
+1. The (empirical) data.
+2. A model function.
 3. The arguments with which to run the model function.
 4. The optimizer options.
 
@@ -204,23 +226,23 @@ my_optimizer_opts <- get_optimizer_opts(
 my_optimizer_opts
 ```
 
-The `get_optimizer_opts` function returns many things:
+The `get_optimizer_opts()` function returns many things:
 
-1. model_pars: The name of the model parameters. Here, the name of the alphas for each stimuli.
-2. ll and ul: The lower and upper limits for the parameter search. Consider shrinking these to speed up the process.
+1. model_pars: The name of the model parameters (name of the alpha for each stimulus).
+2. ll and ul: The lower and upper limits for the parameter search.
 3. optimizer: The numerical optimization technique we wish to use during MLE estimation.
 4. family: The family distribution we assume for our model. In practice, what you request 
 here will be used to determine the link function to transform model responses, 
 and the likelihood function used in the objective function. The normal family here 
-does nothing fancy to the model responses, and will estimate an extra parameter, 
-scale, which scales the model responses into the scale of the empirical data. 
+does nothing fancy to the model responses, but will estimate an extra parameter, 
+scale, which scales the model responses into the scale of the empirical data.
 When it comes to likelihood functions, this family will use the normal density of 
 the data and model differences.
 5. family_pars: The family-specific parameter being estimated alongside salience parameters.
 6. verbose: Whether to print parameters and objective function values as we optimize.
 
 You are free to modify these; just make sure the structure of the list returned 
-by `get_optimizer_opts` remains the same.
+by `get_optimizer_opts()` remains the same.
 
 We can also pass extra parameters to the optimizer call we 
 are using (e.g., the `par` argument for `optim`, or `parallel` for `ga`).
@@ -244,13 +266,15 @@ the_fit <- fit_model(pati_summ$rpert,
 load(file = "calmr_fits_fit.rda")
 ```
 
-
 The `fit_model` function returns a lot of information to track what we put in and what we got out. 
 However, typing the model in the console will show the MLE parameters we obtained this time 
-and their negative log likelihood, given the data:
+and their negative log-likelihood, given the data:
 
 ```{r}
 the_fit
+# the BIC and AIC
+BIC(the_fit)
+AIC(the_fit)
 ```
 
 That's good and all, but how well does a model run with those parameters "visually" fit the data? We can obtain the predictions from the model via the `predict` function.
@@ -270,8 +294,10 @@ pati_summ |>
   facet_grid(us ~ response)
 ```
 
-This looks pretty good! Save from some blatant misfits, of course. Now you know 
-everything you need to fit calmr to your empirical data. Go forth!
+This looks pretty good! Save from some blatant misfits, of course. 
+
+Now you know 
+everything you need to fit `calmr` to your empirical data. Go forth!
 
 ### A final note
 This vignette was pre-generated, as I don't want the user to fit the 
@@ -279,6 +305,6 @@ model at the time of installation. I will try to keep up with it as the
 package develops, but if you spot any inconsistencies, please drop me a line.
 
 [^1]: Within this step, we also filter all output nodes that are not related to expecting one of the USs, 
-we classify responses as being nosepokes (produced by the US) or 
+we classify responses as being nosepokes (produced by the food reward) or 
 lever presses (produced by the levers), and calculate the mean across blocks of trials. 
 Fitting a model is no trivial task!

@@ -115,18 +115,18 @@ Navarro</h4>
 </h2>
 <p>In this demo, I fit HeiDI to some empirical data (Patitucci et al.,
 2016, Experiment 1). This will involve writing a function that produces
-model responses organized as the empirical data, and using that function
-for maximum likelihood estimation (MLE). We begin with a short overview
-of the data, then move to the model function, and finally fit the
-model.</p>
+model responses organized as the empirical data, so we can use that
+function for maximum likelihood estimation (MLE). We begin with a short
+overview of the data, then move to the model function, and finally the
+fit.</p>
 <div class="section level3">
 <h3 id="the-data">The data<a class="anchor" aria-label="anchor" href="#the-data"></a>
 </h3>
 <p>The data (<code>pati</code>) contains the responses (lever presses or
-lp, and nose pokes or np) for 32 subjects (rats) across 6 blocks of
-training (2 sessions per block). The animals were trained to associate
-each of two levers to one of two unconditioned stimuli (pellets or
-sucrose). Let’s take a look at it.</p>
+lp, and nose pokes or np) for 32 rats, across 6 blocks of training (2
+sessions per block). The animals were trained to associate two levers to
+two different food rewards (pellets or sucrose).</p>
+<p>Let’s have a glance.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">pati</span><span class="op">)</span></span>
 <span><span class="co">#&gt;     subject        block     lever        us            response</span></span>
@@ -152,17 +152,19 @@ sucrose). Let’s take a look at it.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="op">~</span><span class="va">response</span><span class="op">)</span></span></code></pre></div>
 <p><img src="calmr_fits_files/figure-html/unnamed-chunk-2-1.png" width="672"></p>
 <p>The thicker lines are group averages; the rest are individual
-subjects. We ignore the specific mapping between levers and USs here,
-because that was counterbalanced across subjects. However, the
-counterbalancing will end up being relevant (see ahead).</p>
+subjects. We ignore the specific mapping between levers and USs here
+because that was counterbalanced across subjects. However, we will not
+ignore the counterbalancing when writing the model function (see
+ahead).</p>
 </div>
 <div class="section level3">
 <h3 id="writing-the-model-function">Writing the model function<a class="anchor" aria-label="anchor" href="#writing-the-model-function"></a>
 </h3>
 <p>The biggest hurdle in fitting the model to empirical data is to write
-a function that, given a vector of parameters and an experiment
-generates responses that are organized as the empirical data. Let’s
-begin by summarizing the data first, so we know what to aim for.</p>
+a function that, <strong>given a vector of parameters and an experiment,
+generates responses that are organized as the empirical data</strong>.
+Let’s begin by summarizing the data first, so we know what to aim
+for.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pati_summ</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="va">pati</span><span class="op">)</span><span class="op">[</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"rpert"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">rpert</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -178,21 +180,22 @@ begin by summarizing the data first, so we know what to aim for.</p>
 <span><span class="co">#&gt; 4:     1  S       np 3.2796875</span></span>
 <span><span class="co">#&gt; 5:     2  P       lp 1.5738281</span></span>
 <span><span class="co">#&gt; 6:     2  S       lp 0.6406250</span></span></code></pre></div>
-<p>We now will prepare the experiment as you would pass to
-<code>run_experiment</code>experiment.</p>
-<p>This is not a trivial issue because HeiDI, like many models, is
-sensitive to order effects. Hence, the arguments we prepare here must
-reflect the behavior of the model after a “general” experimental
-procedure, and not the quirks of an unfortunate run of trials. Here, we
-simply address this issue by running several iterations of the
-experiment (with random trial orders) and averaging all experiments
-before evaluating the likelihood of the parameters.</p>
-<p>So what do we have to design? The experiment presented by Patittuci
+<p>So what do we have to design? The experiment presented by Patitucci
 et al. (2016) was fairly simple, and it can be reduced to the
 presentations of two levers, each followed by a different appetitive
 outcome. Here, we will assume that the two outcomes are independent from
 each other. We will also take some liberties with the number of trials
 we specify to reduce computing time.</p>
+<p>But beware: HeiDI, like many learning models, is sensitive to order
+effects. We do not want the model to misfit the data because we happened
+to run our simulations with an unlucky run of trials. The arguments we
+prepare must reflect the behavior of the model after a “general”
+experimental procedure, and so, we address that issue by running several
+iterations of the experiment (each with random order of trials) and
+averaging all experiments before evaluating the likelihood of the
+parameters.</p>
+<p>With that in mind, we now will prepare the experiment as you would
+pass to <code><a href="../reference/run_experiment.html">run_experiment()</a></code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># The design data.frame</span></span>
 <span><span class="va">des_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
@@ -215,16 +218,16 @@ we specify to reduce computing time.</p>
 <span>  iterations <span class="op">=</span> <span class="fl">4</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">experiment</span></span></code></pre></div>
-<p>Note we specified two counterbalancings as groups. We must reproduce
-the counterbalancings in the data we are trying to fit as close as
-possible. Otherwise, the optimization process might latch onto
-experimentally-irrelevant variables. For example, it can be seen in
-<code>pati</code> that there was more lever pressing whenever a lever
-was paired with pellets. If we didn’t counterbalance the identities of
-the levers and USs, the optimization might result in one of the levers
-being less salient than the other.</p>
+<p>Note we specified two counterbalancings as groups.</p>
+<p>We must reproduce the counterbalancings in the data we are trying to
+fit as close as possible. Otherwise, the optimization process might
+latch onto experimentally-irrelevant variables. For example, it can be
+seen in <code>pati</code> that there was more lever pressing whenever a
+lever was paired with pellets. If we didn’t counterbalance the
+identities of the levers and food rewards, the optimization might result
+in one of the levers being less salient than the other!</p>
 <p>We can now begin to write the model function. First, it would be a
-good to see what results <code>run_experiment</code> returns.</p>
+good to see what results <code><a href="../reference/run_experiment.html">run_experiment()</a></code> returns.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">exp_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_experiment.html">run_experiment</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">results</a></span><span class="op">(</span><span class="va">exp_res</span><span class="op">)</span></span>
@@ -307,11 +310,11 @@ good to see what results <code>run_experiment</code> returns.</p>
 <span><span class="co">#&gt; 766: HD2022</span></span>
 <span><span class="co">#&gt; 767: HD2022</span></span>
 <span><span class="co">#&gt; 768: HD2022</span></span></code></pre></div>
-<p>Although <code>results</code> returns many model outputs, we only
-care about one of them: <code>rs</code> (the model responses). With
-them, we can write our model function.</p>
+<p>Although <code><a href="../reference/CalmrExperiment-methods.html">results()</a></code> returns many model outputs, as I said
+earlier, we only care about one of them: <code>rs</code> (the model
+responses). With them, we can write our model function.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">my_model_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">exper</span><span class="op">)</span> <span class="op">{</span></span>
+<code class="sourceCode R"><span><span class="va">my_model_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">exper</span>, <span class="va">full</span> <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># extract the parameters from the model</span></span>
 <span>  <span class="va">new_parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CalmrExperiment-methods.html">parameters</a></span><span class="op">(</span><span class="va">exper</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span>  <span class="co"># assign alphas</span></span>
@@ -330,49 +333,81 @@ them, we can write our model function.</p>
 <span>    <span class="op">(</span><span class="va">response</span> <span class="op">==</span> <span class="st">"np"</span> <span class="op">|</span> <span class="op">(</span><span class="va">response</span> <span class="op">==</span> <span class="st">"lp"</span> <span class="op">&amp;</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/mapply.html" class="external-link">mapply</a></span><span class="op">(</span><span class="va">grepl</span>, <span class="va">s1</span>, <span class="va">trial_type</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
 <span>  <span class="va">rs</span> <span class="op">&lt;-</span> <span class="va">rs</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"block,s2,response"</span><span class="op">]</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">full</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">rs</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
 <span>  <span class="va">rs</span><span class="op">$</span><span class="va">value</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>Let’s dissect the function above in its three parts.</p>
 <ol style="list-style-type: decimal">
-<li><p>We put <code>parameters</code> (the optimizer parameters) into
-the experiment using the <code>parameters</code> method.</p></li>
-<li><p>We run the model and select the relevant information
-(rs).</p></li>
-<li><p>We summarise the model responses and return them.<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;Within this step, we also filter all output nodes that
+<li><p>We get the parameters from the experiment, via the
+<code><a href="../reference/CalmrExperiment-methods.html">parameters()</a></code> method and store them in
+<code>new_parameters</code>.<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;Note the &lt;code&gt;[[1]]&lt;/code&gt; to get the first parameter
+lists; by default, &lt;code&gt;parameters&lt;/code&gt; returns a named list after
+each group&lt;/p&gt;"><sup>1</sup></a></p></li>
+<li><p>We put <code>pars</code> (the parameters provided by the
+optimizer) into the <code>alphas</code> of
+<code>new_parameters</code>.</p></li>
+<li><p>We run the experiment and store it in
+<code>exp_res</code>.</p></li>
+<li><p>We select the model responses (<code>rs</code>) from the model
+results and store them in <code>rs</code>.</p></li>
+<li><p>Lastly. We summarise the model responses and return them.<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;Within this step, we also filter all output nodes that
 are not related to expecting one of the USs, we classify responses as
-being nosepokes (produced by the US) or lever presses (produced by the
-levers), and calculate the mean across blocks of trials. Fitting a model
-is no trivial task!&lt;/p&gt;"><sup>1</sup></a></p></li>
+being nosepokes (produced by the food reward) or lever presses (produced
+by the levers), and calculate the mean across blocks of trials. Fitting
+a model is no trivial task!&lt;/p&gt;"><sup>2</sup></a></p></li>
 </ol>
-<p>Let’s see the function in action.</p>
+<p>That’s a lot to digest, so let’s see the function in action.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">my_model_function</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.2</span>, <span class="fl">.4</span>, <span class="fl">.3</span><span class="op">)</span>, <span class="va">experiment</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] 0.008050000 0.010565625 0.002650000 0.005048437 0.031828820 0.042306678</span></span>
 <span><span class="co">#&gt;  [7] 0.010963860 0.021017097 0.044113881 0.058286944 0.016036258 0.030438661</span></span>
 <span><span class="co">#&gt; [13] 0.050783660 0.066233126 0.019358818 0.036222556 0.054742035 0.070502134</span></span>
 <span><span class="co">#&gt; [19] 0.021701424 0.040091950 0.057311961 0.073063348 0.023442829 0.042882258</span></span></code></pre></div>
+<p>Just numbers!</p>
 <p>The order of the empirical data and model responses must match. I
 cannot emphasize this point enough: there is nothing within the fit
-function that checks or reorders the data for you. You are the sole
-responsible for making sure both of these pieces of data are in the same
-order. A simple way would be to print the model results before the
-return (see above). Once we have made sure everything is looking good,
-we can fit the model.</p>
+function that checks or reorders the data for you.</p>
+<p>You are the sole responsible for making sure both of these pieces of
+data are in the same order. A simple way would be to print the model
+results before the return and compare them against the data. That’s the
+reason for the <code>full</code> parameter in the function
+definition.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">my_model_function</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.2</span>, <span class="fl">.4</span>, <span class="fl">.3</span><span class="op">)</span>, <span class="va">experiment</span>, full <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    block      s2 response       value</span></span>
+<span><span class="co">#&gt; 1:     1  Pellet       lp 0.008050000</span></span>
+<span><span class="co">#&gt; 2:     1 Sucrose       lp 0.010565625</span></span>
+<span><span class="co">#&gt; 3:     1  Pellet       np 0.002650000</span></span>
+<span><span class="co">#&gt; 4:     1 Sucrose       np 0.005048437</span></span>
+<span><span class="co">#&gt; 5:     2  Pellet       lp 0.031828820</span></span>
+<span><span class="co">#&gt; 6:     2 Sucrose       lp 0.042306678</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pati_summ</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    block us response     rpert</span></span>
+<span><span class="co">#&gt; 1:     1  P       lp 0.8195313</span></span>
+<span><span class="co">#&gt; 2:     1  S       lp 0.5609375</span></span>
+<span><span class="co">#&gt; 3:     1  P       np 3.4109375</span></span>
+<span><span class="co">#&gt; 4:     1  S       np 3.2796875</span></span>
+<span><span class="co">#&gt; 5:     2  P       lp 1.5738281</span></span>
+<span><span class="co">#&gt; 6:     2  S       lp 0.6406250</span></span></code></pre></div>
+<p>Once we have made sure everything is looking good, we can fit the
+model.</p>
 </div>
 <div class="section level3">
 <h3 id="fitting-the-model">Fitting the model<a class="anchor" aria-label="anchor" href="#fitting-the-model"></a>
 </h3>
-<p>We fit models using the <code>fit_model</code> function. This
+<p>We fit models using the <code><a href="../reference/fit_model.html">fit_model()</a></code> function. This
 function requires 4 arguments:</p>
 <ol style="list-style-type: decimal">
-<li>The (empirical) data</li>
-<li>A model function</li>
+<li>The (empirical) data.</li>
+<li>A model function.</li>
 <li>The arguments with which to run the model function.</li>
 <li>The optimizer options.</li>
 </ol>
 <p>We have done a great job taking care of the first three, so let’s
 tackle the last.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_optimizer_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_optimizer_opts.html">get_optimizer_opts</a></span><span class="op">(</span></span>
 <span>  model_pars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">parameters</span><span class="op">$</span><span class="va">alphas</span><span class="op">)</span>,</span>
 <span>  optimizer <span class="op">=</span> <span class="st">"ga"</span>,</span>
@@ -409,19 +444,19 @@ tackle the last.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $verbose</span></span>
 <span><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
-<p>The <code>get_optimizer_opts</code> function returns many things:</p>
+<p>The <code><a href="../reference/get_optimizer_opts.html">get_optimizer_opts()</a></code> function returns many
+things:</p>
 <ol style="list-style-type: decimal">
-<li>model_pars: The name of the model parameters. Here, the name of the
-alphas for each stimuli.</li>
-<li>ll and ul: The lower and upper limits for the parameter search.
-Consider shrinking these to speed up the process.</li>
+<li>model_pars: The name of the model parameters (name of the alpha for
+each stimulus).</li>
+<li>ll and ul: The lower and upper limits for the parameter search.</li>
 <li>optimizer: The numerical optimization technique we wish to use
 during MLE estimation.</li>
 <li>family: The family distribution we assume for our model. In
 practice, what you request here will be used to determine the link
 function to transform model responses, and the likelihood function used
 in the objective function. The normal family here does nothing fancy to
-the model responses, and will estimate an extra parameter, scale, which
+the model responses, but will estimate an extra parameter, scale, which
 scales the model responses into the scale of the empirical data. When it
 comes to likelihood functions, this family will use the normal density
 of the data and model differences.</li>
@@ -431,14 +466,14 @@ salience parameters.</li>
 as we optimize.</li>
 </ol>
 <p>You are free to modify these; just make sure the structure of the
-list returned by <code>get_optimizer_opts</code> remains the same.</p>
+list returned by <code><a href="../reference/get_optimizer_opts.html">get_optimizer_opts()</a></code> remains the same.</p>
 <p>We can also pass extra parameters to the optimizer call we are using
 (e.g., the <code>par</code> argument for <code>optim</code>, or
 <code>parallel</code> for <code>ga</code>). Here, we fit the model in
 parallel with <code>ga</code>, and for only 10 iterations.</p>
 <p>And with that, we can fit the model! (be patient if you are following
 along)</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">the_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_model.html">fit_model</a></span><span class="op">(</span><span class="va">pati_summ</span><span class="op">$</span><span class="va">rpert</span>,</span>
 <span>  model_function <span class="op">=</span> <span class="va">my_model_function</span>,</span>
 <span>  exper <span class="op">=</span> <span class="va">experiment</span>,</span>
@@ -449,13 +484,18 @@ along)</p>
 <p>The <code>fit_model</code> function returns a lot of information to
 track what we put in and what we got out. However, typing the model in
 the console will show the MLE parameters we obtained this time and their
-negative log likelihood, given the data:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">the_fit</span></span></code></pre></div>
+negative log-likelihood, given the data:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">the_fit</span></span>
+<span><span class="co"># the BIC and AIC</span></span>
+<span><span class="fu"><a href="../reference/CalmrFit-methods.html">BIC</a></span><span class="op">(</span><span class="va">the_fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 94.33025</span></span>
+<span><span class="fu"><a href="../reference/CalmrFit-methods.html">AIC</a></span><span class="op">(</span><span class="va">the_fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 88.43998</span></span></code></pre></div>
 <p>That’s good and all, but how well does a model run with those
 parameters “visually” fit the data? We can obtain the predictions from
 the model via the <code>predict</code> function.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pati_summ</span><span class="op">$</span><span class="va">prediction</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CalmrFit-methods.html">predict</a></span><span class="op">(</span><span class="va">the_fit</span>, exper <span class="op">=</span> <span class="va">experiment</span><span class="op">)</span></span>
 <span><span class="va">pati_summ</span><span class="op">[</span>, <span class="va">data</span> <span class="op">:=</span> <span class="va">rpert</span><span class="op">]</span><span class="op">[</span>, <span class="va">rpert</span> <span class="op">:=</span> <span class="cn">NULL</span><span class="op">]</span></span>
 <span><span class="va">pati_summ</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span><span class="va">pati_summ</span>, measure.vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"prediction"</span>, <span class="st">"data"</span><span class="op">)</span><span class="op">)</span></span>
@@ -468,10 +508,11 @@ the model via the <code>predict</code> function.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">us</span> <span class="op">~</span> <span class="va">response</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calmr_fits_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
-<p>This looks pretty good! Save from some blatant misfits, of course.
-Now you know everything you need to fit calmr to your empirical data. Go
-forth!</p>
+<p><img src="calmr_fits_files/figure-html/unnamed-chunk-13-1.png" width="672"></p>
+<p>This looks pretty good! Save from some blatant misfits, of
+course.</p>
+<p>Now you know everything you need to fit <code>calmr</code> to your
+empirical data. Go forth!</p>
 <div class="section level4">
 <h4 id="a-final-note">A final note<a class="anchor" aria-label="anchor" href="#a-final-note"></a>
 </h4>

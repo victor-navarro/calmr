@@ -20,13 +20,19 @@ knitr::opts_chunk$set(
 
 # Using the calmr app
 
-If you are a beginner useR or simply want to simulate an experimental design to see what a 
-model does, you might be interested in using the calmr application.
+If you do not want to deal with the programming side of `calmr` 
+or simply want to simulate an experimental design to see what a 
+model does, you might be interested in using the `calmr` application.
 
-The calmr application offers a GUI that allows you to simulate 
+The `calmr` application offers a GUI that allows you to simulate 
 experiments without writing any code. If you want to use the online app, 
-you can find it at: [https://victor-navarro.shinyapps.io/calmr_app/](https://victor-navarro.shinyapps.io/calmr_app/). Alternatively, if you have installed the calmr package, you can launch the app via `calmr::calmr_app()`.
+you can find it at [https://victor-navarro.shinyapps.io/calmr_app/](https://victor-navarro.shinyapps.io/calmr_app/). 
+
+Alternatively, you can install the [`calmr.app` companion package](https://github.com/victor-navarro/calmr.app) 
+and launch the app via `calmr.app::launch_app()`.
+
 The rest of the tutorial assumes that you have the app open and ready to run. 
+
 Let's break down the GUI.
 
 # The GUI
@@ -49,17 +55,18 @@ For now, it will suffice to say that:
 
 * The number of trials is specified via digits to the left of each trial. For example, 10A(US) specifies ten "A(US)" trials.
 * Stimuli (or their elements) are specified with letters. For example, 10AB(US) specifies with elements A and B and US.
-* Named stimuli are specified within parentheses. For example, (US) implies that there is an element named "US" instead of a compound containing the elements "U" and "S".
+* Named stimuli are specified within parentheses. For example, (US) implies that there is an element named "US" instead of a 
+compound containing the elements "U" and "S".
 * Multiple trials per phase are separated via forward slash (/).
 
 Additionally, one can choose to randomize the trials within each phase by ticking the boxes in the R1 and R2 columns.
-It is important to note that whatever the user sets up here will interact with the 
+It is important to note that whatever you set up here will interact with the 
 "Create trial blocks" option in the *Options* tab in the sidebar (see ahead). 
-Here's the full breakdown of combinations and their behaviour:
+Here's the full breakdown of combinations and their behavior:
 
 * Table checked and preferences checked: Trials will be shuffled within blocks if possible (based on the greater common factor). 
 For example, 2A/2B gets shuffled into 2 blocks each containing one A and one B trial, 
-but 2A/1B gets shuffled into 1 block containign two A trials and one B trial.
+but 2A/1B gets shuffled into 1 block containing two A trials and one B trial.
 * Table unchecked and preferences checked: Trials will be deterministically intermixed within 
 blocks if possible.
 For example, 2A/2B gets shuffled into 2 blocks, resulting in the sequence ABAB.
@@ -73,14 +80,15 @@ Go ahead and parse the design. Some new things will appear on the GUI.
 
 ![The calmr app GUI after parsing](calmr_app_parsed_app.png){width=600px}
 
-After parsing a valid design. The user can set up the parameters for the experiment 
-(including all stimulus-related and global parameters). 
+After parsing a valid design, you can set up the parameters for the experiment. 
+The number of parameters will change as a function of the model. 
 In this case, the Rescorla-Wagner model has 4 parameters per stimulus.
+
 The default values are fairly sensible, but you can modify each parameter by hand
 as you would in your favorite spreadsheet software.
 
-The parametrization of each model in calmr can sometimes differ from what appears in the literature.
-The following table contains links to the documentation pages for each model.
+The parameterization of a model in `calmr` can sometimes differ from what appears in the literature.
+The following table contains links to the documentation pages for each model (warning: equations).
 
 | Citation                        | Name       | Model page              |
 |:-------------------------------:|:----------:|:-----------------------:|
@@ -93,14 +101,15 @@ The following table contains links to the documentation pages for each model.
 
 ## Results
 
-A new button appears after parsing an experiment.
+A new button will appear after parsing the experiment.
+
 A final click on that button will run the model and populate the
 "Results" and "Association Graphs" portions of the app. Go ahead and run the experiment.
-After you do, a new button will appear, allowing you to download the results as a spreadsheet.
+After you do a new button will allow you to download the results as a spreadsheet.
 
 ![The calmr app GUI after running the model](calmr_app_ran_app.png){width=600px}
 
-In the calmr app, the results are shown visually. 
+In the `calmr` app, the results are shown visually. 
 Clicking the bar above the graph 
 (the one containing "Blocking - Response Strength ..." above) 
 will show you all the plots available. The first portion of each plot's name denotes 
@@ -111,9 +120,9 @@ For example, the yellow lines above denote the strength that A and B have with t
 The top column corresponds to A (look at the label to the right) and the middle column 
 corresponds to B.
 
-Go ahead and explore all available plots. These are usually self explanatory, 
+Go ahead and explore all available plots. These are usually self-explanatory, 
 but you should consult the documentation of the package in case something is unclear 
-(specially when using more obscure models).
+(especially when using more obscure models).
 
 ## Association Graphs
 
@@ -126,19 +135,20 @@ in the model change across the experiment.
 
 ## Other bits
 
-The sections above implement the bulk of the functionalities in the calmr app. 
-The following sections describe additional options convenience functions that I found useful.
+The sections above implement the bulk of the functionalities in the `calmr` app. 
+The following sections describe additional options that I found useful.
 
 ### Options
 
-Here we set the number of iterations to run the experiment for (important if model behaviour 
+Here we set the number of iterations to run the experiment for (important if model behavior 
 is sensitive to trial order effects), and whether we want to create trial blocks. Here we also set 
 Here we can choose to plot in a common scale for the y-axis (active by default).
 
 ## A final message
+
 Hope you enjoy the app! If you do find any bugs, have comments, 
 or would like something implemented, feel free to post a message on 
-the package's github repository or drop me a line at navarrov [at] cardiff.ac.uk.
+the package's Github repository or drop me a line at navarrov [at] cardiff.ac.uk.
 
 
 

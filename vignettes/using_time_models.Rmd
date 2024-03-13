@@ -32,7 +32,7 @@ I wrote several additional tools for future models.
 
 #### Changes to trial-based models
 
-The biggest change in calmr version 0.5 is the use of the ">" character and its effect on trial-based models. Before, the ">" character was used to specify a single split within a trial.
+The biggest change in `calmr` version 0.5 is the use of the ">" character and its effect on trial-based models. Before, the ">" character was used to specify a single split within a trial.
 For example, "A>(US)" would encode the typical situation in which stimulus A is followed by the US. This was used to mimic the traditional situation in which we expect an organism
 to start (conditionally) responding before the US is delivered. And so, all trial-based models had two steps within each trial: an expectation step in which the first half of the trial 
 retrieved absent stimuli, and a learning step, in which all stimuli in the trial were associated with each other. The first pass is no more 
