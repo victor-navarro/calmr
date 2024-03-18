@@ -1,3 +1,6 @@
+# calmr 0.6.2
+* Aggregation of ANCCR data now ignores time; time entries are averaged.
+
 # calmr 0.6.1
 * Added `outputs` argument to `run_experiment()`, `parse()`, and `aggregate()`, allowing the user to parse/aggregate only some model outputs.
 * Documentation corrections for CRAN resubmission.

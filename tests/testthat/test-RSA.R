@@ -9,6 +9,9 @@ comparisons <- list(
   "PKH1982" = c("eivs")
 )
 
+# TODO: There is a bug when one includes
+# more than one output for a model and tehre are multiple models
+
 test_that("rsa fails if comparisons is unnamed", {
   expect_error(rsa(comp, unname(comparisons)))
 })
@@ -65,4 +68,14 @@ test_that("show method works without test results", {
 
 test_that("show method works with test results", {
   expect_no_error(capture_message(show(test_res)))
+})
+
+comparisons <- list(
+  "RW1972" = c("rs", "vs")
+)
+
+test_that("can do rsa for multiple outputs of a model", {
+  expect_no_error(
+    rsa(comp, comparisons)
+  )
 })

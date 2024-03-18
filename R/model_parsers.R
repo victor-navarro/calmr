@@ -150,7 +150,7 @@
 
 # type is the type of data
 .aggregate_results_data_table <- function(dat, type) {
-  value <- NULL # local binding
+  value <- time <- NULL # local binding
   dat <- data.table::data.table(dat)
   # define base terms for aggregation formula
   no_s2 <- c("as", "e_ij", "e_i", "m_i", "delta")
@@ -158,9 +158,6 @@
     "group", "phase", "trial_type",
     "trial", "s1", "s2", "block_size"
   )
-  if ("time" %in% names(dat)) {
-    terms <- c(terms, "time")
-  }
   if (type %in% no_s2) {
     terms <- terms[!(terms == "s2")]
   }
@@ -171,7 +168,13 @@
     terms <- c(terms, "comp")
   }
   form <- paste0(terms, collapse = ",")
-  data.table::setDT(dat)[, list("value" = mean(value)), by = form]
+  if (!("time" %in% names(dat))) {
+    data.table::setDT(dat)[, list("value" = mean(value)), by = form]
+  } else {
+    data.table::setDT(dat)[, lapply(.SD, sum, na.rm = TRUE),
+      by = form, .SDcols = c("value", "time")
+    ]
+  }
 }
 
 .rename <- function(x, from, to) {
