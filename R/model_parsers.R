@@ -171,7 +171,7 @@
   if (!("time" %in% names(dat))) {
     data.table::setDT(dat)[, list("value" = mean(value)), by = form]
   } else {
-    data.table::setDT(dat)[, lapply(.SD, sum, na.rm = TRUE),
+    data.table::setDT(dat)[, lapply(.SD, mean, na.rm = TRUE),
       by = form, .SDcols = c("value", "time")
     ]
   }
