@@ -94,7 +94,7 @@ setMethod(
         panel.background = ggplot2::element_blank()
       ) +
       ggplot2::labs(fill = "Correlation") +
-      ggplot2::scale_x_discrete(position = "top")
+      ggplot2::scale_x_discrete(limits = rev, position = "top")
     if (length(x@test_data)) {
       sigmat <- x@test_data$sig_mat
       sigmat[lower.tri(sigmat)] <- NA
