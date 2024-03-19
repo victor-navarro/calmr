@@ -205,7 +205,7 @@ ANCCR <- function(
       # }
       # Total dopamine
       tda <- sum(das[event, , timestep])
-      # Update meaningful causes index
+      # Update meaningful causal target index
       imct[event] <- imct[event] |
         (
           (tda + parameters$betas[event]) >
