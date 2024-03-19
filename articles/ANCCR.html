@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">calmr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,8 +54,8 @@
     <a class="dropdown-item" href="../articles/PKH1982.html">PKH1982</a>
     <a class="dropdown-item" href="../articles/SM2007.html">SM2007</a>
     <a class="dropdown-item" href="../articles/HD2022.html">HD2022</a>
-    <a class="dropdown-item" href="../articles/RAND.html">RAND</a>
     <a class="dropdown-item" href="../articles/ANCCR.html">ANCCR</a>
+    <a class="dropdown-item" href="../articles/RAND.html">RAND</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Demos</h6>
     <a class="dropdown-item" href="../articles/calmr_basics.html">calmr_basics</a>
@@ -90,8 +90,9 @@
 
 
 
-
-<div class="row">
+<script src="ANCCR_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="ANCCR_files/d3-3.3.8/d3.min.js"></script><script src="ANCCR_files/dagre-0.4.0/dagre-d3.min.js"></script><link href="ANCCR_files/mermaid-0.3.0/dist/mermaid.css" rel="stylesheet">
+<script src="ANCCR_files/mermaid-0.3.0/dist/mermaid.slim.min.js"></script><link href="ANCCR_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
+<script src="ANCCR_files/chromatography-0.1/chromatography.js"></script><script src="ANCCR_files/DiagrammeR-binding-1.0.11/DiagrammeR.js"></script><div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>ANCCR</h1>
                         <h4 data-toc-skip class="author">Victor
@@ -107,8 +108,235 @@ Navarro</h4>
 <div class="section level2">
 <h2 id="the-mathematics-behind-anccr">The mathematics behind ANCCR<a class="anchor" aria-label="anchor" href="#the-mathematics-behind-anccr"></a>
 </h2>
-<p>TODO</p>
+<p>The ANCCR <span class="citation">(Jeong et al., 2022)</span> model,
+which stands for adjusted net contingency for causal relations, proposes
+that mesolimbic dopaminergic conveys an adjusted net contingency for
+causal relationships (to biologically meaningful targets). The
+mathematics (and logic) behind the model go well beyond what I can cover
+here, but for now, it will suffice to say that the model:</p>
+<ul>
+<li>Uses a “Hebbian” mechanism to learn retrospective associations after
+experiencing a meaningful causal target.</li>
+<li>Derives prospective associations using Bayes’s rule.</li>
+<li>Combines those associations into contingency terms that represent
+dopaminergic activity.</li>
+<li>Uses the sign of dopaminergic activity to strengthen or weaken
+causal weights.</li>
+<li>Responds as a function of prospective associations and causal
+links.</li>
+</ul>
+<div class="section level3">
+<h3 id="maintaining-stimulus-representations">1 - Maintaining stimulus representations<a class="anchor" aria-label="anchor" href="#maintaining-stimulus-representations"></a>
+</h3>
+<p>The degree to which a stimulus <span class="math inline">\(i\)</span>
+at time <span class="math inline">\(t\)</span> is “active” in memory is
+denoted by:</p>
+<p><span class="math display">\[
+\tag{Eq.1}
+E_i(t) = \Sigma_{t_i \leq t}e^{-(\frac{t-t_i}{t\_constant})}
+\]</span></p>
+<p>where <span class="math inline">\(t_i\)</span> are all the time steps
+up to time <span class="math inline">\(t\)</span>, and <span class="math inline">\(t\_constant\)</span> is a time constant (usually
+meant to be the inter-reward rate)<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;The &lt;span class="math inline"&gt;\(t\_constant\)&lt;/span&gt;
+defaults to &lt;code&gt;NA&lt;/code&gt;, and if it remains like that, is calculated
+internally as the mean of the mean ITI for each trial. You should set
+this by hand if only some of your trials contain rewards.&lt;/p&gt;'><sup>1</sup></a></p>
 </div>
+<div class="section level3">
+<h3 id="learning-stimulus-associations">2 - Learning stimulus associations:<a class="anchor" aria-label="anchor" href="#learning-stimulus-associations"></a>
+</h3>
+<p>The model learns retrospective associations after meaningful causal
+targets occur. Whether event <span class="math inline">\(j\)</span> is a
+meaningful causal target is given by:</p>
+<p><span class="math display">\[
+\tag{Eq.2}
+\Phi_j = \begin{cases}
+    1,&amp; \text{if } \Phi_j(t) = 1\\
+    1,&amp; \text{if }DA_j + \beta_j &gt; \theta\\
+    0,&amp; \text{otherwise}
+\end{cases}
+\]</span></p>
+<p>where <span class="math inline">\(\Phi\)</span> plays the role of an
+indicator function, <span class="math inline">\(DA_j\)</span> is the
+total dopamine activity at the time of event <span class="math inline">\(j\)</span>, <span class="math inline">\(\beta_j\)</span> is the unconditioned value of
+event <span class="math inline">\(j\)</span> and <span class="math inline">\(\theta\)</span> is a global threshold parameter.<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;The first case in Eq. 2 was not written in the
+supplementary information of the Jeong et al. paper, but it reflects
+their MATLAB implementation.&lt;/p&gt;"><sup>2</sup></a> Note that
+the indicator function is self-preserving: once a stimulus becomes a
+meaningful causal target, it does not stop being so.</p>
+<p>After stimulus <span class="math inline">\(j\)</span> is observed,
+the predecessor representation contingency, or <strong>PRC</strong>, for
+each stimulus <span class="math inline">\(i\)</span> is updated via:</p>
+<p><span class="math display">\[
+\tag{Eq.3}
+PRC_{i \leftarrow j} = M_{i \leftarrow j} - M_{i}
+\]</span></p>
+<p>where <span class="math inline">\(M_{i \leftarrow j}\)</span> is the
+predecessor representation of <span class="math inline">\(i\)</span>
+given <span class="math inline">\(j\)</span> has occurred, and <span class="math inline">\(M_{i}\)</span> is the base rate with which <span class="math inline">\(i\)</span> occurs. Both of these quantities are
+given by:</p>
+<p><span class="math display">\[
+\tag{Eq.4a}
+M_{i \leftarrow j} = M_{i \leftarrow j}' + \Phi_j\alpha(E_{i
+\leftarrow j}  -  M_{i \leftarrow j}')
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\tag{Eq.4b}
+M_{i} = M_{i}' + k\alpha(E_{i}  -  M_{i}')
+\]</span></p>
+<p>where <span class="math inline">\(M_{i \leftarrow j}'\)</span>
+and <span class="math inline">\(M_{i}'\)</span> are the quantities
+before <span class="math inline">\(j\)</span> was observed, <span class="math inline">\(k\)</span> and <span class="math inline">\(\alpha\)</span> are learning rate parameters, and
+<span class="math inline">\(E_{i \leftarrow j}\)</span> is the
+eligibility trace of stimulus <span class="math inline">\(i\)</span> at
+the time <span class="math inline">\(j\)</span> occurs (see Eq. 1).</p>
+<p>Then, the PRC can be used to derive the prospective association,
+aptly named as the successor representation contingency, or
+<strong>SRC</strong> via Bayes rule:</p>
+<p><span class="math display">\[
+\tag{Eq.5}
+SRC_{i \rightarrow j} = PRC_{i \leftarrow j} \frac{M_j}{M_i}
+\]</span></p>
+<p>The base rate for <span class="math inline">\(j\)</span>, <span class="math inline">\(M_j\)</span> is calculated via Eq.4b.</p>
+</div>
+<div class="section level3">
+<h3 id="releasing-dopamine">3 - Releasing Dopamine<a class="anchor" aria-label="anchor" href="#releasing-dopamine"></a>
+</h3>
+<p>The model postulates that dopaminergic signaling encodes the adjusted
+net contingencies for causal relations between stimuli, or ANCCRs. The
+total dopaminergic activity at the time of event <span class="math inline">\(i\)</span> is equal to:</p>
+<p><span class="math display">\[
+\tag{Eq.6}
+DA_i = \Sigma_j (ANCCR_{i \rightarrow j}\Phi_j)
+\]</span></p>
+<p>And the ANCCR from stimulus <span class="math inline">\(i\)</span> to
+stimulus <span class="math inline">\(j\)</span> is given by:</p>
+<p><span class="math display">\[
+\tag{Eq.7}
+ANCCR_{i \rightarrow j} = NC_{i \leftrightarrow j} CW_{i \rightarrow j}
+- \sum_{k \neq i}(ANCCR_{k \leftrightarrow j}\Delta_{k \leftarrow
+i}\Phi_{k \leftrightarrow i})
+\]</span></p>
+<p>where <span class="math inline">\(NC_{i \leftrightarrow j}\)</span>
+is the net contingency between stimuli <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>, <span class="math inline">\(CW_{i
+\rightarrow j}\)</span> is the causal weight that <span class="math inline">\(i\)</span> has with <span class="math inline">\(j\)</span>, <span class="math inline">\(\Delta_{k
+\leftarrow i}\)</span> is the recency of stimulus <span class="math inline">\(k\)</span> with respect to stimulus <span class="math inline">\(i\)</span>, and <span class="math inline">\(\Phi_{k \leftrightarrow i}\)</span> is an
+indicator function denoting whether <span class="math inline">\(k\)</span> and <span class="math inline">\(i\)</span> have a putative causal relationship
+with each other.</p>
+<p>The net contingency between stimuli <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>, <span class="math inline">\(NC_{i
+\leftrightarrow j}\)</span>, is given by:</p>
+<p><span class="math display">\[
+\tag{Eq.8}
+NC_{i \leftrightarrow j} = wSRC_{i \rightarrow j} + (1-w)PRC_{i
+\leftarrow j}
+\]</span></p>
+<p>or a weighted sum of successor and predecessor representation
+contingencies.</p>
+<p>The net contingency is used to calculate the indicator function
+above, as:</p>
+<p><span class="math display">\[
+\tag{Eq.9}
+\Phi_{k \leftrightarrow i} = \begin{cases}
+    1,&amp; \text{if } NC_{i \leftrightarrow j} &gt; \theta\\
+    0,&amp; \text{otherwise}
+\end{cases}
+\]</span></p>
+<p>where <span class="math inline">\(\theta\)</span> is the same
+threshold parameter used in Eq.2<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;Notably, although Eq.2 is self-perpetuating, Eq.9 is
+not, meaning causal relations between stimuli can flip between 0 and 1&lt;/p&gt;"><sup>3</sup></a>, and the indicator function for a stimulus
+and itself, <span class="math inline">\(\Phi_{i \leftrightarrow
+i}\)</span>, is 0.</p>
+<p>The recency term, <span class="math inline">\(\Delta_{k \leftarrow
+i}\)</span>, is given by:</p>
+<p><span class="math display">\[
+\tag{Eq.10}
+\Delta_{k \leftarrow i} = e^{-(\frac{t_j-t_i}{t\_constant})}
+\]</span></p>
+<p>where <span class="math inline">\(t\_constant\)</span> is the same
+parameter used in Eq.1. Note however that Eq.9 does not include the sum
+term in Eq. 1. Finally, the causal weight from stimulus <span class="math inline">\(i\)</span> to stimulus <span class="math inline">\(j\)</span> is given by:</p>
+<p><span class="math display">\[
+\tag{Eq.11}
+CW_{i \rightarrow j} = CW_{i \rightarrow j}' +
+\alpha_{reward}\delta_{i \rightarrow j}
+\]</span></p>
+<p>where <span class="math inline">\(CW_{i \rightarrow j}'\)</span>
+is the previous causal weight, <span class="math inline">\(\alpha_{reward}\)</span> is a learning rate
+parameter exclusive for causal weights, and <span class="math inline">\(\delta_{i \rightarrow j}\)</span> is a delta term
+depending on the sign of the total dopaminergic activity, given by:</p>
+<p><span class="math display">\[
+\tag{Eq.12}
+\delta_{i \rightarrow j} = \begin{cases}
+    CW_{j \rightarrow j} - CW_{i \rightarrow j}, &amp; \text{if } DA_j
+\ge 0\\
+    (0-CW_{i \rightarrow j})\frac{n_i^{-1}\Delta{i \leftarrow j} \Phi_{i
+\leftrightarrow j}}{\Sigma_{k \neq j}(n_k^{-1}\Delta_{k \leftarrow j}
+\Phi_{k \leftrightarrow j})},&amp; \text{otherwise}
+\end{cases}
+\]</span></p>
+<p>where <span class="math inline">\(CW_{j \rightarrow j}\)</span> above
+is the reward magnitude of stimulus <span class="math inline">\(j\)</span>. In plain words, when dopaminergic
+activity is positive, causal weights (from all present and absent
+stimuli) strengthen. Conversely, when dopaminergic activity is negative,
+causal weights (from all present and absent stimuli) weaken,
+proportional to their normalized frequency and recency (as long as they
+have putative causal relations with <span class="math inline">\(j\)</span>).</p>
+</div>
+<div class="section level3">
+<h3 id="generating-responses">4 - Generating responses<a class="anchor" aria-label="anchor" href="#generating-responses"></a>
+</h3>
+<p>Responding in ANCCR is lightly specified. The value of responding
+upon presentation of stimulus <span class="math inline">\(i\)</span> is
+given by:</p>
+<p><span class="math display">\[
+\tag{Eq.13}
+Q_i = \Sigma_k(SRC_{i \rightarrow k} CW_{i \rightarrow k})
+\]</span></p>
+<p>which can then be mapped onto probabilities via a softmax function<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;The implementation of ANCCR in &lt;code&gt;calmr&lt;/code&gt;
+returns both action values and probability matrices. The latter is
+parametrized via the global parameters &lt;span class="math inline"&gt;\(cost\)&lt;/span&gt; (the cost of responding) and &lt;span class="math inline"&gt;\(temperature\)&lt;/span&gt;, a multiplier, &lt;strong&gt;not
+divider&lt;/strong&gt; on action values&lt;/p&gt;'><sup>4</sup></a>.</p>
+<div class="section level5">
+<h5 id="a-diagram">A diagram<a class="anchor" aria-label="anchor" href="#a-diagram"></a>
+</h5>
+<p>The diagram below shows the dependencies in the model. I am excluding
+the indicator functions and parameters for simplicity.<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;If nothing appears below, try rebuilding this vignette
+after install &lt;code&gt;DiagrammeR&lt;/code&gt;&lt;/p&gt;"><sup>5</sup></a></p>
+<div id="htmlwidget-bb6de510126a0c65298c" style="width:100%;height:432.632880098888px;" class="DiagrammeR html-widget"></div>
+<script type="application/json" data-for="htmlwidget-bb6de510126a0c65298c">{"x":{"diagram":"graph LR;\n    E_i-->M_i;\n    E_j-->M_j;\n    M_j-->SRC;\n    M_i-->SRC;\n    E_ij-->M_ij;\n    M_ij-->PRC;\n    M_i-->PRC;\n    PRC-->SRC;\n    PRC-->NC;\n    SRC-->NC;\n    NC-->ANCCR;\n    CW-->ANCCR;\n    ANCCR-->DA;\n    DA-->CW;\n    CW-->Q;\n    SRC-->Q;\n"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div class="section level5">
+<h5 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a>
+</h5>
+<p>The implementation of this model is a port from the MATLAB code that
+Jeong et al. shared in the <a href="https://github.com/namboodirilab/ANCCR" class="external-link">GitHub repository</a>
+associated with their paper. The output of the R model was checked
+against the outputs of the MATLAB model, using training routines
+(“eventlogs” in their parlance) generated using their MATLAB code. The
+training routines generated in <code>calmr</code> differ somewhat, to
+accommodate generality. For example, as of version <code>0.6.1</code>,
+it is not possible to specify probabilistic relations between cues and
+rewards. Instead, it is left to the user to specify an exact probability
+via trial numbers (e.g., an 80% reward probability can be specified as
+“80A&gt;(US)/20A”). The naming of parameters also differs between
+codebases.</p>
+</div>
+<div class="section level5">
+<h5 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h5>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0" line-spacing="2">
+<div id="ref-jeong_mesolimbic_2022" class="csl-entry">
+Jeong, H., Taylor, A., Floeder, J. R., Lohmann, M., Mihalas, S., Wu, B.,
+Zhou, M., Burke, D. A., &amp; Namboodiri, V. M. K. (2022). Mesolimbic
+dopamine release conveys causal associations. <em>Science (New York,
+N.Y.)</em>, <em>378</em>, eabq6740. <a href="https://doi.org/10.1126/science.abq6740" class="external-link">https://doi.org/10.1126/science.abq6740</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
 </div>
