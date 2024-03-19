@@ -161,11 +161,13 @@ which can then be mapped onto probabilities via a softmax function^[The implemen
 
 #### A diagram
 
-The diagram below shows the dependencies in the model. I am excluding the indicator functions and parameters for simplicity.
+The diagram below shows the dependencies in the model. I am excluding the indicator functions and parameters for 
+simplicity.^[If nothing appears below, try rebuilding this vignette after install `DiagrammeR`]
 
 
 ```{r echo = FALSE, message=FALSE}
-DiagrammeR::mermaid("graph LR;
+if (requireNamespace("DiagrammeR", quietly = TRUE)) {
+    DiagrammeR::mermaid("graph LR;
     E_i-->M_i;
     E_j-->M_j;
     M_j-->SRC;
@@ -183,6 +185,7 @@ DiagrammeR::mermaid("graph LR;
     CW-->Q;
     SRC-->Q;
 ", width = "100%")
+}
 ```
 
 #### Note
