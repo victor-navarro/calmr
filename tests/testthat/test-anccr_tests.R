@@ -16,8 +16,6 @@ test_that("set reward_parameters changes values", {
   expect_true(pars$betas["N"] != set_reward_parameters(pars, "US")$betas["N"])
 })
 
-timings(make_experiment(df, parameters = pars, timings = tims, model = "ANCCR"))
-
 test_that("can run without exponential", {
   noexp <- tims
   noexp$use_exponential <- 0

@@ -196,6 +196,11 @@ make_experiment <- function(
       parameters, timings, ...
     )
   }
+  if (model == "TD") {
+    exper <- .tdrize_experience(
+      exper, design, parameters, timings, ...
+    )
+  }
   exper
 }
 

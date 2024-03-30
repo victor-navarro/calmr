@@ -45,21 +45,27 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
   for (ti in seq_len(nrow(experience))) {
     trial_name <- experience$tn[ti]
     transitions <- mapping$transitions[[trial_name]]
-
-    # go through periods
     period_funcs <- mapping$period_functionals[[trial_name]]
     # sample start of the trial
     if (timings$use_exponential) {
       new_ts <- min(
-        timings$max_ITI[trial_name],
-        stats::rexp(1, 1 / timings$mean_ITI[trial_name])
+        with(timings$trial_ts, max_ITI[trial == trial_name]),
+        stats::rexp(
+          1, 1 / with(timings$trial_ts, mean_ITI[trial == trial_name])
+        ),
+        timings$time_resolution
       )
     } else {
-      new_ts <- stats::runif(1) * timings$mean_ITI[trial_name] *
-        0.4 + timings$mean_ITI[trial_name] * 0.8
+      new_ts <- stats::runif(1) *
+        with(timings$trial_ts, mean_ITI[trial == trial_name]) *
+        0.4 +
+        with(
+          timings$trial_ts,
+          mean_ITI[trial == trial_name]
+        ) * 0.8
     }
     running_time <- running_time + new_ts
-    for (p in seq_len(length(period_funcs))) {
+    for (p in seq_along(period_funcs)) {
       eventlog <- rbind(
         eventlog,
         data.frame(experience[ti, ],
@@ -72,19 +78,25 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
       # add delay if a transition is next
       if (p < length(period_funcs) && length(transitions)) {
         running_time <- running_time +
-          timings$transition_delay[[trial_name]][[p]]
+          with(
+            timings$transition_ts,
+            transition_delay[trial == trial_name][p]
+          )
       }
     }
     # add post_trial delay
     running_time <- running_time +
-      timings$post_trial_delay[[trial_name]]
+      with(
+        timings$trial_ts,
+        post_trial_delay[trial == trial_name]
+      )
   }
   # jitter if necessary
-  if (timings$jitter > 0) {
+  if (parameters$jitter > 0) {
     eventlog$time <- unlist(sapply(unique(eventlog$time), function(t) {
       tlen <- sum(eventlog$time == t)
       if (tlen > 1) {
-        return(t + stats::rnorm(tlen) * timings$jitter)
+        return(t + stats::rnorm(tlen) * parameters$jitter)
       } else {
         return(t)
       }

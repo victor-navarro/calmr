@@ -22,7 +22,8 @@ NULL
 supported_models <- function() {
   c(
     "HDI2020", "HD2022", "RW1972", "MAC1975",
-    "PKH1982", "SM2007", "RAND", "ANCCR"
+    "PKH1982", "SM2007", "RAND", "ANCCR",
+    "TD"
   )
 }
 #' @rdname model_information
@@ -63,6 +64,7 @@ supported_plots <- function(model = NULL) {
       "psrcs", "ncs", "anccrs", "cws", "das", "qs",
       "ps"
     ),
+    "TD" = c("rs", "vs"),
     "RAND" = c("rs", "vs")
   )
   if (is.null(model)) {
@@ -131,7 +133,7 @@ model_parameters <- function(model = NULL) {
         "t_ratio", "t_constant",
         "alpha", "alpha_reward", "use_timed_alpha",
         "alpha_exponent", "alpha_init", "alpha_min",
-        "add_beta"
+        "add_beta", "jitter"
       ),
       default_value = c(
         1,
@@ -142,12 +144,12 @@ model_parameters <- function(model = NULL) {
         1.2, NA,
         0.02, 0.2, FALSE,
         1, 1, 0,
-        FALSE
+        FALSE, 1
       )
     ),
     "TD" = list(
-      "transition_delay", "post_trial_delay",
-      "mean_ITI", "max_ITI", "use_exponential"
+      name = c("alphas", "betas_on", "betas_off", "lambdas", "sigma", "gamma"),
+      default_value = c(0.4, 0.4, 0.4, 1, 0.9, 0.95)
     ),
     "RAND" = list(
       name = c("alphas"),
@@ -175,15 +177,12 @@ model_parameters <- function(model = NULL) {
       "t_ratio", "t_constant",
       "alpha", "alpha_reward", "use_timed_alpha",
       "alpha_exponent", "alpha_init", "alpha_min",
-      "add_beta"
-    )
+      "add_beta", "jitter"
+    ),
+    "TD" = c("gamma", "sigma")
   )
   parameter %in% global_pars[[model]]
 }
-
-
-
-
 
 #' @rdname model_information
 #' @return `model_outputs()` returns a character vector or
@@ -202,6 +201,7 @@ model_outputs <- function(model = NULL) {
       "psrcs", "ncs", "anccrs", "cws", "das", "qs",
       "ps"
     ),
+    "TD" = c("rs", "vs"),
     "RAND" = c("rs", "vs")
   )
   if (is.null(model)) {
@@ -222,6 +222,7 @@ model_outputs <- function(model = NULL) {
     "SM2007" = "vs",
     "PKH1982" = "eivs",
     "ANCCR" = "anccrs",
+    "TD" = "vs",
     "RAND" = "vs"
   )
   assoc_map[model]

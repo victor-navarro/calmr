@@ -67,7 +67,7 @@ ANCCR <- function(
   if (is.na(parameters$t_constant)) {
     parameters$t_constant <- parameters$t_ratio *
       with(
-        timings,
+        timings$trial_ts,
         sum(unlist(lapply(list(mean_ITI), mean)))
       )
   }

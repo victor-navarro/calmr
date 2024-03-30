@@ -18,15 +18,15 @@ test_that("augmenting ANCCR design creates more experience rows than trials", {
 })
 
 test_that("augmenting ANCCR design with jitter creates different timestamps", {
-  nojitt <- tims
+  nojitt <- pars
   nojitt$jitter <- 0
   exp_jit <- experiences(make_experiment(df,
     parameters = pars, model = "ANCCR",
     timings = tims
   ))[[1]]
   exp_nojit <- experiences(make_experiment(df,
-    parameters = pars, model = "ANCCR",
-    timings = nojitt
+    parameters = nojitt, model = "ANCCR",
+    timings = tims
   ))[[1]]
   expect_true(length(unique(exp_jit$time)) != length(unique(exp_nojit$time)))
 })
