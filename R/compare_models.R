@@ -29,7 +29,7 @@ compare_models <- function(
   } else {
     # assert models
     if (!is.null(models)) {
-      models <- sapply(models, .calmr_assert, what = "supported_model")
+      models <- sapply(models, .assert_model)
       stopifnot(
         "Argument `models` must contain unique model names." =
           length(models) == length(unique(models))

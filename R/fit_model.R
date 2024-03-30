@@ -46,9 +46,9 @@ fit_model <- function(
     data, model_function,
     optimizer_options, file = NULL, ...) {
   # check if the user passed lower and upper limits
-  .calmr_assert("limits", optimizer_options)
+  .assert_limits(optimizer_options)
   # check if user wants to save the fit in a file
-  if (!is.null(file)) .calmr_assert("filepath_OK", file)
+  if (!is.null(file)) .assert_filepath(file)
 
   # split the parameters
   model_par_pointers <- which(

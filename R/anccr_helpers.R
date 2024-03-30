@@ -17,35 +17,24 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
   parameters
 }
 
-
-#' Augment CalmrDesign to be used with the ANCCR model.
-#' @param object A CalmrDesign
-#' @rdname CalmrDesign-methods
-#' @noRd
-.anccrize_design <- function(object) {
-  # VN: After rewriting parse_design, this became unnecessary
-  # Leaving it here for the future.
-  object
-}
-
 # exp is an experience from .build_experiment
 .anccrize_experience <- function(
-    exper, design, parameters,
-    mapping, log_fn = .get_time_logs, ...) {
+    exper, design, parameters, timings,
+    log_fn = .get_time_logs, ...) {
   # Uses the vanilla experience to create time logs
   lapply(exper, function(g) {
     log_fn(g,
       design = design,
-      parameters = parameters
+      parameters = parameters,
+      timings = timings, ...
     )
   })
 }
 
 # args is a list coming from make_experiment
 # it has (at least) experience, mapping, and parameters
-# TODO: Add normal noise using jitter to simultaneous events
 .get_time_logs <- function(
-    experience, design, parameters,
+    experience, design, parameters, timings,
     debug = FALSE, ...) {
   mapping <- design@mapping
   rownames(experience) <- NULL
@@ -60,14 +49,14 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
     # go through periods
     period_funcs <- mapping$period_functionals[[trial_name]]
     # sample start of the trial
-    if (parameters$use_exponential) {
+    if (timings$use_exponential) {
       new_ts <- min(
-        parameters$max_ITI[trial_name],
-        stats::rexp(1, 1 / parameters$mean_ITI[trial_name])
+        timings$max_ITI[trial_name],
+        stats::rexp(1, 1 / timings$mean_ITI[trial_name])
       )
     } else {
-      new_ts <- stats::runif(1) * parameters$mean_ITI[trial_name] *
-        0.4 + parameters$mean_ITI[trial_name] * 0.8
+      new_ts <- stats::runif(1) * timings$mean_ITI[trial_name] *
+        0.4 + timings$mean_ITI[trial_name] * 0.8
     }
     running_time <- running_time + new_ts
     for (p in seq_len(length(period_funcs))) {
@@ -83,19 +72,19 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
       # add delay if a transition is next
       if (p < length(period_funcs) && length(transitions)) {
         running_time <- running_time +
-          parameters$transition_delay[[trial_name]][[p]]
+          timings$transition_delay[[trial_name]][[p]]
       }
     }
     # add post_trial delay
     running_time <- running_time +
-      parameters$post_trial_delay[[trial_name]]
+      timings$post_trial_delay[[trial_name]]
   }
   # jitter if necessary
-  if (parameters$t_jitter > 0) {
+  if (timings$jitter > 0) {
     eventlog$time <- unlist(sapply(unique(eventlog$time), function(t) {
       tlen <- sum(eventlog$time == t)
       if (tlen > 1) {
-        return(t + stats::rnorm(tlen) * parameters$t_jitter)
+        return(t + stats::rnorm(tlen) * timings$jitter)
       } else {
         return(t)
       }

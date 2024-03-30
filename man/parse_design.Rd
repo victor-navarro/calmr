@@ -4,14 +4,10 @@
 \alias{parse_design}
 \title{Parse design data.frame}
 \usage{
-parse_design(df, model = NULL, ...)
+parse_design(df)
 }
 \arguments{
 \item{df}{A \code{data.frame} of dimensions (groups) by (2*phases+1).}
-
-\item{model}{(Optional) model to augment the design.}
-
-\item{...}{Other arguments passed to augment function.}
 }
 \value{
 A \linkS4class{CalmrDesign} object.

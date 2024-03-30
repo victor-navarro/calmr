@@ -1,97 +1,3 @@
-.calmr_assert <- function(what, given, ...) { # nolint: cyclocomp_linter.
-  nargs <- list(...)
-  switch(what,
-    "supported_model" = {
-      if (is.null(given)) {
-        warning("No model passed. Using RW1972.")
-        return("RW1972")
-      } else {
-        if (!(given %in% supported_models())) {
-          stop("Model is not supported. Must be one returned by supported_models()")
-        }
-        return(given)
-      }
-    },
-    "parameters" = {
-      default_pars <- get_parameters(...)
-      if (is.null(given)) {
-        warning("No parameters were passed. Getting default values")
-        return(default_pars)
-      } else {
-        # TODO: Implement parameter check
-        return(given)
-      }
-    },
-    "parsed_design" = {
-      if (is.null(given)) {
-        stop("Must provide a design data.frame or a parsed design.")
-      } else {
-        return(parse_design(given))
-      }
-    },
-    "supported_optimizer" = {
-      if (is.null(given)) {
-        warning("No optimizer passed. Using 'optim'.")
-        return("optim")
-      } else {
-        if (!given %in% supported_optimizers()) {
-          stop("Optimizer is not supported. Must be one returned by supported_optimizers()")
-        } else {
-          return(given)
-        }
-      }
-    },
-    "supported_family" = {
-      if (is.null(given)) {
-        warning("No family passed. Using 'identity'")
-        return("identity")
-      } else {
-        if (!(given %in% supported_families())) {
-          stop("Family is not supported. Must be one returned by supported_families()")
-        } else {
-          return(given)
-        }
-      }
-    },
-    "limits_OK" = {
-      if (any(is.na(given$ll)) | any(is.na(given$ul))) {
-        stop("Did not supply limits for all parameters estimated. Count your parameters. Please see ?fit_model")
-      }
-    },
-    "filepath_OK" = {
-      if (!file.exists(dirname(given))) {
-        stop(sprintf("Path to file (%s) does not exist.", given))
-      }
-    },
-    "no_functional_stimuli" = {
-      if (
-        length(given$unique_nominal_stimuli) >
-          length(given$unique_functional_stimuli)
-      ) {
-        stop("The model does not support functional/nominal stimuli specifications.")
-      }
-    },
-    "supported_plot" = {
-      if (!(given %in% nargs$supported)) {
-        stop(sprintf("Plot not supported. The model does not contain '%s' in model results.", given))
-      }
-    },
-    "good_experiment" = {
-      if (length(given@design@mapping$unique_nominal_stimuli) == 1) {
-        stop("Experiment is too simple to run for one or more groups. Please check your design.")
-      }
-    },
-    "length" = {
-      if (!all(lapply(nargs, length) == given)) {
-        stop(sprintf(
-          "Function requires length of %s argument to be %d",
-          paste0(names(nargs), collapse = ","), given
-        ))
-      }
-    }
-  )
-}
-
 is_experiment <- function(object) {
   inherits(object, "CalmrExperiment")
 }
@@ -121,4 +27,123 @@ is_design <- function(object) {
   }
   if (throw_warn) warning("Found unsupported outputs. Trimming...")
   os
+}
+
+.assert_model <- function(model) {
+  stopifnot(
+    "Model must be one returned by `supported_models()`" =
+      (model %in% supported_models())
+  )
+  model
+}
+
+.assert_timed_model <- function(model) {
+  stopifnot(
+    "Model must be one returned by `supported_timed_models()`" =
+      (model %in% supported_timed_models())
+  )
+  model
+}
+
+.assert_parsed_design <- function(design) {
+  if ("CalmrDesign" %in% class(design)) {
+    return(design)
+  }
+  parse_design(design)
+}
+
+.assert_single_model <- function(model) {
+  stopifnot(
+    "Model must be length 1" =
+      length(model) == 1
+  )
+}
+
+.assert_timings <- function(timings, design) {
+  def_timings <- get_timings(design)
+  if (!is.null(timings)) {
+    stopifnot(
+      "Timing lists must be equally named" =
+        .check_deep_lists(timings, def_timings)
+    )
+    return(timings)
+  }
+  warning("Using default design timings.")
+  def_timings
+}
+
+.assert_parameters <- function(parameters, model, design) {
+  def_parameters <- get_parameters(design, model = model)
+  if (!is.null(parameters)) {
+    stopifnot(
+      "Parameter lists must be equally named" =
+        .check_deep_lists(parameters, def_parameters)
+    )
+    return(parameters)
+  }
+  warning("Using default model parameters.")
+  def_parameters
+}
+
+# returns true if two lists have the same names and length
+.check_deep_lists <- function(a, b) {
+  anames <- sort(names(unlist(a)))
+  bnames <- sort(names(unlist(b)))
+  (length(anames) == length(bnames)) &&
+    all(anames == bnames)
+}
+
+.assert_optimizer <- function(optimizer) {
+  if (is.null(optimizer)) {
+    warning("No optimizer passed. Using 'optim'.")
+    optimizer <- "optim"
+  }
+  stopifnot(
+    "Optimizer must be one returned by supported_optimizers()" =
+      (optimizer %in% supported_optimizers())
+  )
+  optimizer
+}
+
+.assert_family <- function(family) {
+  if (is.null(family)) {
+    warning("No family passed. Using 'idenity'.")
+    family <- "identity"
+  }
+  stopifnot(
+    "Family must be one returned by `supported_families()`" =
+      (family %in% supported_families())
+  )
+  family
+}
+
+.assert_limits <- function(options) {
+  stopifnot(
+    "You must provide upper and lower limits for parameters" =
+      all(!is.na(c(options$ll, options$ul)))
+  )
+}
+
+.assert_no_functional <- function(mapping) {
+  stopifnot(
+    "The model does not support functional/nominal stimuli specifications." =
+      length(
+        mapping$unique_nominal_stimuli
+      ) == length(
+        mapping$unique_functional_stimuli
+      )
+  )
+}
+
+.assert_filepath <- function(file) {
+  if (!file.exists(dirname(file))) {
+    stop(sprintf("Path to file %s does not exist.", file))
+  }
+}
+
+.assert_experiment <- function(experiment) {
+  stopifnot(
+    "Experiment is too simple to run for one or more groups." =
+      length(experiment@design@mapping$unique_nominal_stimuli) > 1
+  )
 }

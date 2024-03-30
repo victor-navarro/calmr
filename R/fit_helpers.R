@@ -22,8 +22,8 @@ get_optimizer_opts <- function(model_pars,
                                ll = rep(NA, length(model_pars)),
                                ul = rep(NA, length(model_pars)),
                                optimizer = NULL, family = NULL) {
-  optimizer <- .calmr_assert("supported_optimizer", optimizer)
-  family <- .calmr_assert("supported_family", family)
+  optimizer <- .assert_optimizer(optimizer)
+  family <- .assert_family(family)
 
   # family-specific
   family_pars <- NULL

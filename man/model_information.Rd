@@ -3,15 +3,18 @@
 \name{model_information}
 \alias{model_information}
 \alias{supported_models}
+\alias{supported_timed_models}
 \alias{supported_optimizers}
 \alias{supported_families}
 \alias{supported_plots}
 \alias{get_model}
-\alias{parameter_info}
+\alias{model_parameters}
 \alias{model_outputs}
 \title{Model information functions}
 \usage{
 supported_models()
+
+supported_timed_models()
 
 supported_optimizers()
 
@@ -21,7 +24,7 @@ supported_plots(model = NULL)
 
 get_model(model)
 
-parameter_info(model = NULL)
+model_parameters(model = NULL)
 
 model_outputs(model = NULL)
 }
@@ -30,6 +33,8 @@ model_outputs(model = NULL)
 }
 \value{
 \code{supported_models()} returns a character vector.
+
+\code{supported_timed_models()} returns a character vector.
 
 \code{supported_optimizers()} returns a character vector.
 
@@ -40,7 +45,7 @@ model_outputs(model = NULL)
 
 \code{get_model()} returns a model function.
 
-\code{parameter_info()} returns a list or a
+\code{model_parameters()} returns a list or a
 list of lists (if model is NULL).
 
 \code{model_outputs()} returns a character vector or
@@ -58,5 +63,5 @@ pkh_func <- get_model("PKH1982")
 head(pkh_func, 10)
 
 # Getting the parameters required by SM2007
-parameter_info("SM2007")
+model_parameters("SM2007")
 }

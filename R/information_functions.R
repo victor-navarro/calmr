@@ -12,7 +12,7 @@
 #' head(pkh_func, 10)
 #'
 #' # Getting the parameters required by SM2007
-#' parameter_info("SM2007")
+#' model_parameters("SM2007")
 NULL
 #> NULL
 
@@ -24,6 +24,12 @@ supported_models <- function() {
     "HDI2020", "HD2022", "RW1972", "MAC1975",
     "PKH1982", "SM2007", "RAND", "ANCCR"
   )
+}
+#' @rdname model_information
+#' @return `supported_timed_models()` returns a character vector.
+#' @export
+supported_timed_models <- function() {
+  c("ANCCR", "TD")
 }
 
 #' @rdname model_information
@@ -62,7 +68,7 @@ supported_plots <- function(model = NULL) {
   if (is.null(model)) {
     plot_info
   } else {
-    model <- .calmr_assert("supported_model", model)
+    model <- .assert_model(model)
     plot_info[[model]]
   }
 }
@@ -72,15 +78,15 @@ supported_plots <- function(model = NULL) {
 #' @export
 get_model <- function(model) {
   # Check model is supported
-  .calmr_assert("supported_model", model)
+  .assert_model(model)
   get(model)
 }
 
 #' @rdname model_information
-#' @return `parameter_info()` returns a list or a
+#' @return `model_parameters()` returns a list or a
 #' list of lists (if model is NULL).
 #' @export
-parameter_info <- function(model = NULL) {
+model_parameters <- function(model = NULL) {
   parameter_map <- list(
     "HDI2020" = list(
       name = c("alphas"),
@@ -117,29 +123,31 @@ parameter_info <- function(model = NULL) {
     ),
     "ANCCR" = list(
       name = c(
-        "transition_delay", "post_trial_delay",
-        "mean_ITI", "max_ITI", "reward_magnitude",
+        "reward_magnitude",
         "betas", "cost", "temperature",
         "threshold", "k",
         "w", "minimum_rate", "sampling_interval",
-        "use_exact_mean", "use_exponential",
-        "t_ratio", "t_constant", "t_jitter",
+        "use_exact_mean",
+        "t_ratio", "t_constant",
         "alpha", "alpha_reward", "use_timed_alpha",
         "alpha_exponent", "alpha_init", "alpha_min",
         "add_beta"
       ),
       default_value = c(
-        1, 1,
-        30, 90, 1,
+        1,
         1, 0, 1,
         0.6, 1,
         0.5, 1e-3, 0.2,
-        FALSE, TRUE,
-        1.2, NA, 0.1,
+        FALSE,
+        1.2, NA,
         0.02, 0.2, FALSE,
         1, 1, 0,
         FALSE
       )
+    ),
+    "TD" = list(
+      "transition_delay", "post_trial_delay",
+      "mean_ITI", "max_ITI", "use_exponential"
     ),
     "RAND" = list(
       name = c("alphas"),
@@ -153,6 +161,7 @@ parameter_info <- function(model = NULL) {
   }
 }
 
+
 # Returns whether a parameter is a global parameter
 .is_global_parameter <- function(parameter, model) {
   global_pars <- list(
@@ -162,8 +171,8 @@ parameter_info <- function(model = NULL) {
       "threshold", "k",
       "w", "minimum_rate",
       "sampling_interval",
-      "use_exact_mean", "use_exponential",
-      "t_ratio", "t_constant", "t_jitter",
+      "use_exact_mean",
+      "t_ratio", "t_constant",
       "alpha", "alpha_reward", "use_timed_alpha",
       "alpha_exponent", "alpha_init", "alpha_min",
       "add_beta"
@@ -172,26 +181,9 @@ parameter_info <- function(model = NULL) {
   parameter %in% global_pars[[model]]
 }
 
-# Returns whether a parameter is a trial parameter
-.is_trial_parameter <- function(parameter, model) {
-  trial_pars <- list(
-    "ANCCR" = c(
-      "post_trial_delay",
-      "mean_ITI", "max_ITI"
-    )
-  )
-  parameter %in% trial_pars[[model]]
-}
 
-# Returns wheter a parameter is a transition parameter
-.is_trans_parameter <- function(parameter, model) {
-  trans_pars <- list(
-    "ANCCR" = c(
-      "transition_delay"
-    )
-  )
-  parameter %in% trans_pars[[model]]
-}
+
+
 
 #' @rdname model_information
 #' @return `model_outputs()` returns a character vector or
@@ -215,7 +207,7 @@ model_outputs <- function(model = NULL) {
   if (is.null(model)) {
     output_info
   } else {
-    model <- .calmr_assert("supported_model", model)
+    model <- .assert_model(model)
     output_info[[model]]
   }
 }

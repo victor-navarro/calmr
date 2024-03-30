@@ -1,7 +1,5 @@
 #' Parse design data.frame
 #' @param df A `data.frame` of dimensions (groups) by (2*phases+1).
-#' @param model (Optional) model to augment the design.
-#' @param ... Other arguments passed to augment function.
 #' @return A [CalmrDesign-class] object.
 #' @note Each entry in even-numbered columns of df is
 #' a string formatted as per [phase_parser()].
@@ -14,46 +12,28 @@
 #' @seealso [phase_parser()]
 #' @export
 
-parse_design <- function(df, model = NULL, ...) {
-  if (!is.null(model)) {
-    .calmr_assert("length", 1, model = model)
-  }
-  # if already parsed, skip
-  if ("CalmrDesign" %in% class(df)) {
-    design_obj <- df
-    # augment if design hasn't been augmented
-    if (!is.null(model) && !df@augmented) {
-      design_obj <- augment(design_obj, model = model, ...)
-    }
-  } else {
-    ri <- seq(2, ncol(df), 2)
-    design <- apply(df, 1, function(r) {
-      sapply(ri, function(p) {
-        list(
-          group = r[[1]],
-          phase = names(df)[p],
-          parse_string = r[[p]],
-          randomize = r[[p + 1]],
-          phase_info = phase_parser(r[[p]])
-        )
-      }, simplify = FALSE)
+parse_design <- function(df) {
+  ri <- seq(2, ncol(df), 2)
+  design <- apply(df, 1, function(r) {
+    sapply(ri, function(p) {
+      list(
+        group = r[[1]],
+        phase = names(df)[p],
+        parse_string = r[[p]],
+        randomize = r[[p + 1]],
+        phase_info = phase_parser(r[[p]])
+      )
     }, simplify = FALSE)
-    # unnest one level (now group:phase is flat now)
-    design <- unlist(design, recursive = FALSE, use.names = FALSE)
-    # That's the easy part
-    # The hard part is to create the mapping for the experiment
-    map <- .get_mapping(design)
+  }, simplify = FALSE)
+  # unnest one level (now group:phase is flat now)
+  design <- unlist(design, recursive = FALSE, use.names = FALSE)
+  # That's the easy part
+  # The hard part is to create the mapping for the experiment
+  map <- .get_mapping(design)
 
-    # create design object
-    design_obj <- methods::new("CalmrDesign",
-      design = design, mapping = map, raw_design = df
-    )
-    # augment design if required
-    if (!is.null(model)) {
-      design_obj <- augment(design_obj, model = model, ...)
-    }
-  }
-  design_obj
+  methods::new("CalmrDesign",
+    design = design, mapping = map, raw_design = df
+  )
 }
 
 .get_mapping <- function(design) {

@@ -21,7 +21,7 @@
 # calmr 0.5.0
 * Implementation of ANCCR (Jeong et al., 2022), the first time-based model included in `calmr`.
 * Added parameter distinction between trial-wise and period-wise parameters.
-* Added internal augmentation of design/arguments depending on the model.
+* Added internal augmentation of arguments depending on the model.
 * All trial-based models do not use pre/post distinctions anymore. Using the ">" special character does not affect these models anymore.
 * The ">" special character is used to specify periods within a trial. For example, "A>B>C" implies A is followed by B which is followed by C. See the `using_time_models` vignette for additional information.
 * Named stimuli now support numbers trailing characters (e.g., "(US1)" is valid now.)

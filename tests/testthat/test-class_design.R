@@ -13,7 +13,3 @@ test_that("mapping method returns the mapping", {
 test_that("trial method works", {
   expect_no_error(trials(parsed_df))
 })
-
-test_that("augment method works", {
-  expect_no_error(augment(parsed_df, model = "ANCCR"))
-})

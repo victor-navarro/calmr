@@ -7,7 +7,7 @@
 get_parameters(design, model = NULL)
 }
 \arguments{
-\item{design}{An \code{data.frame} containing the experimental design.}
+\item{design}{A \code{data.frame} containing the experimental design.}
 
 \item{model}{A string specifying a model. One in \code{\link[=supported_models]{supported_models()}}.}
 }

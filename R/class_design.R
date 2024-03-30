@@ -5,7 +5,6 @@
 #' \item{\code{design}:}{A list containing design information.}
 #' \item{\code{mapping}:}{A list containing the object mapping.}
 #' \item{\code{raw_design}:}{The original data.frame.}
-#' \item{\code{augmented}:}{Whether the object has been augmented.}
 #' }
 #' @exportClass CalmrDesign
 methods::setClass(
@@ -13,10 +12,8 @@ methods::setClass(
   representation(
     design = "list",
     mapping = "list",
-    raw_design = "data.frame",
-    augmented = "logical"
-  ),
-  prototype(augmented = FALSE)
+    raw_design = "data.frame"
+  )
 )
 
 #' CalmrDesign methods
@@ -87,23 +84,3 @@ methods::setMethod(
     return(trial_dat)
   }
 )
-
-methods::setGeneric(
-  "augment",
-  function(object, model, ...) methods::standardGeneric("augment") # nocov
-)
-#' Augment CalmrDesign
-#' @param object A CalmrDesign, as returned by parse_design
-#' @param model A modelname string. One of supported_models()
-#' @param ... Additional parameters depending on the model.
-#' @rdname CalmrDesign-methods
-#' @aliases augment
-#' @noRd
-methods::setMethod("augment", "CalmrDesign", function(object, model, ...) {
-  if (model %in% c("ANCCR")) {
-    # creates eventlogs
-    object <- .anccrize_design(object, ...)
-    object@augmented <- TRUE
-  }
-  object
-})

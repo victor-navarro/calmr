@@ -3,11 +3,14 @@
 #' @description Makes a `CalmrExperiment` object containing
 #' the arguments necessary to run an experiment.
 #' @param design A design `data.frame`.
-#' @param parameters Parameters for a  model as
-#' returned by [get_parameters()].
 #' @param model A string specifying the model name. One of [supported_models()].
+#' @param parameters Optional. Parameters for a  model as
+#' returned by [get_parameters()].
+#' @param timings Optional. Timings for a time-based design as
+#' returned by [get_timings()]
 #' @param iterations An integer specifying the number of iterations per group.
-#' @param miniblocks Whether to organize trials in miniblocks.
+#' Default = 1.
+#' @param miniblocks Whether to organize trials in miniblocks. Default = TRUE.
 #' @param .callback_fn A function for keeping track of progress. Internal use.
 #' @param ... Extra parameters passed to other functions.
 #' @return A [CalmrExperiment-class] object.
@@ -28,25 +31,32 @@
 #' @export
 
 make_experiment <- function(
-    design, parameters = NULL,
-    model = NULL,
+    design,
+    model,
+    parameters = NULL,
+    timings = NULL,
     iterations = 1,
     miniblocks = TRUE,
     .callback_fn = NULL,
     ...) {
-  # parse design
-  design <- parse_design(design,
-    model = model, ...
-  )
+  # assert design is parsed
+  design <- .assert_parsed_design(design)
+  # get group names
   group_names <- design@raw_design[, 1]
-
-  .calmr_assert("length", 1, model = model)
+  # assert user passed only one model
+  .assert_single_model(model)
   # assert model
-  model <- .calmr_assert("supported_model", model)
-  # assert parameters
-  parameters <- .calmr_assert("parameters", parameters,
-    design = design, model = model
+  model <- .assert_model(model)
+  # assert model parameters
+  parameters <- .assert_parameters(parameters,
+    model = model, design = design
   )
+  # assert timing parameters
+  if (model %in% supported_timed_models()) {
+    timings <- .assert_timings(timings,
+      design = design
+    )
+  }
 
   # build the experiences for the experiment
   pb <- progressr::progressor(iterations)
@@ -64,13 +74,16 @@ make_experiment <- function(
     # augment experience if necessary
     exper <- .augment_experience(exper,
       model = model, design = design,
-      parameters = parameters, ...
+      parameters = parameters, timings = timings, ...
     )
     pb("Building experiment")
     exper
   }, simplify = FALSE, future.seed = TRUE)
   # unnest once
   allexps <- unlist(allexps, recursive = FALSE)
+  # hack timings
+  timings <- if (is.null(timings)) list() else timings
+
   # return experiment
   methods::new("CalmrExperiment",
     design = design,
@@ -80,6 +93,7 @@ make_experiment <- function(
       list(parameters),
       length(group_names)
     ), group_names),
+    timings = timings,
     experiences = allexps,
     results = methods::new("CalmrExperimentResult"),
     .model = rep(model, length(allexps)),
@@ -175,11 +189,11 @@ make_experiment <- function(
 
 .augment_experience <- function(
     exper, model,
-    design, parameters, ...) {
+    design, parameters, timings, ...) {
   if (model == "ANCCR") {
     exper <- .anccrize_experience(
       exper, design,
-      parameters, ...
+      parameters, timings, ...
     )
   }
   exper

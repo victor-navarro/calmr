@@ -12,6 +12,7 @@ for (m in models) {
   res <- run_experiment(
     df,
     model = m,
+    timings = get_timings(df),
     parameters = get_parameters(design = df, model = m)
   )
   test_that(sprintf("all plots for model %s", m), {

@@ -1,7 +1,9 @@
 #' Train the ANCCR model
 #'
 #' @param parameters A list containing the model parameters,
-#' as returned by get_parameters().
+#' as returned by `get_parameters()`.
+#' @param timings A list containing the design timings,
+#' as returned by `get_timings()`.
 #' @param experience A data.frame specifying trials as rows,
 #' as returned by `make_experiment`
 #' @param mapping A named list specifying trial and stimulus mapping,
@@ -14,7 +16,7 @@
 #' @note This model is in a highly experimental state. Use with caution.
 #' @noRd
 ANCCR <- function(
-    parameters, experience,
+    parameters, timings, experience,
     mapping, debug = FALSE, debug_t = -1, ...) {
   # TODO: Deal with omission as you would do with probe trials
 
@@ -65,7 +67,7 @@ ANCCR <- function(
   if (is.na(parameters$t_constant)) {
     parameters$t_constant <- parameters$t_ratio *
       with(
-        parameters,
+        timings,
         sum(unlist(lapply(list(mean_ITI), mean)))
       )
   }

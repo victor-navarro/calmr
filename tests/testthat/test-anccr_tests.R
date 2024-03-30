@@ -6,7 +6,7 @@ df <- data.frame(
 )
 
 pars <- get_parameters(df, model = "ANCCR")
-pars
+tims <- get_timings(df)
 
 test_that("set_reward_parameters returns consistent values", {
   expect_equal(pars, set_reward_parameters(pars, names(pars$betas)))
@@ -16,20 +16,34 @@ test_that("set reward_parameters changes values", {
   expect_true(pars$betas["N"] != set_reward_parameters(pars, "US")$betas["N"])
 })
 
+timings(make_experiment(df, parameters = pars, timings = tims, model = "ANCCR"))
+
 test_that("can run without exponential", {
-  noexp <- pars
+  noexp <- tims
   noexp$use_exponential <- 0
-  expect_no_error(run_experiment(df, parameters = noexp, model = "ANCCR"))
+  expect_no_error(
+    run_experiment(df,
+      parameters = pars,
+      timings = noexp,
+      model = "ANCCR"
+    )
+  )
 })
 
 test_that("can run with timed alpha", {
   talpha <- pars
   talpha$use_timed_alpha <- 1
-  expect_no_error(run_experiment(df, parameters = talpha, model = "ANCCR"))
+  expect_no_error(run_experiment(df,
+    parameters = talpha,
+    timings = tims, model = "ANCCR"
+  ))
 })
 
 test_that("can run with exact mean", {
   exac <- pars
   exac$use_exact_mean <- 1
-  expect_no_error(run_experiment(df, parameters = exac, model = "ANCCR"))
+  expect_no_error(run_experiment(df,
+    parameters = exac,
+    timings = tims, model = "ANCCR"
+  ))
 })

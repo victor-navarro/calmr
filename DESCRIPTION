@@ -63,6 +63,7 @@ Collate:
     'make_experiment.R'
     'assertions.R'
     'get_parameters.R'
+    'get_timings.R'
     'get_design.R'
     'heidi_helpers.R'
     'anccr_helpers.R'

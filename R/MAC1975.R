@@ -16,7 +16,7 @@ MAC1975 <- function(v = NULL, # nolint: object_name_linter.
                     experience,
                     mapping, ...) {
   # No functional stimuli check
-  .calmr_assert("no_functional_stimuli", mapping)
+  .assert_no_functional(mapping)
 
   # data initialization
   ntrials <- length(experience$tp)

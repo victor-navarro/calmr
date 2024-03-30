@@ -13,7 +13,6 @@ S4 class for calmr designs
 \item{\code{design}:}{A list containing design information.}
 \item{\code{mapping}:}{A list containing the object mapping.}
 \item{\code{raw_design}:}{The original data.frame.}
-\item{\code{augmented}:}{Whether the object has been augmented.}
 }
 }
 

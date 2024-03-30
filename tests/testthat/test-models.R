@@ -15,7 +15,11 @@ test_that("get_model fails if model is not supported", {
 for (m in supported_mods) {
   test_that(paste("model", m, "works"), {
     pars <- get_parameters(df, model = m)
-    args <- make_experiment(df, parameters = pars, model = m)
+    args <- make_experiment(df,
+      parameters = pars,
+      timings = get_timings(df),
+      model = m
+    )
     res <- run_experiment(args)
     expect_named(res@results@aggregated_results)
   })

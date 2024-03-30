@@ -65,6 +65,9 @@ df <- data.frame(
 pars <- get_parameters(df, model = "ANCCR")
 
 test_that("can make an experiment with empty phases", {
-  exp <- make_experiment(df, parameters = pars, model = "ANCCR")
+  exp <- make_experiment(df,
+    parameters = pars, timings = get_timings(df),
+    model = "ANCCR"
+  )
   expect_true(!("p1" %in% experiences(exp)[[2]]$phase))
 })

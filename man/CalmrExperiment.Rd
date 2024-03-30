@@ -14,6 +14,7 @@ S4 class for calmr experiments.
 \item{\code{model}:}{A string specifying the model used.}
 \item{\code{groups}:}{A string specifying the groups in the design.}
 \item{\code{parameters}:}{A list with the parameters used, per group.}
+\item{\code{timings}:}{A list with the timings used in the design.}
 \item{\code{experiences}:}{A list with the experiences for the model.}
 \item{\code{results}:}{A \linkS4class{CalmrExperimentResult} object.}
 \item{\code{.model}:}{Internal. The model associated with the iteration.}

@@ -5,6 +5,7 @@
 #' \item{\code{model}:}{A string specifying the model used.}
 #' \item{\code{groups}:}{A string specifying the groups in the design.}
 #' \item{\code{parameters}:}{A list with the parameters used, per group.}
+#' \item{\code{timings}:}{A list with the timings used in the design.}
 #' \item{\code{experiences}:}{A list with the experiences for the model.}
 #' \item{\code{results}:}{A [CalmrExperimentResult-class] object.}
 #' \item{\code{.model}:}{Internal. The model associated with the iteration.}
@@ -22,6 +23,7 @@ methods::setClass(
     model = "character",
     groups = "character",
     parameters = "list",
+    timings = "list",
     experiences = "list",
     results = "CalmrExperimentResult",
     .model = "character",
@@ -29,6 +31,7 @@ methods::setClass(
     .iter = "integer"
   )
 )
+
 
 #' CalmrExperiment methods
 #' @description S4 methods for `CalmrExperiment` class.
@@ -149,6 +152,24 @@ methods::setGeneric(
 methods::setMethod(
   "experiences", "CalmrExperiment",
   function(x) x@experiences
+)
+#' @noRd
+methods::setGeneric(
+  "experiences<-",
+  function(x, value) standardGeneric("experiences<-") # nocov
+)
+#' @rdname CalmrExperiment-methods
+#' @return `experiences()<-` returns the object after updating experiences.
+#' @aliases experiences<-
+#' @export
+methods::setMethod(
+  "experiences<-", "CalmrExperiment",
+  function(x, value) {
+    stopifnot(
+      "value must be either 1 or length(experiences(x))" =
+        length(value) == 1 || length(value) == experiences(x)
+    )
+  }
 )
 #' @noRd
 methods::setGeneric(
@@ -348,4 +369,33 @@ setMethod("graph", "CalmrExperiment", function(x, ...) {
     graphs[[m]] <- mgraphs
   }
   graphs
+})
+
+#' @noRd
+methods::setGeneric(
+  "timings",
+  function(x) standardGeneric("timings")
+) # nocov
+#' @noRd
+methods::setGeneric(
+  "timings<-",
+  function(x, value) standardGeneric("timings<-") # nocov
+)
+#' @rdname CalmrExperiment-methods
+#' @return `timings()` returns the list of timings
+#' contained in the object.
+#' @aliases timings
+#' @export
+methods::setMethod(
+  "timings", "CalmrExperiment",
+  function(x) x@timings
+)
+#' @rdname CalmrExperiment-methods
+#' @return `timings()<-` returns the object after updating timings.
+#' @aliases timings<-
+#' @export
+methods::setMethod("timings<-", "CalmrExperiment", function(x, value) {
+  .assert_timings(timings(x), value)
+  x@timings <- value
+  x
 })

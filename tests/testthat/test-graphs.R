@@ -37,7 +37,8 @@ for (m in models) {
     res <- run_experiment(
       df,
       model = m,
-      parameters = get_parameters(design = df, model = m)
+      parameters = get_parameters(design = df, model = m),
+      timings = get_timings(df)
     )
     g <- graph(res)
     expect_named(g)
