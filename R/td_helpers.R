@@ -29,23 +29,18 @@
     if (timings$use_exponential) {
       new_ts <- min(
         with(timings$trial_ts, max_ITI[trial == trial_name]),
-        .round_t(
-          stats::rexp(
-            1, 1 / with(timings$trial_ts, mean_ITI[trial == trial_name])
-          ),
-          timings$time_resolution
+        stats::rexp(
+          1, 1 / with(timings$trial_ts, mean_ITI[trial == trial_name])
         )
       )
     } else {
-      new_ts <- .round_t(
-        stats::runif(1) *
-          with(timings$trial_ts, mean_ITI[trial == trial_name]) *
-          0.4 +
-          with(
-            timings$trial_ts,
-            mean_ITI[trial == trial_name]
-          ) * 0.8, timings$time_resolution
-      )
+      new_ts <- stats::runif(1) *
+        with(timings$trial_ts, mean_ITI[trial == trial_name]) *
+        0.4 +
+        with(
+          timings$trial_ts,
+          mean_ITI[trial == trial_name]
+        ) * 0.8
     }
     running_time <- running_time + new_ts
     for (p in seq_along(period_funcs)) {
@@ -54,6 +49,13 @@
         data.frame(experience[ti, ],
           stimulus = period_funcs[[p]],
           time = running_time,
+          rtime = .round_t(running_time, timings$time_resolution),
+          duration = with(
+            timings$period_ts,
+            stimulus_duration[
+              trial == trial_name & stimulus == period_funcs[[p]]
+            ]
+          ),
           row.names = NULL
         )
       )
@@ -85,10 +87,32 @@
         post_trial_delay[trial == trial_name]
       )
   }
+  # calculate bins
+  eventlog$b_from <- unlist(with(eventlog, lapply(unique(trial), function(tr) {
+    rts <- rtime[trial == tr]
+    (rts - min(rts)) / timings$time_resolution + 1
+  })))
+
+  eventlog$b_to <- unlist(with(eventlog, lapply(unique(trial), function(tr) {
+    rts <- rtime[trial == tr]
+    durs <- duration[trial == tr]
+    (rts - min(rts) + durs) / timings$time_resolution
+  })))
+
   row.names(eventlog) <- NULL
   eventlog
 }
 
 .round_t <- function(t, res) {
   round(t / res) * res
+}
+
+# creates a one_hot matrix for stimuli on a trial
+.onehot_mat <- function(b, stims, froms, tos) {
+  xs <- b
+  xs[] <- 0
+  for (i in seq_along(stims)) {
+    xs[stims[i], froms[i]:tos[i]] <- 1
+  }
+  t(xs)
 }

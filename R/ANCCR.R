@@ -44,12 +44,12 @@ ANCCR <- function(
 
   e_ij <- e_i <- m_i <- delta <- imcts <- array(0,
     dim = c(length(fsnames), nt),
-    dimnames = list(fsnames, seq_len(nt))
+    dimnames = list(fsnames, NULL)
   )
 
   m_ij <- prc <- src <- ncs <- anccrs <- cws <- das <- array(0, dim = c(
     length(fsnames), length(fsnames), nt
-  ), dimnames = list(fsnames, fsnames, seq_len(nt)))
+  ), dimnames = list(fsnames, fsnames, NULL))
 
   r <- array(0, dim = c(
     length(fsnames),

@@ -64,7 +64,7 @@ supported_plots <- function(model = NULL) {
       "psrcs", "ncs", "anccrs", "cws", "das", "qs",
       "ps"
     ),
-    "TD" = c("rs", "vs"),
+    "TD" = c("vs", "es", "qs"),
     "RAND" = c("rs", "vs")
   )
   if (is.null(model)) {
@@ -148,8 +148,14 @@ model_parameters <- function(model = NULL) {
       )
     ),
     "TD" = list(
-      name = c("alphas", "betas_on", "betas_off", "lambdas", "sigma", "gamma"),
-      default_value = c(0.4, 0.4, 0.4, 1, 0.9, 0.95)
+      name = c(
+        "alphas", "betas_on", "betas_off",
+        "lambdas", "gamma", "sigma"
+      ),
+      default_value = c(
+        0.4, 0.4, 0.4,
+        1, 0.95, 0.90
+      )
     ),
     "RAND" = list(
       name = c("alphas"),
@@ -201,7 +207,7 @@ model_outputs <- function(model = NULL) {
       "psrcs", "ncs", "anccrs", "cws", "das", "qs",
       "ps"
     ),
-    "TD" = c("rs", "vs"),
+    "TD" = c("vs", "es", "qs"),
     "RAND" = c("rs", "vs")
   )
   if (is.null(model)) {
