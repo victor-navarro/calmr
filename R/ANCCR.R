@@ -113,13 +113,13 @@ ANCCR <- function(
             experience[timestep, "time"] -
               experience[timestep - 1, "time"]
           )
-        # Update eligibility trace
+        # Update elegibility trace
         e_ij[, timestep] <- e_ij[, timestep - 1] *
           gammas[timestep]^(
             experience[timestep, "time"] -
               experience[timestep - 1, "time"]
           )
-        # Set eligibility trace and anccrs
+        # Set elegibility trace and anccrs
         m_ij[, , timestep] <- m_ij[, , timestep - 1]
         anccrs[absents, , timestep] <- anccrs[absents, , timestep - 1]
       }
@@ -234,7 +234,7 @@ ANCCR <- function(
         }
       }
     }
-    # Update sample eligibility trace
+    # Update sample elegibility trace
     if (timestep < nt) {
       # Time to sample baseline b/t events
       # VN: The function below is about 100 times faster than the original
@@ -267,7 +267,7 @@ ANCCR <- function(
         timestep = timestep
       )
 
-      # Update average sample eligibility trace
+      # Update average sample elegibility trace
       # Name: Baseline predecessor representation
       m_i[, timestep + 1] <- m_i[, timestep] + parameters$k * alphat *
         (e_i[, timestep + 1] - m_i[, timestep])
@@ -294,7 +294,7 @@ ANCCR <- function(
   ps <- exp(cqs) / (exp(0) + exp(cqs)) # nolint: object_usage_linter.
 
   # some reshaping before return
-  twos <- sapply(c("e_ij", "e_i", "m_i", "delta", "imcts"),
+  twos <- sapply(c("e_ij", "e_i", "m_i"),
     function(i) t(get(i)),
     simplify = FALSE
   )
@@ -311,9 +311,19 @@ ANCCR <- function(
     simplify = FALSE
   )
   # bundle prc and src
-  psrcs <- threes[c("prc", "src")]
   threes <- threes[c("m_ij", "ncs", "anccrs", "cws", "das", "qs", "ps")]
 
+  names(twos) <- c(
+    "ij_elegibilities", "i_elegibilities",
+    "i_base_rate"
+  )
+  names(threes) <- c(
+    "ij_base_rate", "prcs", "srcs", "net_contingencies",
+    "anccrs", "causal_weights", "dopamines", "action_values",
+    "probabilities"
+  )
 
-  c(twos, threes, list(psrcs = psrcs))
+  psrcs <- threes[c("prcs", "srcs")]
+
+  c(twos, threes, list(representation_contingencies = psrcs))
 }

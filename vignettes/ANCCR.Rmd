@@ -71,9 +71,9 @@ $$
 M_{i} = M_{i}' + k\alpha(E_{i}  -  M_{i}') 
 $$
 
-where $M_{i \leftarrow j}'$ and $M_{i}'$ are the quantities before $j$ was observed, $k$ and $\alpha$ are learning rate parameters, and $E_{i \leftarrow j}$ is the eligibility trace of stimulus $i$ at the time $j$ occurs (see Eq. 1).
+where $M_{i \leftarrow j}'$ and $M_{i}'$ are the quantities before $j$ was observed, $k$ and $\alpha$ are learning rate parameters, and $E_{i \leftarrow j}$ is the elegibility trace of stimulus $i$ at the time $j$ occurs (see Eq. 1).
 
-Then, the PRC can be used to derive the prospective association, aptly named as the successor representation contingency, or **SRC** via Bayes rule:
+Then, the PRC can be used to derive the prospective association, aptly named the successor representation contingency, or **SRC** via Bayes rule:
 
 $$
 \tag{Eq.5}

@@ -124,14 +124,64 @@
 
 .name_data <- function(dat, model, type) {
   name_map <- list(
+    "HDI2020" = list(
+      "activations" = c("s1"),
+      "pools" = c("s1", "s2"),
+      "responses" = c("s1", "s2"),
+      "associations" = c("s1", "s2")
+    ),
+    "HD2022" = list(
+      "activations" = c("s1"),
+      "pools" = c("s1", "s2"),
+      "responses" = c("s1", "s2"),
+      "associations" = c("s1", "s2")
+    ),
+    "RW1972" = list(
+      "responses" = .parse_nd,
+      "associations" = .parse_nd
+    ),
+    "MAC1975" = list(
+      "responses" = .parse_nd,
+      "associations" = .parse_nd,
+      "associabilities" = .parse_2d
+    ),
+    "SM2007" = list(
+      "activations" = .parse_nd,
+      "relative_activations" = .parse_nd,
+      "associations" = .parse_nd,
+      "operator_switches" = .parse_nd
+    ),
+    "PKH1982" = list(
+      "responses" = .parse_nd,
+      "associabilities" = .parse_2d,
+      "associations" = .parse_typed
+    ),
+    "ANCCR" = list(
+      "ij_elegibilities" = .parse_2d,
+      "i_elegibilities" = .parse_2d,
+      "i_base_rate" = .parse_2d,
+      "ij_base_rate" = .parse_nd,
+      "representation_contingencies" = .parse_typed,
+      "net_contingencies" = .parse_nd,
+      "anccrs" = .parse_nd,
+      "causal_weights" = .parse_nd,
+      "dopamines" = .parse_nd,
+      "action_values" = .parse_nd,
+      "probabilities" = .parse_nd
+    ),
     "TD" = list(
-      "vs" = c("s1", "s2", "t_bin"),
-      "es" = c("s1", "t_bin"),
-      "qs" = c("s1", "s2", "t_bin")
+      "associations" = c("s1", "s2", "t_bin"),
+      "elegibilities" = c("s1", "t_bin"),
+      "values" = c("s1", "t_bin")
+    ),
+    "RAND" = list(
+      "responses" = .parse_nd,
+      "associations" = .parse_nd
     )
   )
-  if (!(type %in% names(name_map[[model]]))) {
-    print(dat)
+  if (inherits(name_map[[model]][[type]], "function")) {
+    print(type)
+    print(head(dat, 2))
     browser()
   }
 
@@ -174,58 +224,58 @@
   # this function just redirects raw data to its parser
   func_map <- list(
     "HDI2020" = list(
-      "as" = .parse_2d,
-      "heidi_acts" = .parse_ragged,
-      "rs" = .parse_nd,
-      "vs" = .parse_nd
+      "activations" = .parse_2d,
+      "pools" = .parse_ragged,
+      "responses" = .parse_nd,
+      "associations" = .parse_nd
     ),
     "HD2022" = list(
-      "as" = .parse_2d,
-      "heidi_acts" = .parse_ragged,
-      "rs" = .parse_nd,
-      "vs" = .parse_nd
+      "activations" = .parse_2d,
+      "pools" = .parse_ragged,
+      "responses" = .parse_nd,
+      "associations" = .parse_nd
     ),
     "RW1972" = list(
-      "rs" = .parse_nd,
-      "vs" = .parse_nd
+      "responses" = .parse_nd,
+      "associations" = .parse_nd
     ),
     "MAC1975" = list(
-      "rs" = .parse_nd,
-      "vs" = .parse_nd,
-      "as" = .parse_2d
+      "responses" = .parse_nd,
+      "associations" = .parse_nd,
+      "associabilities" = .parse_2d
     ),
     "SM2007" = list(
-      "acts" = .parse_nd,
-      "relacts" = .parse_nd,
-      "vs" = .parse_nd,
-      "os" = .parse_nd
+      "activations" = .parse_nd,
+      "relative_activations" = .parse_nd,
+      "associations" = .parse_nd,
+      "operator_switches" = .parse_nd
     ),
     "PKH1982" = list(
-      "rs" = .parse_nd,
-      "as" = .parse_2d,
-      "eivs" = .parse_typed
+      "responses" = .parse_nd,
+      "associabilities" = .parse_2d,
+      "associations" = .parse_typed
     ),
     "ANCCR" = list(
-      "e_ij" = .parse_2d,
-      "e_i" = .parse_2d,
-      "m_i" = .parse_2d,
-      "m_ij" = .parse_nd,
-      "delta" = .parse_2d,
-      "psrcs" = .parse_typed,
-      "ncs" = .parse_nd,
+      "ij_elegibilities" = .parse_2d,
+      "i_elegibilities" = .parse_2d,
+      "i_base_rate" = .parse_2d,
+      "ij_base_rate" = .parse_nd,
+      "representation_contingencies" = .parse_typed,
+      "net_contingencies" = .parse_nd,
       "anccrs" = .parse_nd,
-      "cws" = .parse_nd,
-      "das" = .parse_nd,
-      "qs" = .parse_nd
+      "causal_weights" = .parse_nd,
+      "dopamines" = .parse_nd,
+      "action_values" = .parse_nd,
+      "probabilities" = .parse_nd
     ),
     "TD" = list(
-      "vs" = .parse_nd,
-      "es" = .parse_nd,
-      "qs" = .parse_nd
+      "values" = .parse_nd,
+      "elegibilities" = .parse_nd,
+      "associations" = .parse_nd
     ),
     "RAND" = list(
-      "rs" = .parse_nd,
-      "vs" = .parse_nd
+      "responses" = .parse_nd,
+      "associations" = .parse_nd
     )
   )
   do.call(
@@ -267,7 +317,9 @@
     # put data together
     big_dat <- data.table::rbindlist(lapply(res, "[[", o))
     # aggregate
-    agg_dat <- .aggregate_results_data_table(big_dat, type = o)
+    agg_dat <- .aggregate_results_data_table(big_dat,
+      model = experiment@model, type = o
+    )
     agg_dat$model <- experiment@model
     agg_dat
   }, simplify = FALSE)
@@ -275,28 +327,16 @@
 }
 
 # type is the type of data
-.aggregate_results_data_table <- function(dat, type) {
+.aggregate_results_data_table <- function(dat, model, type) {
   value <- time <- NULL # local binding
+  common_terms <- "group,phase,trial_type,trial,block_size,s1"
+  form_map <- list("TD" = list(
+    "associations" = "s2,t_bin",
+    "elegibilities" = "t_bin",
+    "values" = "t_bin"
+  ))
+  form <- paste0(c(common_terms, form_map[[model]][[type]]), collapse = ",")
   dat <- data.table::data.table(dat)
-  # define base terms for aggregation formula
-  no_s2 <- c("as", "e_ij", "e_i", "m_i", "delta", "es")
-  terms <- c(
-    "group", "phase", "trial_type",
-    "trial", "s1", "s2", "block_size"
-  )
-  if (type %in% no_s2) {
-    terms <- terms[!(terms == "s2")]
-  }
-  if ("type" %in% names(dat)) {
-    terms <- c(terms, "type")
-  }
-  if ("t_bin" %in% names(dat)) {
-    terms <- c(terms, "t_bin")
-  }
-  if (type %in% c("os")) {
-    terms <- c(terms, "comp")
-  }
-  form <- paste0(terms, collapse = ",")
   if (!("time" %in% names(dat))) {
     data.table::setDT(dat)[, list("value" = mean(value)), by = form]
   } else {
@@ -304,6 +344,23 @@
       by = form, .SDcols = c("value", "time")
     ]
   }
+
+
+
+  # # define base terms for aggregation formula
+  # no_s2 <- c("as", "e_ij", "e_i", "m_i", "delta", "es", "values")
+  # if (type %in% no_s2) {
+  #   terms <- terms[!(terms == "s2")]
+  # }
+  # if ("type" %in% names(dat)) {
+  #   terms <- c(terms, "type")
+  # }
+  # if ("t_bin" %in% names(dat)) {
+  #   terms <- c(terms, "t_bin")
+  # }
+  # if (type %in% c("os")) {
+  #   terms <- c(terms, "comp")
+  # }
 }
 
 .rename <- function(x, from, to) {

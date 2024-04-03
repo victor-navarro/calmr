@@ -105,10 +105,10 @@ HD2022 <- function(v = NULL, # nolint: object_name_linter.
   }
 
   results <- list(
-    vs = vs,
-    rs = rs,
-    as = as,
-    heidi_acts = list(combvs = combvs, chainvs = chainvs)
+    associations = vs,
+    responses = rs,
+    activations = as,
+    pools = list(combvs = combvs, chainvs = chainvs)
   )
   results
 }

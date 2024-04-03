@@ -45,6 +45,6 @@ RAND <- function(v = NULL, # nolint: object_name_linter.
     vs[t, , ] <- v
     rs[t, , ] <- r
   }
-  results <- list(vs = vs, rs = rs)
+  results <- list(associations = vs, responses = rs)
   results
 }

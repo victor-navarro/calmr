@@ -97,9 +97,9 @@ MAC1975 <- function(v = NULL, # nolint: object_name_linter.
     }
   }
   results <- list(
-    vs = vs,
-    as = as,
-    rs = rs
+    associations = vs,
+    associabilities = as,
+    responses = rs
   )
   results
 }

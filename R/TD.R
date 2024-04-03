@@ -18,86 +18,108 @@
 
 TD <- function(
     parameters, timings, experience,
-    mapping, debug = FALSE, debug_t = -1, ...) {
+    mapping, debug = FALSE, debug_t = -1,
+    debug_ti = -1, ...) {
   total_trials <- length(unique(experience$trial))
   fsnames <- mapping$unique_functional_stimuli
 
   # get maximum trial duration
   max_tsteps <- max(experience$b_to)
+
   # array for onehots
   base_onehot <- array(0,
-    dim = c(length(fsnames), max_tsteps + 1),
-    dimnames = list(fsnames, (1:(max_tsteps + 1)) * timings$time_resolution)
+    dim = c(length(fsnames), max_tsteps),
+    dimnames = list(fsnames, (1:(max_tsteps)) * timings$time_resolution)
   )
+
   # array for elegibilities
   es <- array(0,
-    dim = c(total_trials, length(fsnames), max_tsteps + 1),
+    dim = c(total_trials, length(fsnames), max_tsteps),
     dimnames = list(
       NULL,
-      fsnames, (1:(max_tsteps + 1)) * timings$time_resolution
+      fsnames, (1:(max_tsteps)) * timings$time_resolution
     )
   )
-  # arrays for associations and expectations
-  vs <- qs <- array(0,
-    dim = c(total_trials, length(fsnames), length(fsnames), max_tsteps + 1),
+  # array for associations (weights)
+  ws <- array(0,
+    dim = c(total_trials, length(fsnames), length(fsnames), max_tsteps),
     dimnames = list(
       NULL, fsnames, fsnames,
-      (1:(max_tsteps + 1)) * timings$time_resolution
+      (1:(max_tsteps)) * timings$time_resolution
     )
   )
-  v <- bigq <- vs[1, , , ]
-  q <- d <- e <- drop(es[1, , ])
+
+  # array for values
+  vs <- array(0,
+    dim = c(total_trials, length(fsnames), max_tsteps),
+    dimnames = list(
+      NULL, fsnames,
+      (1:(max_tsteps)) * timings$time_resolution
+    )
+  )
+
+  # now the smaller arrays that will get modified over trials
+  w <- dd <- ws[1, , , ] # associations and their deltas
+  v <- d <- vs[1, , ] # values and pooled deltas
+  e <- es[1, , ]
 
   for (tn in seq_len(total_trials)) {
     # get trial data
     tdat <- experience[experience$trial == tn, ]
-    # get trial onehot matrix
+    # get trial onehot matrix of active components
     omat <- .onehot_mat(base_onehot, tdat$stimulus, tdat$b_from, tdat$b_to)
-
-    vs[tn, , , ] <- v
-    qs[tn, , , ] <- bigq
-    es[tn, , ] <- e
-
-
-    q[] <- d[] <- 0
+    # save association matrix
+    ws[tn, , , ] <- w
 
     for (ti in seq_len(max_tsteps)) {
-      # expectations
-      q[, ti] <- omat[ti, ] %*% v[, , ti]
-      bigq[, , ti] <- omat[ti, ] * v[, , ti]
-      if (ti == 1) {
-        # specifics for the first epoch
-        if (tn > 1) {
-          # calculate how many steps we had since last ITI
-          iti_steps <- (min(tdat$rtime) -
-            with(
-              experience[experience$trial == (tn - 1), ],
-              max(rtime)
-            )) / timings$time_resolution
-          # decay elegibility traces
-          e[, ti] <- e[, max_tsteps] * parameters$sigma *
-            parameters$gamma^iti_steps
+      # calculate value expectations for this timestep
+      v[, ti] <- t(w[, , ti]) %*% omat[, ti]
+      if (!any(tdat$is_test)) {
+        if (ti == 1) {
+          # special treatment of traces and deltas for the first timestep
+          if (tn > 1) {
+            # decay steps since last time traces were decayed (previous trial)
+            decay_steps <- (min(tdat$rtime) -
+              with(
+                experience[experience$trial == (tn - 1), ],
+                max(rtime)
+              )) / timings$time_resolution
+            e <- e * (parameters$sigma *
+              parameters$gamma)^decay_steps
+          }
+          # delta only depends on current prediction
+          d[, ti] <- (omat[, ti] * parameters$lambdas) +
+            (parameters$gamma * v[, ti])
+        } else {
+          # delta depends on current and previous prediction
+          d[, ti] <- (omat[, ti] * parameters$lambdas) +
+            (parameters$gamma * v[, ti]) -
+            v[, ti - 1]
+          # decay elegibilities by 1 timestep
+          e <- e * parameters$sigma *
+            parameters$gamma
         }
-        # calculate simple delta
-        d[, ti] <- omat[ti, ] * parameters$lambdas -
-          (0 - parameters$gamma * q[, ti])
-      } else {
-        # deltas depend on the previous time step
-        d[, ti] <- omat[ti, ] * parameters$lambdas -
-          (q[, ti - 1] - parameters$gamma * q[, ti])
+        # compute update
+        rates <- parameters$alphas * e
+        dd[] <- sapply(seq_len(max_tsteps), function(i) {
+          x <- rates[, i] %*% t(d[, ti, drop = FALSE])
+          # zero-out self-associations
+          diag(x) <- 0
+          x
+        })
+        # apply update
+        w <- w + dd
+        # add maximal trace of what just happened
+        e[, ti] <- omat[, ti]
+        #
+        if (ti == debug_ti) browser()
       }
-      # compute update
-      dd <- d[, ti, drop = FALSE] %*% t(
-        parameters$alphas * e[, ti, drop = FALSE]
-      )
-      # zero-out self-associations
-      diag(dd) <- 0
-      # apply update
-      v[, , ti + 1] <- v[, , ti] + dd
-      # decay elegibilities for the next time step
-      e[, ti + 1] <- parameters$gamma * parameters$sigma *
-        e[, ti] + omat[ti, ]
     }
+    vs[tn, , ] <- v
+    es[tn, , ] <- e
+
+    if (tn == debug_t) browser()
+    if (debug) message(tn)
   }
-  list(vs = vs, qs = qs, es = es)
+  list(associations = ws, values = vs, elegibilities = es)
 }

@@ -149,6 +149,11 @@ SM2007 <- function(v = NULL, # nolint
       o <- o + do
     }
   }
-  results <- list(vs = vs, acts = acts, relacts = relacts, os = os)
+  results <- list(
+    associations = vs,
+    activations = acts,
+    relative_activations = relacts,
+    operator_switches = os
+  )
   results
 }

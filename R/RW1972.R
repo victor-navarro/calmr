@@ -72,6 +72,6 @@ RW1972 <- function(v = NULL, # nolint: object_name_linter.
       v <- v + d
     }
   }
-  results <- list(vs = vs, rs = rs)
+  results <- list(associations = vs, responses = rs)
   results
 }

@@ -1,129 +1,93 @@
 #' Create a plot with calmr data
 #'
-#' @param dat An `data.table` containing aggregated
+#' @param data A `data.table` containing aggregated
 #' data from a [CalmrExperiment-class]
 #' @param type A character specifying the type of plot.
+#' @param model A character specifying the model.
+#' @param ... Other parameters passed to plotting functions.
 #' @return A 'ggplot' object.
 #' @note You should probably be getting plots via
 #' the [plot()] method for [CalmrExperiment-class].
+#' @seealso [plotting_functions]
 #' @export
 #' @importFrom rlang .data
 
-calmr_model_plot <- function(dat, type) {
-  # define some big categories
-  # exceptions are dealt with individually
-  targetted <- c(
-    "vs", "rs", "acts", "heidi_acts", "relacts", "psrcs",
-    "m_ij", "ncs", "anccrs", "cws", "das", "qs", "ps"
+calmr_model_plot <- function(data, type, model, ...) {
+  print(type)
+  print(model)
+
+  # Just serves the data depending on type/model
+  plot_map <- list(
+    "HDI2020" = list(
+      "associations" = plot_targetted_trials,
+      "pools" = plot_targetted_typed_trials,
+      "responses" = plot_targetted_trials,
+      "activations" = plot_trials
+    ),
+    "HD2022" = list(
+      "activations" = .parse_2d,
+      "pools" = .parse_ragged,
+      "responses" = .parse_nd,
+      "associations" = .parse_nd
+    ),
+    "RW1972" = list(
+      "responses" = .parse_nd,
+      "associations" = .parse_nd
+    ),
+    "MAC1975" = list(
+      "responses" = .parse_nd,
+      "associations" = .parse_nd,
+      "associabilities" = .parse_2d
+    ),
+    "SM2007" = list(
+      "activations" = .parse_nd,
+      "relative_activations" = .parse_nd,
+      "associations" = .parse_nd,
+      "operator_switches" = .parse_nd
+    ),
+    "PKH1982" = list(
+      "responses" = .parse_nd,
+      "associabilities" = .parse_2d,
+      "associations" = .parse_typed
+    ),
+    "ANCCR" = list(
+      "ij_elegibilities" = .parse_2d,
+      "i_elegibilities" = .parse_2d,
+      "i_base_rate" = .parse_2d,
+      "ij_base_rate" = .parse_nd,
+      "representation_contingencies" = .parse_typed,
+      "net_contingencies" = .parse_nd,
+      "anccrs" = .parse_nd,
+      "causal_weights" = .parse_nd,
+      "dopamines" = .parse_nd,
+      "action_values" = .parse_nd,
+      "probabilities" = .parse_nd
+    ),
+    "TD" = list(
+      "associations" = plot_targetted_tbins,
+      "values" = plot_tbins,
+      "elegibilities" = plot_tbins
+    ),
+    "RAND" = list(
+      "responses" = .parse_nd,
+      "associations" = .parse_nd
+    )
   )
-  singles <- c("as", "e_ij", "e_i", "m_i", "delta")
-  # recalculate trial
-  dat$trial <- ceiling(dat$trial / dat$block_size)
-  # define geom layers
-  line_point <- list(
-    ggplot2::stat_summary(geom = "line", fun = "mean"),
-    ggplot2::stat_summary(
-      geom = "point",
-      fun = "mean"
-    )
+  p <- do.call(plot_map[[model]][[type]], c(list(data = data), ...))
+  p <- p + ggplot2::labs(
+    y = .get_y_prettyname(type),
+    colour = .get_scale_prettyname(type),
+    fill = .get_scale_prettyname(type)
   )
 
-  # Assemble aesthetics
-  if (type %in% targetted) {
-    .aes <- ggplot2::aes(
-      x = .data$trial,
-      y = .data$value,
-      colour = .data$s2
-    )
-  }
-  if (type %in% singles) {
-    .aes <- ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$s1)
-  }
-  if (type %in% c("os")) {
-    .aes <- ggplot2::aes(x = .data$trial, y = .data$value, colour = .data$comp)
-  }
-  if ("type" %in% names(dat)) {
-    .aes <- ggplot2::aes(
-      x = .data$trial, y = .data$value,
-      colour = .data$s2, linetype = type
-    )
-  }
-
-  # Assemble geoms
-  geoms <- line_point
-
-  # Assemble labels
-  labels <- list(ggplot2::labs(
-    y = .get_prettyname(type),
-    x = "Trial/Miniblock"
-  ))
-  if (type %in% targetted) {
-    labels <- c(labels, list(ggplot2::labs(colour = "Target")))
-  }
-  if (type %in% singles) {
-    labels <- c(labels, list(ggplot2::labs(colour = "Stimulus")))
-  }
-  if (type %in% c("os")) {
-    labels <- c(labels, list(ggplot2::labs(colour = "Comparison")))
-  }
-  if ("type" %in% names(dat)) {
-    labels <- c(labels, list(ggplot2::labs(linetype = "Type")))
-  }
-
-  # Assemble scales
-  scales <- c(
-    .calmr_scales("colour_d"),
-    .calmr_scales("fill_d"),
-    ggplot2::scale_x_continuous(breaks = NULL)
-  )
-
-  # Define grid
-  grid <- list()
-  if (type %in% targetted) {
-    grid <- ggplot2::facet_grid(
-      .data$s1 ~ .data$phase,
-      scales = "free_x"
-    )
-  }
-  if (type %in% c("acts", "heidi_acts", "relacts")) {
-    grid <- ggplot2::facet_grid(
-      .data$s2 ~ .data$phase + .data$trial_type,
-      scales = "free_x"
-    )
-  }
-  if (type %in% "os") {
-    grid <- ggplot2::facet_grid(
-      .data$s1 ~ .data$s2 + .data$phase,
-      scales = "free_x", switch = "y"
-    )
-  }
-  if (type %in% c("rs")) {
-    grid <- ggplot2::facet_grid(
-      .data$s1 ~ .data$phase +
-        .data$trial_type,
-      scales = "free_x"
-    )
-  }
-  if (type %in% c("as")) {
-    grid <- ggplot2::facet_grid(
-      . ~ .data$phase +
-        .data$trial_type,
-      scales = "free_x"
-    )
-  }
-  if (type %in% "psrcs") {
-    grid <- ggplot2::facet_grid(
-      .data$s1 + .data$type ~ .data$phase,
-      scales = "free_x"
-    )
-  }
-
-  ggplot2::ggplot(data = dat, mapping = .aes) +
-    ggplot2::theme_bw() +
-    geoms +
-    labels +
-    scales +
-    grid
+  p
+  # # define some big categories
+  # # exceptions are dealt with individually
+  # targetted <- c(
+  #   "vs", "rs", "acts", "heidi_acts", "relacts", "psrcs",
+  #   "m_ij", "ncs", "anccrs", "cws", "das", "qs", "ps"
+  # )
+  # singles <- c("as", "e_ij", "e_i", "m_i", "delta")
 }
 
 # internal function to define and make scales available
@@ -145,29 +109,49 @@ calmr_model_plot <- function(dat, type) {
 }
 
 
-.get_prettyname <- function(output) {
+.get_y_prettyname <- function(output) {
   prettynames <- c(
-    "vs" = "Association Strength",
-    "rs" = "Response Strength",
-    "as" = "Saliency",
-    "os" = "Switch Value",
-    "eivs" = "Association Strength",
-    "acts" = "Activation Strength",
-    "heidi_acts" = "Activation Strength",
-    "relacts" = "Relative Activation",
-    "e_ij" = "Event-contingent Eleg. Trace",
-    "e_i" = "Eleg. Trace",
-    "m_i" = "Baseline Predecessor Representation",
-    "m_ij" = "Predecessor Representation",
-    "ncs" = "Net Contingency",
-    "anccrs" = "Adjusted Net Contingency",
-    "delta" = "Time Delta",
-    "psrcs" = "Representation Strength",
-    "das" = "DA",
-    "cws" = "Causal Weights",
-    "qs" = "Action Value",
-    "ps" = "Action Probabilities"
+    "associations" = "Association Strength",
+    "responses" = "Response Strength",
+    "pools" = "Pooled Association Strength",
+    "associabilities" = "Associability",
+    "operator_switches" = "Switch Value",
+    "activations" = "Activation Strength",
+    "relative_activations" = "Relative Activation Strength",
+    "ij_elegibilities" = "Event-contingent Eleg. Trace",
+    "i_elegibilities" = "Eleg. Trace",
+    "i_base_rate" = "Baseline Predecessor Representation",
+    "ij_base_rate" = "Predecessor Representation",
+    "net_contingencies" = "Net Contingency Strength",
+    "anccrs" = "Adjusted Net Contingency Strength",
+    "representation_contingencies" = "Representation Strength",
+    "dopamines" = "DA Strength",
+    "causal_weights" = "Causal Weights",
+    "action_values" = "Action Value",
+    "action_probabilities" = "Action Probabilities",
+    "values" = "Expected Value",
+    "elegibilities" = "Elegibility Trace"
   )
+  if (!(output %in% names(prettynames))) browser() # return(list())
+  ggplot2::labs(y = prettynames[output])
+}
+
+.get_scale_prettyname <- function(output) {
+  prettynames <- c(
+    "operator_switches" = "Comparison",
+    "associations" = "Target",
+    "values" = "Target",
+    "elegibilities" = "Stimulus"
+  )
+  # if (type %in% targetted) {
+  #   labels <- c(labels, list(ggplot2::labs(colour = "Target")))
+  # }
+  # if (type %in% singles) {
+  #   labels <- c(labels, list(ggplot2::labs(colour = "Stimulus")))
+  # }
+  # if ("type" %in% names(data)) {
+  #   labels <- c(labels, list(ggplot2::labs(linetype = "Type")))
+  # }
   prettynames[output]
 }
 
@@ -192,9 +176,9 @@ get_plot_opts <- function(common_scale = TRUE) {
 #' Patch Calmr plots
 #'
 #' @description Convenience function to patch plots with `patchwork`
-#' @param plots A list of named plots, as returned by `calmr::plot`
+#' @param plots A list of named plots, as returned by `calmr::plot()`
 #' @param selection A character or numeric vector determining the plots to patch
-#' @param plot_options A list of plot options as returned by `get_plot_opts`
+#' @param plot_options A list of plot options as returned by [get_plot_opts()]
 #' @export
 #' @return A `patchwork` object
 

@@ -62,7 +62,7 @@
 
 \S4method{aggregate}{CalmrExperiment}(x, outputs = NULL)
 
-\S4method{plot}{CalmrExperiment}(x, type = NULL)
+\S4method{plot}{CalmrExperiment}(x, type = NULL, ...)
 
 \S4method{graph}{CalmrExperiment}(x, ...)
 
@@ -80,7 +80,8 @@
 \item{type}{A character vector specifying the type(s) of plots to create.
 Defaults to NULL. See \link{supported_plots}.}
 
-\item{...}{Extra arguments passed to \code{\link[=calmr_model_graph]{calmr_model_graph()}}.}
+\item{...}{Extra arguments passed to \code{\link[=calmr_model_graph]{calmr_model_graph()}}
+and \code{\link[=calmr_model_plot]{calmr_model_plot()}}.}
 }
 \value{
 \code{show()} returns NULL (invisibly).
@@ -124,4 +125,7 @@ contained in the object.
 }
 \description{
 S4 methods for \code{CalmrExperiment} class.
+}
+\seealso{
+\link{plotting_functions},\link{calmr_model_plot}
 }

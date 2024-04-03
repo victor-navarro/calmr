@@ -114,5 +114,5 @@
   for (i in seq_along(stims)) {
     xs[stims[i], froms[i]:tos[i]] <- 1
   }
-  t(xs)
+  xs
 }

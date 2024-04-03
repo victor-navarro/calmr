@@ -7,11 +7,11 @@
 patch_plots(plots, selection = names(plots), plot_options = get_plot_opts())
 }
 \arguments{
-\item{plots}{A list of named plots, as returned by \code{calmr::plot}}
+\item{plots}{A list of named plots, as returned by \code{calmr::plot()}}
 
 \item{selection}{A character or numeric vector determining the plots to patch}
 
-\item{plot_options}{A list of plot options as returned by \code{get_plot_opts}}
+\item{plot_options}{A list of plot options as returned by \code{\link[=get_plot_opts]{get_plot_opts()}}}
 }
 \value{
 A \code{patchwork} object

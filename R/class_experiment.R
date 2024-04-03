@@ -40,8 +40,10 @@ methods::setClass(
 #' @param type A character vector specifying the type(s) of plots to create.
 #' Defaults to NULL. See [supported_plots].
 #' @param value A list of parameters (or list of parameter lists).
-#' @param ... Extra arguments passed to [calmr_model_graph()].
+#' @param ... Extra arguments passed to [calmr_model_graph()]
+#' and [calmr_model_plot()].
 #' @name CalmrExperiment-methods
+#' @seealso [plotting_functions],[calmr_model_plot]
 NULL
 #> NULL
 
@@ -291,7 +293,7 @@ setGeneric("plot", function(x, y, ...) methods::standardGeneric("plot")) # nocov
 #' @rdname CalmrExperiment-methods
 setMethod(
   "plot", "CalmrExperiment",
-  function(x, type = NULL) {
+  function(x, type = NULL, ...) {
     # Assert type is valid
     throw_warn <- FALSE
     model_plots <- .sanitize_outputs(type, x@model)
@@ -316,9 +318,9 @@ setMethod(
       pdat <- odat[odat$model == x@model, ]
       groups <- unique(pdat$group)
       for (g in groups) {
-        plot_name <- sprintf("%s - %s (%s)", g, .get_prettyname(p), x@model)
+        plot_name <- sprintf("%s - %s (%s)", g, .get_y_prettyname(p), x@model)
         plots[[plot_name]] <- calmr_model_plot(pdat[pdat$group == g, ],
-          type = p
+          type = p, model = x@model, ...
         )
       }
     }
