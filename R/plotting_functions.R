@@ -125,12 +125,12 @@ plot_targetted_typed_trials <- function(data) {
 }
 
 #' @description `plot_targetted_complex_trials()` plots
-#' targetted data with a third variable
+#' targetted data with a third variable.
 #' @param col A string specifying the column of the third variable.
 #' @returns `plot_targetted_complex_trials()` returns 'ggplot' object.
 #' @rdname plotting_functions
 #' @export
-# A general plot for trial-based, targetted data with an extra column
+# A general plot for trial-based, targetted data with an extra column.
 plot_targetted_complex_trials <- function(data, col) {
   ggplot2::ggplot(
     data = data,
