@@ -357,7 +357,6 @@ setMethod("graph", "CalmrExperiment", function(x, ...) {
     odat <- res[[assoc_output]]
     weights <- odat[odat$model == m, ]
     if (x@model == "PKH1982") {
-      browser()
       evs <- weights[weights$type == "EV", ]
       ivs <- weights[weights$type == "IV", ]
       weights <- evs
