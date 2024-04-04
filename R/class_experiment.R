@@ -43,7 +43,7 @@ methods::setClass(
 #' @param ... Extra arguments passed to [calmr_model_graph()]
 #' and [calmr_model_plot()].
 #' @name CalmrExperiment-methods
-#' @seealso [plotting_functions],[calmr_model_plot]
+#' @seealso [plotting_functions()],[calmr_model_plot()],[calmr_model_graph()]
 NULL
 #> NULL
 
@@ -169,8 +169,10 @@ methods::setMethod(
   function(x, value) {
     stopifnot(
       "value must be either 1 or length(experiences(x))" =
-        length(value) == 1 || length(value) == experiences(x)
+        length(value) == 1 || length(value) == length(experiences(x))
     )
+    x@experiences <- value
+    x
   }
 )
 #' @noRd
@@ -338,8 +340,8 @@ setMethod(
 #' @noRd
 setGeneric("graph", function(x, ...) standardGeneric("graph")) # nocov
 #' @rdname CalmrExperiment-methods
-#' @return `graph()` returns a list of 'ggplot' plot objects.
 #' @aliases graph
+#' @return `graph()` returns a list of 'ggplot' plot objects.
 #' @export
 setMethod("graph", "CalmrExperiment", function(x, ...) {
   if (is.null(x@results@aggregated_results)) {
@@ -354,9 +356,10 @@ setMethod("graph", "CalmrExperiment", function(x, ...) {
     assoc_output <- .model_associations(m)
     odat <- res[[assoc_output]]
     weights <- odat[odat$model == m, ]
-    if (assoc_output == c("eivs")) {
-      evs <- weights[weights$type == "evs", ]
-      ivs <- weights[weights$type == "ivs", ]
+    if (x@model == "PKH1982") {
+      browser()
+      evs <- weights[weights$type == "EV", ]
+      ivs <- weights[weights$type == "IV", ]
       weights <- evs
       weights$value <- weights$value - ivs$value
     }
@@ -376,8 +379,8 @@ setMethod("graph", "CalmrExperiment", function(x, ...) {
 #' @noRd
 methods::setGeneric(
   "timings",
-  function(x) standardGeneric("timings")
-) # nocov
+  function(x) standardGeneric("timings") # nocov
+)
 #' @noRd
 methods::setGeneric(
   "timings<-",
@@ -397,7 +400,7 @@ methods::setMethod(
 #' @aliases timings<-
 #' @export
 methods::setMethod("timings<-", "CalmrExperiment", function(x, value) {
-  .assert_timings(timings(x), value)
+  .assert_timings(value, design(x))
   x@timings <- value
   x
 })

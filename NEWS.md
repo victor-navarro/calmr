@@ -1,5 +1,12 @@
 # calmr 0.6.2
 * Aggregation of ANCCR data now ignores time; time entries are averaged.
+* Added the Temporal Difference model under the name "TD". The model is in an experimental state.
+* Experiments for time-based models now require a separate list to construct time-based experiences. See `get_timings()`.
+* Added `experiences<-`, `timings`, `timings<-` methods for `CalmrExperiment` class.
+* Revamped plotting functions and parsing functions.
+* Revamped output names for all models to make them more intelligible.
+* Fixed a bug related to the aggregation of pools in HDI2020 and HD2022.
+* Consolidated some man pages.
 
 # calmr 0.6.1
 * Added `outputs` argument to `run_experiment()`, `parse()`, and `aggregate()`, allowing the user to parse/aggregate only some model outputs.

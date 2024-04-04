@@ -127,5 +127,5 @@ contained in the object.
 S4 methods for \code{CalmrExperiment} class.
 }
 \seealso{
-\link{plotting_functions},\link{calmr_model_plot}
+\code{\link[=plotting_functions]{plotting_functions()}},\code{\link[=calmr_model_plot]{calmr_model_plot()}},\code{\link[=calmr_model_graph]{calmr_model_graph()}}
 }

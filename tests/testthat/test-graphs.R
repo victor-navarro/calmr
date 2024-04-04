@@ -1,7 +1,6 @@
-# TODO: Test graphs
 df <- data.frame(
   Group = "X",
-  P1 = "2AB(US)",
+  P1 = "2AB>(US)",
   R1 = TRUE
 )
 df <- parse_design(df)
@@ -13,7 +12,7 @@ test_that("calmr_model_graph works", {
     model = models[1],
     parameters = get_parameters(design = df, model = models[1])
   )
-  g <- calmr_model_graph(results(res)$vs)
+  g <- calmr_model_graph(results(res)$associations)
   expect_named(g)
 })
 
@@ -23,12 +22,12 @@ res <- run_experiment(
   parameters = get_parameters(design = df, model = models[1])
 )
 test_that("calmr_model_graph takes a trial", {
-  g <- calmr_model_graph(results(res)$vs, t = 1)
+  g <- calmr_model_graph(results(res)$associations, t = 1)
   expect_named(g)
 })
 
 test_that("calmr_model_graph throws a warning if trial exceeds data", {
-  expect_warning(calmr_model_graph(results(res)$vs, t = 5000))
+  expect_warning(calmr_model_graph(results(res)$associations, t = 5000))
 })
 
 # Test graphs for every model

@@ -4,9 +4,9 @@ models <- c("HD2022", "RW1972", "PKH1982")
 comp <- compare_models(df, models)
 
 comparisons <- list(
-  "HD2022" = c("vs"),
-  "RW1972" = c("vs"),
-  "PKH1982" = c("eivs")
+  "HD2022" = c("associations"),
+  "RW1972" = c("associations"),
+  "PKH1982" = c("associations")
 )
 
 # TODO: There is a bug when one includes
@@ -17,7 +17,7 @@ test_that("rsa fails if comparisons is unnamed", {
 })
 
 test_that("rsa fails with inconsistent model outputs", {
-  expect_error(rsa(comp, list("HD2022" = c("heidi_acts", "vs"))))
+  expect_error(rsa(comp, list("HD2022" = c("pools", "associations"))))
 })
 
 test_that("rsa can be ran with test = TRUE", {
@@ -40,11 +40,11 @@ test_that("rsa method works with one model", {
 })
 
 test_that("rsa method stops with models outside x", {
-  expect_error(rsa(comp, comparisons = list("HDI2020" = c("os"))))
+  expect_error(rsa(comp, comparisons = list("HDI2020" = c("operator_switches"))))
 })
 
 test_that("rsa method stops with bad model outputs", {
-  expect_error(rsa(comp, comparisons = list("HD2022" = c("os"))))
+  expect_error(rsa(comp, comparisons = list("HD2022" = c("operator_switches"))))
 })
 
 test_res <- test(res, n_samples = 20)
@@ -71,7 +71,7 @@ test_that("show method works with test results", {
 })
 
 comparisons <- list(
-  "RW1972" = c("rs", "vs")
+  "RW1972" = c("responses", "associations")
 )
 
 test_that("can do rsa for multiple outputs of a model", {

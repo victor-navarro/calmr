@@ -202,8 +202,8 @@ pass to <code><a href="../reference/run_experiment.html">run_experiment()</a></c
 <span><span class="va">des_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CB1"</span>, <span class="st">"CB2"</span><span class="op">)</span>,</span>
 <span>  training <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>    <span class="st">"12L&gt;(Pellet)/12R&gt;(Sucrose)"</span>,</span>
-<span>    <span class="st">"12L&gt;(Sucrose)/12R&gt;(Pellet)"</span></span>
+<span>    <span class="st">"12L&gt;(Pellet)/12R&gt;(Sucrose)/12#L/12#R"</span>,</span>
+<span>    <span class="st">"12L&gt;(Sucrose)/12R&gt;(Pellet)/12#L/12#R"</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  rand_train <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
@@ -232,88 +232,88 @@ good to see what results <code><a href="../reference/run_experiment.html">run_ex
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">exp_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_experiment.html">run_experiment</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">results</a></span><span class="op">(</span><span class="va">exp_res</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $as</span></span>
-<span><span class="co">#&gt;      group    phase  trial_type trial      s1 block_size value  model</span></span>
-<span><span class="co">#&gt;   1:   CB1 training  L&gt;(Pellet)     1       L          2   0.4 HD2022</span></span>
-<span><span class="co">#&gt;   2:   CB1 training R&gt;(Sucrose)     2       L          2   0.0 HD2022</span></span>
-<span><span class="co">#&gt;   3:   CB1 training  L&gt;(Pellet)     3       L          2   0.4 HD2022</span></span>
-<span><span class="co">#&gt;   4:   CB1 training R&gt;(Sucrose)     4       L          2   0.0 HD2022</span></span>
-<span><span class="co">#&gt;   5:   CB1 training  L&gt;(Pellet)     5       L          2   0.4 HD2022</span></span>
-<span><span class="co">#&gt;  ---                                                                 </span></span>
-<span><span class="co">#&gt; 188:   CB2 training  R&gt;(Pellet)    20 Sucrose          2   0.0 HD2022</span></span>
-<span><span class="co">#&gt; 189:   CB2 training L&gt;(Sucrose)    21 Sucrose          2   0.4 HD2022</span></span>
-<span><span class="co">#&gt; 190:   CB2 training  R&gt;(Pellet)    22 Sucrose          2   0.0 HD2022</span></span>
-<span><span class="co">#&gt; 191:   CB2 training L&gt;(Sucrose)    23 Sucrose          2   0.4 HD2022</span></span>
-<span><span class="co">#&gt; 192:   CB2 training  R&gt;(Pellet)    24 Sucrose          2   0.0 HD2022</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $heidi_acts</span></span>
-<span><span class="co">#&gt;      group    phase  trial_type trial      s1      s2 block_size    type value</span></span>
-<span><span class="co">#&gt;   1:   CB1 training  L&gt;(Pellet)     1 LPellet       L          2  combvs     0</span></span>
-<span><span class="co">#&gt;   2:   CB1 training  L&gt;(Pellet)     1 LPellet  Pellet          2  combvs     0</span></span>
-<span><span class="co">#&gt;   3:   CB1 training  L&gt;(Pellet)     1 LPellet       R          2  combvs     0</span></span>
-<span><span class="co">#&gt;   4:   CB1 training  L&gt;(Pellet)     1 LPellet Sucrose          2  combvs     0</span></span>
-<span><span class="co">#&gt;   5:   CB1 training R&gt;(Sucrose)     2 LPellet       L          2  combvs     0</span></span>
-<span><span class="co">#&gt;  ---                                                                          </span></span>
-<span><span class="co">#&gt; 572:   CB2 training  R&gt;(Pellet)    24       L Sucrose          2 chainvs     0</span></span>
-<span><span class="co">#&gt; 573:   CB2 training  R&gt;(Pellet)    24 Sucrose       L          2 chainvs     0</span></span>
-<span><span class="co">#&gt; 574:   CB2 training  R&gt;(Pellet)    24 Sucrose  Pellet          2 chainvs     0</span></span>
-<span><span class="co">#&gt; 575:   CB2 training  R&gt;(Pellet)    24 Sucrose       R          2 chainvs     0</span></span>
-<span><span class="co">#&gt; 576:   CB2 training  R&gt;(Pellet)    24 Sucrose Sucrose          2 chainvs     0</span></span>
-<span><span class="co">#&gt;       model</span></span>
-<span><span class="co">#&gt;   1: HD2022</span></span>
-<span><span class="co">#&gt;   2: HD2022</span></span>
-<span><span class="co">#&gt;   3: HD2022</span></span>
-<span><span class="co">#&gt;   4: HD2022</span></span>
-<span><span class="co">#&gt;   5: HD2022</span></span>
-<span><span class="co">#&gt;  ---       </span></span>
-<span><span class="co">#&gt; 572: HD2022</span></span>
-<span><span class="co">#&gt; 573: HD2022</span></span>
-<span><span class="co">#&gt; 574: HD2022</span></span>
-<span><span class="co">#&gt; 575: HD2022</span></span>
-<span><span class="co">#&gt; 576: HD2022</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $rs</span></span>
-<span><span class="co">#&gt;      group    phase trial_type trial      s1      s2 block_size value  model</span></span>
-<span><span class="co">#&gt;   1:   CB1 training L&gt;(Pellet)     1       L       L          2     0 HD2022</span></span>
-<span><span class="co">#&gt;   2:   CB1 training L&gt;(Pellet)     1       L  Pellet          2     0 HD2022</span></span>
-<span><span class="co">#&gt;   3:   CB1 training L&gt;(Pellet)     1       L       R          2     0 HD2022</span></span>
-<span><span class="co">#&gt;   4:   CB1 training L&gt;(Pellet)     1       L Sucrose          2     0 HD2022</span></span>
-<span><span class="co">#&gt;   5:   CB1 training L&gt;(Pellet)     1  Pellet       L          2     0 HD2022</span></span>
-<span><span class="co">#&gt;  ---                                                                        </span></span>
-<span><span class="co">#&gt; 764:   CB2 training R&gt;(Pellet)    24       R Sucrose          2     0 HD2022</span></span>
-<span><span class="co">#&gt; 765:   CB2 training R&gt;(Pellet)    24 Sucrose       L          2     0 HD2022</span></span>
-<span><span class="co">#&gt; 766:   CB2 training R&gt;(Pellet)    24 Sucrose  Pellet          2     0 HD2022</span></span>
-<span><span class="co">#&gt; 767:   CB2 training R&gt;(Pellet)    24 Sucrose       R          2     0 HD2022</span></span>
-<span><span class="co">#&gt; 768:   CB2 training R&gt;(Pellet)    24 Sucrose Sucrose          2     0 HD2022</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $vs</span></span>
-<span><span class="co">#&gt;      group    phase trial_type trial      s1      s2 block_size     value</span></span>
-<span><span class="co">#&gt;   1:   CB1 training L&gt;(Pellet)     1       L       L          2 0.0000000</span></span>
-<span><span class="co">#&gt;   2:   CB1 training L&gt;(Pellet)     1       L  Pellet          2 0.0000000</span></span>
-<span><span class="co">#&gt;   3:   CB1 training L&gt;(Pellet)     1       L       R          2 0.0000000</span></span>
-<span><span class="co">#&gt;   4:   CB1 training L&gt;(Pellet)     1       L Sucrose          2 0.0000000</span></span>
-<span><span class="co">#&gt;   5:   CB1 training L&gt;(Pellet)     1  Pellet       L          2 0.0000000</span></span>
+<span><span class="co">#&gt; $activations</span></span>
+<span><span class="co">#&gt;      group    phase  trial_type trial block_size      s1     value  model</span></span>
+<span><span class="co">#&gt;   1:   CB1 training  L&gt;(Pellet)     1          4       L 0.4000000 HD2022</span></span>
+<span><span class="co">#&gt;   2:   CB1 training R&gt;(Sucrose)     2          4       L 0.0000000 HD2022</span></span>
+<span><span class="co">#&gt;   3:   CB1 training          #L     3          4       L 0.4000000 HD2022</span></span>
+<span><span class="co">#&gt;   4:   CB1 training          #R     4          4       L 0.0000000 HD2022</span></span>
+<span><span class="co">#&gt;   5:   CB1 training  L&gt;(Pellet)     5          4       L 0.4000000 HD2022</span></span>
 <span><span class="co">#&gt;  ---                                                                     </span></span>
-<span><span class="co">#&gt; 764:   CB2 training R&gt;(Pellet)    24       R Sucrose          2 0.0000000</span></span>
-<span><span class="co">#&gt; 765:   CB2 training R&gt;(Pellet)    24 Sucrose       L          2 0.3991293</span></span>
-<span><span class="co">#&gt; 766:   CB2 training R&gt;(Pellet)    24 Sucrose  Pellet          2 0.0000000</span></span>
-<span><span class="co">#&gt; 767:   CB2 training R&gt;(Pellet)    24 Sucrose       R          2 0.0000000</span></span>
-<span><span class="co">#&gt; 768:   CB2 training R&gt;(Pellet)    24 Sucrose Sucrose          2 0.0000000</span></span>
-<span><span class="co">#&gt;       model</span></span>
-<span><span class="co">#&gt;   1: HD2022</span></span>
-<span><span class="co">#&gt;   2: HD2022</span></span>
-<span><span class="co">#&gt;   3: HD2022</span></span>
-<span><span class="co">#&gt;   4: HD2022</span></span>
-<span><span class="co">#&gt;   5: HD2022</span></span>
-<span><span class="co">#&gt;  ---       </span></span>
-<span><span class="co">#&gt; 764: HD2022</span></span>
-<span><span class="co">#&gt; 765: HD2022</span></span>
-<span><span class="co">#&gt; 766: HD2022</span></span>
-<span><span class="co">#&gt; 767: HD2022</span></span>
-<span><span class="co">#&gt; 768: HD2022</span></span></code></pre></div>
+<span><span class="co">#&gt; 380:   CB2 training          #R    44          4 Sucrose 0.0000000 HD2022</span></span>
+<span><span class="co">#&gt; 381:   CB2 training L&gt;(Sucrose)    45          4 Sucrose 0.4000000 HD2022</span></span>
+<span><span class="co">#&gt; 382:   CB2 training  R&gt;(Pellet)    46          4 Sucrose 0.0000000 HD2022</span></span>
+<span><span class="co">#&gt; 383:   CB2 training          #L    47          4 Sucrose 0.3991293 HD2022</span></span>
+<span><span class="co">#&gt; 384:   CB2 training          #R    48          4 Sucrose 0.0000000 HD2022</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $associations</span></span>
+<span><span class="co">#&gt;       group    phase trial_type trial block_size      s1      s2     value</span></span>
+<span><span class="co">#&gt;    1:   CB1 training L&gt;(Pellet)     1          4       L       L 0.0000000</span></span>
+<span><span class="co">#&gt;    2:   CB1 training L&gt;(Pellet)     1          4       L  Pellet 0.0000000</span></span>
+<span><span class="co">#&gt;    3:   CB1 training L&gt;(Pellet)     1          4       L       R 0.0000000</span></span>
+<span><span class="co">#&gt;    4:   CB1 training L&gt;(Pellet)     1          4       L Sucrose 0.0000000</span></span>
+<span><span class="co">#&gt;    5:   CB1 training L&gt;(Pellet)     1          4  Pellet       L 0.0000000</span></span>
+<span><span class="co">#&gt;   ---                                                                     </span></span>
+<span><span class="co">#&gt; 1532:   CB2 training         #R    48          4       R Sucrose 0.0000000</span></span>
+<span><span class="co">#&gt; 1533:   CB2 training         #R    48          4 Sucrose       L 0.3991293</span></span>
+<span><span class="co">#&gt; 1534:   CB2 training         #R    48          4 Sucrose  Pellet 0.0000000</span></span>
+<span><span class="co">#&gt; 1535:   CB2 training         #R    48          4 Sucrose       R 0.0000000</span></span>
+<span><span class="co">#&gt; 1536:   CB2 training         #R    48          4 Sucrose Sucrose 0.0000000</span></span>
+<span><span class="co">#&gt;        model</span></span>
+<span><span class="co">#&gt;    1: HD2022</span></span>
+<span><span class="co">#&gt;    2: HD2022</span></span>
+<span><span class="co">#&gt;    3: HD2022</span></span>
+<span><span class="co">#&gt;    4: HD2022</span></span>
+<span><span class="co">#&gt;    5: HD2022</span></span>
+<span><span class="co">#&gt;   ---       </span></span>
+<span><span class="co">#&gt; 1532: HD2022</span></span>
+<span><span class="co">#&gt; 1533: HD2022</span></span>
+<span><span class="co">#&gt; 1534: HD2022</span></span>
+<span><span class="co">#&gt; 1535: HD2022</span></span>
+<span><span class="co">#&gt; 1536: HD2022</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $pools</span></span>
+<span><span class="co">#&gt;      group    phase  trial_type trial block_size        s1      s2    type</span></span>
+<span><span class="co">#&gt;   1:   CB1 training  L&gt;(Pellet)     1          4  L,Pellet       L  combvs</span></span>
+<span><span class="co">#&gt;   2:   CB1 training  L&gt;(Pellet)     1          4  L,Pellet  Pellet  combvs</span></span>
+<span><span class="co">#&gt;   3:   CB1 training  L&gt;(Pellet)     1          4  L,Pellet       R  combvs</span></span>
+<span><span class="co">#&gt;   4:   CB1 training  L&gt;(Pellet)     1          4  L,Pellet Sucrose  combvs</span></span>
+<span><span class="co">#&gt;   5:   CB1 training R&gt;(Sucrose)     2          4 R,Sucrose       L  combvs</span></span>
+<span><span class="co">#&gt;  ---                                                                      </span></span>
+<span><span class="co">#&gt; 764:   CB2 training          #L    47          4         L Sucrose chainvs</span></span>
+<span><span class="co">#&gt; 765:   CB2 training          #R    48          4         R       L chainvs</span></span>
+<span><span class="co">#&gt; 766:   CB2 training          #R    48          4         R  Pellet chainvs</span></span>
+<span><span class="co">#&gt; 767:   CB2 training          #R    48          4         R       R chainvs</span></span>
+<span><span class="co">#&gt; 768:   CB2 training          #R    48          4         R Sucrose chainvs</span></span>
+<span><span class="co">#&gt;      value  model</span></span>
+<span><span class="co">#&gt;   1:     0 HD2022</span></span>
+<span><span class="co">#&gt;   2:     0 HD2022</span></span>
+<span><span class="co">#&gt;   3:     0 HD2022</span></span>
+<span><span class="co">#&gt;   4:     0 HD2022</span></span>
+<span><span class="co">#&gt;   5:     0 HD2022</span></span>
+<span><span class="co">#&gt;  ---             </span></span>
+<span><span class="co">#&gt; 764:     0 HD2022</span></span>
+<span><span class="co">#&gt; 765:     0 HD2022</span></span>
+<span><span class="co">#&gt; 766:     0 HD2022</span></span>
+<span><span class="co">#&gt; 767:     0 HD2022</span></span>
+<span><span class="co">#&gt; 768:     0 HD2022</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $responses</span></span>
+<span><span class="co">#&gt;       group    phase trial_type trial block_size      s1      s2 value  model</span></span>
+<span><span class="co">#&gt;    1:   CB1 training L&gt;(Pellet)     1          4       L       L     0 HD2022</span></span>
+<span><span class="co">#&gt;    2:   CB1 training L&gt;(Pellet)     1          4       L  Pellet     0 HD2022</span></span>
+<span><span class="co">#&gt;    3:   CB1 training L&gt;(Pellet)     1          4       L       R     0 HD2022</span></span>
+<span><span class="co">#&gt;    4:   CB1 training L&gt;(Pellet)     1          4       L Sucrose     0 HD2022</span></span>
+<span><span class="co">#&gt;    5:   CB1 training L&gt;(Pellet)     1          4  Pellet       L     0 HD2022</span></span>
+<span><span class="co">#&gt;   ---                                                                        </span></span>
+<span><span class="co">#&gt; 1532:   CB2 training         #R    48          4       R Sucrose     0 HD2022</span></span>
+<span><span class="co">#&gt; 1533:   CB2 training         #R    48          4 Sucrose       L     0 HD2022</span></span>
+<span><span class="co">#&gt; 1534:   CB2 training         #R    48          4 Sucrose  Pellet     0 HD2022</span></span>
+<span><span class="co">#&gt; 1535:   CB2 training         #R    48          4 Sucrose       R     0 HD2022</span></span>
+<span><span class="co">#&gt; 1536:   CB2 training         #R    48          4 Sucrose Sucrose     0 HD2022</span></span></code></pre></div>
 <p>Although <code><a href="../reference/CalmrExperiment-methods.html">results()</a></code> returns many model outputs, as I said
-earlier, we only care about one of them: <code>rs</code> (the model
-responses). With them, we can write our model function.</p>
+earlier, we only care about one of them: <code>responses</code> (the
+model responses). With them, we can write our model function.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_model_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">pars</span>, <span class="va">exper</span>, <span class="va">full</span> <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># extract the parameters from the model</span></span>
@@ -322,22 +322,28 @@ responses). With them, we can write our model function.</p>
 <span>  <span class="va">new_parameters</span><span class="op">$</span><span class="va">alphas</span><span class="op">[</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">pars</span></span>
 <span>  <span class="co"># reassign parameters to the experiment</span></span>
 <span>  <span class="fu"><a href="../reference/CalmrExperiment-methods.html">parameters</a></span><span class="op">(</span><span class="va">exper</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">new_parameters</span> <span class="co"># note parameters method</span></span>
-<span>  <span class="co"># running the model and selecting rs</span></span>
+<span>  <span class="co"># running the model and selecting responses</span></span>
 <span>  <span class="va">exp_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_experiment.html">run_experiment</a></span><span class="op">(</span><span class="va">exper</span><span class="op">)</span></span>
 <span>  <span class="co"># summarizing the model</span></span>
-<span>  <span class="va">rs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CalmrExperiment-methods.html">results</a></span><span class="op">(</span><span class="va">exp_res</span><span class="op">)</span><span class="op">$</span><span class="va">rs</span></span>
+<span>  <span class="va">responses</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CalmrExperiment-methods.html">results</a></span><span class="op">(</span><span class="va">exp_res</span><span class="op">)</span><span class="op">$</span><span class="va">responses</span></span>
 <span>  <span class="co"># calculate extra variables</span></span>
-<span>  <span class="va">rs</span><span class="op">$</span><span class="va">response</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">rs</span><span class="op">$</span><span class="va">s1</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pellet"</span>, <span class="st">"Sucrose"</span><span class="op">)</span>, <span class="st">"np"</span>, <span class="st">"lp"</span><span class="op">)</span></span>
-<span>  <span class="va">rs</span><span class="op">$</span><span class="va">block</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">rs</span><span class="op">$</span><span class="va">trial</span> <span class="op">/</span> <span class="fl">4</span><span class="op">)</span></span>
+<span>  <span class="va">responses</span><span class="op">$</span><span class="va">response</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">responses</span><span class="op">$</span><span class="va">s1</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pellet"</span>, <span class="st">"Sucrose"</span><span class="op">)</span>,</span>
+<span>    <span class="st">"np"</span>, <span class="st">"lp"</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="va">responses</span><span class="op">$</span><span class="va">block</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">responses</span><span class="op">$</span><span class="va">trial</span> <span class="op">/</span> <span class="fl">8</span><span class="op">)</span></span>
 <span>  <span class="co"># filtering</span></span>
-<span>  <span class="va">rs</span> <span class="op">&lt;-</span> <span class="va">rs</span><span class="op">[</span><span class="va">s2</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pellet"</span>, <span class="st">"Sucrose"</span><span class="op">)</span> <span class="op">&amp;</span></span>
+<span>  <span class="co"># only probe trials</span></span>
+<span>  <span class="va">responses</span> <span class="op">&lt;-</span> <span class="va">responses</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"#"</span>, <span class="va">trial_type</span><span class="op">)</span><span class="op">]</span></span>
+<span>  <span class="co"># only available responses</span></span>
+<span>  <span class="va">responses</span> <span class="op">&lt;-</span> <span class="va">responses</span><span class="op">[</span><span class="va">s2</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pellet"</span>, <span class="st">"Sucrose"</span><span class="op">)</span> <span class="op">&amp;</span></span>
 <span>    <span class="op">(</span><span class="va">response</span> <span class="op">==</span> <span class="st">"np"</span> <span class="op">|</span> <span class="op">(</span><span class="va">response</span> <span class="op">==</span> <span class="st">"lp"</span> <span class="op">&amp;</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/mapply.html" class="external-link">mapply</a></span><span class="op">(</span><span class="va">grepl</span>, <span class="va">s1</span>, <span class="va">trial_type</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
-<span>  <span class="va">rs</span> <span class="op">&lt;-</span> <span class="va">rs</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"block,s2,response"</span><span class="op">]</span></span>
+<span>  <span class="co"># aggregate</span></span>
+<span>  <span class="va">responses</span> <span class="op">&lt;-</span> <span class="va">responses</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"block,s2,response"</span><span class="op">]</span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="va">full</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">rs</span><span class="op">)</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">responses</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
-<span>  <span class="va">rs</span><span class="op">$</span><span class="va">value</span></span>
+<span>  <span class="va">responses</span><span class="op">$</span><span class="va">value</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>Let’s dissect the function above in its three parts.</p>
 <ol style="list-style-type: decimal">
@@ -351,8 +357,8 @@ optimizer) into the <code>alphas</code> of
 <code>new_parameters</code>.</p></li>
 <li><p>We run the experiment and store it in
 <code>exp_res</code>.</p></li>
-<li><p>We select the model responses (<code>rs</code>) from the model
-results and store them in <code>rs</code>.</p></li>
+<li><p>We select the model responses (<code>responses</code>) from the
+model results and store them in <code>responses</code>.</p></li>
 <li><p>Lastly. We summarise the model responses and return them.<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;Within this step, we also filter all output nodes that
 are not related to expecting one of the USs, we classify responses as
 being nosepokes (produced by the food reward) or lever presses (produced
@@ -362,10 +368,10 @@ a model is no trivial task!&lt;/p&gt;"><sup>2</sup></a></p></li>
 <p>That’s a lot to digest, so let’s see the function in action.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">my_model_function</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.2</span>, <span class="fl">.4</span>, <span class="fl">.3</span><span class="op">)</span>, <span class="va">experiment</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] 0.008050000 0.010565625 0.002650000 0.005048437 0.031828820 0.042306678</span></span>
-<span><span class="co">#&gt;  [7] 0.010963860 0.021017097 0.044113881 0.058286944 0.016036258 0.030438661</span></span>
-<span><span class="co">#&gt; [13] 0.050783660 0.066233126 0.019358818 0.036222556 0.054742035 0.070502134</span></span>
-<span><span class="co">#&gt; [19] 0.021701424 0.040091950 0.057311961 0.073063348 0.023442829 0.042882258</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] 0.028557609 0.040188221 0.004008696 0.008429327 0.045573899 0.061933782</span></span>
+<span><span class="co">#&gt;  [7] 0.010480790 0.021230102 0.053426837 0.070862133 0.015100913 0.029677071</span></span>
+<span><span class="co">#&gt; [13] 0.057584182 0.074995358 0.018328387 0.035165746 0.059994400 0.077081202</span></span>
+<span><span class="co">#&gt; [19] 0.020711121 0.039013071 0.061492438 0.078227391 0.022547790 0.041891069</span></span></code></pre></div>
 <p>Just numbers!</p>
 <p>The order of the empirical data and model responses must match. I
 cannot emphasize this point enough: there is nothing within the fit
@@ -378,12 +384,12 @@ definition.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">my_model_function</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.2</span>, <span class="fl">.4</span>, <span class="fl">.3</span><span class="op">)</span>, <span class="va">experiment</span>, full <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    block      s2 response       value</span></span>
-<span><span class="co">#&gt; 1:     1  Pellet       lp 0.008050000</span></span>
-<span><span class="co">#&gt; 2:     1 Sucrose       lp 0.010565625</span></span>
-<span><span class="co">#&gt; 3:     1  Pellet       np 0.002650000</span></span>
-<span><span class="co">#&gt; 4:     1 Sucrose       np 0.005048437</span></span>
-<span><span class="co">#&gt; 5:     2  Pellet       lp 0.031828820</span></span>
-<span><span class="co">#&gt; 6:     2 Sucrose       lp 0.042306678</span></span>
+<span><span class="co">#&gt; 1:     1  Pellet       lp 0.028557609</span></span>
+<span><span class="co">#&gt; 2:     1 Sucrose       lp 0.040188221</span></span>
+<span><span class="co">#&gt; 3:     1  Pellet       np 0.004008696</span></span>
+<span><span class="co">#&gt; 4:     1 Sucrose       np 0.008429327</span></span>
+<span><span class="co">#&gt; 5:     2  Pellet       lp 0.045573899</span></span>
+<span><span class="co">#&gt; 6:     2 Sucrose       lp 0.061933782</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pati_summ</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    block us response     rpert</span></span>
 <span><span class="co">#&gt; 1:     1  P       lp 0.8195313</span></span>
@@ -457,7 +463,7 @@ during MLE estimation.</li>
 practice, what you request here will be used to determine the link
 function to transform model responses, and the likelihood function used
 in the objective function. The normal family here does nothing fancy to
-the model responses, but will estimate an extra parameter, scale, which
+the model responses but will estimate an extra parameter, scale, which
 scales the model responses into the scale of the empirical data. When it
 comes to likelihood functions, this family will use the normal density
 of the data and model differences.</li>
@@ -490,9 +496,9 @@ negative log-likelihood, given the data:</p>
 <code class="sourceCode R"><span><span class="va">the_fit</span></span>
 <span><span class="co"># the BIC and AIC</span></span>
 <span><span class="fu"><a href="../reference/CalmrFit-methods.html">BIC</a></span><span class="op">(</span><span class="va">the_fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 94.33025</span></span>
+<span><span class="co">#&gt; [1] 102.484</span></span>
 <span><span class="fu"><a href="../reference/CalmrFit-methods.html">AIC</a></span><span class="op">(</span><span class="va">the_fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 88.43998</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 96.5937</span></span></code></pre></div>
 <p>That’s good and all, but how well does a model run with those
 parameters “visually” fit the data? We can obtain the predictions from
 the model via the <code>predict</code> function.</p>

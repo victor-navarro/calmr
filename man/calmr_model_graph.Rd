@@ -2,6 +2,8 @@
 % Please edit documentation in R/model_graphs.R
 \name{calmr_model_graph}
 \alias{calmr_model_graph}
+\alias{patch_graphs}
+\alias{get_graph_opts}
 \title{Create a graph with calmr data}
 \usage{
 calmr_model_graph(
@@ -12,6 +14,10 @@ calmr_model_graph(
   t = max(x$trial),
   options = get_graph_opts()
 )
+
+patch_graphs(graphs, selection = names(graphs))
+
+get_graph_opts(graph_size = "small")
 }
 \arguments{
 \item{x}{A \code{data.frame}-like with data to use in the plot.
@@ -29,15 +35,28 @@ Defaults to max(abs(x$value))*c(-1,1).}
 
 \item{options}{A list with graph options, as returned by \code{\link[=get_graph_opts]{get_graph_opts()}}.}
 
+\item{graphs}{A list of (named) graphs, as returned by \code{\link[=graph]{graph()}} or
+\code{\link[=calmr_model_graph]{calmr_model_graph()}}}
+
+\item{selection}{A character or numeric vector
+determining the plots to patch.}
+
+\item{graph_size}{A string (either "small" or "large").
+to return default values for small or large graphs}
+
 \item{trial}{Numerical. The trial to graph.}
 }
 \value{
 A 'ggplot' object
+
+\code{patch_graphs()} returns a 'patchwork' object
+
+A list with graph options, to be passed to \code{ggnetwork::geom_nodes()}.
 }
 \description{
-Create a graph with calmr data
+\code{patch_graphs()} patches graphs with 'patchwork'
 }
 \note{
 You should probably be getting graphs via
-the \code{\link[=graph]{graph()}} method for \linkS4class{CalmrExperiment}.
+the graph method for \linkS4class{CalmrExperiment}.
 }

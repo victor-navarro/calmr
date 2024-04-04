@@ -48,5 +48,5 @@ exper <- make_experiment(df,
 run_experiment(exper)
 
 # Only parsing the associations in the model, without aggregation
-run_experiment(exper, outputs = "vs", aggregate = FALSE)
+run_experiment(exper, outputs = "associations", aggregate = FALSE)
 }

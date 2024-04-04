@@ -53,7 +53,7 @@
           duration = with(
             timings$period_ts,
             stimulus_duration[
-              trial == trial_name & stimulus == period_funcs[[p]]
+              trial == trial_name & stimulus %in% period_funcs[[p]]
             ]
           ),
           row.names = NULL

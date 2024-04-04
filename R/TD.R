@@ -8,9 +8,10 @@
 #' as returned by `make_experiment`
 #' @param mapping A named list specifying trial and stimulus mapping,
 #' as returned by `make_experiment`
-#' @param debug Logical specifying whether to print debug information.
 #' @param debug_t Whether to invoke a `browser` at
-#' the end of a timestep equal to debug_t.
+#' the end of a trial equal to debug_t.
+#' @param debug_ti Whether to invoke a `browser` at
+#' the end of a timestep within a trial equal to debug_ti.
 #' @param ... Additional named arguments
 #' @return A list with raw results
 #' @note This model is in a highly experimental state. Use with caution.
@@ -18,7 +19,7 @@
 
 TD <- function(
     parameters, timings, experience,
-    mapping, debug = FALSE, debug_t = -1,
+    mapping, debug_t = -1,
     debug_ti = -1, ...) {
   total_trials <- length(unique(experience$trial))
   fsnames <- mapping$unique_functional_stimuli
@@ -112,14 +113,13 @@ TD <- function(
         # add maximal trace of what just happened
         e[, ti] <- omat[, ti]
         #
-        if (ti == debug_ti) browser()
+        if (ti == debug_ti) browser() # nocov
       }
     }
     vs[tn, , ] <- v
     es[tn, , ] <- e
 
-    if (tn == debug_t) browser()
-    if (debug) message(tn)
+    if (tn == debug_t) browser() # nocov
   }
   list(associations = ws, values = vs, elegibilities = es)
 }

@@ -12,11 +12,10 @@
 #' (defaults to the maximum trial in the data).
 #' @return A 'ggplot' object
 #' @note You should probably be getting graphs via
-#' the [graph()] method for [CalmrExperiment-class].
+#' the graph method for [CalmrExperiment-class].
 #' @export
-#' @rdname graph
+#' @rdname calmr_model_graph
 #' @importFrom rlang .data
-
 calmr_model_graph <- function(
     x, loops = TRUE,
     limits = max(abs(x$value)) * c(-1, 1),
@@ -73,15 +72,15 @@ calmr_model_graph <- function(
   p
 }
 
-#' Patch Calmr graphs
-#'
-#' @description Convenience function to patch graphs with 'patchwork'
-#' @param graphs A list of named graphs, as returned by [graph()] or
+#' @description `patch_graphs()` patches graphs with 'patchwork'
+#' @param graphs A list of (named) graphs, as returned by [graph()] or
 #' [calmr_model_graph()]
 #' @param selection A character or numeric vector
 #' determining the plots to patch.
+#' @aliases patch_graphs
+#' @rdname calmr_model_graph
 #' @export
-#' @return A 'patchwork' object
+#' @return `patch_graphs()` returns a 'patchwork' object
 
 patch_graphs <- function(graphs, selection = names(graphs)) {
   # unlist graphs
@@ -101,6 +100,8 @@ patch_graphs <- function(graphs, selection = names(graphs)) {
 #' @param graph_size A string (either "small" or "large").
 #' to return default values for small or large graphs
 #' @return A list with graph options, to be passed to `ggnetwork::geom_nodes()`.
+#' @aliases get_graph_opts
+#' @rdname calmr_model_graph
 #' @export
 get_graph_opts <- function(graph_size = "small") {
   if (graph_size == "large") {

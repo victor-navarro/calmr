@@ -163,13 +163,13 @@ Each model supports different types of plots according to the results they can p
 plots <- plot(my_experiment)
 names(plots)
 # or get a specific type of plot
-specific_plot <- plot(my_experiment, type = "vs")
+specific_plot <- plot(my_experiment, type = "associations")
 names(specific_plot)
 # show which plots are supported by the model we are using
 supported_plots("RW1972")
 ```
 
-In this case, the RW model supports both associations (vs) and responses (rs).
+In this case, the RW model supports both associations (associations) and responses (responses).
 
 ### Stimulus associations
 
@@ -179,7 +179,7 @@ the source of the association.
 The colors within each panel determine the target of the association.
 
 ```{r}
-plot(my_experiment, type = "vs")
+plot(my_experiment, type = "associations")
 ```
 
 ### Responding
@@ -187,7 +187,7 @@ plot(my_experiment, type = "vs")
 Fairly similar to the above, but responding is a function of the stimuli presented in each trial.
 
 ```{r}
-plot(my_experiment, type = "rs")
+plot(my_experiment, type = "responses")
 ```
 
 ## Graphing

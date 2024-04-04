@@ -81,23 +81,6 @@ get_timings <- function(design) {
 .default_global_timings <- function() {
   list(
     "use_exponential" = TRUE,
-    "time_resolution" = 1.0
+    "time_resolution" = 0.5
   )
-}
-
-# Returns whether a parameter is a trial parameter
-.is_trial_parameter <- function(parameter) {
-  trial_pars <- list(
-    "post_trial_delay",
-    "mean_ITI", "max_ITI"
-  )
-  parameter %in% trial_pars
-}
-
-# Returns wheter a parameter is a transition parameter
-.is_trans_parameter <- function(parameter) {
-  trans_pars <- list(
-    "transition_delay"
-  )
-  parameter %in% trans_pars
 }

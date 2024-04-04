@@ -44,3 +44,11 @@ test_that("patch_plot throws error with bad names", {
 test_that("patch_plot throws error with bad numbers", {
   expect_error(patch_plots(plots, -3:-2))
 })
+
+
+test_that("can get default scales", {
+  default_scales <- c("colour_d", "colour_c", "fill_d", "fill_c")
+  for (s in default_scales) {
+    expect_no_error(.calmr_scales(s))
+  }
+})

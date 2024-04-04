@@ -45,3 +45,7 @@ test_that("can run with exact mean", {
     timings = tims, model = "ANCCR"
   ))
 })
+
+test_that(".seq_gen helper returns numeric(0) with weird timings", {
+  expect_true(length(.seq_gen(.8, .2, .5)) == 0)
+})

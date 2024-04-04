@@ -7,6 +7,7 @@
 \alias{plot_targetted_trials}
 \alias{plot_trials}
 \alias{plot_targetted_typed_trials}
+\alias{plot_targetted_complex_trials}
 \title{General plotting functions}
 \usage{
 plot_targetted_tbins(data, t = max(data$trial))
@@ -18,12 +19,16 @@ plot_targetted_trials(data)
 plot_trials(data)
 
 plot_targetted_typed_trials(data)
+
+plot_targetted_complex_trials(data, col)
 }
 \arguments{
 \item{data}{A \code{data.frame}-like with data to plot.}
 
 \item{t}{A numeric vector specifying the trial(s) to plot.
 Defaults to the last trial in data.}
+
+\item{col}{A string specifying the column of the third variable.}
 }
 \value{
 \code{plot_targetted_tbins()} returns 'ggplot' object.
@@ -35,20 +40,25 @@ Defaults to the last trial in data.}
 \code{plot_trials()} returns 'ggplot' object.
 
 \code{plot_targetted_typed_trials()} returns 'ggplot' object.
+
+\code{plot_targetted_complex_trials()} returns 'ggplot' object.
 }
 \description{
 \code{plot_targetted_tbins()} plots targetted time data on a trial.
 
 \code{plot_tbins()} plots non-targetted time data on a trial.
 
-\code{plot_targetted_trials()} plots for targetted trial data.
+\code{plot_targetted_trials()} plots targetted trial data.
 
-\code{plot_trials()} plots for non-targetted trial data.
+\code{plot_trials()} plots non-targetted trial data.
 
-\code{plot_targetted_typed_trials()} plots for
+\code{plot_targetted_typed_trials()} plots
 targetted trial data with a type.
+
+\code{plot_targetted_complex_trials()} plots
+targetted data with a third variable
 }
 \note{
 All data must be organised as
-returned by \code{\link[=results]{results()}} or \code{\link[=parsed_results]{parsed_results()}}
+returned by \code{\link[=results]{results()}} or \code{\link[=parsed_results]{parsed_results()}}.
 }

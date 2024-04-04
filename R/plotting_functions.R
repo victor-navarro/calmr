@@ -4,7 +4,7 @@
 #' Defaults to the last trial in data.
 #' @name plotting_functions
 #' @note All data must be organised as
-#' returned by [results()] or [parsed_results()]
+#' returned by [results()] or [parsed_results()].
 #' @importFrom rlang .data
 NULL
 #> NULL
@@ -54,7 +54,7 @@ plot_tbins <- function(data, t = max(data$trial)) {
     ggplot2::facet_grid(~ .data$phase + .data$trial_type + .data$trial)
 }
 
-#' @description `plot_targetted_trials()` plots for targetted trial data.
+#' @description `plot_targetted_trials()` plots targetted trial data.
 #' @returns `plot_targetted_trials()` returns 'ggplot' object.
 #' @rdname plotting_functions
 #' @export
@@ -64,7 +64,7 @@ plot_targetted_trials <- function(data) {
   ggplot2::ggplot(
     data = data,
     mapping = ggplot2::aes(
-      x = .data$trial, y = .data$value,
+      x = ceiling(.data$trial / .data$block_size), y = .data$value,
       colour = .data$s2
     )
   ) +
@@ -73,9 +73,11 @@ plot_targetted_trials <- function(data) {
     ggplot2::labs(x = "Trial/Miniblock") +
     ggplot2::theme_bw() +
     .calmr_scales("colour_d") +
-    ggplot2::facet_grid(.data$s1 ~ .data$phase + .data$trial_type)
+    ggplot2::facet_grid(.data$s1 ~ .data$phase + .data$trial_type,
+      scales = "free_x"
+    )
 }
-#' @description `plot_trials()` plots for non-targetted trial data.
+#' @description `plot_trials()` plots non-targetted trial data.
 #' @returns `plot_trials()` returns 'ggplot' object.
 #' @rdname plotting_functions
 #' @export
@@ -84,7 +86,7 @@ plot_trials <- function(data) {
   ggplot2::ggplot(
     data = data,
     mapping = ggplot2::aes(
-      x = .data$trial, y = .data$value,
+      x = ceiling(.data$trial / .data$block_size), y = .data$value,
       colour = .data$s1
     )
   ) +
@@ -93,10 +95,12 @@ plot_trials <- function(data) {
     ggplot2::labs(x = "Trial/Miniblock") +
     ggplot2::theme_bw() +
     .calmr_scales("colour_d") +
-    ggplot2::facet_grid(~ .data$phase + .data$trial_type)
+    ggplot2::facet_grid(~ .data$phase + .data$trial_type,
+      scales = "free_x"
+    )
 }
 
-#' @description `plot_targetted_typed_trials()` plots for
+#' @description `plot_targetted_typed_trials()` plots
 #' targetted trial data with a type.
 #' @returns `plot_targetted_typed_trials()` returns 'ggplot' object.
 #' @rdname plotting_functions
@@ -106,7 +110,7 @@ plot_targetted_typed_trials <- function(data) {
   ggplot2::ggplot(
     data = data,
     mapping = ggplot2::aes(
-      x = .data$trial, y = .data$value,
+      x = ceiling(.data$trial / .data$block_size), y = .data$value,
       colour = .data$s2, linetype = .data$type
     )
   ) +
@@ -115,5 +119,54 @@ plot_targetted_typed_trials <- function(data) {
     ggplot2::labs(x = "Trial/Miniblock", linetype = "Type") +
     ggplot2::theme_bw() +
     .calmr_scales("colour_d") +
-    ggplot2::facet_grid(.data$s1 ~ .data$phase + .data$trial_type)
+    ggplot2::facet_grid(.data$s1 ~ .data$phase + .data$trial_type,
+      scales = "free_x"
+    )
+}
+
+#' @description `plot_targetted_complex_trials()` plots
+#' targetted data with a third variable
+#' @param col A string specifying the column of the third variable.
+#' @returns `plot_targetted_complex_trials()` returns 'ggplot' object.
+#' @rdname plotting_functions
+#' @export
+# A general plot for trial-based, targetted data with an extra column
+plot_targetted_complex_trials <- function(data, col) {
+  ggplot2::ggplot(
+    data = data,
+    mapping = ggplot2::aes(
+      x = ceiling(.data$trial / .data$block_size), y = .data$value,
+      colour = .data$s2, linetype = .data[[col]]
+    )
+  ) +
+    ggplot2::stat_summary(geom = "line", fun = "mean") +
+    ggplot2::stat_summary(geom = "point", fun = "mean") +
+    ggplot2::labs(x = "Trial/Miniblock", linetype = tools::toTitleCase(col)) +
+    ggplot2::theme_bw() +
+    .calmr_scales("colour_d") +
+    ggplot2::facet_grid(.data$s1 ~ .data$phase + .data$trial_type,
+      scales = "free_x"
+    )
+}
+
+#' Get calmr scales
+#' @param which A string specifying the scale
+#' @param ... Other parameters passed to the corresponding scale function.
+#' @return A 'ggplot2' scale for colour or fill.
+#' @noRd
+.calmr_scales <- function(which, ...) {
+  switch(which,
+    "colour_d" = {
+      ggplot2::scale_colour_viridis_d(begin = .1, end = .9, ...)
+    },
+    "fill_d" = {
+      ggplot2::scale_fill_viridis_d(begin = .1, end = .9, ...)
+    },
+    "colour_c" = {
+      ggplot2::scale_colour_viridis_c(begin = .1, end = .9, ...) # nocov
+    },
+    "fill_c" = {
+      ggplot2::scale_fill_viridis_c(begin = .1, end = .9, ...)
+    }
+  )
 }

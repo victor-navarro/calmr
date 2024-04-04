@@ -45,17 +45,16 @@ HDI2020 <- function(v = NULL, # nolint: object_name_linter.
 
     # compute combV for all stimuli
     combV <- .combV(
-      v = v, pre_func = fstims,
-      post_func = fsnames,
-      db_trial = t
+      v = v,
+      pre_func = fstims,
+      post_func = fsnames
     )
 
     # compute chainV for all stimuli without a similarity rule
     chainV <- .chainV(
       v = v,
       pre_func = fstims,
-      post_func = fsnames,
-      db_trial = t
+      post_func = fsnames
     )
 
     # identify absent stimuli and calculate their "retrieved" salience
@@ -65,12 +64,11 @@ HDI2020 <- function(v = NULL, # nolint: object_name_linter.
       pre_nomi = nstims,
       pre_func = fstims,
       fsnames = fsnames,
-      nomi2func = mapping$nomi2func,
-      db_trial = t
+      nomi2func = mapping$nomi2func
     )
 
     # Distribute R
-    r <- .distR(ralphas, combV, chainV, t)
+    r <- .distR(ralphas, combV, chainV)
 
     # save data
     vs[t, , ] <- v

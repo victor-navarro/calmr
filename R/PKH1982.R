@@ -112,7 +112,7 @@ PKH1982 <- function(
     }
   }
   results <- list(
-    associations = list(evs = evs, ivs = ivs),
+    associations = list(EV = evs, IV = ivs),
     associabilities = as,
     responses = rs
   )

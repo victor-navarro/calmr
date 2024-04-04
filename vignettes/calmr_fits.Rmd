@@ -97,8 +97,8 @@ With that in mind, we now will prepare the experiment as you would pass to `run_
 des_df <- data.frame(
   group = c("CB1", "CB2"),
   training = c(
-    "12L>(Pellet)/12R>(Sucrose)",
-    "12L>(Sucrose)/12R>(Pellet)"
+    "12L>(Pellet)/12R>(Sucrose)/12#L/12#R",
+    "12L>(Sucrose)/12R>(Pellet)/12#L/12#R"
   ),
   rand_train = FALSE
 )
@@ -135,7 +135,7 @@ results(exp_res)
 ```
 
 Although `results()` returns many model outputs, as I said earlier,
-we only care about one of them: `rs` (the model responses).
+we only care about one of them: `responses` (the model responses).
 With them, we can write our model function.
 
 ```{r}
@@ -146,22 +146,28 @@ my_model_function <- function(pars, exper, full = FALSE) {
   new_parameters$alphas[] <- pars
   # reassign parameters to the experiment
   parameters(exper) <- new_parameters # note parameters method
-  # running the model and selecting rs
+  # running the model and selecting responses
   exp_res <- run_experiment(exper)
   # summarizing the model
-  rs <- results(exp_res)$rs
+  responses <- results(exp_res)$responses
   # calculate extra variables
-  rs$response <- ifelse(rs$s1 %in% c("Pellet", "Sucrose"), "np", "lp")
-  rs$block <- ceiling(rs$trial / 4)
+  responses$response <- ifelse(responses$s1 %in% c("Pellet", "Sucrose"),
+    "np", "lp"
+  )
+  responses$block <- ceiling(responses$trial / 8)
   # filtering
-  rs <- rs[s2 %in% c("Pellet", "Sucrose") &
+  # only probe trials
+  responses <- responses[grepl("#", trial_type)]
+  # only available responses
+  responses <- responses[s2 %in% c("Pellet", "Sucrose") &
     (response == "np" | (response == "lp" &
       mapply(grepl, s1, trial_type)))]
-  rs <- rs[, list(value = mean(value)), by = "block,s2,response"]
+  # aggregate
+  responses <- responses[, list(value = mean(value)), by = "block,s2,response"]
   if (full) {
-    return(rs)
+    return(responses)
   }
-  rs$value
+  responses$value
 }
 ```
 
@@ -175,7 +181,7 @@ store them in `new_parameters`.^[Note the `[[1]]` to get the first parameter lis
 
 3. We run the experiment and store it in `exp_res`.
 
-4. We select the model responses (`rs`) from the model results and store them in `rs`.
+4. We select the model responses (`responses`) from the model results and store them in `responses`.
 
 5. Lastly. We summarise the model responses and return them.[^1]
 
@@ -234,7 +240,7 @@ The `get_optimizer_opts()` function returns many things:
 4. family: The family distribution we assume for our model. In practice, what you request 
 here will be used to determine the link function to transform model responses, 
 and the likelihood function used in the objective function. The normal family here 
-does nothing fancy to the model responses, but will estimate an extra parameter, 
+does nothing fancy to the model responses but will estimate an extra parameter, 
 scale, which scales the model responses into the scale of the empirical data.
 When it comes to likelihood functions, this family will use the normal density of 
 the data and model differences.

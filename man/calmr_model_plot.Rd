@@ -2,9 +2,18 @@
 % Please edit documentation in R/model_plots.R
 \name{calmr_model_plot}
 \alias{calmr_model_plot}
+\alias{plot_common_scale}
+\alias{get_plot_opts}
+\alias{patch_plots}
 \title{Create a plot with calmr data}
 \usage{
 calmr_model_plot(data, type, model, ...)
+
+plot_common_scale(plots)
+
+get_plot_opts(common_scale = TRUE)
+
+patch_plots(plots, selection = names(plots), plot_options = get_plot_opts())
 }
 \arguments{
 \item{data}{A \code{data.table} containing aggregated
@@ -15,12 +24,33 @@ data from a \linkS4class{CalmrExperiment}}
 \item{model}{A character specifying the model.}
 
 \item{...}{Other parameters passed to plotting functions.}
+
+\item{plots}{A list of (named) plots, as returned by \code{\link[=plot]{plot()}} or
+\code{\link[=calmr_model_plot]{calmr_model_plot()}}}
+
+\item{common_scale}{Logical specifying whether to
+have plots in a common scale.}
+
+\item{selection}{A character or numeric vector determining the plots to patch}
+
+\item{plot_options}{A list of plot options as returned by \code{\link[=get_plot_opts]{get_plot_opts()}}}
 }
 \value{
 A 'ggplot' object.
+
+\code{plot_common_scale()} returns a list of plots.
+
+\code{get_plot_opts()} returns a list.
+
+\code{patch_plots()} returns a \code{patchwork} object.
 }
 \description{
-Create a plot with calmr data
+\code{plot_common_scale()} rescales a list of
+plots to have a common scale.
+
+\code{get_plot_opts()} returns generic plotting options.
+
+\code{patch_plots()} patches plots using \code{patchwork} package.
 }
 \note{
 You should probably be getting plots via

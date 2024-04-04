@@ -311,6 +311,7 @@ ANCCR <- function(
     simplify = FALSE
   )
   # bundle prc and src
+  psrcs <- list(PRC = threes$prc, SRC = threes$src)
   threes <- threes[c("m_ij", "ncs", "anccrs", "cws", "das", "qs", "ps")]
 
   names(twos) <- c(
@@ -318,12 +319,10 @@ ANCCR <- function(
     "i_base_rate"
   )
   names(threes) <- c(
-    "ij_base_rate", "prcs", "srcs", "net_contingencies",
+    "ij_base_rate", "net_contingencies",
     "anccrs", "causal_weights", "dopamines", "action_values",
     "probabilities"
   )
-
-  psrcs <- threes[c("prcs", "srcs")]
 
   c(twos, threes, list(representation_contingencies = psrcs))
 }

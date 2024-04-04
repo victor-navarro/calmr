@@ -39,7 +39,7 @@ test_that(".parallel_standby message works", {
   future::plan(future::multisession)
   pb <- progressr::progressor(1)
   expect_silent(progressr::with_progress({
-    .parallel_standby(pb)
+    calmr:::.parallel_standby(pb)
     for (p in 1) {
       pb()
     }

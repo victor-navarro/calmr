@@ -89,11 +89,11 @@ experiment <- run_experiment(experiment)
 ```
 ```{r}
 # Action values
-patch_plots(plot(experiment, type = "qs"))
+patch_plots(plot(experiment, type = "action_values"))
 # ANCCR
 patch_plots(plot(experiment, type = "anccrs"))
 # Dopamine transients
-patch_plots(plot(experiment, type = "das"))
+patch_plots(plot(experiment, type = "dopamines"))
 ```
 
 And that's it! Easy, right?

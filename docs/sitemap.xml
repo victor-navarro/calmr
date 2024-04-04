@@ -175,6 +175,9 @@
     <loc>https://victornavarro.org/calmr/reference/calmr_app.html</loc>
   </url>
   <url>
+    <loc>https://victornavarro.org/calmr/reference/calmr_model_graph.html</loc>
+  </url>
+  <url>
     <loc>https://victornavarro.org/calmr/reference/calmr_model_plot.html</loc>
   </url>
   <url>
@@ -245,6 +248,9 @@
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/get_params.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calmr/reference/get_timings.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/graph-CalmrExperiment-method.html</loc>
@@ -341,6 +347,9 @@
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/plot.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calmr/reference/plotting_functions.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/predict-CalmrFit-method.html</loc>

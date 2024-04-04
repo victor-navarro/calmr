@@ -68,6 +68,13 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.2" id="calmr-062">calmr 0.6.2<a class="anchor" aria-label="anchor" href="#calmr-062"></a></h2>
 <ul><li>Aggregation of ANCCR data now ignores time; time entries are averaged.</li>
+<li>Added the Temporal Difference model under the name “TD”. The model is in an experimental state.</li>
+<li>Experiments for time-based models now require a separate list to construct time-based experiences. See <code><a href="../reference/get_timings.html">get_timings()</a></code>.</li>
+<li>Added <code>experiences&lt;-</code>, <code>timings</code>, <code>timings&lt;-</code> methods for <code>CalmrExperiment</code> class.</li>
+<li>Revamped plotting functions and parsing functions.</li>
+<li>Revamped output names for all models to make them more intelligible.</li>
+<li>Fixed a bug related to the aggregation of pools in HDI2020 and HD2022.</li>
+<li>Consolidated some man pages.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.1" id="calmr-061">calmr 0.6.1<a class="anchor" aria-label="anchor" href="#calmr-061"></a></h2><p class="text-muted">CRAN release: 2024-03-14</p>
@@ -93,7 +100,7 @@
 <h2 class="pkg-version" data-toc-text="0.5.0" id="calmr-050">calmr 0.5.0<a class="anchor" aria-label="anchor" href="#calmr-050"></a></h2>
 <ul><li>Implementation of ANCCR (Jeong et al., 2022), the first time-based model included in <code>calmr</code>.</li>
 <li>Added parameter distinction between trial-wise and period-wise parameters.</li>
-<li>Added internal augmentation of design/arguments depending on the model.</li>
+<li>Added internal augmentation of arguments depending on the model.</li>
 <li>All trial-based models do not use pre/post distinctions anymore. Using the “&gt;” special character does not affect these models anymore.</li>
 <li>The “&gt;” special character is used to specify periods within a trial. For example, “A&gt;B&gt;C” implies A is followed by B which is followed by C. See the <code>using_time_models</code> vignette for additional information.</li>
 <li>Named stimuli now support numbers trailing characters (e.g., “(US1)” is valid now.)</li>

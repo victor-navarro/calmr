@@ -2,14 +2,14 @@ df <- data.frame(g = "g", p1 = "3A>(US)", r1 = TRUE)
 pars <- get_parameters(df, model = "RW1972")
 exper <- make_experiment(df, parameters = pars, model = "RW1972")
 res <- run_experiment(exper)
-rs <- results(res)$rs$value
+responses <- results(res)$responses$value
 
 # define model function
 model_fun <- function(p, ex) {
   np <- parameters(ex)
   np[[1]]$alphas[] <- p
   parameters(ex) <- np
-  results(run_experiment(ex))$rs$value
+  results(run_experiment(ex))$responses$value
 }
 
 def_opts <- list(
@@ -32,7 +32,7 @@ optim_opts$initial_pars[] <- rep(.6, 3)
 
 test_that("can fit with optim and print verbosity", {
   optim_opts$verbose <- TRUE
-  expect_no_error(capture_message(fit_model(rs, model_fun, optim_opts,
+  expect_no_error(capture_message(fit_model(responses, model_fun, optim_opts,
     ex = exper, method = "L-BFGS-B", control = list(maxit = 1)
   )))
 })
@@ -44,7 +44,7 @@ pois_opts <- do.call(get_optimizer_opts, c(def_opts,
 pois_opts$initial_pars[] <- rep(.6, 3)
 
 test_that("can fit poisson and can create fit file", {
-  expect_no_error(fit_model(ceiling(rs * 10), model_fun, pois_opts,
+  expect_no_error(fit_model(ceiling(responses * 10), model_fun, pois_opts,
     ex = exper, method = "L-BFGS-B", control = list(maxit = 1),
     file = "pois_test.rds"
   ))
@@ -52,7 +52,7 @@ test_that("can fit poisson and can create fit file", {
 
 test_that("can load a fit from file", {
   on.exit(file.remove("pois_test.rds"))
-  expect_no_error(fit_model(ceiling(rs * 10), model_fun, pois_opts,
+  expect_no_error(fit_model(ceiling(responses * 10), model_fun, pois_opts,
     ex = exper, method = "L-BFGS-B", control = list(maxit = 1),
     file = "pois_test.rds"
   ))
@@ -62,13 +62,13 @@ ga_opts <- do.call(get_optimizer_opts, c(def_opts,
   optimizer = "ga", family = "identity"
 ))
 test_that("can fit with GA", {
-  expect_no_error(fit_model(rs, model_fun, ga_opts,
+  expect_no_error(fit_model(responses, model_fun, ga_opts,
     ex = exper, maxiter = 1, monitor = FALSE
   ))
 })
 
 # method tests
-opt <- fit_model(rs, model_fun, optim_opts,
+opt <- fit_model(responses, model_fun, optim_opts,
   ex = exper, method = "L-BFGS-B", control = list(maxit = 1)
 )
 
@@ -89,7 +89,7 @@ test_that("BIC method works", {
 })
 
 test_that("predict method works", {
-  expect_equal(length(rs), length(predict(opt, ex = exper)))
+  expect_equal(length(responses), length(predict(opt, ex = exper)))
 })
 
 test_that("show method works", {
