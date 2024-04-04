@@ -224,7 +224,7 @@ call <code><a href="../reference/model_information.html">supported_models()</a><
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/model_information.html">supported_models</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "HDI2020" "HD2022"  "RW1972"  "MAC1975" "PKH1982" "SM2007"  "RAND"   </span></span>
-<span><span class="co">#&gt; [8] "ANCCR"</span></span></code></pre></div>
+<span><span class="co">#&gt; [8] "ANCCR"   "TD"</span></span></code></pre></div>
 <p>After choosing a model, you can get default parameters for your
 design with <code><a href="../reference/get_parameters.html">get_parameters()</a></code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -270,8 +270,8 @@ the experiment for 5 iterations.</p>
 <span><span class="co">#&gt; [1] "calmr"</span></span>
 <span><span class="co"># CalmrExperiment is an S4 class, so it has slots</span></span>
 <span><span class="fu">slotNames</span><span class="op">(</span><span class="va">my_experiment</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "design"      "model"       "groups"      "parameters"  "experiences"</span></span>
-<span><span class="co">#&gt; [6] "results"     ".model"      ".group"      ".iter"</span></span>
+<span><span class="co">#&gt;  [1] "design"      "model"       "groups"      "parameters"  "timings"    </span></span>
+<span><span class="co">#&gt;  [6] "experiences" "results"     ".model"      ".group"      ".iter"</span></span>
 <span><span class="co"># the experience given to group Exp on the first iteration</span></span>
 <span><span class="va">my_experiment</span><span class="op">@</span><span class="va">experiences</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="co">#&gt;     model group  phase tp     tn is_test block_size trial</span></span>
@@ -309,35 +309,35 @@ the experiment for 5 iterations.</p>
 <span><span class="co">#&gt; [1] "aggregated_results" "parsed_results"     "raw_results"</span></span>
 <span><span class="co"># shorthand method to access aggregated_results</span></span>
 <span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">results</a></span><span class="op">(</span><span class="va">my_experiment</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $rs</span></span>
-<span><span class="co">#&gt;        group  phase trial_type trial     s1     s2 block_size value  model</span></span>
-<span><span class="co">#&gt;       &lt;char&gt; &lt;char&gt;     &lt;char&gt; &lt;int&gt; &lt;char&gt; &lt;char&gt;      &lt;num&gt; &lt;num&gt; &lt;char&gt;</span></span>
-<span><span class="co">#&gt;   1:     Exp Phase1      A(US)     1      A      A          1     0 RW1972</span></span>
-<span><span class="co">#&gt;   2:     Exp Phase1      A(US)     1      A      B          1     0 RW1972</span></span>
-<span><span class="co">#&gt;   3:     Exp Phase1      A(US)     1      A      C          1     0 RW1972</span></span>
-<span><span class="co">#&gt;   4:     Exp Phase1      A(US)     1      A     US          1     0 RW1972</span></span>
-<span><span class="co">#&gt;   5:     Exp Phase1      A(US)     1      B      A          1     0 RW1972</span></span>
-<span><span class="co">#&gt;  ---                                                                      </span></span>
-<span><span class="co">#&gt; 700: Control   Test         #B    22      C     US          2     0 RW1972</span></span>
-<span><span class="co">#&gt; 701: Control   Test         #B    22     US      A          2     0 RW1972</span></span>
-<span><span class="co">#&gt; 702: Control   Test         #B    22     US      B          2     0 RW1972</span></span>
-<span><span class="co">#&gt; 703: Control   Test         #B    22     US      C          2     0 RW1972</span></span>
-<span><span class="co">#&gt; 704: Control   Test         #B    22     US     US          2     0 RW1972</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $vs</span></span>
-<span><span class="co">#&gt;        group  phase trial_type trial     s1     s2 block_size     value  model</span></span>
-<span><span class="co">#&gt;       &lt;char&gt; &lt;char&gt;     &lt;char&gt; &lt;int&gt; &lt;char&gt; &lt;char&gt;      &lt;num&gt;     &lt;num&gt; &lt;char&gt;</span></span>
-<span><span class="co">#&gt;   1:     Exp Phase1      A(US)     1      A      A          1 0.0000000 RW1972</span></span>
-<span><span class="co">#&gt;   2:     Exp Phase1      A(US)     1      A      B          1 0.0000000 RW1972</span></span>
-<span><span class="co">#&gt;   3:     Exp Phase1      A(US)     1      A      C          1 0.0000000 RW1972</span></span>
-<span><span class="co">#&gt;   4:     Exp Phase1      A(US)     1      A     US          1 0.0000000 RW1972</span></span>
-<span><span class="co">#&gt;   5:     Exp Phase1      A(US)     1      B      A          1 0.0000000 RW1972</span></span>
+<span><span class="co">#&gt; $associations</span></span>
+<span><span class="co">#&gt;        group  phase trial_type trial block_size     s1     s2     value  model</span></span>
+<span><span class="co">#&gt;       &lt;char&gt; &lt;char&gt;     &lt;char&gt; &lt;int&gt;      &lt;num&gt; &lt;char&gt; &lt;char&gt;     &lt;num&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt;   1:     Exp Phase1      A(US)     1          1      A      A 0.0000000 RW1972</span></span>
+<span><span class="co">#&gt;   2:     Exp Phase1      A(US)     1          1      A      B 0.0000000 RW1972</span></span>
+<span><span class="co">#&gt;   3:     Exp Phase1      A(US)     1          1      A      C 0.0000000 RW1972</span></span>
+<span><span class="co">#&gt;   4:     Exp Phase1      A(US)     1          1      A     US 0.0000000 RW1972</span></span>
+<span><span class="co">#&gt;   5:     Exp Phase1      A(US)     1          1      B      A 0.0000000 RW1972</span></span>
 <span><span class="co">#&gt;  ---                                                                          </span></span>
-<span><span class="co">#&gt; 700: Control   Test         #B    22      C     US          2 0.9939534 RW1972</span></span>
-<span><span class="co">#&gt; 701: Control   Test         #B    22     US      A          2 0.4999999 RW1972</span></span>
-<span><span class="co">#&gt; 702: Control   Test         #B    22     US      B          2 0.4999999 RW1972</span></span>
-<span><span class="co">#&gt; 703: Control   Test         #B    22     US      C          2 0.6626356 RW1972</span></span>
-<span><span class="co">#&gt; 704: Control   Test         #B    22     US     US          2 0.0000000 RW1972</span></span></code></pre></div>
+<span><span class="co">#&gt; 700: Control   Test         #B    22          2      C     US 0.9939534 RW1972</span></span>
+<span><span class="co">#&gt; 701: Control   Test         #B    22          2     US      A 0.4999999 RW1972</span></span>
+<span><span class="co">#&gt; 702: Control   Test         #B    22          2     US      B 0.4999999 RW1972</span></span>
+<span><span class="co">#&gt; 703: Control   Test         #B    22          2     US      C 0.6626356 RW1972</span></span>
+<span><span class="co">#&gt; 704: Control   Test         #B    22          2     US     US 0.0000000 RW1972</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $responses</span></span>
+<span><span class="co">#&gt;        group  phase trial_type trial block_size     s1     s2 value  model</span></span>
+<span><span class="co">#&gt;       &lt;char&gt; &lt;char&gt;     &lt;char&gt; &lt;int&gt;      &lt;num&gt; &lt;char&gt; &lt;char&gt; &lt;num&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt;   1:     Exp Phase1      A(US)     1          1      A      A     0 RW1972</span></span>
+<span><span class="co">#&gt;   2:     Exp Phase1      A(US)     1          1      A      B     0 RW1972</span></span>
+<span><span class="co">#&gt;   3:     Exp Phase1      A(US)     1          1      A      C     0 RW1972</span></span>
+<span><span class="co">#&gt;   4:     Exp Phase1      A(US)     1          1      A     US     0 RW1972</span></span>
+<span><span class="co">#&gt;   5:     Exp Phase1      A(US)     1          1      B      A     0 RW1972</span></span>
+<span><span class="co">#&gt;  ---                                                                      </span></span>
+<span><span class="co">#&gt; 700: Control   Test         #B    22          2      C     US     0 RW1972</span></span>
+<span><span class="co">#&gt; 701: Control   Test         #B    22          2     US      A     0 RW1972</span></span>
+<span><span class="co">#&gt; 702: Control   Test         #B    22          2     US      B     0 RW1972</span></span>
+<span><span class="co">#&gt; 703: Control   Test         #B    22          2     US      C     0 RW1972</span></span>
+<span><span class="co">#&gt; 704: Control   Test         #B    22          2     US     US     0 RW1972</span></span></code></pre></div>
 <p>If you are an advanced R user you will be able to dig into the data
 straight away. However, the package also includes some methods to get a
 quick look at the results.</p>
@@ -353,20 +353,20 @@ produce (e.g., associations, responses, saliences, etc.)</p>
 <code class="sourceCode R"><span><span class="co"># get all the plots for the experiment</span></span>
 <span><span class="va">plots</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CalmrExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">my_experiment</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">plots</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Exp - Response Strength (RW1972)"       </span></span>
-<span><span class="co">#&gt; [2] "Control - Response Strength (RW1972)"   </span></span>
-<span><span class="co">#&gt; [3] "Exp - Association Strength (RW1972)"    </span></span>
-<span><span class="co">#&gt; [4] "Control - Association Strength (RW1972)"</span></span>
+<span><span class="co">#&gt; [1] "Exp - Association Strength (RW1972)"    </span></span>
+<span><span class="co">#&gt; [2] "Control - Association Strength (RW1972)"</span></span>
+<span><span class="co">#&gt; [3] "Exp - Response Strength (RW1972)"       </span></span>
+<span><span class="co">#&gt; [4] "Control - Response Strength (RW1972)"</span></span>
 <span><span class="co"># or get a specific type of plot</span></span>
-<span><span class="va">specific_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CalmrExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">my_experiment</span>, type <span class="op">=</span> <span class="st">"vs"</span><span class="op">)</span></span>
+<span><span class="va">specific_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CalmrExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">my_experiment</span>, type <span class="op">=</span> <span class="st">"associations"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">specific_plot</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "Exp - Association Strength (RW1972)"    </span></span>
 <span><span class="co">#&gt; [2] "Control - Association Strength (RW1972)"</span></span>
 <span><span class="co"># show which plots are supported by the model we are using</span></span>
 <span><span class="fu"><a href="../reference/model_information.html">supported_plots</a></span><span class="op">(</span><span class="st">"RW1972"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "rs" "vs"</span></span></code></pre></div>
-<p>In this case, the RW model supports both associations (vs) and
-responses (rs).</p>
+<span><span class="co">#&gt; [1] "associations" "responses"</span></span></code></pre></div>
+<p>In this case, the RW model supports both associations (associations)
+and responses (responses).</p>
 <div class="section level3">
 <h3 id="stimulus-associations">Stimulus associations<a class="anchor" aria-label="anchor" href="#stimulus-associations"></a>
 </h3>
@@ -375,7 +375,7 @@ rows denote the source of the association.</p>
 <p>The colors within each panel determine the target of the
 association.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">my_experiment</span>, type <span class="op">=</span> <span class="st">"vs"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">my_experiment</span>, type <span class="op">=</span> <span class="st">"associations"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $`Exp - Association Strength (RW1972)`</span></span></code></pre></div>
 <p><img src="calmr_basics_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
@@ -388,7 +388,7 @@ association.</p>
 <p>Fairly similar to the above, but responding is a function of the
 stimuli presented in each trial.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">my_experiment</span>, type <span class="op">=</span> <span class="st">"rs"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">my_experiment</span>, type <span class="op">=</span> <span class="st">"responses"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $`Exp - Response Strength (RW1972)`</span></span></code></pre></div>
 <p><img src="calmr_basics_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
@@ -403,14 +403,14 @@ stimuli presented in each trial.</p>
 any point during training, using the <code>graph</code> method in your
 experiment.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">my_graph_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_graph_opts.html">get_graph_opts</a></span><span class="op">(</span><span class="st">"small"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">my_graph_opts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calmr_model_graph.html">get_graph_opts</a></span><span class="op">(</span><span class="st">"small"</span><span class="op">)</span></span>
 <span><span class="co"># passing the argument t to specify the trial we're interested in.</span></span>
 <span><span class="co"># end of acquisition</span></span>
-<span><span class="fu"><a href="../reference/patch_graphs.html">patch_graphs</a></span><span class="op">(</span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">graph</a></span><span class="op">(</span><span class="va">my_experiment</span>, t <span class="op">=</span> <span class="fl">10</span>, options <span class="op">=</span> <span class="va">my_graph_opts</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/calmr_model_graph.html">patch_graphs</a></span><span class="op">(</span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">graph</a></span><span class="op">(</span><span class="va">my_experiment</span>, t <span class="op">=</span> <span class="fl">10</span>, options <span class="op">=</span> <span class="va">my_graph_opts</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="calmr_basics_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># end of blocking</span></span>
-<span><span class="fu"><a href="../reference/patch_graphs.html">patch_graphs</a></span><span class="op">(</span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">graph</a></span><span class="op">(</span><span class="va">my_experiment</span>, t <span class="op">=</span> <span class="fl">20</span>, options <span class="op">=</span> <span class="va">my_graph_opts</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/calmr_model_graph.html">patch_graphs</a></span><span class="op">(</span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">graph</a></span><span class="op">(</span><span class="va">my_experiment</span>, t <span class="op">=</span> <span class="fl">20</span>, options <span class="op">=</span> <span class="va">my_graph_opts</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="calmr_basics_files/figure-html/unnamed-chunk-10-2.png" width="672"></p>
 </div>
 <div class="section level2">

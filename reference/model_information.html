@@ -74,6 +74,8 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">supported_models</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">supported_timed_models</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">supported_optimizers</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">supported_families</span><span class="op">(</span><span class="op">)</span></span>
@@ -82,7 +84,7 @@
 <span></span>
 <span><span class="fu">get_model</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">parameter_info</span><span class="op">(</span>model <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="fu">model_parameters</span><span class="op">(</span>model <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">model_outputs</span><span class="op">(</span>model <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -100,6 +102,9 @@
 <p><code>supported_models()</code> returns a character vector.</p>
 
 
+<p><code>supported_timed_models()</code> returns a character vector.</p>
+
+
 <p><code>supported_optimizers()</code> returns a character vector.</p>
 
 
@@ -113,7 +118,7 @@
 <p><code>get_model()</code> returns a model function.</p>
 
 
-<p><code>parameter_info()</code> returns a list or a
+<p><code>model_parameters()</code> returns a list or a
 list of lists (if model is NULL).</p>
 
 
@@ -125,7 +130,7 @@ list (if model is NULL).</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Outputs and plots supported by the RW1972 model</span></span></span>
 <span class="r-in"><span><span class="fu">model_outputs</span><span class="op">(</span><span class="st">"RW1972"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rs" "vs"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "associations" "responses"   </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Getting the model function implementing the PKH1982 model</span></span></span>
 <span class="r-in"><span><span class="va">pkh_func</span> <span class="op">&lt;-</span> <span class="fu">get_model</span><span class="op">(</span><span class="st">"PKH1982"</span><span class="op">)</span></span></span>
@@ -134,7 +139,7 @@ list (if model is NULL).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  function (ev = NULL, iv = NULL, parameters, experience, mapping, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2      ...)                                                         </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3  {                                                                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4      .calmr_assert("no_functional_stimuli", mapping)              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      .assert_no_functional(mapping)                               </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5      ntrials &lt;- length(experience$tp)                             </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6      fsnames &lt;- mapping$unique_functional_stimuli                 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7      if (is.null(ev)) {                                           </span>
@@ -143,7 +148,7 @@ list (if model is NULL).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10     if (is.null(iv)) {                                           </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Getting the parameters required by SM2007</span></span></span>
-<span class="r-in"><span><span class="fu">parameter_info</span><span class="op">(</span><span class="st">"SM2007"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">model_parameters</span><span class="op">(</span><span class="st">"SM2007"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $name</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "alphas"  "lambdas" "omegas"  "rhos"    "gammas"  "taus"    "order"  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

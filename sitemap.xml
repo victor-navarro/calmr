@@ -94,6 +94,9 @@
     <loc>https://victornavarro.org/calmr/reference/RSA.html</loc>
   </url>
   <url>
+    <loc>https://victornavarro.org/calmr/reference/calmr_model_graph.html</loc>
+  </url>
+  <url>
     <loc>https://victornavarro.org/calmr/reference/calmr_model_plot.html</loc>
   </url>
   <url>
@@ -109,16 +112,13 @@
     <loc>https://victornavarro.org/calmr/reference/get_design.html</loc>
   </url>
   <url>
-    <loc>https://victornavarro.org/calmr/reference/get_graph_opts.html</loc>
-  </url>
-  <url>
     <loc>https://victornavarro.org/calmr/reference/get_optimizer_opts.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/get_parameters.html</loc>
   </url>
   <url>
-    <loc>https://victornavarro.org/calmr/reference/graph.html</loc>
+    <loc>https://victornavarro.org/calmr/reference/get_timings.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/index.html</loc>
@@ -133,16 +133,13 @@
     <loc>https://victornavarro.org/calmr/reference/parse_design.html</loc>
   </url>
   <url>
-    <loc>https://victornavarro.org/calmr/reference/patch_graphs.html</loc>
-  </url>
-  <url>
-    <loc>https://victornavarro.org/calmr/reference/patch_plots.html</loc>
-  </url>
-  <url>
     <loc>https://victornavarro.org/calmr/reference/pati.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/phase_parser.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calmr/reference/plotting_functions.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/reference/run_experiment.html</loc>

@@ -185,17 +185,11 @@ experiment:</p>
 <span><span class="co">#&gt; $use_exact_mean</span></span>
 <span><span class="co">#&gt; [1] 0</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $use_exponential</span></span>
-<span><span class="co">#&gt; [1] 1</span></span>
-<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $t_ratio</span></span>
 <span><span class="co">#&gt; [1] 1.2</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $t_constant</span></span>
 <span><span class="co">#&gt; [1] NA</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $t_jitter</span></span>
-<span><span class="co">#&gt; [1] 0.1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $alpha</span></span>
 <span><span class="co">#&gt; [1] 0.08</span></span>
@@ -218,30 +212,8 @@ experiment:</p>
 <span><span class="co">#&gt; $add_beta</span></span>
 <span><span class="co">#&gt; [1] 0</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $post_trial_delay</span></span>
-<span><span class="co">#&gt; F&gt;T&gt;(US)        T      F&gt;T   T&gt;(US) </span></span>
-<span><span class="co">#&gt;        1        1        1        1 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $mean_ITI</span></span>
-<span><span class="co">#&gt; F&gt;T&gt;(US)        T      F&gt;T   T&gt;(US) </span></span>
-<span><span class="co">#&gt;       30       30       30       30 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $max_ITI</span></span>
-<span><span class="co">#&gt; F&gt;T&gt;(US)        T      F&gt;T   T&gt;(US) </span></span>
-<span><span class="co">#&gt;       90       90       90       90 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $transition_delay</span></span>
-<span><span class="co">#&gt; $transition_delay$`F&gt;T&gt;(US)`</span></span>
-<span><span class="co">#&gt;    F&gt;T T&gt;(US) </span></span>
-<span><span class="co">#&gt;      1      1 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $transition_delay$`F&gt;T`</span></span>
-<span><span class="co">#&gt; F&gt;T </span></span>
-<span><span class="co">#&gt;   1 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $transition_delay$`T&gt;(US)`</span></span>
-<span><span class="co">#&gt; T&gt;(US) </span></span>
-<span><span class="co">#&gt;      1</span></span></code></pre></div>
+<span><span class="co">#&gt; $jitter</span></span>
+<span><span class="co">#&gt; [1] 1</span></span></code></pre></div>
 <p>The ANCCR model has plenty of parameters, yet nearly half of the
 parameters in the above list correspond to parameters we will use to
 create the experience that the model will receive. I leave the
@@ -257,27 +229,27 @@ entries.</p>
 <span>  model <span class="op">=</span> <span class="st">"ANCCR"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">experiences</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fl">20</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    model group  phase tp       tn is_test block_size trial stimulus        time reward_mag</span></span>
-<span><span class="co">#&gt; 1  ANCCR    FP phase1  2        T   FALSE          2     1        T   0.4600907          1</span></span>
-<span><span class="co">#&gt; 2  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     2        F   2.1903518          1</span></span>
-<span><span class="co">#&gt; 3  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     2        T   3.1903518          1</span></span>
-<span><span class="co">#&gt; 4  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     2       US   4.1903518          1</span></span>
-<span><span class="co">#&gt; 5  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     3        F  24.0961679          1</span></span>
-<span><span class="co">#&gt; 6  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     3        T  25.0961679          1</span></span>
-<span><span class="co">#&gt; 7  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     3       US  26.0961679          1</span></span>
-<span><span class="co">#&gt; 8  ANCCR    FP phase1  2        T   FALSE          2     4        T  62.1731874          1</span></span>
-<span><span class="co">#&gt; 9  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     5        F  66.3658586          1</span></span>
-<span><span class="co">#&gt; 10 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     5        T  67.3658586          1</span></span>
-<span><span class="co">#&gt; 11 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     5       US  68.3658586          1</span></span>
-<span><span class="co">#&gt; 12 ANCCR    FP phase1  2        T   FALSE          2     6        T  69.7549555          1</span></span>
-<span><span class="co">#&gt; 13 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     7        F  92.9989755          1</span></span>
-<span><span class="co">#&gt; 14 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     7        T  93.9989755          1</span></span>
-<span><span class="co">#&gt; 15 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     7       US  94.9989755          1</span></span>
-<span><span class="co">#&gt; 16 ANCCR    FP phase1  2        T   FALSE          2     8        T 100.0117089          1</span></span>
-<span><span class="co">#&gt; 17 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     9        F 191.0117089          1</span></span>
-<span><span class="co">#&gt; 18 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     9        T 192.0117089          1</span></span>
-<span><span class="co">#&gt; 19 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     9       US 193.0117089          1</span></span>
-<span><span class="co">#&gt; 20 ANCCR    FP phase1  2        T   FALSE          2    10        T 246.4541755          1</span></span></code></pre></div>
+<span><span class="co">#&gt;    model group  phase tp       tn is_test block_size trial stimulus time reward_mag</span></span>
+<span><span class="co">#&gt; 1  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     1        F  0.5          1</span></span>
+<span><span class="co">#&gt; 2  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     1        T  1.5          1</span></span>
+<span><span class="co">#&gt; 3  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     1       US  2.5          1</span></span>
+<span><span class="co">#&gt; 4  ANCCR    FP phase1  2        T   FALSE          2     2        T  4.0          1</span></span>
+<span><span class="co">#&gt; 5  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     3        F  5.5          1</span></span>
+<span><span class="co">#&gt; 6  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     3        T  6.5          1</span></span>
+<span><span class="co">#&gt; 7  ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     3       US  7.5          1</span></span>
+<span><span class="co">#&gt; 8  ANCCR    FP phase1  2        T   FALSE          2     4        T  9.0          1</span></span>
+<span><span class="co">#&gt; 9  ANCCR    FP phase1  2        T   FALSE          2     5        T 10.5          1</span></span>
+<span><span class="co">#&gt; 10 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     6        F 12.0          1</span></span>
+<span><span class="co">#&gt; 11 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     6        T 13.0          1</span></span>
+<span><span class="co">#&gt; 12 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     6       US 14.0          1</span></span>
+<span><span class="co">#&gt; 13 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     7        F 15.5          1</span></span>
+<span><span class="co">#&gt; 14 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     7        T 16.5          1</span></span>
+<span><span class="co">#&gt; 15 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     7       US 17.5          1</span></span>
+<span><span class="co">#&gt; 16 ANCCR    FP phase1  2        T   FALSE          2     8        T 19.0          1</span></span>
+<span><span class="co">#&gt; 17 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     9        F 20.5          1</span></span>
+<span><span class="co">#&gt; 18 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     9        T 21.5          1</span></span>
+<span><span class="co">#&gt; 19 ANCCR    FP phase1  1 F&gt;T&gt;(US)   FALSE          2     9       US 22.5          1</span></span>
+<span><span class="co">#&gt; 20 ANCCR    FP phase1  2        T   FALSE          2    10        T 24.0          1</span></span></code></pre></div>
 <p>As you can see above, there are several rows per trial, each
 specifying a different stimulus. Time-based models like ANCCR run over a
 time log because they make ample use of the time difference between
@@ -287,15 +259,15 @@ events.</p>
 <code class="sourceCode R"><span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_experiment.html">run_experiment</a></span><span class="op">(</span><span class="va">experiment</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Action values</span></span>
-<span><span class="fu"><a href="../reference/patch_plots.html">patch_plots</a></span><span class="op">(</span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">experiment</span>, type <span class="op">=</span> <span class="st">"qs"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/calmr_model_plot.html">patch_plots</a></span><span class="op">(</span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">experiment</span>, type <span class="op">=</span> <span class="st">"action_values"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="using_time_models_files/figure-html/unnamed-chunk-6-1.png" width="672"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ANCCR</span></span>
-<span><span class="fu"><a href="../reference/patch_plots.html">patch_plots</a></span><span class="op">(</span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">experiment</span>, type <span class="op">=</span> <span class="st">"anccrs"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/calmr_model_plot.html">patch_plots</a></span><span class="op">(</span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">experiment</span>, type <span class="op">=</span> <span class="st">"anccrs"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="using_time_models_files/figure-html/unnamed-chunk-6-2.png" width="672"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Dopamine transients</span></span>
-<span><span class="fu"><a href="../reference/patch_plots.html">patch_plots</a></span><span class="op">(</span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">experiment</span>, type <span class="op">=</span> <span class="st">"das"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/calmr_model_plot.html">patch_plots</a></span><span class="op">(</span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">experiment</span>, type <span class="op">=</span> <span class="st">"dopamines"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="using_time_models_files/figure-html/unnamed-chunk-6-3.png" width="672"></p>
 <p>And that’s it! Easy, right?</p>
 </div>
