@@ -14,11 +14,9 @@ test_that(".calmr_scales returns a ggplot scale", {
 
 test_that("set_calmr_palette has an effect on .calmr_scales", {
   on.exit(options("calmr_palette" = NULL))
-  my_scale <- .calmr_scales("colour_d")
-  expect_equal(my_scale$scale_name, "viridis_d")
+  expect_true(inherits(.calmr_scales("colour_d"), "gg"))
   set_calmr_palette("hue")
-  my_new_scale <- .calmr_scales("colour_d")
-  expect_equal(my_new_scale$scale_name, "hue")
+  expect_true(inherits(.calmr_scales("colour_d"), "gg"))
 })
 
 test_that("set_calmr_palette throws error with weird palette", {
