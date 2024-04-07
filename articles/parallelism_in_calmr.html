@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">calmr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -110,7 +110,7 @@ Navarro</h4>
 <p>With the advent of time-based models, version 0.51 of
 <code>calmr</code> uses the <code>future</code> package to parallelize
 some operations. Thanks to the design philosophy of <code>future</code>,
-running things in parallel takes a single line of code.</p>
+running things in parallel will take you a single line of code.</p>
 <div class="section level3">
 <h3 id="why-run-things-in-parallel">Why run things in parallel?<a class="anchor" aria-label="anchor" href="#why-run-things-in-parallel"></a>
 </h3>
@@ -146,7 +146,7 @@ package.</p>
 <span><span class="va">end</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html" class="external-link">proc.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">start</span></span>
 <span><span class="va">end</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   5.834   0.074   3.869</span></span></code></pre></div>
+<span><span class="co">#&gt;   5.328   0.096   3.482</span></span></code></pre></div>
 <p>Let’s try parallelizing now.</p>
 </div>
 <div class="section level3">
@@ -154,9 +154,9 @@ package.</p>
 </h3>
 <p>To run the same experiment, but in parallel, you need to enable a
 <code>future</code> plan. A “plan” is one of many ways the
-<code>future</code> package can parallelize things (you should consult
-their documentation). Regardless, if you are running <code>calmr</code>
-on a single computer, you’ll be using
+<code>future</code> package can parallelize things (you should really
+consult their documentation). Regardless, if you are running
+<code>calmr</code> on a single computer, you’ll be using
 <code>plan(multisession)</code></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org" class="external-link">future</a></span><span class="op">)</span></span>
@@ -167,15 +167,15 @@ on a single computer, you’ll be using
 <span><span class="va">end</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html" class="external-link">proc.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">start</span></span>
 <span><span class="va">end</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.918   0.106   6.351</span></span>
+<span><span class="co">#&gt;   0.734   0.145   3.854</span></span>
 <span></span>
 <span><span class="co"># go back to non-parallel evaluations</span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">sequential</span><span class="op">)</span></span></code></pre></div>
-<p>In this case, the parallel was faster (see <em>user</em> time above).
-The <code>future</code> package trades off ease of use for bulkier
-overheads.</p>
-<p>As those overheads tend to be constant, the parallelization will have
-a better payoff once you run more iterations.</p>
+<p>In this case, the parallel evaluation was faster (see <em>user</em>
+time above).</p>
+<p>The <code>future</code> package trades off ease of use for bulkier
+overheads, but as the overheads tend to be constant, the parallelization
+will have a better payoff once you run more and more iterations.</p>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0" line-spacing="2">
 <div id="ref-honey_heidi_2020" class="csl-entry">
 Honey, R. C., Dwyer, D. M., &amp; Iliescu, A. F. (2020).
