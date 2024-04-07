@@ -40,7 +40,9 @@ test_that("rsa method works with one model", {
 })
 
 test_that("rsa method stops with models outside x", {
-  expect_error(rsa(comp, comparisons = list("HDI2020" = c("operator_switches"))))
+  expect_error(rsa(comp,
+    comparisons = list("HDI2020" = c("operator_switches"))
+  ))
 })
 
 test_that("rsa method stops with bad model outputs", {

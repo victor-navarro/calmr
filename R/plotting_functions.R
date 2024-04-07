@@ -155,18 +155,29 @@ plot_targetted_complex_trials <- function(data, col) {
 #' @return A 'ggplot2' scale for colour or fill.
 #' @noRd
 .calmr_scales <- function(which, ...) {
-  switch(which,
-    "colour_d" = {
-      ggplot2::scale_colour_viridis_d(begin = .1, end = .9, ...)
-    },
-    "fill_d" = {
-      ggplot2::scale_fill_viridis_d(begin = .1, end = .9, ...)
-    },
-    "colour_c" = {
-      ggplot2::scale_colour_viridis_c(begin = .1, end = .9, ...) # nocov
-    },
-    "fill_c" = {
-      ggplot2::scale_fill_viridis_c(begin = .1, end = .9, ...)
-    }
-  )
+  current_scale <- getOption("calmr_palette", default = "viridis")
+  if (current_scale == "viridis") {
+    return(switch(which,
+      "colour_d" = ggplot2::scale_colour_viridis_d(
+        begin = .1, end = .9, ...
+      ),
+      "fill_d" = ggplot2::scale_fill_viridis_d(
+        begin = .1, end = .9, ...
+      ),
+      "colour_c" = ggplot2::scale_colour_viridis_c(
+        begin = .1, end = .9, ...
+      ),
+      "fill_c" = ggplot2::scale_fill_viridis_c(
+        begin = .1, end = .9, ...
+      )
+    ))
+  }
+  if (current_scale == "hue") {
+    return(switch(which,
+      "colour_d" = ggplot2::scale_colour_discrete(...),
+      "fill_d" = ggplot2::scale_fill_discrete(...),
+      "colour_c" = ggplot2::scale_colour_continuous(...), # nocov
+      "fill_c" = ggplot2::scale_fill_continuous(...)
+    ))
+  }
 }

@@ -56,7 +56,7 @@ Defaults to the last trial in data.}
 targetted trial data with a type.
 
 \code{plot_targetted_complex_trials()} plots
-targetted data with a third variable
+targetted data with a third variable.
 }
 \note{
 All data must be organised as

@@ -260,7 +260,7 @@ plots_map <- function() {
     "elegibilities" = "Elegibility Trace",
     "probabilities" = "Response Probability"
   )
-  ggplot2::labs(y = prettynames[output])
+  prettynames[output]
 }
 
 .get_scale_prettyname <- function(output) {

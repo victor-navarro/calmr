@@ -1,6 +1,6 @@
 Package: calmr
 Title: Canonical Associative Learning Models and their Representations
-Version: 0.6.2
+Version: 0.6.3
 Authors@R: 
     person("Victor", "Navarro", , "navarrov@cardiff.ac.uk", role = c("aut", "cre", "cph"))
 Description: Implementations of canonical associative learning models,
@@ -78,6 +78,7 @@ Collate:
     'calmr_verbosity.R'
     'parallel_helpers.R'
     'maps.R'
+    'set_calmr_palette.R'
     'class_model.R'
     'class_design.R'
     'class_result.R'

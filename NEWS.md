@@ -1,3 +1,6 @@
+# calmr 0.6.3
+* Added `set_calmr_palette()` function to control the colour/fill scales used to plot results ([#1](https://github.com/victor-navarro/calmr/issues/1)).
+
 # calmr 0.6.2
 * Aggregation of ANCCR data now ignores time; time entries are averaged.
 * Added the Temporal Difference model under the name "TD". The model is in an experimental state.
