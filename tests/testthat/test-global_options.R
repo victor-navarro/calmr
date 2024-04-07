@@ -8,6 +8,10 @@ test_that("set_calmr_palette actually sets global option", {
   expect_equal(getOption("calmr_palette"), "hue")
 })
 
+test_that(".calmr_scales returns a ggplot scale", {
+  expect_true(inherits(.calmr_scales("colour_d"), "gg"))
+})
+
 test_that("set_calmr_palette has an effect on .calmr_scales", {
   on.exit(options("calmr_palette" = NULL))
   expect_equal(.calmr_scales("colour_d")$scale_name, "viridis_d")
