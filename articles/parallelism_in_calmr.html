@@ -43,22 +43,26 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
+  <a class="nav-link" href="../articles/calmr.html">Get started</a>
+</li>
+<li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Model reference</h6>
+    <a class="dropdown-item" href="../articles/model_parameters.html">Model Parameters</a>
     <a class="dropdown-item" href="../articles/RW1972.html">RW1972</a>
     <a class="dropdown-item" href="../articles/MAC1975.html">MAC1975</a>
     <a class="dropdown-item" href="../articles/PKH1982.html">PKH1982</a>
     <a class="dropdown-item" href="../articles/SM2007.html">SM2007</a>
     <a class="dropdown-item" href="../articles/HD2022.html">HD2022</a>
     <a class="dropdown-item" href="../articles/ANCCR.html">ANCCR</a>
+    <a class="dropdown-item" href="../articles/TD.html">TD</a>
     <a class="dropdown-item" href="../articles/RAND.html">RAND</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Demos</h6>
-    <a class="dropdown-item" href="../articles/calmr_basics.html">calmr_basics</a>
     <a class="dropdown-item" href="../articles/calmr_app.html">calmr_app</a>
     <a class="dropdown-item" href="../articles/calmr_fits.html">calmr_fits</a>
     <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
@@ -146,7 +150,7 @@ package.</p>
 <span><span class="va">end</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html" class="external-link">proc.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">start</span></span>
 <span><span class="va">end</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   5.397   0.070   3.515</span></span></code></pre></div>
+<span><span class="co">#&gt;   5.408   0.074   3.510</span></span></code></pre></div>
 <p>Let’s try parallelizing now.</p>
 </div>
 <div class="section level3">
@@ -167,7 +171,7 @@ consult their documentation). Regardless, if you are running
 <span><span class="va">end</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html" class="external-link">proc.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">start</span></span>
 <span><span class="va">end</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   0.862   0.103   5.283</span></span>
+<span><span class="co">#&gt;   1.034   0.148  11.688</span></span>
 <span></span>
 <span><span class="co"># go back to non-parallel evaluations</span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">sequential</span><span class="op">)</span></span></code></pre></div>

@@ -28,10 +28,13 @@
     <loc>https://victornavarro.org/calmr/articles/SM2007.html</loc>
   </url>
   <url>
-    <loc>https://victornavarro.org/calmr/articles/calmr_app.html</loc>
+    <loc>https://victornavarro.org/calmr/articles/TD.html</loc>
   </url>
   <url>
-    <loc>https://victornavarro.org/calmr/articles/calmr_basics.html</loc>
+    <loc>https://victornavarro.org/calmr/articles/calmr.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calmr/articles/calmr_app.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/articles/calmr_fits.html</loc>
@@ -41,6 +44,9 @@
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://victornavarro.org/calmr/articles/model_parameters.html</loc>
   </url>
   <url>
     <loc>https://victornavarro.org/calmr/articles/parallelism_in_calmr.html</loc>
