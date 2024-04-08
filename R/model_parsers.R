@@ -226,9 +226,9 @@
 # type is the type of data
 .aggregate_results_data_table <- function(dat, model, type) {
   value <- time <- NULL # local binding
-  common_terms <- "group,phase,trial_type,trial,block_size,s1"
+  common_terms <- c("group","phase","trial_type","trial","block_size","s1")
   fmap <- formula_map()
-  form <- paste0(c(common_terms, fmap[[model]][[type]]), collapse = ",")
+  form <- c(common_terms, fmap[[model]][[type]])
   dat <- data.table::data.table(dat)
   if (!("time" %in% names(dat))) {
     data.table::setDT(dat)[, list("value" = mean(value)), by = form]
