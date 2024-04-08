@@ -14,10 +14,15 @@ test_that("get_model fails if model is not supported", {
 
 for (m in supported_mods) {
   test_that(paste("model", m, "works"), {
+    if (m %in% supported_timed_models()) {
+      tims <- get_timings(df, model = m)
+    } else {
+      tims <- NULL
+    }
     pars <- get_parameters(df, model = m)
     args <- make_experiment(df,
       parameters = pars,
-      timings = get_timings(df),
+      timings = tims,
       model = m
     )
     res <- run_experiment(args)

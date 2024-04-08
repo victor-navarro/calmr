@@ -6,7 +6,7 @@ df <- data.frame(
 )
 
 pars <- get_parameters(df, model = "ANCCR")
-tims <- get_timings(df)
+tims <- get_timings(df, model = "ANCCR")
 
 test_that("set_reward_parameters returns consistent values", {
   expect_equal(pars, set_reward_parameters(pars, names(pars$betas)))

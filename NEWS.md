@@ -1,5 +1,7 @@
 # calmr 0.6.3
 * Added `set_calmr_palette()` function to control the colour/fill scales used to plot results ([#1](https://github.com/victor-navarro/calmr/issues/1)).
+* Fixed bug in `make_experiment()` that was triggered by empty phases and no miniblocks.
+* Changed `get_timings()` to require a specific model name.
 
 # calmr 0.6.2
 * Aggregation of ANCCR data now ignores time; time entries are averaged.

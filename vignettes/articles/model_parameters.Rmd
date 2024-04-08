@@ -1,0 +1,121 @@
+---
+title: "Model Parameters"
+---
+
+```{r, include = FALSE, message = FALSE}
+library(calmr)
+```
+#### [RW1972](RW1972.html)
+
+```{r}
+model_parameters("RW1972")
+```
+
+| Name | Symbol | Description |
+|:----|:----:|:---|
+|alphas|$\alpha$|Learning rate for presented stimulus|
+|betas_on, betas_off|$\beta_{on},\beta_{off}$|Intensity of presented and absent target|
+|lambdas|$\lambda$|Maximum learning supported by target|
+
+#### [MAC1975](MAC1975.html)
+
+```{r}
+model_parameters("MAC1975")
+```
+
+| Name | Symbol | Description |
+|:----|:----:|:---|
+|alphas|$\alpha$|Starting associability (learning rate) for presented stimulus|
+|min_alphas, max_alphas|$\alpha_{min}, \alpha_{max}$|Minimum and maximum associability for stimulus|
+|betas_on, betas_off|$\beta_{on},\beta_{off}$|Intensity of presented and absent target|
+|lambdas|$\lambda$|Maximum learning supported by target|
+|thetas|$\theta$|Attentional learning rate parameter for stimulus|
+|gammas|$\gamma$|Attentional learning weight for stimulus|
+
+#### [PKH1982](PKH1982.html)
+
+```{r}
+model_parameters("PKH1982")
+```
+
+| Name | Symbol | Description |
+|:----|:----:|:---|
+|alphas|$\alpha$|Learning rate for presented stimulus|
+|min_alphas, max_alphas|$\alpha_{min}, \alpha_{max}$|Minimum and maximum associability for stimulus|
+|betas_in, betas_ex|$\beta_{in},\beta_{ex}$|Learning rates for inhibitory and excitatory associations|
+|lambdas|$\lambda$|Maximum learning supported by target|
+|thetas|$\theta$|Decay/strengthening associability rate parameter for stimulus|
+|gammas|$\gamma$|Attentional learning weight for stimulus|
+
+#### [SM2007](SM2007.html)
+```{r}
+model_parameters("SM2007")
+```
+
+| Name | Symbol | Description |
+|:----|:----:|:---|
+|alphas|$\alpha$|Learning rate for presented stimulus|
+|lambdas|$\lambda$|Maximum learning supported by target|
+|omegas|$\omega$|Weaking rate for presented stimulus|
+|rhos|$\rho$|Salience contribution for unconditioned activation of target|
+|gammas|$\gamma$|Contribution of stimulus to comparison process|
+|taus|$\tau$|Learning rate for operator switch|
+|order|$order$|Order for the comparison process|
+
+#### [HDI2020/HD2022](HD2022.html)
+```{r}
+model_parameters("HDI2020")
+model_parameters("HD2022")
+```
+
+| Name | Symbol | Description |
+|:----|:----:|:---|
+|alphas|$\alpha$|Learning rate for presented stimulus|
+
+#### [TD](TD.html)
+
+```{r}
+model_parameters("TD")
+```
+
+| Name | Symbol | Description |
+|:----|:----:|:---|
+|alphas|$\alpha$|Learning rate for presented stimulus|
+|betas_on, betas_off|$\beta_{on},\beta_{off}$|Intensity of presented and absent target|
+|lambdas|$\lambda$|Maximum learning supported by target|
+|gamma|$\gamma$|Temporal discount parameter|
+|sigma|$\sigma$|Rate of decay for elegibility traces|
+
+#### [ANCCR](ANCCR.html)
+
+```{r}
+model_parameters("ANCCR")
+```
+
+| Name | Symbol | Description |
+|:----|:----:|:---|
+|reward_magnitude|$CW_{j,j}$|Reward magnitude for target|
+|betas|$\beta$|Unconditional value for target|
+|cost|$cost$|Response cost|
+|temperature|$temperature$|Temperature for softmax function|
+|threshold|$\theta$|Threshold to become meaningful causal target/putative cause|
+|k,alpha,alpha_reward|$k,\alpha,\alpha_{reward}$|Learning rates for predecessor representation, predecessor representation contingency, and causal weights.
+|w|$w$|Weight for net contingency computation|
+|minimum_rate|$minimum\_rate$|Lower bound on perceivable event rates|
+|sampling_interval|$sampling\_interval$|Time interval to update base rate calculations|
+|use_exact_mean|$use\_exact\_mean$|Whether to use exact mean calculations for $\alpha$|
+|t_ratio|$t\_ratio$|Ratio to calculate time constant|
+|use_timed_alpha|$use\_timed\_alpha$|Whether to use exponential decay for $\alpha$|
+|alpha_exponent, alpha_init, alpha_min|$alpha\_exponent,alpha\_init, alpha\_min$|Parameters for exponential decay of $\alpha$|
+|add_beta|$add\_beta$|Whether to add $\beta$ to dopaminergic activity|
+|jitter|$jitter$|Magnitude of perceptual noise for simultaneous events|
+
+#### [RAND](RAND.html)
+
+```{r}
+model_parameters("RAND")
+```
+
+| Name | Symbol | Description |
+|:----|:----:|:---|
+|alphas|$\alpha$|Placeholder; no meaning.|

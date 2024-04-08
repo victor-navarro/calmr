@@ -7,7 +7,7 @@ rawdf <- data.frame(
 )
 df <- parse_design(rawdf)
 pars <- get_parameters(rawdf, model = "ANCCR")
-tims <- get_timings(rawdf)
+tims <- get_timings(rawdf, model = "ANCCR")
 
 test_that("augmenting ANCCR design creates more experience rows than trials", {
   exp <- experiences(make_experiment(df,

@@ -399,7 +399,7 @@ methods::setMethod(
 #' @aliases timings<-
 #' @export
 methods::setMethod("timings<-", "CalmrExperiment", function(x, value) {
-  .assert_timings(value, design(x))
+  .assert_timings(value, design(x), x@model)
   x@timings <- value
   x
 })

@@ -144,7 +144,7 @@ test_that("experiences<- throws error with weird list", {
 
 tim_exper <- make_experiment(df,
   parameters = get_parameters(df, model = "TD"),
-  timings = get_timings(df), model = "TD"
+  timings = get_timings(df, model = "TD"), model = "TD"
 )
 
 test_that("timings retrieves the timings", {

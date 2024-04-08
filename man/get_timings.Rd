@@ -4,10 +4,12 @@
 \alias{get_timings}
 \title{Get timing design parameters}
 \usage{
-get_timings(design)
+get_timings(design, model)
 }
 \arguments{
 \item{design}{A \code{data.frame} containing the experimental design.}
+
+\item{model}{One of \code{\link[=supported_timed_models]{supported_timed_models()}}.}
 }
 \value{
 A list of timing design parameters.
@@ -17,5 +19,5 @@ Get timing design parameters
 }
 \examples{
 block <- get_design("blocking")
-get_timings(block)
+get_timings(block, model = "TD")
 }

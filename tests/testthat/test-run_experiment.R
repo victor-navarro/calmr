@@ -27,7 +27,6 @@ test_that("run_experiment asserts correctly", {
 test_that("run_experiment runs with split args", {
   res <- run_experiment(df,
     parameters = get_parameters(df, model = "HD2022"),
-    timings = get_timings(df),
     model = "HD2022"
   )
   expect_named(
@@ -38,7 +37,6 @@ test_that("run_experiment runs with split args", {
 test_that("run_experiment runs with bundled args", {
   args <- make_experiment(df,
     parameters = get_parameters(df, model = "HD2022"),
-    timings = get_timings(df),
     model = "HD2022"
   )
   res <- run_experiment(args)

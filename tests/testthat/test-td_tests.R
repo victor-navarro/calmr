@@ -6,7 +6,7 @@ df <- data.frame(
 )
 
 pars <- get_parameters(df, model = "TD")
-tims <- get_timings(df)
+tims <- get_timings(df, model = "TD")
 
 test_that("can run without exponential", {
   noexp <- tims

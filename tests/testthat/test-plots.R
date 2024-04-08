@@ -8,11 +8,16 @@ models <- supported_models()
 
 # Test plots for every model
 for (m in models) {
+  if (m %in% supported_timed_models()) {
+    tims <- get_timings(df, model = m)
+  } else {
+    tims <- NULL
+  }
   ps <- supported_plots(m)
   res <- run_experiment(
     df,
     model = m,
-    timings = get_timings(df),
+    timings = tims,
     parameters = get_parameters(design = df, model = m)
   )
   test_that(sprintf("all plots for model %s", m), {

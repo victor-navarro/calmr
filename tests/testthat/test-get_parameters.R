@@ -1,6 +1,6 @@
 df <- data.frame(g = "g", p1 = "2A/2AB", r1 = TRUE)
 pars <- get_parameters(df, model = "ANCCR")
-tims <- get_timings(df)
+tims <- get_timings(df, model = "ANCCR")
 
 test_that("can build experiment without transitions", {
   exp <- make_experiment(df,

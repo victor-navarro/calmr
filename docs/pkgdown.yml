@@ -3,8 +3,9 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   ANCCR: ANCCR.html
+  model_parameters: model_parameters.html
+  calmr: calmr.html
   calmr_app: calmr_app.html
-  calmr_basics: calmr_basics.html
   calmr_fits: calmr_fits.html
   HD2022: HD2022.html
   heidi_similarity: heidi_similarity.html
@@ -14,8 +15,9 @@ articles:
   RAND: RAND.html
   RW1972: RW1972.html
   SM2007: SM2007.html
+  TD: TD.html
   using_time_models: using_time_models.html
-last_built: 2024-04-07T19:12Z
+last_built: 2024-04-08T12:21Z
 urls:
   reference: https://victornavarro.org/calmr/reference
   article: https://victornavarro.org/calmr/articles

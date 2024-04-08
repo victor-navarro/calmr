@@ -33,11 +33,16 @@ test_that("calmr_model_graph throws a warning if trial exceeds data", {
 # Test graphs for every model
 for (m in models) {
   test_that(sprintf("graphs for model %s", m), {
+    if (m %in% supported_timed_models()) {
+      tims <- get_timings(df, model = m)
+    } else {
+      tims <- NULL
+    }
     res <- run_experiment(
       df,
       model = m,
       parameters = get_parameters(design = df, model = m),
-      timings = get_timings(df)
+      timings = tims
     )
     g <- graph(res)
     expect_named(g)

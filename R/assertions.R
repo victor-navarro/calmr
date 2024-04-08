@@ -59,8 +59,8 @@ is_design <- function(object) {
   )
 }
 
-.assert_timings <- function(timings, design) {
-  def_timings <- get_timings(design)
+.assert_timings <- function(timings, design, model) {
+  def_timings <- get_timings(design, model)
   if (!is.null(timings)) {
     stopifnot(
       "Timing lists must be equally named" =

@@ -2,21 +2,26 @@ url: https://victornavarro.org/calmr/
 template:
   bootstrap: 5
 
+navbar:
+  structure:
+    left:  [intro, reference, articles, news]
+
 articles:
 - title: Model reference
   navbar: Model reference
   contents:
+  - articles/model_parameters
   - RW1972
   - MAC1975
   - PKH1982
   - SM2007
   - HD2022
   - ANCCR
+  - TD
   - RAND
 - title: Demos
   navbar: Demos
   contents:
-  - calmr_basics
   - calmr_app
   - calmr_fits
   - heidi_similarity

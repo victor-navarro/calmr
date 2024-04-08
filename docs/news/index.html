@@ -19,22 +19,26 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
+  <a class="nav-link" href="../articles/calmr.html">Get started</a>
+</li>
+<li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Model reference</h6>
+    <a class="dropdown-item" href="../articles/model_parameters.html">Model Parameters</a>
     <a class="dropdown-item" href="../articles/RW1972.html">RW1972</a>
     <a class="dropdown-item" href="../articles/MAC1975.html">MAC1975</a>
     <a class="dropdown-item" href="../articles/PKH1982.html">PKH1982</a>
     <a class="dropdown-item" href="../articles/SM2007.html">SM2007</a>
     <a class="dropdown-item" href="../articles/HD2022.html">HD2022</a>
     <a class="dropdown-item" href="../articles/ANCCR.html">ANCCR</a>
+    <a class="dropdown-item" href="../articles/TD.html">TD</a>
     <a class="dropdown-item" href="../articles/RAND.html">RAND</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Demos</h6>
-    <a class="dropdown-item" href="../articles/calmr_basics.html">calmr_basics</a>
     <a class="dropdown-item" href="../articles/calmr_app.html">calmr_app</a>
     <a class="dropdown-item" href="../articles/calmr_fits.html">calmr_fits</a>
     <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
@@ -68,6 +72,8 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.3" id="calmr-063">calmr 0.6.3<a class="anchor" aria-label="anchor" href="#calmr-063"></a></h2>
 <ul><li>Added <code><a href="../reference/set_calmr_palette.html">set_calmr_palette()</a></code> function to control the colour/fill scales used to plot results (<a href="https://github.com/victor-navarro/calmr/issues/1" class="external-link">#1</a>).</li>
+<li>Fixed bug in <code><a href="../reference/make_experiment.html">make_experiment()</a></code> that was triggered by empty phases and no miniblocks.</li>
+<li>Changed <code><a href="../reference/get_timings.html">get_timings()</a></code> to require a specific model name.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.2" id="calmr-062">calmr 0.6.2<a class="anchor" aria-label="anchor" href="#calmr-062"></a></h2>

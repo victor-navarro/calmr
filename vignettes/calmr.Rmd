@@ -1,9 +1,8 @@
 ---
-title: "calmr_basics"
-author: "Victor Navarro"
+title: "Getting started with calmr"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{calmr_basics}
+  %\VignetteIndexEntry{Getting started with calmr}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,8 +17,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Your first simulation
-
 To perform your first simulation you will need:
 
 1. A `data.frame` specifying the experiment design, and
@@ -29,9 +26,8 @@ To perform your first simulation you will need:
 
 Let's specify a blocking design.
 
-```{r}
+```{r, message = TRUE}
 library(calmr)
-
 my_blocking <- data.frame(
   Group = c("Exp", "Control"),
   Phase1 = c("10A(US)", "10C(US)"),
@@ -82,8 +78,8 @@ the model learns on normal training trials.
 
 If you want to check whether your phase string will work with the package, 
 you can use `phase_parser()`.
-The function returns a list with a lot of information, 
-so let's print only some of the fields.
+Warning: The function returns a list with a lot of information used by the models in the package, 
+but the rule of thumb is that if you see a ton of text, your phase string is working.
 
 ```{r, error = TRUE}
 # not specifying the number of AB trials. Error!
@@ -110,7 +106,8 @@ To get the models currently supported in `calmr`, you can call `supported_models
 supported_models()
 ```
 
-After choosing a model, you can get default parameters for your design with `get_parameters()`.
+After choosing a model, you can get some default parameters 
+for your design with `get_parameters()`.
 
 ```{r}
 my_pars <- get_parameters(my_blocking, model = "RW1972")
@@ -119,27 +116,33 @@ my_pars$betas_on["US"] <- .6
 my_pars
 ```
 
+For a reference on how each model is parametrized, check out the model's reference page. For example, the reference page for the "RW1972" model is [here](RW1972.html).
+
+Or, if that many equations tire your eyes, you can consult the [model parameter reference](model_parameters.html).
 
 ### Simulating
 
 With all of the above, we can run our simulation using the `run_experiment()` function.
-This function also takes extra arguments to manipulate the number of iterations to run the experiment for, 
-and whether to organize trials in miniblocks (see the help page for `make_experiment()` for additional details).
-Below, we run the experiment for 5 iterations.
+This function also takes extra arguments to manipulate the number of iterations 
+to run the experiment for (important for designs with randomized trials), 
+whether to organize trials in miniblocks,
+and extra configuration for more complex models 
+(see the help page for `make_experiment()` for additional details).
+
+Below, we keep it simple and run the experiment for a single iteration.
 
 ```{r}
 my_experiment <- run_experiment(
   my_blocking, # note we do not need to pass the parsed design
   model = "RW1972",
-  parameters = my_pars,
-  iterations = 5
+  parameters = my_pars
 )
 # returns a `CalmrExperiment` object
 class(my_experiment)
 # CalmrExperiment is an S4 class, so it has slots
 slotNames(my_experiment)
-# the experience given to group Exp on the first iteration
-my_experiment@experiences[[1]]
+# some of the experience given to group Exp on the first (and only) iteration
+head(my_experiment@experiences[[1]])
 # the number of times we ran the model (groups x iterations)
 length(experiences(my_experiment))
 # an experiment has results with different levels of aggregation
@@ -176,7 +179,8 @@ In this case, the RW model supports both associations (associations) and respons
 The columns in the plots below are the phases of the design and the rows denote 
 the source of the association.
 
-The colors within each panel determine the target of the association.
+The colors within each panel determine the target of the association. 
+For example, associations towards the US are shown in yellow.
 
 ```{r}
 plot(my_experiment, type = "associations")
@@ -193,9 +197,11 @@ plot(my_experiment, type = "responses")
 ## Graphing
 
 You can also take a look at the state of the model's associations at any 
-point during training, using the `graph` method in your experiment.
+point during the experiment, using the `graph` method. The graphs are created using
+the `ggnetwork` package.
 
 ```{r}
+# some general options for ggnetwork
 my_graph_opts <- get_graph_opts("small")
 # passing the argument t to specify the trial we're interested in.
 # end of acquisition
@@ -206,8 +212,11 @@ patch_graphs(graph(my_experiment, t = 20, options = my_graph_opts))
 
 ## Final thoughts
 
-The `calmr` package was designed to simulate quickly: specify a design, parameters, 
-and get a glance at model predictions. 
-However, the package also has additional features for more advanced R users. If you're one of them, make sure to check
-the other vignettes when you are ready.
+The design philosophy behind `calmr` package revolves around simplicity and ease of access.
+
+The user only needs to specify a design as well as a model to generate model predictions. In fact,
+there is also [an app](calmr_app.html) that lets users access the basic package functionality using a GUI.
+
+That said, the package has plenty of features for more advanced R users. 
+If you're one of them, make sure to check the other vignettes when you are ready.
 

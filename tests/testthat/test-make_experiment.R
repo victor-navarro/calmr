@@ -31,6 +31,27 @@ test_that("trials are generated in blocks", {
   #
 })
 
+test_that("no miniblocks", {
+  expect_no_error(
+    make_experiment(parsed_df,
+      parameters = parameters,
+      model = "HD2022",
+      miniblocks = FALSE
+    )
+  )
+})
+
+test_that("no miniblocks problematic design", {
+  des <- get_design("blocking")
+  expect_no_error(
+    make_experiment(des,
+      parameters = get_parameters(des, model = "HD2022"),
+      model = "HD2022",
+      miniblocks = FALSE
+    )
+  )
+})
+
 # More tests
 df <- data.frame(
   Group = c("A", "B"),
@@ -66,7 +87,7 @@ pars <- get_parameters(df, model = "ANCCR")
 
 test_that("can make an experiment with empty phases", {
   exp <- make_experiment(df,
-    parameters = pars, timings = get_timings(df),
+    parameters = pars, timings = get_timings(df, "ANCCR"),
     model = "ANCCR"
   )
   expect_true(!("p1" %in% experiences(exp)[[2]]$phase))

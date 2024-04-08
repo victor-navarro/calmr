@@ -54,7 +54,7 @@ make_experiment <- function(
   # assert timing parameters
   if (model %in% supported_timed_models()) {
     timings <- .assert_timings(timings,
-      design = design
+      design = design, model
     )
   }
 
@@ -79,6 +79,7 @@ make_experiment <- function(
     pb("Building experiment")
     exper
   }, simplify = FALSE, future.seed = TRUE)
+
   # unnest once
   allexps <- unlist(allexps, recursive = FALSE)
   # hack timings
@@ -125,6 +126,7 @@ make_experiment <- function(
   # finally, convert lists to data.frames and bind across phases per group
   gs <- unlist(lapply(des, "[[", "group"))
   ugs <- unique(gs)
+
   lapply(ugs, function(g) {
     d <- do.call(rbind, lapply(samples[which(gs == g)], as.data.frame))
     d$trial <- seq_len(nrow(d))
@@ -145,11 +147,11 @@ make_experiment <- function(
     tps <- c() # note the redefining
     tstps <- c()
     for (b in 1:gcd) {
-      ts <- unlist(sapply(
+      ts <- unlist(lapply(
         seq_along(trial_names),
         function(n) rep(which(masterlist %in% trial_names[n]), per_block[n])
       ))
-      tsts <- unlist(sapply(
+      tsts <- unlist(lapply(
         seq_along(trial_names),
         function(n) rep(is_test[n], per_block[n])
       ))
@@ -163,11 +165,11 @@ make_experiment <- function(
       tstps <- c(tstps, tsts)
     }
   } else {
-    tps <- unlist(sapply(
+    tps <- unlist(lapply(
       seq_along(trial_names),
       function(n) rep(which(masterlist %in% trial_names[n]), trial_repeats[n])
     ))
-    tstps <- unlist(sapply(
+    tstps <- unlist(lapply(
       seq_along(trial_names),
       function(n) rep(is_test[n], trial_repeats[n])
     ))
@@ -178,7 +180,6 @@ make_experiment <- function(
       tstps <- tstps[ri]
     }
   }
-
   return(list(
     tp = tps,
     tn = masterlist[tps],
