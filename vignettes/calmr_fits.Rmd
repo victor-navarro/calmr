@@ -66,7 +66,7 @@ so we know what to aim for.
 ```{r}
 pati_summ <- setDT(pati)[,
   list("rpert" = mean(rpert)),
-  by = "block,us,response"
+  by = c("block","us","response")
 ]
 # set order (relevant for the future)
 setorder(pati_summ, block, response, us)
@@ -163,7 +163,7 @@ my_model_function <- function(pars, exper, full = FALSE) {
     (response == "np" | (response == "lp" &
       mapply(grepl, s1, trial_type)))]
   # aggregate
-  responses <- responses[, list(value = mean(value)), by = "block,s2,response"]
+  responses <- responses[, list(value = mean(value)), by = c("block","s2","response")]
   if (full) {
     return(responses)
   }
