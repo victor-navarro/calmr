@@ -8,10 +8,6 @@
 #' as returned by `make_experiment`
 #' @param mapping A named list specifying trial and stimulus mapping,
 #' as returned by `make_experiment`
-#' @param debug_t Whether to invoke a `browser` at
-#' the end of a trial equal to debug_t.
-#' @param debug_ti Whether to invoke a `browser` at
-#' the end of a timestep within a trial equal to debug_ti.
 #' @param ... Additional named arguments
 #' @return A list with raw results
 #' @note This model is in a highly experimental state. Use with caution.
@@ -19,10 +15,13 @@
 
 TD <- function(
     parameters, timings, experience,
-    mapping, debug_t = -1,
-    debug_ti = -1, ...) {
+    mapping, ...) {
   total_trials <- length(unique(experience$trial))
   fsnames <- mapping$unique_functional_stimuli
+
+  # join betas
+  betas <- cbind(parameters$betas_off, parameters$betas_on)
+  colnames(betas) <- c("off", "on")
 
   # get maximum trial duration
   max_tsteps <- max(experience$b_to)
@@ -33,7 +32,7 @@ TD <- function(
     dimnames = list(fsnames, (1:(max_tsteps)) * timings$time_resolution)
   )
 
-  # array for elegibilities
+  # array for eligibilities
   es <- array(0,
     dim = c(total_trials, length(fsnames), max_tsteps),
     dimnames = list(
@@ -41,14 +40,7 @@ TD <- function(
       fsnames, (1:(max_tsteps)) * timings$time_resolution
     )
   )
-  # array for associations (weights)
-  ws <- array(0,
-    dim = c(total_trials, length(fsnames), length(fsnames), max_tsteps),
-    dimnames = list(
-      NULL, fsnames, fsnames,
-      (1:(max_tsteps)) * timings$time_resolution
-    )
-  )
+  ws <- es <- vector("list", length = total_trials)
 
   # array for values
   vs <- array(0,
@@ -59,10 +51,38 @@ TD <- function(
     )
   )
 
-  # now the smaller arrays that will get modified over trials
-  w <- dd <- ws[1, , , ] # associations and their deltas
-  v <- d <- vs[1, , ] # values and pooled deltas
-  e <- es[1, , ]
+  # calculate stimulus durations
+  s_steps <- sapply(fsnames, function(stim) {
+    if (stim %in% experience$stimulus) {
+      with(
+        experience[experience$stimulus == stim, ],
+        max(b_to) - min(b_from) + 1
+      )
+    }
+  }, simplify = FALSE)
+
+
+  # now the smaller arrays that will get modified over trials (csc-based)
+  w <- e <- list()
+  for (stim in fsnames) {
+    if (is.null(s_steps[[stim]])) {
+      # backup in case stim not in experience
+      s_steps[[stim]] <- max(unlist(s_steps))
+    }
+    w[[stim]] <- array(0,
+      dim = c(length(fsnames), s_steps[[stim]]),
+      dimnames = list(
+        fsnames,
+        seq_len(s_steps[[stim]]) * timings$time_resolution
+      )
+    )
+    e[[stim]] <- array(0,
+      dim = c(s_steps[[stim]]),
+      dimnames = list(seq_len(s_steps[[stim]]) * timings$time_resolution)
+    )
+  }
+
+  v <- d <- vs[1, , ] # values and pooled deltas (time-based)
 
   for (tn in seq_len(total_trials)) {
     # get trial data
@@ -70,11 +90,20 @@ TD <- function(
     # get trial onehot matrix of active components
     omat <- .onehot_mat(base_onehot, tdat$stimulus, tdat$b_from, tdat$b_to)
     # save association matrix
-    ws[tn, , , ] <- w
+    ws[[tn]] <- w
 
     for (ti in seq_len(max_tsteps)) {
       # calculate value expectations for this timestep
-      v[, ti] <- t(w[, , ti]) %*% omat[, ti]
+      # build weight matrix
+      present <- fsnames[which(omat[, ti] > 0)]
+      if (length(present)) {
+        tw <- sapply(present, function(stim) {
+          w[[stim]][, sum(omat[stim, 1:ti])]
+        })
+        v[, ti] <- tw %*% omat[present, ti, drop = FALSE]
+      } else {
+        v[, ti][] <- 0
+      }
       if (!any(tdat$is_test)) {
         if (ti == 1) {
           # special treatment of traces and deltas for the first timestep
@@ -85,41 +114,76 @@ TD <- function(
                 experience[experience$trial == (tn - 1), ],
                 max(rtime)
               )) / timings$time_resolution
-            e <- e * (parameters$sigma *
-              parameters$gamma)^decay_steps
+            for (stim in fsnames) {
+              e[[stim]] <- e[[stim]] *
+                (parameters$sigma * parameters$gamma)^decay_steps
+            }
           }
           # delta only depends on current prediction
-          d[, ti] <- (omat[, ti] * parameters$lambdas) +
-            (parameters$gamma * v[, ti])
+          d[, ti] <- (parameters$gamma * v[, ti])
         } else {
           # delta depends on current and previous prediction
-          d[, ti] <- (omat[, ti] * parameters$lambdas) +
-            (parameters$gamma * v[, ti]) -
+          d[, ti] <- (parameters$gamma * v[, ti]) -
             v[, ti - 1]
-          # decay elegibilities by 1 timestep
-          e <- e * parameters$sigma *
-            parameters$gamma
         }
-        # compute update
-        rates <- parameters$alphas * e
-        dd[] <- sapply(seq_len(max_tsteps), function(i) {
-          x <- rates[, i] %*% t(d[, ti, drop = FALSE])
+        # add events to error term
+        d[, ti] <- d[, ti] + (omat[, ti] * parameters$lambdas)
+
+        # rates of learning
+        rates <- sapply(fsnames, function(stim) {
+          e[[stim]] * parameters$alphas[stim]
+        }, simplify = FALSE)
+        # compute updates
+        # trial betas
+        tbetas <- sapply(fsnames, function(i) betas[i, omat[i, ti] + 1])
+        dd <- sapply(fsnames, function(stim) {
+          dhold <- (d[, ti, drop = FALSE] * tbetas) %*% rates[[stim]]
           # zero-out self-associations
-          diag(x) <- 0
-          x
-        })
-        # apply update
-        w <- w + dd
-        # add maximal trace of what just happened
-        e[, ti] <- omat[, ti]
-        #
-        if (ti == debug_ti) browser() # nocov
+          dhold[stim, ][] <- 0
+          dhold
+        }, simplify = FALSE)
+
+        # apply updates and elegibility traces
+        for (stim in fsnames) {
+          w[[stim]][] <- w[[stim]] + dd[[stim]]
+          # decay eligibilities by 1 timestep
+          e[[stim]] <- e[[stim]] * parameters$sigma * parameters$gamma
+          # Add event to
+          e[[stim]][sum(omat[stim, 1:ti])][] <-
+            e[[stim]][sum(omat[stim, 1:ti])][] +
+            omat[, ti][stim]
+        }
       }
     }
-    vs[tn, , ] <- v
-    es[tn, , ] <- e
 
-    if (tn == debug_t) browser() # nocov
+    # Update the last step separately with a "ghost" step
+    # delta only depends on the last prediction
+    gd <- -v[, ti, drop = FALSE]
+    # decay elegibilities
+    for (stim in fsnames) {
+      e[[stim]] <- e[[stim]] * parameters$sigma * parameters$gamma
+    }
+
+    # rates of learning
+    rates <- sapply(fsnames, function(stim) {
+      e[[stim]] * parameters$alphas[stim]
+    }, simplify = FALSE)
+    # compute updates
+    # trial betas
+    tbetas[] <- betas[, 1] # all off
+    dd <- sapply(fsnames, function(stim) {
+      dhold <- (gd * tbetas) %*% rates[[stim]]
+      # zero-out self-associations
+      dhold[stim, ][] <- 0
+      dhold
+    }, simplify = FALSE)
+
+    # apply updates
+    for (stim in fsnames) {
+      w[[stim]][] <- w[[stim]] + dd[[stim]]
+    }
+    vs[tn, , ] <- v
+    es[[tn]] <- e
   }
-  list(associations = ws, values = vs, elegibilities = es)
+  list(associations = ws, values = vs, eligibilities = es)
 }

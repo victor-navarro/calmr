@@ -33,8 +33,8 @@ formula_map <- function() {
       "associations" = "s2,type"
     ),
     "ANCCR" = list(
-      "ij_elegibilities" = "",
-      "i_elegibilities" = "",
+      "ij_eligibilities" = "",
+      "i_eligibilities" = "",
       "i_base_rate" = "",
       "ij_base_rate" = "s2",
       "representation_contingencies" = "s2,type",
@@ -47,7 +47,7 @@ formula_map <- function() {
     ),
     "TD" = list(
       "associations" = "s2,t_bin",
-      "elegibilities" = "t_bin",
+      "eligibilities" = "t_bin",
       "values" = "t_bin"
     ),
     "RAND" = list(
@@ -61,13 +61,13 @@ parse_map <- function() {
   list(
     "HDI2020" = list(
       "activations" = .parse_2d,
-      "pools" = .parse_ragged,
+      "pools" = .parse_typed_ragged,
       "responses" = .parse_nd,
       "associations" = .parse_nd
     ),
     "HD2022" = list(
       "activations" = .parse_2d,
-      "pools" = .parse_ragged,
+      "pools" = .parse_typed_ragged,
       "responses" = .parse_nd,
       "associations" = .parse_nd
     ),
@@ -92,8 +92,8 @@ parse_map <- function() {
       "associations" = .parse_typed
     ),
     "ANCCR" = list(
-      "ij_elegibilities" = .parse_2d,
-      "i_elegibilities" = .parse_2d,
+      "ij_eligibilities" = .parse_2d,
+      "i_eligibilities" = .parse_2d,
       "i_base_rate" = .parse_2d,
       "ij_base_rate" = .parse_nd,
       "representation_contingencies" = .parse_typed,
@@ -106,8 +106,8 @@ parse_map <- function() {
     ),
     "TD" = list(
       "values" = .parse_nd,
-      "elegibilities" = .parse_nd,
-      "associations" = .parse_nd
+      "eligibilities" = .parse_nested_ragged,
+      "associations" = .parse_nested_ragged
     ),
     "RAND" = list(
       "responses" = .parse_nd,
@@ -151,8 +151,8 @@ dnames_map <- function() {
       "associations" = c("s1", "s2")
     ),
     "ANCCR" = list(
-      "ij_elegibilities" = c("s1"),
-      "i_elegibilities" = c("s1"),
+      "ij_eligibilities" = c("s1"),
+      "i_eligibilities" = c("s1"),
       "i_base_rate" = c("s1"),
       "ij_base_rate" = c("s1", "s2"),
       "representation_contingencies" = c("s1", "s2"),
@@ -164,8 +164,8 @@ dnames_map <- function() {
       "probabilities" = c("s1", "s2")
     ),
     "TD" = list(
-      "associations" = c("s1", "s2", "t_bin"),
-      "elegibilities" = c("s1", "t_bin"),
+      "associations" = c("s1", "s2", "t_bin", "value"),
+      "eligibilities" = c("s1", "t_bin", "value"),
       "values" = c("s1", "t_bin")
     ),
     "RAND" = list(
@@ -212,8 +212,8 @@ plots_map <- function() {
       "associations" = plot_targetted_typed_trials
     ),
     "ANCCR" = list(
-      "ij_elegibilities" = plot_trials,
-      "i_elegibilities" = plot_trials,
+      "ij_eligibilities" = plot_trials,
+      "i_eligibilities" = plot_trials,
       "i_base_rate" = plot_trials,
       "ij_base_rate" = plot_targetted_trials,
       "representation_contingencies" = plot_targetted_typed_trials,
@@ -225,9 +225,16 @@ plots_map <- function() {
       "probabilities" = plot_targetted_trials
     ),
     "TD" = list(
-      "associations" = plot_targetted_tbins,
+      "associations" = function(data, ...) {
+        p <- plot_targetted_tbins(data, ...)
+        # change x-label label
+        t <- max(p$data$trial)
+        p + ggplot2::labs(
+          x = sprintf("Onset-relative Time Bin (Trial: %s)", t)
+        )
+      },
       "values" = plot_tbins,
-      "elegibilities" = plot_tbins
+      "eligibilities" = plot_tbins
     ),
     "RAND" = list(
       "responses" = plot_targetted_trials,
@@ -245,8 +252,8 @@ plots_map <- function() {
     "operator_switches" = "Switch Value",
     "activations" = "Activation Strength",
     "relative_activations" = "Relative Activation Strength",
-    "ij_elegibilities" = "Event-contingent Eleg. Trace",
-    "i_elegibilities" = "Eleg. Trace",
+    "ij_eligibilities" = "Event-contingent Eleg. Trace",
+    "i_eligibilities" = "Eleg. Trace",
     "i_base_rate" = "Baseline Predecessor Representation",
     "ij_base_rate" = "Predecessor Representation",
     "net_contingencies" = "Net Contingency Strength",
@@ -257,7 +264,7 @@ plots_map <- function() {
     "action_values" = "Action Value",
     "action_probabilities" = "Action Probabilities",
     "values" = "Expected Value",
-    "elegibilities" = "Elegibility Trace",
+    "eligibilities" = "Eligibility Trace",
     "probabilities" = "Response Probability"
   )
   prettynames[output]
@@ -270,12 +277,12 @@ plots_map <- function() {
     "associations" = "Target",
     "associabilities" = "Stimulus",
     "values" = "Target",
-    "elegibilities" = "Stimulus",
+    "eligibilities" = "Stimulus",
     "activations" = "Target",
     "pools" = "Target",
     "relative_activations" = "Target",
-    "ij_elegibilities" = "Stimulus",
-    "i_elegibilities" = "Stimulus",
+    "ij_eligibilities" = "Stimulus",
+    "i_eligibilities" = "Stimulus",
     "i_base_rate" = "Stimulus",
     "ij_base_rate" = "Target",
     "net_contingencies" = "Target",
@@ -286,7 +293,7 @@ plots_map <- function() {
     "action_values" = "Target",
     "action_probabilities" = "Target",
     "values" = "Target",
-    "elegibilities" = "Stimulus",
+    "eligibilities" = "Stimulus",
     "probabilities" = "Target"
   )
   prettynames[output]

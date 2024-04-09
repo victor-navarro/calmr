@@ -19,3 +19,26 @@ test_that("can run without exponential", {
     )
   )
 })
+
+# A specific test with nested trials
+df <- data.frame(
+  group = "G",
+  p1 = "10A>AB>(US)",
+  r1 = TRUE
+)
+
+test_that("can run with nested trials", {
+  tims <- get_timings(df, "TD")
+  tims$period_ts$stimulus_duration[c(1:3)][] <- 6
+  tims$transition_ts$transition_delay[] <- 0
+  pars <- get_parameters(df, model = "TD")
+  pars$alphas[] <- .3
+
+  expect_no_error(run_experiment(df,
+    model = "TD",
+    timings = tims,
+    parameters = pars,
+    parse = TRUE,
+    aggregate = TRUE
+  ))
+})

@@ -12,4 +12,76 @@ vignette: >
 
 # The mathematics behind TD
 
-WIP
+The temporal difference (TD) model [@suttonTimederivativeModelsPavlovian1990] is 
+an extension of the ideas underlying the RW model [@rescorla_theory_1972]. Most notably
+the TD model abandons the construct of a "trial", favoring instead time-based formulations.
+Also notable is the introduction of eligibility traces, which allow the model 
+to bridge temporal gaps and deal with the credit assigment problem.
+
+*Implementation note: As of `calmr` version `0.6.2`, stimulus representation in TD 
+is based on complete serial compounds (i.e., time-specific stimulus elements entirely 
+discriminable from each other), and the eligibility traces are of the replacing type.*
+
+*General Note: There are several descriptions of the TD model out there, however, all of the ones I found were opaque when it comes to implementation. Hence, the following description of the model has a focus on implementational details.*
+
+# 1 - Maintaining stimulus representations
+
+TD maintains stimulus traces as eligibility traces. The elegibility of stimulus $i$ at time $t$, $e_i^t$, is given by:
+
+$$
+\tag{Eq. 1}
+e_i^t = e_i^{t-1} \sigma \gamma + x_i^t
+$$
+
+where $\sigma$ and $\gamma$ are decay and discount parameters, respectively, and $x_i^t$ is the activation of stimulus $i$ at time $t$ (1 or 0 for present and absent stimuli, respectively).
+
+Internally, $e_i$ is represented as a vector of length $d$, where $d$ is the number of stimulus compounds (not in the general sense of the word compound, but in terms of complete serial compounds, or CSC). For example, a 2s stimulus in a model with a time resolution of 0.5s will have a $d = 4$, and the second entry in that vector represents the eligibility of the compound active after the stimulus has been present for 1s.
+
+Similarly, $x_i^t$ entails the specific compound of stimulus $i$ at time $t$, and not the general activation of $i$ at that time. For example, suppose two, 2s stimuli, $A$ and $B$ are presented with an overlap of 1s, with $A$'s onset occurring first. Can you guess what stimulus compounds will be active at $t = 2$ with a time resolution of 0.5s?^[A's fourth compound and B's second compound.]
+
+
+# 2 - Generating expectations
+
+The TD model generates stimulus expectations[^1] based on the presented stimuli, **not on the strength of eligibility traces**. The expectation of of stimulus $j$ at time $t$, $V_j^t$, is given by:
+
+$$
+\tag{Eq. 2}
+V_j^t = w_j^{t'} x^t = \sum_i^K w_{i,j}^t x_i^t
+$$
+
+Where $w_j^t$ is a matrix of stimulus weights at time $t$ pointing towards $j$, $'$ denotes transposition, and $w_{i,j}$ denotes an entry in a square matrix denoting the association from $i$ to $j$. As with the eligibility traces above, the entries in each matrix are the weights of specific stimulus compounds.
+
+Internally, the $w_j^t$ is constructed on a trial-by-trial, step-by-step basis, depending on the stimulus compounds active at the time.
+
+# 3 - Learning associations
+
+Owing to its name, the TD model updates associations based on a temporally discounted prediction of upcoming stimuli. This temporal difference error term is given by:
+
+$$
+\tag{Eq. 3}
+\delta_j^t = \lambda_j^t +  \gamma V_j^t - V_j^{t-1}
+$$
+
+where $\lambda_j$ is the value of stimulus $j$ at time $t$, which also determines the assymptote for stimulus weights towards $j$. 
+
+The temporal difference error term is used to update $w$ via:
+
+$$
+\tag{Eq. 4}
+w_{i,j}^t = w_{i,j}^t + \alpha_i \beta(x_j^t) \delta_j^t e_i^t
+$$
+
+where $\alpha_i$ is a learning rate parameter for stimulus $i$, and $\beta(x_j)$ is a function that returns one of two learning rate parameters ($\beta_{on}$ or $\beta_{off}$) depending on whether $j$ is being presented or not at time $t$.
+
+# 4 - Generating responses
+
+As with many associative learning models, the transformation between stimulus expectations and responding is unspecified/left in the hands of the user. The TD model does not return a response vector, but it suffices to assume that responding is the identity function on the expected stimulus values, as follows:
+
+$$
+\tag{Eq. 5}
+r_j^t = V_j^t
+$$
+
+## References
+
+[^1]: This can be understood as the expected value if the expected stimulus has some reward value.

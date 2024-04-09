@@ -84,7 +84,7 @@ model_parameters("TD")
 |betas_on, betas_off|$\beta_{on},\beta_{off}$|Intensity of presented and absent target|
 |lambdas|$\lambda$|Maximum learning supported by target|
 |gamma|$\gamma$|Temporal discount parameter|
-|sigma|$\sigma$|Rate of decay for elegibility traces|
+|sigma|$\sigma$|Rate of decay for eligibility traces|
 
 #### [ANCCR](ANCCR.html)
 

@@ -17,6 +17,24 @@
   }, simplify = FALSE)
 }
 
+# unnests a list containing named lists of ragged arrays
+.unnest_nested_raw_list <- function(raw) {
+  data.table::rbindlist(lapply(seq_along(raw), function(tr) {
+    stims <- names(raw[[tr]])
+    do.call(rbind, lapply(stims, function(entry) {
+      holder <- data.table::data.table(
+        tie = tr,
+        V0 = entry,
+        as.table(raw[[tr]][[entry]])
+      )
+      # hack to shift names because V1 is not the trial
+      names(holder) <- c("tie", paste0("V", 2:(2 + ncol(holder) - 2)))
+      holder
+    }))
+  }))
+}
+
+# ^look above for a perhaps slower, but much simpler implementation
 .unnest_raw_list <- function(raw) {
   dims <- lapply(raw, dim)
   udims <- unique(dims)
@@ -59,7 +77,8 @@
   full_dat
 }
 
-.parse_ragged <- function(raw, type, experience, model) {
+
+.parse_typed_ragged <- function(raw, type, experience, model) {
   # local bindings
   tie <- NULL
   # generic data
@@ -71,6 +90,19 @@
       hold[, "type" := r]
     }, simplify = FALSE)
   )
+  full_dat <- gen_dat[raw2d, on = list(tie)]
+  # post process
+  full_dat <- .post_process_data_table(full_dat, model, type)
+  full_dat
+}
+
+.parse_nested_ragged <- function(raw, type, experience, model) {
+  # local bindings
+  tie <- NULL
+  # generic data
+  gen_dat <- .get_gen_dat(experience, model)
+  # join with general data
+  raw2d <- .unnest_nested_raw_list(raw)
   full_dat <- gen_dat[raw2d, on = list(tie)]
   # post process
   full_dat <- .post_process_data_table(full_dat, model, type)
@@ -169,8 +201,6 @@
   )]
   raw2d
 }
-
-
 
 .parse_raw_data_table <- function(raw, type, experience, model) {
   # this function just redirects raw data to its parser

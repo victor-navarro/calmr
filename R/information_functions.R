@@ -194,12 +194,12 @@ model_outputs <- function(model = NULL) {
     "ANCCR" = c(
       "action_values", "anccrs",
       "causal_weights", "dopamines",
-      "ij_elegibilities", "i_elegibilities",
+      "ij_eligibilities", "i_eligibilities",
       "i_base_rate", "ij_base_rate",
       "net_contingencies", "probabilities",
       "representation_contingencies"
     ),
-    "TD" = c("values", "associations", "elegibilities"),
+    "TD" = c("values", "associations", "eligibilities"),
     "RAND" = c("associations", "responses")
   )
   if (is.null(model)) {

@@ -113,19 +113,19 @@ ANCCR <- function(
             experience[timestep, "time"] -
               experience[timestep - 1, "time"]
           )
-        # Update elegibility trace
+        # Update eligibility trace
         e_ij[, timestep] <- e_ij[, timestep - 1] *
           gammas[timestep]^(
             experience[timestep, "time"] -
               experience[timestep - 1, "time"]
           )
-        # Set elegibility trace and anccrs
+        # Set eligibility trace and anccrs
         m_ij[, , timestep] <- m_ij[, , timestep - 1]
         anccrs[absents, , timestep] <- anccrs[absents, , timestep - 1]
       }
       # Delta reset
       delta[event, timestep] <- 1
-      # Increment elegibility trace for the event that occurred by + 1
+      # Increment eligibility trace for the event that occurred by + 1
       e_ij[event, timestep] <- e_ij[event, timestep] + 1
       # Update predecessor representation
       m_ij[, event, timestep] <- m_ij[, event, timestep] + alphat *
@@ -234,7 +234,7 @@ ANCCR <- function(
         }
       }
     }
-    # Update sample elegibility trace
+    # Update sample eligibility trace
     if (timestep < nt) {
       # Time to sample baseline b/t events
       # VN: The function below is about 100 times faster than the original
@@ -260,14 +260,14 @@ ANCCR <- function(
         }
         nextt <- timestep + 1
       }
-      # Update alpha of sample elegibility trace
+      # Update alpha of sample eligibility trace
       alphat <- .anccr_get_alpha(
         denom = numsampling + 1,
         parameters = parameters,
         timestep = timestep
       )
 
-      # Update average sample elegibility trace
+      # Update average sample eligibility trace
       # Name: Baseline predecessor representation
       m_i[, timestep + 1] <- m_i[, timestep] + parameters$k * alphat *
         (e_i[, timestep + 1] - m_i[, timestep])
@@ -315,7 +315,7 @@ ANCCR <- function(
   threes <- threes[c("m_ij", "ncs", "anccrs", "cws", "das", "qs", "ps")]
 
   names(twos) <- c(
-    "ij_elegibilities", "i_elegibilities",
+    "ij_eligibilities", "i_eligibilities",
     "i_base_rate"
   )
   names(threes) <- c(

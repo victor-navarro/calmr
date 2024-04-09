@@ -53,7 +53,9 @@
           duration = with(
             timings$period_ts,
             stimulus_duration[
-              trial == trial_name & stimulus %in% period_funcs[[p]]
+              trial == trial_name &
+                stimulus %in% period_funcs[[p]] &
+                period == names(period_funcs)[p]
             ]
           ),
           row.names = NULL
@@ -87,6 +89,20 @@
         post_trial_delay[trial == trial_name]
       )
   }
+  # calculate ITIs
+  # starts of every trial
+  starts <- with(eventlog, tapply(rtime, trial, min))
+  # end of every trial
+  ends <- with(eventlog, tapply(rtime + duration, trial, max))
+  # calculate all but one ITI
+  itis <- starts[-1] - ends[-length(ends)]
+  # get last trial type
+  itis <- c(itis, sum(timings$trial_ts[
+    timings$trial_ts$trial == tail(eventlog, 1)$tn,
+    c("post_trial_delay", "mean_ITI")
+  ]))
+  eventlog$iti <- itis[eventlog$trial]
+
   # calculate bins
   eventlog$b_from <- unlist(with(eventlog, lapply(unique(trial), function(tr) {
     rts <- rtime[trial == tr]
