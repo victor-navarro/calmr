@@ -111,8 +111,133 @@ Navarro</h4>
 <div class="section level2">
 <h2 id="the-mathematics-behind-td">The mathematics behind TD<a class="anchor" aria-label="anchor" href="#the-mathematics-behind-td"></a>
 </h2>
-<p>WIP</p>
+<p>The temporal difference (TD) model <span class="citation">(Sutton
+&amp; Barto, 1990)</span> is an extension of the ideas underlying the RW
+model <span class="citation">(Rescorla &amp; Wagner, 1972)</span>. Most
+notably the TD model abandons the construct of a “trial”, favoring
+instead time-based formulations. Also notable is the introduction of
+eligibility traces, which allow the model to bridge temporal gaps and
+deal with the credit assigment problem.</p>
+<p><em>Implementation note: As of <code>calmr</code> version
+<code>0.6.2</code>, stimulus representation in TD is based on complete
+serial compounds (i.e., time-specific stimulus elements entirely
+discriminable from each other), and the eligibility traces are of the
+replacing type.</em></p>
+<p><em>General Note: There are several descriptions of the TD model out
+there, however, all of the ones I found were opaque when it comes to
+implementation. Hence, the following description of the model has a
+focus on implementational details.</em></p>
 </div>
+<div class="section level2">
+<h2 id="maintaining-stimulus-representations">1 - Maintaining stimulus representations<a class="anchor" aria-label="anchor" href="#maintaining-stimulus-representations"></a>
+</h2>
+<p>TD maintains stimulus traces as eligibility traces. The elegibility
+of stimulus <span class="math inline">\(i\)</span> at time <span class="math inline">\(t\)</span>, <span class="math inline">\(e_i^t\)</span>, is given by:</p>
+<p><span class="math display">\[
+\tag{Eq. 1}
+e_i^t = e_i^{t-1} \sigma \gamma + x_i^t
+\]</span></p>
+<p>where <span class="math inline">\(\sigma\)</span> and <span class="math inline">\(\gamma\)</span> are decay and discount parameters,
+respectively, and <span class="math inline">\(x_i^t\)</span> is the
+activation of stimulus <span class="math inline">\(i\)</span> at time
+<span class="math inline">\(t\)</span> (1 or 0 for present and absent
+stimuli, respectively).</p>
+<p>Internally, <span class="math inline">\(e_i\)</span> is represented
+as a vector of length <span class="math inline">\(d\)</span>, where
+<span class="math inline">\(d\)</span> is the number of stimulus
+compounds (not in the general sense of the word compound, but in terms
+of complete serial compounds, or CSC). For example, a 2s stimulus in a
+model with a time resolution of 0.5s will have a <span class="math inline">\(d = 4\)</span>, and the second entry in that
+vector represents the eligibility of the compound active after the
+stimulus has been present for 1s.</p>
+<p>Similarly, <span class="math inline">\(x_i^t\)</span> entails the
+specific compound of stimulus <span class="math inline">\(i\)</span> at
+time <span class="math inline">\(t\)</span>, and not the general
+activation of <span class="math inline">\(i\)</span> at that time. For
+example, suppose two, 2s stimuli, <span class="math inline">\(A\)</span>
+and <span class="math inline">\(B\)</span> are presented with an overlap
+of 1s, with <span class="math inline">\(A\)</span>’s onset occurring
+first. Can you guess what stimulus compounds will be active at <span class="math inline">\(t = 2\)</span> with a time resolution of 0.5s?<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;A’s fourth compound and B’s second compound.&lt;/p&gt;"><sup>1</sup></a></p>
+</div>
+<div class="section level2">
+<h2 id="generating-expectations">2 - Generating expectations<a class="anchor" aria-label="anchor" href="#generating-expectations"></a>
+</h2>
+<p>The TD model generates stimulus expectations<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;This can be understood as the expected value if the
+expected stimulus has some reward value.&lt;/p&gt;"><sup>2</sup></a> based on the presented
+stimuli, <strong>not on the strength of eligibility traces</strong>. The
+expectation of of stimulus <span class="math inline">\(j\)</span> at
+time <span class="math inline">\(t\)</span>, <span class="math inline">\(V_j^t\)</span>, is given by:</p>
+<p><span class="math display">\[
+\tag{Eq. 2}
+V_j^t = w_j^{t'} x^t = \sum_i^K w_{i,j}^t x_i^t
+\]</span></p>
+<p>Where <span class="math inline">\(w_j^t\)</span> is a matrix of
+stimulus weights at time <span class="math inline">\(t\)</span> pointing
+towards <span class="math inline">\(j\)</span>, <span class="math inline">\('\)</span> denotes transposition, and <span class="math inline">\(w_{i,j}\)</span> denotes an entry in a square
+matrix denoting the association from <span class="math inline">\(i\)</span> to <span class="math inline">\(j\)</span>. As with the eligibility traces above,
+the entries in each matrix are the weights of specific stimulus
+compounds.</p>
+<p>Internally, the <span class="math inline">\(w_j^t\)</span> is
+constructed on a trial-by-trial, step-by-step basis, depending on the
+stimulus compounds active at the time.</p>
+</div>
+<div class="section level2">
+<h2 id="learning-associations">3 - Learning associations<a class="anchor" aria-label="anchor" href="#learning-associations"></a>
+</h2>
+<p>Owing to its name, the TD model updates associations based on a
+temporally discounted prediction of upcoming stimuli. This temporal
+difference error term is given by:</p>
+<p><span class="math display">\[
+\tag{Eq. 3}
+\delta_j^t = \lambda_j^t +  \gamma V_j^t - V_j^{t-1}
+\]</span></p>
+<p>where <span class="math inline">\(\lambda_j\)</span> is the value of
+stimulus <span class="math inline">\(j\)</span> at time <span class="math inline">\(t\)</span>, which also determines the assymptote
+for stimulus weights towards <span class="math inline">\(j\)</span>.</p>
+<p>The temporal difference error term is used to update <span class="math inline">\(w\)</span> via:</p>
+<p><span class="math display">\[
+\tag{Eq. 4}
+w_{i,j}^t = w_{i,j}^t + \alpha_i \beta(x_j^t) \delta_j^t e_i^t
+\]</span></p>
+<p>where <span class="math inline">\(\alpha_i\)</span> is a learning
+rate parameter for stimulus <span class="math inline">\(i\)</span>, and
+<span class="math inline">\(\beta(x_j)\)</span> is a function that
+returns one of two learning rate parameters (<span class="math inline">\(\beta_{on}\)</span> or <span class="math inline">\(\beta_{off}\)</span>) depending on whether <span class="math inline">\(j\)</span> is being presented or not at time <span class="math inline">\(t\)</span>.</p>
+</div>
+<div class="section level2">
+<h2 id="generating-responses">4 - Generating responses<a class="anchor" aria-label="anchor" href="#generating-responses"></a>
+</h2>
+<p>As with many associative learning models, the transformation between
+stimulus expectations and responding is unspecified/left in the hands of
+the user. The TD model does not return a response vector, but it
+suffices to assume that responding is the identity function on the
+expected stimulus values, as follows:</p>
+<p><span class="math display">\[
+\tag{Eq. 5}
+r_j^t = V_j^t
+\]</span></p>
+<div class="section level3">
+<h3 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0" line-spacing="2">
+<div id="ref-rescorla_theory_1972" class="csl-entry">
+Rescorla, R. A., &amp; Wagner, A. R. (1972). A theory of
+<span>Pavlovian</span> conditioning: <span>Variations</span> in the
+effectiveness of reinforcement and nonreinforcement. In A. H. Black
+&amp; W. F. Prokasy (Eds.), <em>Classical conditioning <span>II</span>:
+<span>Current</span> research and theory.</em> (pp. 64–69).
+Appleton-Century-Crofts.
+</div>
+<div id="ref-suttonTimederivativeModelsPavlovian1990" class="csl-entry">
+Sutton, R. S., &amp; Barto, A. G. (1990). Time-derivative models of
+<span>Pavlovian</span> reinforcement. In M. Gabriel &amp; J. W. Moore
+(Eds.), <em>Learning and computational neuroscience</em> (pp. 497–537).
+MIT Press.
+</div>
+</div>
+</div>
+</div>
+
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
 </div>
