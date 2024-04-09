@@ -31,7 +31,7 @@ calmr_model_graph <- function(
   # aggregate data
   x <- data.table::setDT(x)[trial == t,
     list("value" = mean(value)),
-    by = c("s1","s2")
+    by = c("s1", "s2")
   ]
   net <- ggnetwork::ggnetwork(network::as.network(x, loops = loops),
     layout = "circle",

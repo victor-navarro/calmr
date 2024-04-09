@@ -2,14 +2,14 @@ formula_map <- function() {
   list(
     "HDI2020" = list(
       "associations" = "s2",
-      "activations" = "",
-      "pools" = "s2,type",
+      "activations" = c(),
+      "pools" = c("s2", "type"),
       "responses" = "s2"
     ),
     "HD2022" = list(
       "associations" = "s2",
-      "activations" = "",
-      "pools" = "s2,type",
+      "activations" = c(),
+      "pools" = c("s2", "type"),
       "responses" = "s2"
     ),
     "RW1972" = list(
@@ -19,25 +19,25 @@ formula_map <- function() {
     "MAC1975" = list(
       "responses" = "s2",
       "associations" = "s2",
-      "associabilities" = ""
+      "associabilities" = c()
     ),
     "SM2007" = list(
       "activations" = "s2",
       "relative_activations" = "s2",
       "associations" = "s2",
-      "operator_switches" = "s2,comparison"
+      "operator_switches" = c("s2", "comparison")
     ),
     "PKH1982" = list(
       "responses" = "s2",
-      "associabilities" = "",
-      "associations" = "s2,type"
+      "associabilities" = c(),
+      "associations" = c("s2", "type")
     ),
     "ANCCR" = list(
-      "ij_eligibilities" = "",
-      "i_eligibilities" = "",
-      "i_base_rate" = "",
+      "ij_eligibilities" = c(),
+      "i_eligibilities" = c(),
+      "i_base_rate" = c(),
       "ij_base_rate" = "s2",
-      "representation_contingencies" = "s2,type",
+      "representation_contingencies" = c("s2", "type"),
       "net_contingencies" = "s2",
       "anccrs" = "s2",
       "causal_weights" = "s2",
@@ -46,7 +46,7 @@ formula_map <- function() {
       "probabilities" = "s2"
     ),
     "TD" = list(
-      "associations" = "s2,t_bin",
+      "associations" = c("s2", "t_bin"),
       "eligibilities" = "t_bin",
       "values" = "t_bin"
     ),
