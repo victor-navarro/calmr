@@ -21,16 +21,16 @@ NULL
 #' @export
 supported_models <- function() {
   c(
-    "HDI2020", "HD2022", "RW1972", "MAC1975",
-    "PKH1982", "SM2007", "RAND", "ANCCR",
-    "TD"
+    "RW1972", "MAC1975",
+    "PKH1982", "SM2007", "HDI2020", "HD2022",
+    "NDH2023", "RAND", "ANCCR", "TD"
   )
 }
 #' @rdname model_information
 #' @return `supported_timed_models()` returns a character vector.
 #' @export
 supported_timed_models <- function() {
-  c("ANCCR", "TD")
+  c("ANCCR", "TD", "NDH2023")
 }
 
 #' @rdname model_information
@@ -83,6 +83,10 @@ model_parameters <- function(model = NULL) {
     "HD2022" = list(
       name = c("alphas"),
       default_value = c(0.4)
+    ),
+    "NDH2023" = list(
+      name = c("max_alphas", "decay_on", "decay_off", "min_alpha"),
+      default_value = c(0.4, 0.6, 0.2, 0.1)
     ),
     "RW1972" = list(
       name = c("alphas", "betas_on", "betas_off", "lambdas"),
@@ -171,7 +175,8 @@ model_parameters <- function(model = NULL) {
       "alpha_exponent", "alpha_init", "alpha_min",
       "add_beta", "jitter"
     ),
-    "TD" = c("gamma", "sigma")
+    "TD" = c("gamma", "sigma"),
+    "NDH2023" = c("min_alpha")
   )
   parameter %in% global_pars[[model]]
 }
@@ -184,6 +189,7 @@ model_outputs <- function(model = NULL) {
   output_info <- list(
     "HDI2020" = c("activations", "associations", "pools", "responses"),
     "HD2022" = c("activations", "associations", "pools", "responses"),
+    "NDH2023" = c("activations", "associations", "pools", "responses"),
     "RW1972" = c("associations", "responses"),
     "MAC1975" = c("associabilities", "associations", "responses"),
     "SM2007" = c(
@@ -215,6 +221,7 @@ model_outputs <- function(model = NULL) {
   assoc_map <- c(
     "HDI2020" = "associations",
     "HD2022" = "associations",
+    "NDH2023" = "associations",
     "RW1972" = "associations",
     "MAC1975" = "associations",
     "SM2007" = "associations",

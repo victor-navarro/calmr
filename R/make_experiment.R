@@ -202,6 +202,11 @@ make_experiment <- function(
       exper, design, parameters, timings, ...
     )
   }
+  if (model == "NDH2023") {
+    exper <- .tdrize_experience(
+      exper, design, parameters, timings, ...
+    )
+  }
   exper
 }
 

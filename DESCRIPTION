@@ -42,7 +42,7 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Collate: 
     'HD2022.R'
     'HDI2020.R'
@@ -52,6 +52,7 @@ Collate:
     'ANCCR.R'
     'RW1972.R'
     'SM2007.R'
+    'NDH2023.R'
     'TD.R'
     'rsa_functions.R'
     'compare_models.R'

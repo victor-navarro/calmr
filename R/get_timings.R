@@ -114,6 +114,12 @@ get_timings <- function(design, model) {
       "transitions" = c("transition_delay"),
       "periods" = c("stimulus_duration"),
       "trials" = c("post_trial_delay", "mean_ITI", "max_ITI")
+    ),
+    "NDH2023" = list(
+      "global" = c("use_exponential", "time_resolution"),
+      "transitions" = c("transition_delay"),
+      "periods" = c("stimulus_duration"),
+      "trials" = c("post_trial_delay", "mean_ITI", "max_ITI")
     )
   )
   if (is.null(mode)) {
