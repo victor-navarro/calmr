@@ -86,6 +86,12 @@ Defaults to NULL. See \link{supported_plots}.}
 
 \item{...}{Extra arguments passed to \code{\link[=calmr_model_graph]{calmr_model_graph()}}
 and \code{\link[=calmr_model_plot]{calmr_model_plot()}}.}
+
+\item{trial_types}{A character vector with trial types to filter.}
+
+\item{phases}{A character vector with phase names to filter.}
+
+\item{stimuli}{A character vector with stimulus names to filter.}
 }
 \value{
 \code{show()} returns NULL (invisibly).

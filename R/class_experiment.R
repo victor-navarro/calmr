@@ -407,9 +407,12 @@ methods::setMethod("timings<-", "CalmrExperiment", function(x, value) {
 #' @noRd
 setGeneric(
   "filter",
-  function(x, trial_types = NULL, phase = NULL, stimuli = NULL, ...) methods::standardGeneric("filter") # nolint: line_length_linter.
+  function(x, ...) methods::standardGeneric("filter") # nolint: line_length_linter.
 ) # nocov
 #' @rdname CalmrExperiment-methods
+#' @param trial_types A character vector with trial types to filter.
+#' @param phases A character vector with phase names to filter.
+#' @param stimuli A character vector with stimulus names to filter.
 #' @return `filter()` returns the object after filtering
 #' parsed aggregated results
 #' @aliases filter
@@ -424,7 +427,6 @@ methods::setMethod("filter", "CalmrExperiment", function(
       "Use `aggregate` on your experiment first."
     ))
   }
-  browser()
   res <- results(x)
   # filter phases
   if (!is.null(phases)) {
