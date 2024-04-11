@@ -39,31 +39,42 @@ NDH2023 <- function(parameters, # nolint: object_name_linter.
 
   # preallocate a prediction matrix (s, s, t)
   pw <- array(0,
-    dim = c(nstims, nstims, max_tsteps),
-    dimnames = list(fsnames, fsnames, step_labs)
+    dim = c(nstims, nstims),
+    dimnames = list(fsnames, fsnames)
   )
-  es <- drop(pw[1, , ])
+  es <- drop(pw[1, ])
 
   # Calculate all possible alphas based on trial types
-  all_alphas <- .get_possible_alphas(experience, base_onehot, parameters)
+  alphas_n <- .get_possible_alphas(experience, base_onehot, parameters)
+  alphas_str <- lapply(alphas_n, function(vals) sprintf("%1.3f", vals))
+
+  # Calculate similarities
+  alpha_sims <- lapply(
+    alphas_n,
+    function(a) sapply(a, .alphaSim, j = a)
+  )
+
 
   # Initialize the "smaller" w
   w <- list()
   for (stim in fsnames) {
     w[[stim]] <- stats::setNames(rep(list(array(0,
-      dim = c(nstims, max_tsteps),
-      dimnames = list(fsnames, step_labs)
-    )), max_tsteps), step_labs)
+      dim = nstims,
+      dimnames = list(fsnames)
+    )), length(alphas_str[[stim]])), alphas_str[[stim]])
   }
   dummyw <- w[[1]][[1]]
 
   for (tn in seq_len(total_trials)) {
     # get trial data
     tdat <- experience[experience$trial == tn, ]
+    is_test <- unique(tdat$is_test)
     # get trial onehot matrix of active components
     omat <- .onehot_mat(base_onehot, tdat$stimulus, tdat$b_from, tdat$b_to)
     # get alphas for the trial
     traces <- .get_traces(omat, parameters)
+    # get trace pointers
+    tracesi <- .find_traces(fsnames, traces, alphas_n)
     # calculate maximum trial steps
     tsteps <- max(tdat$b_to)
     # save association matrix
@@ -72,41 +83,120 @@ NDH2023 <- function(parameters, # nolint: object_name_linter.
     # reset stim component counter
     scomps[] <- 0
     for (ti in seq_len(tsteps)) {
-      print(omat)
-      # only do something if there is something going on
-      if (any(omat[, ti] > 0)) {
-        browser()
+      # only learn if there is something going on
+      # and we're not on a test
+      if (any(omat[, ti] > 0) && !is_test) {
         # increase component count
         scomps <- scomps + omat[, ti]
         # get prediction matrix
         # very slow
         pw[] <- 0
         for (stim in fsnames) {
-          if (scomps[stim] > 0) {
-            pw[stim, , ] <- w[[stim]][[scomps[stim]]]
+          if (omat[stim, ti]) {
+            pw[stim, ] <- w[[stim]][[tracesi[[stim, ti]]]]
           } else {
-            pw[stim, , ] <- dummyw
+            pw[stim, ] <- dummyw
           }
         }
         # get predictions
-        es[] <- apply(pw, 3, function(wi) t(wi) %*% omat[, ti])
+        es[] <- t(pw) %*% omat[, ti]
 
         # compute errors
-        ds <- traces[, ti] * eye[scomps + 1, ] - es
+        ds <- traces[, ti] - es
 
         # apply errors
         for (stim in fsnames) {
           if (scomps[stim] > 0) {
-            nw <- w[[stim]][[as.character(traces[stim, ti])]] +
-              traces[stim, ti] * ds
-            nw[stim, ][] <- 0
-            w[[stim]][[scomps[stim]]] <- nw
+            d <- traces[stim, ti] * ds
+            d[stim] <- 0
+            w[[stim]][[tracesi[[stim, ti]]]] <-
+              w[[stim]][[tracesi[[stim, ti]]]] +
+              d
           }
         }
       }
+
+      # Now the "fun" part
+      # calculate sim-based expectation (forward)
+      browser()
+      se <- sapply(fsnames, function(stim) {
+        sapply(seq_len(tsteps), function(ti) {
+          if (length(tracesi[[stim, ti]])) {
+            sims <- alpha_sims[[stim]][tracesi[[stim, ti]], ]
+            colSums(t(simplify2array(w[[stim]])) * sims)
+          } else {
+            dummyw
+          }
+        })
+      }, simplify = FALSE)
+
+      # calculate sim-based combv
+      scombv <- lapply(seq_len(tsteps), function(ti) {
+        absents <- fsnames[!omat[, ti]]
+        presents <- fsnames[omat[, ti]]
+        .get_scombv(absents, presents, w, se, ti)
+      })
+
+      # calculate sim-based chainv
+      schainv <- lapply(seq_len(tsteps), function(ti) {
+        absents <- fsnames[!omat[, ti]]
+        presents <- fsnames[omat[, ti]]
+
+        res <- array(0,
+          dim = c(length(absents), length(presents)),
+          dimnames = list(paste0(presents, collapse = ","), absents)
+        )
+        if (length(absents) && length(presents)) {
+          forwards <- do.call(
+            rbind,
+            sapply(presents, function(pr) {
+              se[[pr]][absents, ti]
+            }, simplify = FALSE)
+          )
+          inters <-
+            res[] <- sapply(absents, function(ab) {
+              forwards[ab] * (1 + backwards[[ab]])
+            })
+        }
+        res
+
+        .get_schainv(absents, presents, w, se, ti)
+      })
     }
   }
+
+
+
+  for (tn in seq_len(total_trials)) {
+
+  }
+
   return(list(associations = ws))
+}
+
+.get_scombv <- function(absents, presents, w, fw, i) {
+  res <- array(0,
+    dim = c(length(absents), length(presents)),
+    dimnames = list(paste0(presents, collapse = ","), absents)
+  )
+  if (length(absents) && length(presents)) {
+    # calculate pooled backwards
+    # the backward is just a sum of all component associations; likely will have
+    # to change it to be specific to a specific component
+    backwards <- sapply(absents, function(ab) {
+      colSums(do.call(rbind, (lapply(w[[ab]], "[", presents))))
+    }, simplify = FALSE)
+    forwards <- colSums(do.call(
+      rbind,
+      lapply(presents, function(pr) {
+        fw[[pr]][absents, i]
+      })
+    ))
+    res[] <- sapply(absents, function(ab) {
+      forwards[ab] * (1 + backwards[[ab]])
+    })
+  }
+  res
 }
 
 #' Get stimulus traces
@@ -157,5 +247,14 @@ NDH2023 <- function(parameters, # nolint: object_name_linter.
     )
   }))
   uni_alphas <- apply(all_alphas, 1, unique, simplify = FALSE)
-  lapply(uni_alphas, function(x) x[x > 0])
+  lapply(uni_alphas, function(x) sort(x[x > 0]))
+}
+
+.find_traces <- function(stims, traces, alphas) {
+  t(sapply(stims, function(stim) {
+    sapply(
+      traces[stim, ],
+      function(a) which(a == alphas[[stim]])
+    )
+  }))
 }
