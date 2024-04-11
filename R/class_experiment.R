@@ -403,3 +403,58 @@ methods::setMethod("timings<-", "CalmrExperiment", function(x, value) {
   x@timings <- value
   x
 })
+
+#' @noRd
+setGeneric(
+  "filter",
+  function(x, trial_types = NULL, phase = NULL, stimuli = NULL, ...) methods::standardGeneric("filter") # nolint: line_length_linter.
+) # nocov
+#' @rdname CalmrExperiment-methods
+#' @return `filter()` returns the object after filtering
+#' parsed aggregated results
+#' @aliases filter
+#' @export
+methods::setMethod("filter", "CalmrExperiment", function(
+    x,
+    trial_types = NULL,
+    phases = NULL, stimuli = NULL) {
+  if (is.null(x@results@aggregated_results)) {
+    stop(c(
+      "Experiment must have aggregated results. ",
+      "Use `aggregate` on your experiment first."
+    ))
+  }
+  browser()
+  res <- results(x)
+  # filter phases
+  if (!is.null(phases)) {
+    res <- lapply(
+      res,
+      function(r) r[r$phase %in% phases, ]
+    )
+  }
+  if (!is.null(trial_types)) {
+    res <- lapply(
+      res,
+      function(r) r[r$trial_type %in% trial_types, ]
+    )
+  }
+  if (!is.null(stimuli)) {
+    res <- lapply(
+      res,
+      function(r) r[r$s1 %in% stimuli, ]
+    )
+    res <- lapply(
+      res,
+      function(r) {
+        if ("s2" %in% names(r)) {
+          r[r$s2 %in% stimuli, ]
+        } else {
+          r
+        }
+      }
+    )
+  }
+  x@results@aggregated_results <- res
+  x
+})
