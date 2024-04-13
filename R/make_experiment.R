@@ -11,6 +11,8 @@
 #' @param iterations An integer specifying the number of iterations per group.
 #' Default = 1.
 #' @param miniblocks Whether to organize trials in miniblocks. Default = TRUE.
+#' @param seed A valid seed for the RNG to make the experiment.
+#' Default = NULL, in which case the current RNG is used.
 #' @param .callback_fn A function for keeping track of progress. Internal use.
 #' @param ... Extra parameters passed to other functions.
 #' @return A [CalmrExperiment-class] object.
@@ -22,7 +24,7 @@
 #' with one A trial, and 2 B trials. However, the phase string "2A/1B" will
 #' not result in miniblocks, even if miniblocks here is set to TRUE.
 #' @examples
-#' des <- data.frame(Group = "G1", P1 = "10A>(US)", R1 = TRUE)
+#' des <- data.frame(Group = "G1", P1 = "10A>(US)")
 #' ps <- get_parameters(des, model = "HD2022")
 #' make_experiment(
 #'   design = des, parameters = ps,
@@ -37,6 +39,7 @@ make_experiment <- function(
     timings = NULL,
     iterations = 1,
     miniblocks = TRUE,
+    seed = NULL,
     .callback_fn = NULL,
     ...) {
   # assert design is parsed
@@ -62,23 +65,25 @@ make_experiment <- function(
   pb <- progressr::progressor(iterations)
   .parallel_standby(pb) # print parallel backend message
   pb(amount = 0, message = "Building experiment")
-  allexps <- future.apply::future_sapply(seq_len(iterations), function(x) {
-    if (!is.null(.callback_fn)) .callback_fn() # nocov
-    exper <- .build_experiment(
-      design = design,
-      model = model,
-      iterations = iterations,
-      miniblocks = miniblocks,
-      ...
-    )
-    # augment experience if necessary
-    exper <- .augment_experience(exper,
-      model = model, design = design,
-      parameters = parameters, timings = timings, ...
-    )
-    pb("Building experiment")
-    exper
-  }, simplify = FALSE, future.seed = TRUE)
+  allexps <- .with_seed(seed, {
+    future.apply::future_sapply(seq_len(iterations), function(x) {
+      if (!is.null(.callback_fn)) .callback_fn() # nocov
+      exper <- .build_experiment(
+        design = design,
+        model = model,
+        iterations = iterations,
+        miniblocks = miniblocks,
+        ...
+      )
+      # augment experience if necessary
+      exper <- .augment_experience(exper,
+        model = model, design = design,
+        parameters = parameters, timings = timings, ...
+      )
+      pb("Building experiment")
+      exper
+    }, simplify = FALSE, future.seed = TRUE)
+  })
 
   # unnest once
   allexps <- unlist(allexps, recursive = FALSE)
@@ -99,7 +104,8 @@ make_experiment <- function(
     results = methods::new("CalmrExperimentResult"),
     .model = rep(model, length(allexps)),
     .group = rep(group_names, iterations),
-    .iter = rep(seq_len(iterations), each = length(group_names))
+    .iter = rep(seq_len(iterations), each = length(group_names)),
+    .seed = seed
   )
 }
 
@@ -208,4 +214,17 @@ make_experiment <- function(
 .gcd <- function(x, y) {
   r <- x %% y
   return(ifelse(r, .gcd(y, r), y))
+}
+
+# a function to evaluate an expression with a specific seed
+.with_seed <- function(seed, expr) {
+  if (!is.null(seed)) {
+    expr <- substitute(expr)
+    oseed <- .Random.seed # get the state of the RNG
+    on.exit(.Random.seed <<- oseed)
+    set.seed(seed)
+    eval.parent(expr)
+  } else {
+    eval.parent(expr)
+  }
 }

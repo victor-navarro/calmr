@@ -80,11 +80,37 @@ df <- data.frame(
   p2 = c("10NL>(US)", "10NL>(US)/10#L")
 )
 pars <- get_parameters(df, model = "ANCCR")
+tims <- timings <- get_timings(df, "ANCCR")
 
 test_that("can make an experiment with empty phases", {
   exp <- make_experiment(df,
-    parameters = pars, timings = get_timings(df, "ANCCR"),
+    parameters = pars, timings = tims,
     model = "ANCCR"
   )
   expect_true(!("p1" %in% experiences(exp)[[2]]$phase))
+})
+
+test_that("seeding works", {
+  nonseeded <- make_experiment(df,
+    parameters = pars, timings = tims,
+    model = "ANCCR"
+  )
+  seed1 <- make_experiment(df,
+    parameters = pars, timings = tims,
+    model = "ANCCR", seed = 123
+  )
+  # to test the state of the RNG is OK after
+  # running a seeded generation
+  rand1 <- rnorm(100)
+  seed2 <- make_experiment(df,
+    parameters = pars, timings = tims,
+    model = "ANCCR", seed = 123
+  )
+  rand2 <- rnorm(100)
+  expect_true(any(experiences(nonseeded)[[1]]$time !=
+    experiences(seed1)[[1]]$time))
+  expect_true(all(experiences(seed1)[[1]]$time ==
+    experiences(seed2)[[1]]$time))
+  expect_true(any(rand1 != rand2))
+  expect_true(seed1@.seed == seed2@.seed)
 })

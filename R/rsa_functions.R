@@ -14,8 +14,7 @@
 #' # Comparing the associations in three models
 #' exp <- data.frame(
 #'   Group = c("A", "B"),
-#'   P1 = c("2(A)>(US)/1B>(US)", "1(A)>(US)/2B>(US)"),
-#'   R1 = TRUE
+#'   P1 = c("!2(A)>(US)/1B>(US)", "!1(A)>(US)/2B>(US)")
 #' )
 #' models <- c("HD2022", "RW1972", "PKH1982")
 #' parameters <- sapply(models, get_parameters, design = exp)

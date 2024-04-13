@@ -1,4 +1,6 @@
 # calmr 0.6.3
+* Removed randomization column requirement from designs. Randomization of phases is now specified using the "!" character anywhere in the phase string.
+* Added support for seed experiment generation in `make_experiment()`.
 * Added `set_calmr_palette()` function to control the colour/fill scales used to plot results ([#1](https://github.com/victor-navarro/calmr/issues/1)).
 * Added `filter()` method for `CalmrExperiment` class that allows filtering of aggregated data ([#1](https://github.com/victor-navarro/calmr/issues/1)).
 * Fixed bug in `make_experiment()` that was triggered by empty phases and no miniblocks.

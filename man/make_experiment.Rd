@@ -11,6 +11,7 @@ make_experiment(
   timings = NULL,
   iterations = 1,
   miniblocks = TRUE,
+  seed = NULL,
   .callback_fn = NULL,
   ...
 )
@@ -30,6 +31,9 @@ returned by \code{\link[=get_timings]{get_timings()}}}
 Default = 1.}
 
 \item{miniblocks}{Whether to organize trials in miniblocks. Default = TRUE.}
+
+\item{seed}{A valid seed for the RNG to make the experiment.
+Default = NULL, in which case the current RNG is used.}
 
 \item{.callback_fn}{A function for keeping track of progress. Internal use.}
 
@@ -51,7 +55,7 @@ with one A trial, and 2 B trials. However, the phase string "2A/1B" will
 not result in miniblocks, even if miniblocks here is set to TRUE.
 }
 \examples{
-des <- data.frame(Group = "G1", P1 = "10A>(US)", R1 = TRUE)
+des <- data.frame(Group = "G1", P1 = "10A>(US)")
 ps <- get_parameters(des, model = "HD2022")
 make_experiment(
   design = des, parameters = ps,

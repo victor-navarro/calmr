@@ -20,6 +20,7 @@ S4 class for calmr experiments.
 \item{\code{.model}:}{Internal. The model associated with the iteration.}
 \item{\code{.group}:}{Internal. The group associated with the iteration.}
 \item{\code{.iter}:}{Internal. The iteration number.}
+\item{\code{.seed}:}{The seed used to generate the experiment.}
 }
 }
 
