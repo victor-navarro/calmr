@@ -1,9 +1,7 @@
 rawdf <- data.frame(
   group = "G",
   p1 = "10A>(US)",
-  r1 = FALSE,
-  p2 = "10AB>(US)",
-  r2 = FALSE
+  p2 = "10AB>(US)"
 )
 df <- parse_design(rawdf)
 pars <- get_parameters(rawdf, model = "ANCCR")

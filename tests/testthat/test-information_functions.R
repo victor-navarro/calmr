@@ -1,6 +1,6 @@
 # model_parameters
 mods <- supported_models()
-df <- parse_design(data.frame(group = "X", p1 = c("10A/10B"), r1 = TRUE))
+df <- parse_design(data.frame(group = "X", p1 = c("!10A/10B")))
 
 test_that("model_parameters returns full information", {
   expect_true(length(model_parameters()) > 2)

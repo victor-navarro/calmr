@@ -51,9 +51,7 @@ test_that("run_experiment works with simple cells", {
   simple_df <- data.frame(
     Group = c("Over", "Ctrl"),
     P1 = c("1AB(US)", "1A(US)"),
-    R1 = c(TRUE, TRUE),
-    P2 = c("1A", "1A"),
-    R2 = c(TRUE, TRUE)
+    P2 = c("1A", "1A")
   )
   simple_pars <- get_parameters(simple_df, model = "HD2022")
   res <- run_experiment(
@@ -66,7 +64,7 @@ test_that("run_experiment works with simple cells", {
 })
 
 test_that("run_experiment stops overly minimal experiments", {
-  df <- data.frame(group = "A", p1 = "1A", r1 = TRUE)
+  df <- data.frame(group = "A", p1 = "!1A")
   expect_error(run_experiment(
     df,
     model = "HD2022",

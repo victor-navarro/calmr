@@ -1,26 +1,24 @@
 #' Parse design data.frame
-#' @param df A `data.frame` of dimensions (groups) by (2*phases+1).
+#' @param df A `data.frame` of dimensions (groups) by (phases+1).
 #' @return A [CalmrDesign-class] object.
 #' @note Each entry in even-numbered columns of df is
 #' a string formatted as per [phase_parser()].
 #' @examples
 #' df <- data.frame(
 #'   Group = c("Group 1", "Group 2"),
-#'   P1 = c("10AB(US)", "10A(US)"), R1 = c(TRUE, TRUE)
+#'   P1 = c("10AB(US)", "10A(US)")
 #' )
 #' parse_design(df)
 #' @seealso [phase_parser()]
 #' @export
 
 parse_design <- function(df) {
-  ri <- seq(2, ncol(df), 2)
   design <- apply(df, 1, function(r) {
-    sapply(ri, function(p) {
+    sapply(seq_len(ncol(df))[-1], function(p) {
       list(
         group = r[[1]],
         phase = names(df)[p],
         parse_string = r[[p]],
-        randomize = r[[p + 1]],
         phase_info = phase_parser(r[[p]])
       )
     }, simplify = FALSE)

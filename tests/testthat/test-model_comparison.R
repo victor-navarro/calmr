@@ -1,5 +1,5 @@
 # By making experiment beforehand (recommended)
-df <- data.frame(g = "A", p1 = "2A>(US)", r1 = TRUE)
+df <- data.frame(g = "A", p1 = "!2A>(US)")
 models <- c("HD2022", "RW1972", "PKH1982")
 exps <- lapply(models, function(m) {
   make_experiment(df,

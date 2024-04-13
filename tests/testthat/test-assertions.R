@@ -36,7 +36,7 @@ test_that("throws error for upper and lower limits with NAs", {
 test_that("throws error for unsuported functional stimuli", {
   map <- parse_design(data.frame(
     g = "a",
-    p1 = "1(A_a)(US)/1(A_b)(US)", r1 = TRUE
+    p1 = "!1(A_a)(US)/1(A_b)(US)"
   ))@mapping
   expect_error(.assert_no_functional(map))
 })

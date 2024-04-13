@@ -116,7 +116,6 @@ make_experiment <- function(
     samps <- do.call(
       .sample_trials,
       c(x$phase_info$general_info, list(
-        randomize = x$randomize,
         masterlist = design@mapping$trial_names,
         miniblocks = miniblocks
       ))

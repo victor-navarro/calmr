@@ -1,4 +1,4 @@
-df <- data.frame(g = "g", p1 = "2A/2AB", r1 = TRUE)
+df <- data.frame(g = "g", p1 = "!2A/2AB")
 pars <- get_parameters(df, model = "ANCCR")
 tims <- get_timings(df, model = "ANCCR")
 

@@ -1,4 +1,4 @@
-df <- data.frame(g = "g", p1 = "3A>(US)", r1 = TRUE)
+df <- data.frame(g = "g", p1 = "!3A>(US)")
 pars <- get_parameters(df, model = "RW1972")
 exper <- make_experiment(df, parameters = pars, model = "RW1972")
 res <- run_experiment(exper)

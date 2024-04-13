@@ -1,8 +1,8 @@
 # A problematic design
 df <- data.frame(
   group = c("Blocking", "Control"),
-  p1 = c("2N>(US)", ""), r1 = FALSE,
-  p2 = c("2NL>(US)", "2NL>(US)/2#L"), r2 = FALSE
+  p1 = c("2N>(US)", ""),
+  p2 = c("2NL>(US)", "2NL>(US)/2#L")
 )
 
 pars <- get_parameters(df, model = "ANCCR")

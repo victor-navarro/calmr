@@ -22,6 +22,9 @@ phase_parser <- function(phase_string) {
     return(NULL)
   }
 
+  randomize <- grepl("!", phase_string)
+  phase_string <- gsub("!", "", phase_string)
+
   ts <- unlist(base::strsplit(phase_string, "/"))
   # parse each trial separately
   tinfo <- sapply(ts, .parse_trial, simplify = FALSE)
@@ -44,6 +47,7 @@ phase_parser <- function(phase_string) {
     is_test = unname(unlist(
       lapply(tinfo, "[[", "is_test")
     )),
+    randomize = randomize,
     nomi2func = nomi2func,
     func2nomi = func2nomi
   )
