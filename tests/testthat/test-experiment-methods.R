@@ -63,6 +63,13 @@ test_that("parse method throws error without raw_results", {
   expect_error(parse(exper))
 })
 
+test_that("filter method filters with single filters", {
+  results(filter(agg_exper, stimuli = "A"))$associations
+})
+
+
+
+
 test_that("plot method throws error when missing aggregated results", {
   expect_error(plot(raw_exper, type = "associations"))
 })

@@ -34,6 +34,8 @@
 \alias{timings}
 \alias{timings<-,CalmrExperiment-method}
 \alias{timings<-}
+\alias{filter,CalmrExperiment-method}
+\alias{filter}
 \title{CalmrExperiment methods}
 \usage{
 \S4method{show}{CalmrExperiment}(object)
@@ -69,6 +71,8 @@
 \S4method{timings}{CalmrExperiment}(x)
 
 \S4method{timings}{CalmrExperiment}(x) <- value
+
+\S4method{filter}{CalmrExperiment}(x, trial_types = NULL, phases = NULL, stimuli = NULL)
 }
 \arguments{
 \item{object, x}{A \code{CalmrExperiment} object.}
@@ -122,6 +126,9 @@ of the experiment (groups by iterations).
 contained in the object.
 
 \verb{timings()<-} returns the object after updating timings.
+
+\code{filter()} returns the object after filtering
+parsed aggregated results
 }
 \description{
 S4 methods for \code{CalmrExperiment} class.
