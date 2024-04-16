@@ -1,0 +1,34 @@
+---
+title: "NDH2023"
+author: "Victor Navarro"
+output: rmarkdown::html_vignette
+bibliography: references.bib
+csl: apa.csl
+vignette: >
+  %\VignetteIndexEntry{NDH2023}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# The mathematics behind HeiDI
+Navarro et al. [-@navarro_prediction_2023] presented a time-based 
+extension of HeiDI [@honey_heidi_2020], equipping the model
+with an intensity-based generalization mechanism that enables
+it to respond across time.
+
+
+## 0 - Stimulus decay
+
+The model assumes that the perceived intensity of a stimulus decays across time, and
+each of those intensities is represented as an independent compound 
+(in the complete serial compound sense, see [TD](TD.html)). The intensity of 
+stimulus $i$ on epoch $e$ is given by:
+
+$$
+\tag{Eq. 1}
+\alpha_i^e = \alpha_i^{e-1} * (1 -)
+$$
+
+
+
+
