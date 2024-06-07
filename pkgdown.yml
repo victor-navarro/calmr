@@ -1,23 +1,23 @@
 pandoc: 3.1.11
-pkgdown: 2.0.7
+pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   ANCCR: ANCCR.html
+  calmr_app: calmr_app.html
+  calmr_fits: calmr_fits.html
+  calmr: calmr.html
   HD2022: HD2022.html
+  heidi_similarity: heidi_similarity.html
   MAC1975: MAC1975.html
+  model_parameters: model_parameters.html
+  parallelism_in_calmr: parallelism_in_calmr.html
   PKH1982: PKH1982.html
   RAND: RAND.html
   RW1972: RW1972.html
   SM2007: SM2007.html
   TD: TD.html
-  model_parameters: model_parameters.html
-  calmr: calmr.html
-  calmr_app: calmr_app.html
-  calmr_fits: calmr_fits.html
-  heidi_similarity: heidi_similarity.html
-  parallelism_in_calmr: parallelism_in_calmr.html
   using_time_models: using_time_models.html
-last_built: 2024-04-10T11:16Z
+last_built: 2024-06-07T10:31Z
 urls:
   reference: https://victornavarro.org/calmr/reference
   article: https://victornavarro.org/calmr/articles
