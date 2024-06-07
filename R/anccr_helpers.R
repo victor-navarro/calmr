@@ -47,23 +47,28 @@ set_reward_parameters <- function(parameters, rewards = c("US")) {
     transitions <- mapping$transitions[[trial_name]]
     period_funcs <- mapping$period_functionals[[trial_name]]
     # sample start of the trial
-    if (timings$use_exponential) {
-      new_ts <- min(
-        with(timings$trial_ts, max_ITI[trial == trial_name]),
-        stats::rexp(
-          1, 1 / with(timings$trial_ts, mean_ITI[trial == trial_name])
-        ),
-        timings$time_resolution
-      )
+    if (!timings$sample_timings) {
+      # no sampling: use mean ITI
+      new_ts <- with(timings$trial_ts, mean_ITI[trial == trial_name])
     } else {
-      new_ts <- stats::runif(1) *
-        with(timings$trial_ts, mean_ITI[trial == trial_name]) *
-        0.4 +
-        with(
-          timings$trial_ts,
-          mean_ITI[trial == trial_name]
-        ) * 0.8
+      if (timings$use_exponential) {
+        new_ts <- min(
+          with(timings$trial_ts, max_ITI[trial == trial_name]),
+          stats::rexp(
+            1, 1 / with(timings$trial_ts, mean_ITI[trial == trial_name])
+          )
+        )
+      } else {
+        new_ts <- stats::runif(1) *
+          with(timings$trial_ts, mean_ITI[trial == trial_name]) *
+          0.4 +
+          with(
+            timings$trial_ts,
+            mean_ITI[trial == trial_name]
+          ) * 0.8
+      }
     }
+
     running_time <- running_time + new_ts
     for (p in seq_along(period_funcs)) {
       eventlog <- rbind(
