@@ -28,6 +28,15 @@ test_that("can run without exponential", {
   )
 })
 
+test_that("can run without sampling timings", {
+  nots <- tims
+  nots$sample_timings <- FALSE
+  expect_no_error(run_experiment(df,
+    parameters = pars,
+    timings = nots, model = "ANCCR"
+  ))
+})
+
 test_that("can run with timed alpha", {
   talpha <- pars
   talpha$use_timed_alpha <- 1

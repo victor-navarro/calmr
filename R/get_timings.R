@@ -97,20 +97,21 @@ get_timings <- function(design, model) {
 .default_global_timings <- function() {
   list(
     "use_exponential" = TRUE,
-    "time_resolution" = 0.5
+    "time_resolution" = 0.5,
+    "sample_timings" = TRUE
   )
 }
 
 .model_timings <- function(model) {
   timings_map <- list(
     "ANCCR" = list(
-      "global" = c("use_exponential"),
+      "global" = c("use_exponential", "sample_timings"),
       "transitions" = c("transition_delay"),
       "periods" = c(),
       "trials" = c("post_trial_delay", "mean_ITI", "max_ITI")
     ),
     "TD" = list(
-      "global" = c("use_exponential", "time_resolution"),
+      "global" = c("use_exponential", "time_resolution", "sample_timings"),
       "transitions" = c("transition_delay"),
       "periods" = c("stimulus_duration"),
       "trials" = c("post_trial_delay", "mean_ITI", "max_ITI")
