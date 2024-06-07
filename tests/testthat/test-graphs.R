@@ -1,7 +1,6 @@
 df <- data.frame(
   Group = "X",
-  P1 = "2AB>(US)",
-  R1 = TRUE
+  P1 = "2AB>(US)"
 )
 df <- parse_design(df)
 models <- supported_models()

@@ -3,10 +3,8 @@
 # A basic experiment
 df <- data.frame(
   Group = c("X", "Y"),
-  P1 = c("10A/10#A/10B", "2AB/6A/6C/2#AB"),
-  R1 = c(TRUE, TRUE),
-  P2 = c("10A/10#A/10B", "2AB/6A/6C/2#AB"),
-  R2 = c(TRUE, TRUE)
+  P1 = c("!10A/10#A/10B", "!2AB/6A/6C/2#AB"),
+  P2 = c("!10A/10#A/10B", "!2AB/6A/6C/2#AB")
 )
 
 parsed_df <- parse_design(df)
@@ -55,10 +53,8 @@ test_that("no miniblocks problematic design", {
 # More tests
 df <- data.frame(
   Group = c("A", "B"),
-  P1 = c("2A>(US)", "2B>(US)"),
-  R1 = c(TRUE, TRUE),
-  P2 = c("2AX>(US)", "2AX>(US)"),
-  R2 = c(TRUE, TRUE)
+  P1 = c("!2A>(US)", "!2B>(US)"),
+  P2 = c("!2AX>(US)", "!2AX>(US)")
 )
 df <- parse_design(df)
 parameters <- get_parameters(df, "RW1972")
@@ -80,15 +76,41 @@ test_that("make_experiment fails with too many models", {
 # A problematic design
 df <- data.frame(
   group = c("Blocking", "Control"),
-  p1 = c("10N>(US)", ""), r1 = FALSE,
-  p2 = c("10NL>(US)", "10NL>(US)/10#L"), r2 = FALSE
+  p1 = c("10N>(US)", ""),
+  p2 = c("10NL>(US)", "10NL>(US)/10#L")
 )
 pars <- get_parameters(df, model = "ANCCR")
+tims <- timings <- get_timings(df, "ANCCR")
 
 test_that("can make an experiment with empty phases", {
   exp <- make_experiment(df,
-    parameters = pars, timings = get_timings(df, "ANCCR"),
+    parameters = pars, timings = tims,
     model = "ANCCR"
   )
   expect_true(!("p1" %in% experiences(exp)[[2]]$phase))
+})
+
+test_that("seeding works", {
+  nonseeded <- make_experiment(df,
+    parameters = pars, timings = tims,
+    model = "ANCCR"
+  )
+  seed1 <- make_experiment(df,
+    parameters = pars, timings = tims,
+    model = "ANCCR", seed = 123
+  )
+  # to test the state of the RNG is OK after
+  # running a seeded generation
+  rand1 <- rnorm(100)
+  seed2 <- make_experiment(df,
+    parameters = pars, timings = tims,
+    model = "ANCCR", seed = 123
+  )
+  rand2 <- rnorm(100)
+  expect_true(any(experiences(nonseeded)[[1]]$time !=
+    experiences(seed1)[[1]]$time))
+  expect_true(all(experiences(seed1)[[1]]$time ==
+    experiences(seed2)[[1]]$time))
+  expect_true(any(rand1 != rand2))
+  expect_true(seed1@.seed == seed2@.seed)
 })

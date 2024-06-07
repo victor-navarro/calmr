@@ -1,8 +1,8 @@
 # A problematic design
 df <- data.frame(
   group = c("Blocking", "Control"),
-  p1 = c("2N>(US)", ""), r1 = FALSE,
-  p2 = c("2NL>(US)", "2NL>(US)/2#L"), r2 = FALSE
+  p1 = c("2N>(US)", ""),
+  p2 = c("2NL>(US)", "2NL>(US)/2#L")
 )
 
 pars <- get_parameters(df, model = "TD")
@@ -23,8 +23,7 @@ test_that("can run without exponential", {
 # A specific test with nested trials
 df <- data.frame(
   group = "G",
-  p1 = "10A>AB>(US)",
-  r1 = TRUE
+  p1 = "!10A>AB>(US)"
 )
 
 test_that("can run with nested trials", {

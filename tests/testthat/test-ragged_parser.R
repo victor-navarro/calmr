@@ -2,7 +2,7 @@
 # ragged data is defined as lists with arrays that vary in dimensionality
 # e.g., HeiDI's pools
 
-df <- data.frame(group = "p", p1 = "1A>(US)/1A/2AB", r1 = FALSE)
+df <- data.frame(group = "p", p1 = "1A>(US)/1A/2AB")
 res <- run_experiment(df,
   model = "HD2022",
   parameters = get_parameters(df, model = "HD2022")

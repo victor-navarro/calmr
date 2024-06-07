@@ -64,11 +64,20 @@ test_that("parse method throws error without raw_results", {
 })
 
 test_that("filter method filters with single filters", {
-  results(filter(agg_exper, stimuli = "A"))$associations
+  onlya <- results(filter(agg_exper, stimuli = "A"))$associations
+  expect_setequal(unique(onlya[, c("s1", "s2")]), c("A", "A"))
+  ab <- results(filter(agg_exper, stimuli = c("A", "B")))$associations
+  expect_setequal(unlist(unique(ab[, c("s1")])), c("A", "B"))
+  abp1 <- results(filter(agg_exper,
+    stimuli = c("A", "B"),
+    phase = c("P1")
+  ))$associations
+  expect_true(all(c("A", "B", "P1") %in%
+    c(unique(abp1$s1), unique(abp1$phase))))
+  tn <- trials(agg_exper)$trial_names[1]
+  abus <- results(filter(agg_exper, trial_types = c(tn)))$responses
+  expect_true(all(abus$trial_type == tn))
 })
-
-
-
 
 test_that("plot method throws error when missing aggregated results", {
   expect_error(plot(raw_exper, type = "associations"))

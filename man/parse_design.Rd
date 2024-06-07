@@ -7,7 +7,7 @@
 parse_design(df)
 }
 \arguments{
-\item{df}{A \code{data.frame} of dimensions (groups) by (2*phases+1).}
+\item{df}{A \code{data.frame} of dimensions (groups) by (phases+1).}
 }
 \value{
 A \linkS4class{CalmrDesign} object.
@@ -22,7 +22,7 @@ a string formatted as per \code{\link[=phase_parser]{phase_parser()}}.
 \examples{
 df <- data.frame(
   Group = c("Group 1", "Group 2"),
-  P1 = c("10AB(US)", "10A(US)"), R1 = c(TRUE, TRUE)
+  P1 = c("10AB(US)", "10A(US)")
 )
 parse_design(df)
 }

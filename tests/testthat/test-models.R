@@ -1,9 +1,7 @@
 df <- data.frame(
   Group = c("A", "B"),
-  P1 = c("2A>(US)", "2B>(US)"),
-  R1 = c(TRUE, TRUE),
-  P2 = c("2AX>(US)", "2AX>(US)"),
-  R2 = c(TRUE, TRUE)
+  P1 = c("!2A>(US)", "!2B>(US)"),
+  P2 = c("!2AX>(US)", "!2AX>(US)")
 )
 df <- parse_design(df)
 supported_mods <- supported_models()
