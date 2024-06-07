@@ -10,25 +10,220 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-# The mathematics behind HeiDI
+
+# The mathematics behind NDH2023
 Navarro et al. [-@navarro_prediction_2023] presented a time-based 
 extension of HeiDI [@honey_heidi_2020], equipping the model
 with an intensity-based generalization mechanism that enables
 it to respond across time.
 
 
-## 0 - Stimulus decay
+## 1 - Stimulus decay and representation
 
 The model assumes that the perceived intensity of a stimulus decays across time, and
 each of those intensities is represented as an independent compound 
 (in the complete serial compound sense, see [TD](TD.html)). The intensity of 
-stimulus $i$ on epoch $e$ is given by:
-
+stimulus $i$ at time $t$ is given by:
 $$
 \tag{Eq. 1}
-\alpha_i^e = \alpha_i^{e-1} * (1 -)
+\alpha_i^t = 
+\begin{cases}
+    \alpha_i^{t-1} * [1 - \gamma(x_i)],& \text{if } t \gt 1\\
+    \alpha_{i_{max}}, & \text{otherwise}
+\end{cases}
+$$
+
+where $\alpha_{i_{max}}$ is the nominal salience value stimulus $i$ takes upon its 
+presentation and $\gamma(x_i)$ is a function that returns a rate of decay, based on whether stimulus $i$ is being presented or not 
+(i.e., $\gamma_{on}$ if $x_i = 1$ and $\gamma_{off}$ if $x_i = 0$).
+
+<details>
+<summary>A visual depiction</summary>
+
+The plot below shows the function of a stimulus 
+presented for timesteps 1 to 10 
+and is absent for the next 10 timesteps.
+
+```{r, message = FALSE, warning = FALSE}
+library(ggplot2)
+x <- rep(c(1, 0), each = 10)
+gammas <- c(.15, .05) # gammas for off and on
+alphas <- rep(0, 20)
+alphas[1] <- 0.8 # maximum alpha upon presentation
+for (step in seq_len(20)[-1]) {
+  alphas[step] <- alphas[step - 1] * (1 - gammas[x[step] + 1])
+}
+data.frame(Time = 1:20, Alpha = alphas) |>
+  ggplot(aes(x = Time, y = Alpha)) +
+  geom_line() +
+  theme_bw()
+```
+</details>
+
+## 2 - Intensity-based generalization
+
+The model makes ample use of an intensity-based generalization mechanism. 
+The similarity between stimulus $i$'s intensities at times $t$ and $e$ is given by:
+
+$$
+\tag{Eq. 2}
+S(\alpha_i^t, \alpha_i^e) = \frac{\alpha_i^t}{\alpha_i^t + |\alpha_i^t-\alpha_i^e|} 
+\times \frac{\alpha_i^e}{\alpha_i^e+ |\alpha_i^t-\alpha_i^e|}
+$$
+
+<details>
+<summary>A visual depiction</summary>
+The plot below shows the similarities (lines) between different reference values (t)
+and all of the values (e).
+```{r}
+sim <- function(i, j) i / (i + abs(i - j)) * j / (j + abs(i - j))
+df <- expand.grid(t = seq(.1, 1, .1), e = seq(.1, 1, .1))
+df$Similarity <- mapply(sim, df$t, df$e)
+
+df |>
+  ggplot(aes(x = e, y = Similarity, colour = as.factor(t))) +
+  geom_line() +
+  theme_bw() +
+  labs(colour = "t")
+```
+</details>
+
+## 3 - Learning associations
+
+The learning rules for NDH2023 are nearly identical to the original model but are
+now conditionalized on the specific compound being presented. As mentioned in section 1, 
+compounds are identified by their intensity.
+
+At time $t$, the expectation of stimulus $j$, $v_j^t$, is given by
+
+$$
+\tag{Eq. 3}
+v_j^t = \sum_p^P w_{p,j}^t
+$$
+
+where P is the set containing all stimuli **presented** at time $t$, and
+$w_{p,j}^t$ is the association between the compound of stimulus $p$
+active at time $t$ and functional stimulus $j$^[Functional stimuli are the qualitatively different stimuli 
+in an experiment, e.g., a lever, a tone, food, etc.].
+
+With expectations in hand, the change in the association between the component of stimulus $i$, 
+active at time $t$, and functional stimulus $j$ is given by
+
+$$
+\tag{Eq. 4}
+\Delta w_{i,j}^t = \alpha_i^t (\alpha_j^t - v_j^t)
+$$
+
+An identical rule can be applied to update the 
+backward association from $j$ to $i$.[^note_rob0]
+
+
+## 4 - Pooling associations
+
+The net pooled associative strength for stimulus $j$ at time $t$, given
+stimuli P were presented, is the sum of two different associative pools, 
+$N_{P,j}^t = O_{P,j}^t + H_{P,j}^t$. From here on, it is important to 
+note that $j \in A$, where $A$ is a set containing all the functional stimuli
+**absent** at time $t$.
+
+The first of the pools combines forward and backward associations directly, 
+and is given by
+
+$$
+\tag{Eq. 5}
+O_{P,j}^t = \hat{f}_{P,j}^t \times 
+  (1 + [\sum_p^P \sum_m^M S(\hat{f}_{P,j}^t, \alpha_j^m) w_{j,p}^m])
+$$
+
+where $M$ is a set containing *known* intensities for stimulus $j$. Note
+that the right-hand term inside the parenthetical in Eq. 5 represents
+similarity-weighted backward associations[^note_rob1]. The term 
+$\hat{f}_{P,j}^t$ denotes similarity-weighted 
+forward associations from stimuli $P$ to stimulus $j$, and is given by:
+
+$$
+\tag{Eq. 6}
+\hat{f}_{P,j}^t = \sum_p^P \sum_e^E S(\alpha_p^t, \alpha_p^e)w_{p,j}^e
+$$
+
+The second pool combines associations indirectly and is given by
+
+$$
+\tag{Eq. 7}
+H_{P,j}^t = \sum_a^A \hat{f}_{P,a}^t \times \sum_g^G S(\hat{f}_{P,a}^t, \alpha_a^g) O_{A,j}^g
+$$
+
+where the set G contains all *known* intensities for absent stimulus $a$. 
+
+The left-hand term can be thought of as a similarity-weighted link
+to absent stimulus $a$, and the right-hand term can be thought of as a 
+similarity-weighted pool from all absent stimuli to stimulus j.[^note_rob2]
+
+Of course, the terms for the direct pool in Eq. 7 
+are similar to those in Eq. 5, but with absent stimuli.
+
+$$
+O_{A,j}^g = \hat{f}_{A,j}^g \times 
+  (1 + [\sum_a^A \sum_m^M S(\hat{f}_{A,j}^g, \alpha_j^m) w_{j,a}^m]) 
+$$
+$$
+\hat{f}_{A,j}^g = \sum_a^A \sum_e^E S(\alpha_a^g, \alpha_a^e)w_{a,j}^e
+$$
+
+## 5 - Distributing strength into stimulus-specific response units
+
+As with the original model, the activation of the $k$-oriented response unit 
+due to the associative retrieval of stimulus $j$ at time $t$, $R_{k,j}^t$ is given by
+
+$$
+\tag{Eq. 8}
+R_{k,j}^t = \frac{\theta(k)}{\sum_k^K \theta(k)} N_{P,j}^t
+$$
+
+where K contains all the stimuli in the experiment. Note that only 
+stimuli holding biological significance are considered to activate response units. 
+The $\theta(k)$ function returns the perceived intensity of a stimulus
+based on whether it was presented or not at time $t$, as
+
+$$
+\tag{Eq. 9}
+\theta(k) = 
+\begin{cases}
+    \hat{f}_{P,k}^t,& \text{if } k \in A\\
+    \alpha_k^t, & \text{otherwise}
+\end{cases}
+$$
+
+## 6 - Generating responses
+
+As in the original model, the weighted activation of response units 
+translates into behavior. The activation of motor unit $q$ at time $t$ 
+is given by
+
+$$
+\tag{Eq. 10}
+r_q^t = \sum_k^K R_{k,j}z_{k,q}
 $$
 
 
+As this component of the model remains unspecified, it is assumed that
+all weights are equal to 1.
 
 
+
+
+[^note_rob0]: First tension point is here, should associations
+from a stimulus intensity (compound in the CSC sense) point
+to another stimulus intensity? This assumption is already in play
+when learning the backward association. (i.e., a US compound with intensity 0.4 enters association, 
+not all of the compounds).
+
+[^note_rob1]: Second tension point is here, in our last paper 
+there is no similarity term weighting the backward association. All backward 
+associations had, effectively, a weight of 1.
+
+[^note_rob2]: Third tension point is here. We've never had 
+to specify this rule this deeply but, does this make sense to you? I am 
+currently unsure what the effect of summing these things over and 
+over again will have, but it might be a way to enhance the influence of 
+the chained V.
