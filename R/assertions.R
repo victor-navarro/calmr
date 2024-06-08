@@ -107,7 +107,7 @@ is_design <- function(object) {
 
 .assert_family <- function(family) {
   if (is.null(family)) {
-    warning("No family passed. Using 'idenity'.")
+    warning("No family passed. Using 'identity'.")
     family <- "identity"
   }
   stopifnot(

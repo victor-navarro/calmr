@@ -220,8 +220,12 @@ make_experiment <- function(
 .with_seed <- function(seed, expr) {
   if (!is.null(seed)) {
     expr <- substitute(expr)
-    oseed <- .Random.seed # get the state of the RNG
-    on.exit(.Random.seed <<- oseed)
+    # get original seed if it exists
+    if (exists(".Random.seed")) {
+      oseed <- .Random.seed
+      # reinstate the seed on exit
+      on.exit(.Random.seed <<- oseed)
+    }
     set.seed(seed)
     eval.parent(expr)
   } else {
