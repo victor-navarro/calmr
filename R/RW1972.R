@@ -36,40 +36,58 @@ RW1972 <- function(v = NULL, # nolint: object_name_linter.
     # get pointers
     tn <- experience$tn[t]
 
-    # get nominal, and onehot stimuli
-    nstims <- mapping$trial_nominals[[tn]]
+    # get onehot stimuli
     oh_fstims <- mapping$trial_ohs[[tn]]
-
-    e <- oh_fstims %*% v # expectation
+    # get response
     r <- v * oh_fstims
 
     # save data
-    vs[t, , ] <- v
-    rs[t, , ] <- r
+    vs[t, , ] <- v # associations
+    rs[t, , ] <- r # responses
 
     # learn if we need to
     if (!experience$is_test[t]) {
-      # get parameters$alphas betas and parameters$lambdas for learning
-      talphas <- tbetas <- tlambdas <-
-        stats::setNames(rep(0, length(fsnames)), fsnames)
+      # to maintain the directionality of learning
+      # we need to look one period ahead
+      # for situations in which there is only one period
+      # (or if we are in the last period)
+      # we just clamp the next period to the current period
+      trial_periods <- length(mapping$period_functionals[[tn]])
+      for (p in seq_len(trial_periods)) {
+        p2 <- min(p + 1, trial_periods) # clamp
+        # gather the nominals for the periods
+        pnominals <- union(
+          mapping$period_nominals[[tn]][[p]],
+          mapping$period_nominals[[tn]][[p2]]
+        )
 
-      # populating vector with nominal stimuli values as
-      # functional stimuli values
-      talphas[mapping$nomi2func[nstims]] <-
-        parameters$alphas[nstims]
+        # set parameters for learning
+        palphas <- plambdas <-
+          stats::setNames(rep(0, length(fsnames)), fsnames)
+        # populate alphas
+        palphas[mapping$nomi2func[pnominals]] <-
+          parameters$alphas[pnominals]
+        # populate betas
+        pbetas <- betas_off_avg
+        pbetas[mapping$nomi2func[pnominals]] <-
+          parameters$betas_on[pnominals]
+        # populate lambdas
+        plambdas[mapping$nomi2func[pnominals]] <-
+          parameters$lambdas[pnominals]
 
-      # vector is initialized as if all stimuli are absent
-      tbetas <- betas_off_avg
-      tbetas[mapping$nomi2func[nstims]] <-
-        parameters$betas_on[nstims]
 
-      tlambdas[mapping$nomi2func[nstims]] <-
-        parameters$lambdas[nstims]
-
-      err <- oh_fstims * tlambdas - e # error
-      d <- oh_fstims * talphas %*% err # delta
-      diag(d) <- 0
-      v <- v + d
+        # get period onehot stimuli
+        p_ohs <- mapping$period_ohs[[tn]][[p]]
+        # generate period expectation
+        pe <- p_ohs %*% v
+        # calculate period error (with both periods)
+        err <- plambdas - pe
+        # calculate period delta
+        d <- p_ohs * palphas %*% err
+        diag(d) <- 0
+        # update weights
+        v <- v + d
+      }
     }
   }
   results <- list(associations = vs, responses = rs)

@@ -41,9 +41,8 @@ MAC1975 <- function(v = NULL, # nolint: object_name_linter.
   for (t in 1:ntrials) {
     # get pointers
     tn <- experience$tn[t]
-    # get nominal, and onehot stimuli
+    # get onehot stimuli for the trial
     oh_fstims <- mapping$trial_ohs[[tn]]
-    nstims <- mapping$trial_nominals[[tn]]
 
     # generate expectation and response matrices
     # note the local error
@@ -57,43 +56,66 @@ MAC1975 <- function(v = NULL, # nolint: object_name_linter.
 
     # learn if we need to
     if (!experience$is_test[t]) {
-      talphas <- tbetas <- tlambdas <-
-        stats::setNames(rep(0, length(fsnames)), fsnames)
-      # populating vector with nominal stimuli
-      # values as functional stimuli values
-      talphas[nstims] <- parameters$alphas[nstims]
-
-      # betas and lambdas vectors
-      # are initialized as if all stimuli are absent
-      tbetas <- parameters$betas_off
-      tbetas[nstims] <- parameters$betas_on[nstims]
-      tlambdas[nstims] <- parameters$lambdas[nstims]
-
-      # Learn associations
-      err <- oh_fstims * t(tlambdas - t(e))
-      d <- t(t(oh_fstims * talphas * err) * tbetas)
-
-      diag(d) <- 0
-      v <- v + d
-
-      # Learn alphas
-      # note: the expressions below take the expectation matrix,
-      # pools it twice (once for each predictor, once for all i
-      # but the predictor) and sweeps each with the lambda for each j.
-      alphasd <- parameters$thetas * oh_fstims *
-        rowSums(
-          abs(t((tlambdas - t(r) %*% nsmat) * parameters$gammas))
-          - abs(t((tlambdas - t(r)) * parameters$gammas))
+      # we maintain the directionality of learning
+      # for a description of how this is implemented, see the RW1972 model code
+      trial_periods <- length(mapping$period_functionals[[tn]])
+      for (p in seq_len(trial_periods)) {
+        p2 <- min(p + 1, trial_periods) # clamp
+        # gather the nominals for the periods
+        pnominals <- union(
+          mapping$period_nominals[[tn]][[p]],
+          mapping$period_nominals[[tn]][[p2]]
         )
-      parameters$alphas <- parameters$alphas + alphasd
-      # apply lower limit on parameters$alphas
-      parameters$alphas[] <- sapply(seq_len(length(fsnames)), function(i) {
-        max(parameters$min_alphas[i], parameters$alphas[i])
-      })
-      # apply upper limit on parameters$alphas
-      parameters$alphas[] <- sapply(seq_len(length(fsnames)), function(i) {
-        min(parameters$max_alphas[i], parameters$alphas[i])
-      })
+
+        # set parameters for learning
+        palphas <- plambdas <-
+          stats::setNames(rep(0, length(fsnames)), fsnames)
+        # populate alphas
+        palphas[mapping$nomi2func[pnominals]] <-
+          parameters$alphas[pnominals]
+        # populate betas
+        pbetas <- parameters$betas_off
+        pbetas[mapping$nomi2func[pnominals]] <-
+          parameters$betas_on[pnominals]
+        # populate lambdas
+        plambdas[mapping$nomi2func[pnominals]] <-
+          parameters$lambdas[pnominals]
+
+
+        # get period onehot stimuli
+        p_ohs <- mapping$period_ohs[[tn]][[p]]
+        # gather onehot stimuli for both periods
+        ps_ohs <- mapping$period_ohs[[tn]][[p]] | mapping$period_ohs[[tn]][[p2]]
+        # generate period expectation
+        pe <- v * p_ohs
+        # calculate period error (with both periods)
+        err <- ps_ohs * t(plambdas - t(pe))
+        # calculate period delta
+        d <- t(t(p_ohs * palphas * err) * pbetas)
+        diag(d) <- 0
+        # update weights
+        v <- v + d
+
+        # learn alphas
+        # note: the expressions below take the expectation matrix,
+        # pool it twice (once for each predictor, once for all i
+        # but the predictor) and then sweeps each entry
+        # with the lambda for each j.
+        alphasd <- parameters$thetas * ps_ohs *
+          rowSums(
+            abs(t((plambdas - t(pe) %*% nsmat) * parameters$gammas))
+            - abs(t((plambdas - t(pe)) * parameters$gammas))
+          )
+        parameters$alphas <- parameters$alphas + alphasd
+        # apply lower limit on parameters$alphas
+        parameters$alphas[] <- sapply(seq_len(length(fsnames)), function(i) {
+          max(parameters$min_alphas[i], parameters$alphas[i])
+        })
+        # apply upper limit on parameters$alphas
+        parameters$alphas[] <- sapply(seq_len(length(fsnames)), function(i) {
+          min(parameters$max_alphas[i], parameters$alphas[i])
+        })
+      }
     }
   }
   results <- list(

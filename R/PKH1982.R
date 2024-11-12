@@ -51,7 +51,6 @@ PKH1982 <- function(
     nstims <- mapping$trial_nominals[[tn]]
 
     # generate expectations
-    # first expectation
     ee <- oh_fstims %*% ev
     ie <- oh_fstims %*% iv
     ne <- ee - ie # net
@@ -67,48 +66,75 @@ PKH1982 <- function(
 
     # learn if we need to
     if (!experience$is_test[t]) {
-      # get parameters for learning
-      tlambdas <- stats::setNames(rep(0, length(fsnames)), fsnames)
-      tlambdas[nstims] <- parameters$lambdas[nstims]
+      # we maintain the directionality of learning
+      # for a description of how this is implemented, see the RW1972 model code
+      trial_periods <- length(mapping$period_functionals[[tn]])
+      for (p in seq_len(trial_periods)) {
+        p2 <- min(p + 1, trial_periods) # clamp
+        # gather the nominals for the periods
+        pnominals <- union(
+          mapping$period_nominals[[tn]][[p]],
+          mapping$period_nominals[[tn]][[p2]]
+        )
 
-      # association deltas
-      # excitatory
-      ed <- oh_fstims * parameters$alphas %*% t(tlambdas * parameters$betas_ex)
-      # only learn when expectation expectation is lower than lambda
-      ed <- t(t(ed) * as.numeric(
-        (tlambdas - ne) > 0
-      ))
+        # set parameters for learning
+        plambdas <-
+          stats::setNames(rep(0, length(fsnames)), fsnames)
+        # populate lambdas
+        plambdas[mapping$nomi2func[pnominals]] <-
+          parameters$lambdas[pnominals]
 
-      # inhibitory ; hack to collapse ne into a numeric
-      id <- oh_fstims * parameters$alphas %*% t(
-        (tlambdas - as.numeric(ne)) * parameters$betas_in
-      )
-      # only learn when expectation is higher than lambda
-      id[id > 0] <- 0
-      id <- abs(id)
 
-      diag(ed) <- diag(id) <- 0
+        # get period onehot stimuli
+        p_ohs <- mapping$period_ohs[[tn]][[p]]
+        # gather onehot stimuli for both periods
+        ps_ohs <- mapping$period_ohs[[tn]][[p]] | mapping$period_ohs[[tn]][[p2]]
 
-      # alpha deltas
-      alphasd <- oh_fstims %*% abs(parameters$gammas * (tlambdas - ne))
-      diag(alphasd) <- 0
+        # calculate period expectation
+        pee <- p_ohs %*% ev
+        pie <- p_ohs %*% iv
+        pne <- pee - pie # net
+        # association deltas
+        # excitatory
+        ed <- p_ohs * parameters$alphas %*% t(
+          plambdas * parameters$betas_ex
+        )
+        # only learn when expectation expectation is lower than lambda
+        ed <- t(t(ed) * as.numeric(
+          (plambdas - pne) > 0
+        ))
+        # inhibitory ; hack to collapse ne into a numeric
+        id <- p_ohs * parameters$alphas %*% t(
+          (plambdas - as.numeric(pne)) * parameters$betas_in
+        )
 
-      # learn
-      ev <- ev + ed
-      iv <- iv + id
+        # only learn when expectation is higher than lambda
+        id[id > 0] <- 0
+        id <- abs(id)
+        diag(ed) <- diag(id) <- 0
 
-      # Need to be careful here, as there is no decay for absent stimuli
-      talphasd <- (1 - parameters$thetas) *
-        parameters$alphas + parameters$thetas * rowSums(alphasd)
-      parameters$alphas[nstims] <- talphasd[nstims]
-      # apply lower limit on parameters$alphas
-      parameters$alphas[] <- sapply(seq_len(length(fsnames)), function(i) {
-        max(parameters$min_alphas[i], parameters$alphas[i])
-      })
-      # apply upper limit on parameters$alphas
-      parameters$alphas[] <- sapply(seq_len(length(fsnames)), function(i) {
-        min(parameters$max_alphas[i], parameters$alphas[i])
-      })
+        # learn
+        ev <- ev + ed
+        iv <- iv + id
+
+        # alpha deltas
+        alphasd <- p_ohs %*% abs(parameters$gammas * (plambdas - pne))
+        diag(alphasd) <- 0
+
+        # Need to be careful here, as there is no decay for absent stimuli
+        talphasd <- (1 - parameters$thetas) *
+          parameters$alphas + parameters$thetas * rowSums(alphasd)
+        # update just what was seen
+        parameters$alphas[pnominals] <- talphasd[pnominals]
+        # apply lower limit on parameters$alphas
+        parameters$alphas[] <- sapply(seq_len(length(fsnames)), function(i) {
+          max(parameters$min_alphas[i], parameters$alphas[i])
+        })
+        # apply upper limit on parameters$alphas
+        parameters$alphas[] <- sapply(seq_len(length(fsnames)), function(i) {
+          min(parameters$max_alphas[i], parameters$alphas[i])
+        })
+      }
     }
   }
   results <- list(
