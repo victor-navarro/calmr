@@ -41,9 +41,10 @@
     <h6 class="dropdown-header" data-toc-skip>Demos</h6>
     <a class="dropdown-item" href="../articles/calmr_app.html">calmr_app</a>
     <a class="dropdown-item" href="../articles/calmr_fits.html">calmr_fits</a>
-    <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
-    <a class="dropdown-item" href="../articles/using_time_models.html">using_time_models</a>
     <a class="dropdown-item" href="../articles/parallelism_in_calmr.html">parallelism_in_calmr</a>
+    <a class="dropdown-item" href="../articles/directional_models.html">directional_models</a>
+    <a class="dropdown-item" href="../articles/using_time_models.html">using_time_models</a>
+    <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -71,7 +72,12 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.3" id="calmr-063">calmr 0.6.3<a class="anchor" aria-label="anchor" href="#calmr-063"></a></h2>
-<ul><li>Added <code><a href="../reference/set_calmr_palette.html">set_calmr_palette()</a></code> function to control the colour/fill scales used to plot results (<a href="https://github.com/victor-navarro/calmr/issues/1" class="external-link">#1</a>).</li>
+<ul><li>Corrected some issues in directional models.</li>
+<li>Created a vignette to expose the behaviour of directional models.</li>
+<li>Removed randomization column requirement from designs. Randomization of phases is now specified using the “!” character anywhere in the phase string.</li>
+<li>Added support for seed experiment generation in <code><a href="../reference/make_experiment.html">make_experiment()</a></code>.</li>
+<li>Added <code><a href="../reference/set_calmr_palette.html">set_calmr_palette()</a></code> function to control the colour/fill scales used to plot results (<a href="https://github.com/victor-navarro/calmr/issues/1" class="external-link">#1</a>).</li>
+<li>Added <code><a href="../reference/CalmrExperiment-methods.html">filter()</a></code> method for <code>CalmrExperiment</code> class that allows filtering of aggregated data (<a href="https://github.com/victor-navarro/calmr/issues/1" class="external-link">#1</a>).</li>
 <li>Fixed bug in <code><a href="../reference/make_experiment.html">make_experiment()</a></code> that was triggered by empty phases and no miniblocks.</li>
 <li>Changed <code><a href="../reference/get_timings.html">get_timings()</a></code> to require a specific model name.</li>
 <li>Added vignette for TD model.</li>

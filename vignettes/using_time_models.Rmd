@@ -33,17 +33,9 @@ I wrote several additional tools for future time-based models.
 #### Changes to trial-based models
 
 The biggest change in `calmr` version 0.5 is the use of the ">" character and its effect on 
-trial-based models, or rather, the lack thereof.
-
-Before, the ">" character was used to specify a single split within a trial.
-For example, "A>(US)" would encode the typical situation in which stimulus A is 
-followed by the US. This was used to mimic the traditional situation in which we 
-expect an organism to start (conditionally) responding before the US is delivered. 
-And so, all trial-based models had two steps within each trial: an expectation step 
-in which the first half of the trial retrieved (and responded to) absent stimuli, 
-and a learning step, in which all stimuli in the trial were associated with each other. 
-The first pass is no more (so start throwing extinction trials, 
-or better yet, probe trials with the "#" character to test your associations).
+trial-based models. With the advent of time-based models, some generalizations had to be made 
+to enable those models to update across adjacent trial periods. You can learn more about this 
+in the [directional_models](directional_models.html) vignette.
 
 #### Specifying a design for time-based models
 
@@ -55,8 +47,7 @@ enrich them. Let's specify a serial feature discrimination experiment:
 library(calmr)
 fpfn <- data.frame(
   group = c("FP", "FN"),
-  phase1 = c("100F>T>(US)/100T", "100F>T/100T>(US)"),
-  r1 = c(TRUE, TRUE)
+  phase1 = c("!100F>T>(US)/100T", "!100F>T/100T>(US)")
 )
 parse_design(fpfn)
 ```

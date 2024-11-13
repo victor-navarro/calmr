@@ -24,6 +24,7 @@ articles:
   contents:
   - calmr_app
   - calmr_fits
-  - heidi_similarity
-  - using_time_models
   - parallelism_in_calmr
+  - directional_models
+  - using_time_models
+  - heidi_similarity

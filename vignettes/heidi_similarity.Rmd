@@ -64,9 +64,7 @@ to .30 and .50, respectively, for both conditions.
 df <- data.frame(
   Group = c("Same", "Reduced"),
   P1 = c("10A(X_a)", "10A(X_a)"),
-  R1 = c(FALSE, FALSE),
-  P2 = c("10(X_a)(US)", "10(X_b)(US)"),
-  R2 = c(FALSE, FALSE)
+  P2 = c("10(X_a)(US)", "10(X_b)(US)")
 )
 params <- get_parameters(df, model = "HD2022")
 params$alphas[] <- c(.30, .40, .50, .36)
@@ -110,11 +108,8 @@ ntrials <- 1:10
 df <- data.frame(
   Group = c(paste0("S", ntrials), paste0("R", ntrials)),
   P1 = rep(paste0(ntrials, "A(X_a)"), 2),
-  R1 = FALSE,
   P2 = rep(c("10(X_a)>(US)", "10(X_b)>(US)"), each = 10),
-  R2 = FALSE,
-  P3 = "1A#",
-  R3 = FALSE
+  P3 = "1A#"
 )
 head(df)
 ```

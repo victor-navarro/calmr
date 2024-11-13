@@ -41,9 +41,10 @@
     <h6 class="dropdown-header" data-toc-skip>Demos</h6>
     <a class="dropdown-item" href="../articles/calmr_app.html">calmr_app</a>
     <a class="dropdown-item" href="../articles/calmr_fits.html">calmr_fits</a>
-    <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
-    <a class="dropdown-item" href="../articles/using_time_models.html">using_time_models</a>
     <a class="dropdown-item" href="../articles/parallelism_in_calmr.html">parallelism_in_calmr</a>
+    <a class="dropdown-item" href="../articles/directional_models.html">directional_models</a>
+    <a class="dropdown-item" href="../articles/using_time_models.html">using_time_models</a>
+    <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
   </div>
 </li>
 <li class="nav-item">
@@ -123,9 +124,9 @@ should be aggregated. Default = TRUE.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> RW1972</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> -----------------------------</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Design:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>    Group                      P1   R1  P2   R2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1   True           10AB(US)/10AC TRUE 1#A TRUE</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2 Pseudo 5AB(US)/5AB/5AC(US)/5AC TRUE 1#A TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>    Group                       P1  P2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1   True           !10AB(US)/10AC 1#A</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2 Pseudo !5AB(US)/5AB/5AC(US)/5AC 1#A</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> -----------------------------</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Parameters:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> $True</span>
@@ -174,9 +175,9 @@ should be aggregated. Default = TRUE.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> HD2022</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> -----------------------------</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Design:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>    Group                      P1   R1  P2   R2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1   True           10AB(US)/10AC TRUE 1#A TRUE</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2 Pseudo 5AB(US)/5AB/5AC(US)/5AC TRUE 1#A TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>    Group                       P1  P2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1   True           !10AB(US)/10AC 1#A</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2 Pseudo !5AB(US)/5AB/5AC(US)/5AC 1#A</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> -----------------------------</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Parameters:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> $True</span>
@@ -204,9 +205,9 @@ should be aggregated. Default = TRUE.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> SM2007</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> -----------------------------</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Design:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>      Group       P1    R1             P2    R2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1 Blocking 10N&gt;(US) FALSE 10NL&gt;(US)/10#L FALSE</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2  Control          FALSE 10NL&gt;(US)/10#L FALSE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>      Group       P1             P2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1 Blocking 10N&gt;(US) 10NL&gt;(US)/10#L</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2  Control          10NL&gt;(US)/10#L</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> -----------------------------</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Parameters:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> $Blocking</span>
@@ -274,9 +275,9 @@ should be aggregated. Default = TRUE.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> SM2007</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> -----------------------------</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Design:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>      Group       P1    R1             P2    R2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1 Blocking 10N&gt;(US) FALSE 10NL&gt;(US)/10#L FALSE</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2  Control          FALSE 10NL&gt;(US)/10#L FALSE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>      Group       P1             P2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1 Blocking 10N&gt;(US) 10NL&gt;(US)/10#L</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2  Control          10NL&gt;(US)/10#L</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> -----------------------------</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Parameters:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> $Blocking</span>

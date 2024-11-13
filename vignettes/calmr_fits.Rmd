@@ -99,8 +99,7 @@ des_df <- data.frame(
   training = c(
     "12L>(Pellet)/12R>(Sucrose)/12#L/12#R",
     "12L>(Sucrose)/12R>(Pellet)/12#L/12#R"
-  ),
-  rand_train = FALSE
+  )
 )
 # The parameters
 # the actual parameter values don't matter,

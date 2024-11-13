@@ -65,9 +65,10 @@
     <h6 class="dropdown-header" data-toc-skip>Demos</h6>
     <a class="dropdown-item" href="../articles/calmr_app.html">calmr_app</a>
     <a class="dropdown-item" href="../articles/calmr_fits.html">calmr_fits</a>
-    <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
-    <a class="dropdown-item" href="../articles/using_time_models.html">using_time_models</a>
     <a class="dropdown-item" href="../articles/parallelism_in_calmr.html">parallelism_in_calmr</a>
+    <a class="dropdown-item" href="../articles/directional_models.html">directional_models</a>
+    <a class="dropdown-item" href="../articles/using_time_models.html">using_time_models</a>
+    <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
   </div>
 </li>
 <li class="nav-item">
@@ -150,9 +151,7 @@ saliency was .40. The saliencies of A and the US were fixed to .30 and
 <code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  Group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Same"</span>, <span class="st">"Reduced"</span><span class="op">)</span>,</span>
 <span>  P1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"10A(X_a)"</span>, <span class="st">"10A(X_a)"</span><span class="op">)</span>,</span>
-<span>  R1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
-<span>  P2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"10(X_a)(US)"</span>, <span class="st">"10(X_b)(US)"</span><span class="op">)</span>,</span>
-<span>  R2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  P2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"10(X_a)(US)"</span>, <span class="st">"10(X_b)(US)"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_parameters.html">get_parameters</a></span><span class="op">(</span><span class="va">df</span>, model <span class="op">=</span> <span class="st">"HD2022"</span><span class="op">)</span></span>
 <span><span class="va">params</span><span class="op">$</span><span class="va">alphas</span><span class="op">[</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.30</span>, <span class="fl">.40</span>, <span class="fl">.50</span>, <span class="fl">.36</span><span class="op">)</span></span>
@@ -199,20 +198,17 @@ designs.</p>
 <span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  Group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"S"</span>, <span class="va">ntrials</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"R"</span>, <span class="va">ntrials</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  P1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">ntrials</span>, <span class="st">"A(X_a)"</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span>  R1 <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  P2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"10(X_a)&gt;(US)"</span>, <span class="st">"10(X_b)&gt;(US)"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,</span>
-<span>  R2 <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  P3 <span class="op">=</span> <span class="st">"1A#"</span>,</span>
-<span>  R3 <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  P3 <span class="op">=</span> <span class="st">"1A#"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   Group      P1    R1           P2    R2  P3    R3</span></span>
-<span><span class="co">#&gt; 1    S1 1A(X_a) FALSE 10(X_a)&gt;(US) FALSE 1A# FALSE</span></span>
-<span><span class="co">#&gt; 2    S2 2A(X_a) FALSE 10(X_a)&gt;(US) FALSE 1A# FALSE</span></span>
-<span><span class="co">#&gt; 3    S3 3A(X_a) FALSE 10(X_a)&gt;(US) FALSE 1A# FALSE</span></span>
-<span><span class="co">#&gt; 4    S4 4A(X_a) FALSE 10(X_a)&gt;(US) FALSE 1A# FALSE</span></span>
-<span><span class="co">#&gt; 5    S5 5A(X_a) FALSE 10(X_a)&gt;(US) FALSE 1A# FALSE</span></span>
-<span><span class="co">#&gt; 6    S6 6A(X_a) FALSE 10(X_a)&gt;(US) FALSE 1A# FALSE</span></span></code></pre></div>
+<span><span class="co">#&gt;   Group      P1           P2  P3</span></span>
+<span><span class="co">#&gt; 1    S1 1A(X_a) 10(X_a)&gt;(US) 1A#</span></span>
+<span><span class="co">#&gt; 2    S2 2A(X_a) 10(X_a)&gt;(US) 1A#</span></span>
+<span><span class="co">#&gt; 3    S3 3A(X_a) 10(X_a)&gt;(US) 1A#</span></span>
+<span><span class="co">#&gt; 4    S4 4A(X_a) 10(X_a)&gt;(US) 1A#</span></span>
+<span><span class="co">#&gt; 5    S5 5A(X_a) 10(X_a)&gt;(US) 1A#</span></span>
+<span><span class="co">#&gt; 6    S6 6A(X_a) 10(X_a)&gt;(US) 1A#</span></span></code></pre></div>
 <p>Run the model.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_experiment.html">run_experiment</a></span><span class="op">(</span><span class="va">df</span>,</span>

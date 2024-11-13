@@ -40,8 +40,7 @@ library(calmr)
 # calmr_verbosity(TRUE)
 pav_inhib <- data.frame(
   group = "group",
-  phase1 = "50(US)/50AB/50#A",
-  rand1 = TRUE
+  phase1 = "!50(US)/50AB/50#A"
 )
 # set options to introduce more randomness
 pars <- get_parameters(pav_inhib, model = "HDI2020")

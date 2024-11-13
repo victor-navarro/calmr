@@ -41,9 +41,10 @@
     <h6 class="dropdown-header" data-toc-skip>Demos</h6>
     <a class="dropdown-item" href="../articles/calmr_app.html">calmr_app</a>
     <a class="dropdown-item" href="../articles/calmr_fits.html">calmr_fits</a>
-    <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
-    <a class="dropdown-item" href="../articles/using_time_models.html">using_time_models</a>
     <a class="dropdown-item" href="../articles/parallelism_in_calmr.html">parallelism_in_calmr</a>
+    <a class="dropdown-item" href="../articles/directional_models.html">directional_models</a>
+    <a class="dropdown-item" href="../articles/using_time_models.html">using_time_models</a>
+    <a class="dropdown-item" href="../articles/heidi_similarity.html">heidi_similarity</a>
   </div>
 </li>
 <li class="nav-item">
@@ -123,7 +124,7 @@ the model just gets loaded.</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Make some fake data</span></span></span>
-<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>g <span class="op">=</span> <span class="st">"g"</span>, p1 <span class="op">=</span> <span class="st">"3A&gt;(US)"</span>, r1 <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>g <span class="op">=</span> <span class="st">"g"</span>, p1 <span class="op">=</span> <span class="st">"!3A&gt;(US)"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_parameters.html">get_parameters</a></span><span class="op">(</span><span class="va">df</span>, model <span class="op">=</span> <span class="st">"RW1972"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">pars</span><span class="op">$</span><span class="va">alphas</span><span class="op">[</span><span class="st">"US"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0.9</span></span></span>
 <span class="r-in"><span><span class="va">exper</span> <span class="op">&lt;-</span> <span class="fu"><a href="make_experiment.html">make_experiment</a></span><span class="op">(</span><span class="va">df</span>, parameters <span class="op">=</span> <span class="va">pars</span>, model <span class="op">=</span> <span class="st">"RW1972"</span><span class="op">)</span></span></span>
@@ -154,10 +155,10 @@ the model just gets loaded.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --------------</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Parameters:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>         A        US </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.4386228 0.8962406 </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.3820854 0.6000000 </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --------------</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> nLogLik: 11.029</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> nLogLik: 11.0277</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
