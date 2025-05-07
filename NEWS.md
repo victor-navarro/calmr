@@ -1,4 +1,4 @@
-# calmr 0.6.3
+# calmr 0.7.0
 * Corrected some issues in directional models.
 * Created a vignette to expose the behaviour of directional models.
 * Removed randomization column requirement from designs. Randomization of phases is now specified using the "!" character anywhere in the phase string.
