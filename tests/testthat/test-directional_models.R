@@ -1,6 +1,6 @@
 # Test that directional models do not form reciprocal associations
 exp <- data.frame(group = "G", phase1 = c("10A>B"))
-models_to_test <- c("RW1972", "MAC1975", "PKH1982")
+models_to_test <- c("RW1972", "MAC1975", "PKH1982") # Current directional models
 
 for (model in models_to_test) {
   test_that(sprintf("model %s does not form reciprocal associations", model), {
