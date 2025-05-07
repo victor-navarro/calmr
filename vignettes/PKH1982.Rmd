@@ -85,7 +85,7 @@ of the absolute global error, via:
 
 $$
 \tag{Eq.3}
-\Delta \alpha_{i} = x_i \sum_{j}^{K}\gamma_j(|\lambda_j - e_j|)
+\alpha_{i} = x_i \sum_{j}^{K}\gamma_j(|\lambda_j - e_j|)
 $$
 where $\gamma_j$ denotes the contribution of the 
 prediction error based on the jth stimulus. In this regard, 
@@ -104,7 +104,7 @@ of the different experimental stimuli. For example, in a simple
 The PKH1982 model improves upon the @pearce_model_1980 
 model by adding an extra parameter that controls the rate 
 at which associability changes. If we qualify the changes 
-in associability determined by Eq.3 via $\Delta\alpha_{i}^{n}$ 
+in associability described by Eq.3 via $\alpha_{i}^{n}$ 
 (meaning they happened after trial $n$), then we can quantify the 
 total associability of stimulus $i$ after trial $n$ via:
 
@@ -112,7 +112,7 @@ $$
 \tag{Eq.4}
 \alpha_{i}^{n} = 
 \begin{cases}
-  (1-\theta_i) \alpha_{i}^{n-1} + \theta_i\Delta\alpha_{j}^n &\text{, if } x_i = 1\\
+  (1-\theta_i) \alpha_{i}^{n-1} + \theta_i\alpha_{j}^n &\text{, if } x_i = 1\\
   \alpha_{i}^{n} & \text{, otherwise}
 \end{cases}
 $$
