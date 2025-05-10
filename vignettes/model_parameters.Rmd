@@ -1,11 +1,18 @@
 ---
-title: "Model Parameters"
+title: "model_parameters"
+authod: "Victor Navarro"
+output: rmarkdown::html_vignette
+bibliography: references.bib
+vignette: >
+  %\VignetteIndexEntry{model_parameters}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE, message = FALSE}
 library(calmr)
 ```
-#### [RW1972](https://victornavarro.org/calmr/articles/RW1972.html)
+#### [RW1972](RW1972.html)
 
 ```{r}
 model_parameters("RW1972")
@@ -17,7 +24,7 @@ model_parameters("RW1972")
 |betas_on, betas_off|$\beta_{on},\beta_{off}$|Intensity of presented and absent target|
 |lambdas|$\lambda$|Maximum learning supported by target|
 
-#### [MAC1975](https://victornavarro.org/calmr/articles/MAC1975.html)
+#### [MAC1975](MAC1975.html)
 
 ```{r}
 model_parameters("MAC1975")
@@ -32,7 +39,7 @@ model_parameters("MAC1975")
 |thetas|$\theta$|Attentional learning rate parameter for stimulus|
 |gammas|$\gamma$|Attentional learning weight for stimulus|
 
-#### [PKH1982](https://victornavarro.org/calmr/articles/PKH1982.html)
+#### [PKH1982](PKH1982.html)
 
 ```{r}
 model_parameters("PKH1982")
@@ -47,7 +54,7 @@ model_parameters("PKH1982")
 |thetas|$\theta$|Decay/strengthening associability rate parameter for stimulus|
 |gammas|$\gamma$|Attentional learning weight for stimulus|
 
-#### [SM2007](https://victornavarro.org/calmr/articles/SM2007.html)
+#### [SM2007](SM2007.html)
 ```{r}
 model_parameters("SM2007")
 ```
@@ -62,7 +69,7 @@ model_parameters("SM2007")
 |taus|$\tau$|Learning rate for operator switch|
 |order|$order$|Order for the comparison process|
 
-#### [HDI2020/HD2022](https://victornavarro.org/calmr/articles/HD2022.html)
+#### [HDI2020/HD2022](HD2022.html)
 ```{r}
 model_parameters("HDI2020")
 model_parameters("HD2022")
@@ -72,7 +79,7 @@ model_parameters("HD2022")
 |:----|:----:|:---|
 |alphas|$\alpha$|Learning rate for presented stimulus|
 
-#### [TD](https://victornavarro.org/calmr/articles/TD.html)
+#### [TD](TD.html)
 
 ```{r}
 model_parameters("TD")
@@ -86,7 +93,7 @@ model_parameters("TD")
 |gamma|$\gamma$|Temporal discount parameter|
 |sigma|$\sigma$|Rate of decay for eligibility traces|
 
-#### [ANCCR](https://victornavarro.org/calmr/articles/ANCCR.html)
+#### [ANCCR](ANCCR.html)
 
 ```{r}
 model_parameters("ANCCR")
@@ -110,7 +117,7 @@ model_parameters("ANCCR")
 |add_beta|$add\_beta$|Whether to add $\beta$ to dopaminergic activity|
 |jitter|$jitter$|Magnitude of perceptual noise for simultaneous events|
 
-#### [RAND](https://victornavarro.org/calmr/articles/RAND.html)
+#### [RAND](RAND.html)
 
 ```{r}
 model_parameters("RAND")
