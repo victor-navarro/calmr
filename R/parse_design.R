@@ -13,6 +13,12 @@
 #' @export
 
 parse_design <- function(df) {
+  # assert at least two columns
+  if (ncol(df) < 2) {
+    stop("Data frame must have at least two columns (1 group 1 phase).")
+  }
+  # pass to compatibility function
+  df <- .design_compat(df)
   design <- apply(df, 1, function(r) {
     sapply(seq_len(ncol(df))[-1], function(p) {
       list(
@@ -32,6 +38,42 @@ parse_design <- function(df) {
   methods::new("CalmrDesign",
     design = design, mapping = map, raw_design = df
   )
+}
+
+.design_compat <- function(df) {
+  # checks if the data.frame uses <0.7.0 format with a randomization column.
+  # If so, it throws a deprecation warning and modifies the data.frame
+
+  # check if any columns contain boolean values
+  col_classes <- sapply(df, class)
+  if (any(col_classes == "logical")) {
+    # check if any of the boolean columns are named "randomization
+    # raise warning
+    lifecycle::deprecate_warn(
+      when = "0.7.0",
+      what = "parse_design(df = 'must not contain randomization columns')",
+      details = "Please use the new format using '!'
+      and no randomization column.
+      (e.g., !10A/10B)",
+      always = TRUE
+    )
+
+    # get randomization symbols
+    is_random <- which(col_classes == "logical")
+    df[is_random] <- sapply(df[is_random], function(col) {
+      ifelse(col, "!", "")
+    })
+    # paste the columns
+    df[is_random - 1] <- sapply(
+      is_random,
+      function(i) {
+        paste0(df[[i]], df[[i - 1]])
+      }
+    )
+    # remove the randomization columns
+    df <- df[, -is_random]
+  }
+  df
 }
 
 .get_mapping <- function(design) {
@@ -92,11 +134,11 @@ parse_design <- function(df) {
   # make one-hot vectors
   # period based
   period_onehots <- lapply(funcs, function(t) {
-    lapply(t, one_hot, stimnames = uni_fun)
+    lapply(t, .one_hot, stimnames = uni_fun)
   })
   # trial based
   trial_onehots <- lapply(funcs, function(t) {
-    one_hot(unique(unlist(t)), stimnames = uni_fun)
+    .one_hot(unique(unlist(t)), stimnames = uni_fun)
   })
 
   list(
@@ -116,6 +158,6 @@ parse_design <- function(df) {
 }
 
 # Makes a onehot representation of the stimulus vector, given all stimuli
-one_hot <- function(s, stimnames) {
-  return(stats::setNames(as.numeric(stimnames %in% s), stimnames))
+.one_hot <- function(s, stimnames) {
+  stats::setNames(as.numeric(stimnames %in% s), stimnames)
 }

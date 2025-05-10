@@ -143,7 +143,7 @@ TD <- function(
           dhold
         }, simplify = FALSE)
 
-        # apply updates and elegibility traces
+        # apply updates and eligibility traces
         for (stim in fsnames) {
           w[[stim]][] <- w[[stim]] + dd[[stim]]
           # decay eligibilities by 1 timestep

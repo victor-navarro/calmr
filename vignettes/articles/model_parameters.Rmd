@@ -56,7 +56,7 @@ model_parameters("SM2007")
 |:----|:----:|:---|
 |alphas|$\alpha$|Learning rate for presented stimulus|
 |lambdas|$\lambda$|Maximum learning supported by target|
-|omegas|$\omega$|Weaking rate for presented stimulus|
+|omegas|$\omega$|Weakening rate for presented stimulus|
 |rhos|$\rho$|Salience contribution for unconditioned activation of target|
 |gammas|$\gamma$|Contribution of stimulus to comparison process|
 |taus|$\tau$|Learning rate for operator switch|

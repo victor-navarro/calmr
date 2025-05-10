@@ -43,3 +43,31 @@ df <- data.frame(
 test_that("no transitions for trial in design with empty phases", {
   expect_true(!("#L" %in% parse_design(df)@mapping$transitions))
 })
+
+# A design with the old format for randomization
+old_rand_df <- data.frame(
+  group = c("A", "B"),
+  p1 = c("10AB/10C", "10AC/10A"),
+  r1 = c(TRUE, FALSE),
+  p2 = c("10A/10B", "10B/10C"),
+  r2 = c(FALSE, TRUE)
+)
+
+test_that("compatibility function works", {
+  compat_rand_df <- suppressWarnings(calmr:::.design_compat(old_rand_df))
+
+  # the randomization columns should be removed
+  expect_false(any(grepl("r", names(compat_rand_df[2:ncol(compat_rand_df)]))))
+  # get number of randomization entries
+  n_rand <- sum(sapply(old_rand_df, class) == "logical")
+
+  # get entries which should have a !
+  targets <- which(old_rand_df == TRUE) - (1:n_rand) * nrow(old_rand_df)
+  expect_true(all(grepl("!", unlist(compat_rand_df)[targets])))
+})
+
+test_that("warning is thrown for old randomization format", {
+  expect_warning(
+    parse_design(old_rand_df)
+  )
+})

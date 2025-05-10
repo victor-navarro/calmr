@@ -21,6 +21,7 @@ Imports:
     ggnetwork,
     ggplot2,
     grid,
+    lifecycle,
     methods,
     network,
     patchwork,
@@ -42,7 +43,7 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Collate: 
     'HD2022.R'
     'HDI2020.R'
@@ -85,3 +86,4 @@ Collate:
     'class_experiment.R'
     'class_rsa.R'
     'class_fit.R'
+    'calmr-package.R'

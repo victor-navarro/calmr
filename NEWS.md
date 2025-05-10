@@ -1,7 +1,7 @@
 # calmr 0.7.0
 * Corrected some issues in directional models.
 * Created a vignette to expose the behaviour of directional models.
-* Removed randomization column requirement from designs. Randomization of phases is now specified using the "!" character anywhere in the phase string.
+* Removed randomization column requirement from designs. Randomization of phases is now specified using the "!" character anywhere in the phase string. Using the old format throws a deprecation warning.
 * Added support for seed experiment generation in `make_experiment()`.
 * Added `set_calmr_palette()` function to control the colour/fill scales used to plot results ([#1](https://github.com/victor-navarro/calmr/issues/1)).
 * Added `filter()` method for `CalmrExperiment` class that allows filtering of aggregated data ([#1](https://github.com/victor-navarro/calmr/issues/1)).

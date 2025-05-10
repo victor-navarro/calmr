@@ -16,17 +16,17 @@ The temporal difference (TD) model [@suttonTimederivativeModelsPavlovian1990] is
 an extension of the ideas underlying the RW model [@rescorla_theory_1972]. Most notably
 the TD model abandons the construct of a "trial", favoring instead time-based formulations.
 Also notable is the introduction of eligibility traces, which allow the model 
-to bridge temporal gaps and deal with the credit assigment problem.
+to bridge temporal gaps and deal with the credit assignment problem.
 
 *Implementation note: As of `calmr` version `0.6.2`, stimulus representation in TD 
 is based on complete serial compounds (i.e., time-specific stimulus elements entirely 
 discriminable from each other), and the eligibility traces are of the replacing type.*
 
-*General Note: There are several descriptions of the TD model out there, however, all of the ones I found were opaque when it comes to implementation. Hence, the following description of the model has a focus on implementational details.*
+*General Note: There are several descriptions of the TD model out there, however, all of the ones I found were opaque when it comes to implementation. Hence, the following description of the model has a focus on implementation details.*
 
 # 1 - Maintaining stimulus representations
 
-TD maintains stimulus traces as eligibility traces. The elegibility of stimulus $i$ at time $t$, $e_i^t$, is given by:
+TD maintains stimulus traces as eligibility traces. The eligibility of stimulus $i$ at time $t$, $e_i^t$, is given by:
 
 $$
 \tag{Eq. 1}
@@ -62,7 +62,7 @@ $$
 \delta_j^t = \lambda_j^t +  \gamma V_j^t - V_j^{t-1}
 $$
 
-where $\lambda_j$ is the value of stimulus $j$ at time $t$, which also determines the assymptote for stimulus weights towards $j$. 
+where $\lambda_j$ is the value of stimulus $j$ at time $t$, which also determines the asymptote for stimulus weights towards $j$. 
 
 The temporal difference error term is used to update $w$ via:
 
