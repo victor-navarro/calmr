@@ -103,7 +103,7 @@
   itis <- starts[-1] - ends[-length(ends)]
   # get last trial type
   itis <- c(itis, sum(timings$trial_ts[
-    timings$trial_ts$trial == tail(eventlog, 1)$tn,
+    timings$trial_ts$trial == utils::tail(eventlog, 1)$tn,
     c("post_trial_delay", "mean_ITI")
   ]))
   eventlog$iti <- itis[eventlog$trial]
