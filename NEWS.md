@@ -1,5 +1,3 @@
-# calmr 0.7.1
-
 # calmr 0.7.0
 * Corrected some issues in directional models.
 * Created a vignette to expose the behaviour of directional models.
