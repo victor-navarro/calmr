@@ -6,11 +6,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>TD • calmr</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
-<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
-<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
-<link rel="icon" sizes="any" href="../favicon.ico">
-<link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
@@ -99,7 +94,7 @@ model <span class="citation">(Rescorla &amp; Wagner, 1972)</span>. Most
 notably the TD model abandons the construct of a “trial”, favoring
 instead time-based formulations. Also notable is the introduction of
 eligibility traces, which allow the model to bridge temporal gaps and
-deal with the credit assigment problem.</p>
+deal with the credit assignment problem.</p>
 <p><em>Implementation note: As of <code>calmr</code> version
 <code>0.6.2</code>, stimulus representation in TD is based on complete
 serial compounds (i.e., time-specific stimulus elements entirely
@@ -108,12 +103,12 @@ replacing type.</em></p>
 <p><em>General Note: There are several descriptions of the TD model out
 there, however, all of the ones I found were opaque when it comes to
 implementation. Hence, the following description of the model has a
-focus on implementational details.</em></p>
+focus on implementation details.</em></p>
 </div>
 <div class="section level2">
 <h2 id="maintaining-stimulus-representations">1 - Maintaining stimulus representations<a class="anchor" aria-label="anchor" href="#maintaining-stimulus-representations"></a>
 </h2>
-<p>TD maintains stimulus traces as eligibility traces. The elegibility
+<p>TD maintains stimulus traces as eligibility traces. The eligibility
 of stimulus
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
 at time
@@ -219,7 +214,7 @@ is the value of stimulus
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>
 at time
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>,
-which also determines the assymptote for stimulus weights towards
+which also determines the asymptote for stimulus weights towards
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>.</p>
 <p>The temporal difference error term is used to update
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>w</mi><annotation encoding="application/x-tex">w</annotation></semantics></math>
