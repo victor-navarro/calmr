@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">calmr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +36,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Model reference</h6></li>
-    <li><a class="dropdown-item" href="../articles/model_parameters.html">Model Parameters</a></li>
+    <li><a class="dropdown-item" href="../articles/model_parameters.html">model_parameters</a></li>
     <li><a class="dropdown-item" href="../articles/RW1972.html">RW1972</a></li>
     <li><a class="dropdown-item" href="../articles/MAC1975.html">MAC1975</a></li>
     <li><a class="dropdown-item" href="../articles/PKH1982.html">PKH1982</a></li>
@@ -79,7 +79,7 @@
 Navarro</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/victor-navarro/calmr/blob/v0.7.0/vignettes/parallelism_in_calmr.Rmd" class="external-link"><code>vignettes/parallelism_in_calmr.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/victor-navarro/calmr/blob/main/vignettes/parallelism_in_calmr.Rmd" class="external-link"><code>vignettes/parallelism_in_calmr.Rmd</code></a></small>
       <div class="d-none name"><code>parallelism_in_calmr.Rmd</code></div>
     </div>
 
@@ -126,7 +126,7 @@ package.</p>
 <span><span class="va">end</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html" class="external-link">proc.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">start</span></span>
 <span><span class="va">end</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   6.718   0.086   4.727</span></span></code></pre></div>
+<span><span class="co">#&gt;   6.384   0.062   4.396</span></span></code></pre></div>
 <p>Let’s try parallelizing now.</p>
 </div>
 <div class="section level3">
@@ -147,7 +147,7 @@ consult their documentation). Regardless, if you are running
 <span><span class="va">end</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html" class="external-link">proc.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">start</span></span>
 <span><span class="va">end</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   1.199   0.163   4.660</span></span>
+<span><span class="co">#&gt;   1.162   0.155   4.539</span></span>
 <span></span>
 <span><span class="co"># go back to non-parallel evaluations</span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">sequential</span><span class="op">)</span></span></code></pre></div>
