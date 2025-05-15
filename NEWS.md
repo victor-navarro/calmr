@@ -1,4 +1,5 @@
 # calmr 0.7.1
+* Fixed bug in usage of beta parameters in the RW1972 model. Added tests all model parameters.
 
 # calmr 0.7.0
 * Corrected some issues in directional models.

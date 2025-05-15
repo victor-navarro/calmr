@@ -75,7 +75,6 @@ RW1972 <- function(v = NULL, # nolint: object_name_linter.
         plambdas[mapping$nomi2func[pnominals]] <-
           parameters$lambdas[pnominals]
 
-
         # get period onehot stimuli
         p_ohs <- mapping$period_ohs[[tn]][[p]]
         # generate period expectation
@@ -83,7 +82,7 @@ RW1972 <- function(v = NULL, # nolint: object_name_linter.
         # calculate period error (with both periods)
         err <- plambdas - pe
         # calculate period delta
-        d <- p_ohs * palphas %*% err
+        d <- t(t(p_ohs * palphas %*% err) * pbetas)
         diag(d) <- 0
         # update weights
         v <- v + d
