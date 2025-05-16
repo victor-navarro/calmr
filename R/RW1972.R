@@ -15,22 +15,20 @@ RW1972 <- function(v = NULL, # nolint: object_name_linter.
                    parameters,
                    experience,
                    mapping, ...) {
+  .assert_no_functional(mapping)
+
   # data initialization
   ntrials <- length(experience$tp)
-  fsnames <- mapping$unique_functional_stimuli
+  stim_names <- mapping$unique_nominal_stimuli
 
   if (is.null(v)) {
-    v <- gen_ss_weights(fsnames)
+    v <- gen_ss_weights(stim_names)
   }
   vs <- array(NA,
     dim = c(ntrials, dim(v)),
-    dimnames = list(NULL, fsnames, fsnames)
+    dimnames = list(NULL, stim_names, stim_names)
   )
   rs <- vs
-  betas_off_avg <- tapply(
-    parameters$betas_off,
-    mapping$nomi2func, mean
-  ) # average saliencies
 
   for (t in 1:ntrials) {
     # get pointers
@@ -38,6 +36,7 @@ RW1972 <- function(v = NULL, # nolint: object_name_linter.
 
     # get onehot stimuli
     oh_fstims <- mapping$trial_ohs[[tn]]
+
     # get response
     r <- v * oh_fstims
 
@@ -60,20 +59,16 @@ RW1972 <- function(v = NULL, # nolint: object_name_linter.
           mapping$period_nominals[[tn]][[p]],
           mapping$period_nominals[[tn]][[p2]]
         )
-
         # set parameters for learning
         palphas <- plambdas <-
-          stats::setNames(rep(0, length(fsnames)), fsnames)
+          stats::setNames(rep(0, length(stim_names)), stim_names)
         # populate alphas
-        palphas[mapping$nomi2func[pnominals]] <-
-          parameters$alphas[pnominals]
+        palphas[pnominals] <- parameters$alphas[pnominals]
         # populate betas
-        pbetas <- betas_off_avg
-        pbetas[mapping$nomi2func[pnominals]] <-
-          parameters$betas_on[pnominals]
+        pbetas <- parameters$betas_off
+        pbetas[pnominals] <- parameters$betas_on[pnominals]
         # populate lambdas
-        plambdas[mapping$nomi2func[pnominals]] <-
-          parameters$lambdas[pnominals]
+        plambdas[pnominals] <- parameters$lambdas[pnominals]
 
         # get period onehot stimuli
         p_ohs <- mapping$period_ohs[[tn]][[p]]
