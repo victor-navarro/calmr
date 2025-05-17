@@ -1,4 +1,4 @@
-test_model <- test_model
+test_model <- "MAC1975"
 simple_acquisition <- data.frame(g = "X", s1 = "10A>B")
 
 pars <- get_parameters(simple_acquisition, model = test_model)
