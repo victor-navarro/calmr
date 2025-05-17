@@ -1,5 +1,6 @@
 # calmr 0.7.1
 * Fixed bug in usage of beta parameters in the RW1972 model. Added tests for all model parameters. Additionally, disabled functional stimuli for RW1972.
+* Fixed bug in calculation of alpha deltas for MAC1975. Added tests for all model parameters and some expected behaviours with regards to associability.
 
 # calmr 0.7.0
 * Corrected some issues in directional models.

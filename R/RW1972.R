@@ -15,6 +15,7 @@ RW1972 <- function(v = NULL, # nolint: object_name_linter.
                    parameters,
                    experience,
                    mapping, ...) {
+  # No functional stimuli check
   .assert_no_functional(mapping)
 
   # data initialization
@@ -51,7 +52,7 @@ RW1972 <- function(v = NULL, # nolint: object_name_linter.
       # for situations in which there is only one period
       # (or if we are in the last period)
       # we just clamp the next period to the current period
-      trial_periods <- length(mapping$period_functionals[[tn]])
+      trial_periods <- length(mapping$period_nominals[[tn]])
       for (p in seq_len(trial_periods)) {
         p2 <- min(p + 1, trial_periods) # clamp
         # gather the nominals for the periods

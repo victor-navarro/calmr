@@ -20,7 +20,7 @@ MAC1975 <- function(v = NULL, # nolint: object_name_linter.
 
   # data initialization
   ntrials <- length(experience$tp)
-  fsnames <- mapping$unique_functional_stimuli
+  fsnames <- mapping$unique_nominal_stimuli
 
   if (is.null(v)) {
     v <- gen_ss_weights(fsnames)
@@ -58,7 +58,7 @@ MAC1975 <- function(v = NULL, # nolint: object_name_linter.
     if (!experience$is_test[t]) {
       # we maintain the directionality of learning
       # for a description of how this is implemented, see the RW1972 model code
-      trial_periods <- length(mapping$period_functionals[[tn]])
+      trial_periods <- length(mapping$period_nominals[[tn]])
       for (p in seq_len(trial_periods)) {
         p2 <- min(p + 1, trial_periods) # clamp
         # gather the nominals for the periods
@@ -71,15 +71,12 @@ MAC1975 <- function(v = NULL, # nolint: object_name_linter.
         palphas <- plambdas <-
           stats::setNames(rep(0, length(fsnames)), fsnames)
         # populate alphas
-        palphas[mapping$nomi2func[pnominals]] <-
-          parameters$alphas[pnominals]
+        palphas[pnominals] <- parameters$alphas[pnominals]
         # populate betas
         pbetas <- parameters$betas_off
-        pbetas[mapping$nomi2func[pnominals]] <-
-          parameters$betas_on[pnominals]
+        pbetas[pnominals] <- parameters$betas_on[pnominals]
         # populate lambdas
-        plambdas[mapping$nomi2func[pnominals]] <-
-          parameters$lambdas[pnominals]
+        plambdas[pnominals] <- parameters$lambdas[pnominals]
 
 
         # get period onehot stimuli
@@ -96,12 +93,12 @@ MAC1975 <- function(v = NULL, # nolint: object_name_linter.
         # update weights
         v <- v + d
 
-        # learn alphas
+        # learn alphas for the stimuli in the current period
         # note: the expressions below take the expectation matrix,
         # pool it twice (once for each predictor, once for all i
         # but the predictor) and then sweeps each entry
         # with the lambda for each j.
-        alphasd <- parameters$thetas * ps_ohs *
+        alphasd <- parameters$thetas * p_ohs *
           rowSums(
             abs(t((plambdas - t(pe) %*% nsmat) * parameters$gammas))
             - abs(t((plambdas - t(pe)) * parameters$gammas))

@@ -325,7 +325,7 @@ setMethod(
         plot_name <- sprintf("%s - %s (%s)", g, .get_y_prettyname(p), x@model)
         plots[[plot_name]] <- calmr_model_plot(pdat[pdat$group == g, ],
           type = p, model = x@model, ...
-        )
+        ) + ggplot2::labs(title = plot_name)
       }
     }
     if (throw_warn) {
