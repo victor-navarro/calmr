@@ -45,13 +45,13 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Collate: 
+    'RW1972.R'
     'HD2022.R'
     'HDI2020.R'
     'MAC1975.R'
     'PKH1982.R'
     'RAND.R'
     'ANCCR.R'
-    'RW1972.R'
     'SM2007.R'
     'TD.R'
     'rsa_functions.R'
@@ -86,4 +86,5 @@ Collate:
     'class_rsa.R'
     'class_fit.R'
     'class_model.R'
+    'class_RW1972.R'
     'calmr-package.R'

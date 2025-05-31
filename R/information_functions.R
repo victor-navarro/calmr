@@ -21,9 +21,10 @@ NULL
 #' @export
 supported_models <- function() {
   c(
-    "HDI2020", "HD2022", "RW1972", "MAC1975",
-    "PKH1982", "SM2007", "RAND", "ANCCR",
-    "TD"
+    "RW1972"
+    # "HDI2020", "HD2022", "RW1972", "MAC1975",
+    # "PKH1982", "SM2007", "RAND", "ANCCR",
+    # "TD"
   )
 }
 #' @rdname model_information

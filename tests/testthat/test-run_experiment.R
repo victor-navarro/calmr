@@ -21,7 +21,6 @@ test_that("run_experiment asserts correctly", {
     df,
     model = "HD2022"
   ))
-  # TODO: write tests that check for parameters and for options
 })
 
 test_that("run_experiment runs with split args", {

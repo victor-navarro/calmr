@@ -73,7 +73,18 @@ run_experiment <- function(
         parameters = experiment@parameters[[experiment@.group[i]]],
         timings = experiment@timings
       ), nargs)
-      raw <- do.call(get_model(experiment@.model[i]), args)
+
+      # create model instance
+      mod <- methods::new(
+        experiment@.model[i],
+        parameters = args$parameters
+      )
+      mod <- calmr::run(mod,
+        experience = args$experience,
+        mapping = args$mapping,
+        timings = args$timings, nargs
+      )
+      raw <- results(mod)
       parsed <- NULL
       if (parse) {
         parsed <- .parse_model(
