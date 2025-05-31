@@ -137,7 +137,8 @@ methods::setMethod("parameters<-", "CalmrExperiment", function(x, value) {
   if (is.null(newpars)) {
     stop(paste(
       "Could not find a match for group/parameter names.",
-      "Try calling parameters on experiment before trying the assignment."
+      "Try calling `parameters()` on the experiment before
+      attempting the assignment."
     ))
   }
   x@parameters <- newpars

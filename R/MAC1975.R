@@ -23,7 +23,7 @@ MAC1975 <- function(v = NULL, # nolint: object_name_linter.
   fsnames <- mapping$unique_nominal_stimuli
 
   if (is.null(v)) {
-    v <- gen_ss_weights(fsnames)
+    v <- .gen_ss_weights(fsnames)
   }
 
   vs <- rs <- array(NA,

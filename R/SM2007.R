@@ -40,7 +40,7 @@ SM2007 <- function(v = NULL, # nolint
   fsnames <- mapping$unique_functional_stimuli
 
   if (is.null(v)) {
-    v <- gen_ss_weights(fsnames)
+    v <- .gen_ss_weights(fsnames)
   } # association weights
   if (is.null(o)) {
     o <- gen_os_values(fsnames)

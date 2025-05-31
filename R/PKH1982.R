@@ -25,10 +25,10 @@ PKH1982 <- function(
   fsnames <- mapping$unique_functional_stimuli
 
   if (is.null(ev)) {
-    ev <- gen_ss_weights(fsnames)
+    ev <- .gen_ss_weights(fsnames)
   }
   if (is.null(iv)) {
-    iv <- gen_ss_weights(fsnames)
+    iv <- .gen_ss_weights(fsnames)
   }
   rs <- array(NA,
     dim = c(ntrials, dim(ev)),

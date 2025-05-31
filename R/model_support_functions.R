@@ -1,8 +1,27 @@
 # An assortment of functions to support models
 
 # Generate a matrix with named columns and rows
-gen_ss_weights <- function(stims, default_val = 0) {
+.gen_ss_weights <- function(stims, default_val = 0) {
   array(default_val, dim = rep(length(stims), 2), dimnames = list(stims, stims))
+}
+
+# Expand a matrix with named columns and rows to match the given stimuli
+.expand_ss_weights <- function(mat, stims, default_val = 0) {
+  # get names of the matrix
+  old_stims <- rownames(mat)
+  # get the difference
+  diff_stims <- setdiff(stims, old_stims)
+  # if the matrix is already expanded, return it
+  if (length(diff_stims) == 0) {
+    return(mat)
+  }
+  full_stims <- c(old_stims, diff_stims)
+  # create a new matrix with the new stimuli
+  new_mat <- .gen_ss_weights(full_stims, default_val = default_val)
+  # copy the old values to the new matrix
+  new_mat[old_stims, old_stims] <- mat
+  # return the new matrix
+  new_mat
 }
 
 # Generate a three dimensional matrix with named axes

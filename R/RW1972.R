@@ -23,7 +23,7 @@ RW1972 <- function(v = NULL, # nolint: object_name_linter.
   stim_names <- mapping$unique_nominal_stimuli
 
   if (is.null(v)) {
-    v <- gen_ss_weights(stim_names)
+    v <- .gen_ss_weights(stim_names)
   }
   vs <- array(NA,
     dim = c(ntrials, dim(v)),

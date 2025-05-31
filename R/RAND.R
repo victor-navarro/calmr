@@ -20,7 +20,7 @@ RAND <- function(v = NULL, # nolint: object_name_linter.
   fsnames <- mapping$unique_functional_stimuli
 
   if (is.null(v)) {
-    v <- gen_ss_weights(fsnames)
+    v <- .gen_ss_weights(fsnames)
   }
 
   vs <- rs <- array(NA,

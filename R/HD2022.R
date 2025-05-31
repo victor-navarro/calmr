@@ -19,7 +19,7 @@ HD2022 <- function(v = NULL, # nolint: object_name_linter.
   ntrials <- length(experience$tp)
   fsnames <- mapping$unique_functional_stimuli
   if (is.null(v)) {
-    v <- gen_ss_weights(fsnames)
+    v <- .gen_ss_weights(fsnames)
   }
   vs <- array(NA,
     dim = c(ntrials, dim(v)),
