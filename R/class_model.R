@@ -22,6 +22,7 @@ methods::setClass(
     .parse_map = "list",
     .formula_map = "list",
     .plots_map = "list",
+    .last_experience = "data.frame",
     .last_results = "list"
   )
 )

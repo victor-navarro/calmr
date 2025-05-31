@@ -82,8 +82,10 @@ run_experiment <- function(
       mod <- calmr::run(mod,
         experience = args$experience,
         mapping = args$mapping,
-        timings = args$timings, nargs
+        timings = args$timings,
+        nargs
       )
+      # get results
       raw <- results(mod)
       parsed <- NULL
       if (parse) {
