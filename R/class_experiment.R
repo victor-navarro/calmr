@@ -21,13 +21,13 @@ methods::setClass(
   "CalmrExperiment",
   representation(
     design = "CalmrDesign",
-    model = "character",
     groups = "character",
+    model = "character",
     parameters = "list",
     timings = "list",
     experiences = "list",
     results = "CalmrExperimentResult",
-    .model = "character",
+    .models = "list",
     .group = "character",
     .iter = "integer",
     .seed = "ANY"
@@ -58,7 +58,7 @@ setMethod("show", "CalmrExperiment", function(object) {
   message(
     "-----------------------------\n",
     "CalmrExperiment with model:\n",
-    object@model, "\n",
+    class(object@model), "\n",
     "-----------------------------\n",
     "Design:\n",
     paste0(utils::capture.output(object@design@raw_design), collapse = "\n"),
@@ -240,7 +240,10 @@ methods::setMethod(
       stop("Found no raw_results to parse.")
     }
     # Sanitize outputs
-    outputs <- .sanitize_outputs(outputs, object@model)
+    outputs <- .sanitize_outputs(
+      outputs,
+      object@.models[[1]]@outputs
+    )
 
     n <- length(object)
     pb <- progressr::progressor(n)
@@ -257,12 +260,7 @@ methods::setMethod(
         # parse
         pp <- list()
         if (length(to_parse) > 0) {
-          pp <- .parse_model(
-            raw = object@results@raw_results[[r]],
-            experience = object@experiences[[r]],
-            model = object@model,
-            outputs = to_parse
-          )
+          pp <- parse(object@.models[[r]], outputs = to_parse)
         }
         pb("Parsing results")
         c(existing, pp)
@@ -281,7 +279,7 @@ methods::setMethod(
 methods::setMethod(
   "aggregate", "CalmrExperiment",
   function(x, outputs = NULL) {
-    outputs <- .sanitize_outputs(outputs, x@model)
+    outputs <- .sanitize_outputs(outputs, x@.models[[1]]@outputs)
     res <- .aggregate_experiment(x, outputs)
     # unnest_once to leave at output level
     x@results@aggregated_results <- unlist(unname(res),
@@ -301,7 +299,7 @@ setMethod(
   function(x, type = NULL, ...) {
     # Assert type is valid
     throw_warn <- FALSE
-    model_plots <- .sanitize_outputs(type, x@model)
+    model_plots <- .sanitize_outputs(type, x@.models[[1]]@outputs)
     # Check aggregated results are available
     if (is.null(x@results@aggregated_results)) {
       stop(c(
@@ -317,6 +315,8 @@ setMethod(
       to_agg <- setdiff(model_plots, names(res))
       res <- results(aggregate(x, outputs = to_agg))
     }
+    # get plots from first model
+    pfuncs <- x@.models[[1]]@.plots_map
     plots <- list()
     for (p in model_plots) {
       odat <- res[[p]]
@@ -324,9 +324,9 @@ setMethod(
       groups <- unique(pdat$group)
       for (g in groups) {
         plot_name <- sprintf("%s - %s (%s)", g, .get_y_prettyname(p), x@model)
-        plots[[plot_name]] <- calmr_model_plot(pdat[pdat$group == g, ],
-          type = p, model = x@model, ...
-        ) + ggplot2::labs(title = plot_name)
+        # get plot
+        plots[[plot_name]] <- pfuncs[[p]](pdat[pdat$group == g, ], ...) +
+          ggplot2::labs(title = plot_name)
       }
     }
     if (throw_warn) {

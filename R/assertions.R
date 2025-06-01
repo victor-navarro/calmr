@@ -8,12 +8,11 @@ is_design <- function(object) {
 
 #' Sanitize model outputs
 #' @param os Given outputs. Character vector
-#' @param m A model name
+#' @param moutputs Model outputs. Character vector
 #' @return A character vector
 #' @note If os is not NULL, cuts extraneous outputs.
 #' @noRd
-.sanitize_outputs <- function(os, m) {
-  moutputs <- model_outputs(m)
+.sanitize_outputs <- function(os, moutputs) {
   if (is.null(os)) {
     return(moutputs)
   }
@@ -157,4 +156,12 @@ is_design <- function(object) {
       palette %in% set_calmr_palette()
   )
   palette
+}
+
+.assert_has_parameters <- function(object) {
+  stopifnot(
+    "Model parameters are not set.
+  Use `parameters<-` to set them." =
+      (!is.null(object@parameters) && length(object@parameters) > 0)
+  )
 }

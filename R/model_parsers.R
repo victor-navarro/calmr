@@ -119,13 +119,13 @@
     sapply(names(object@.last_results[[type]]), function(r) {
       hold <- data.table::as.data.table(object@.last_results[[type]][[r]])
       hold[, "type" := r]
-      if (length(dim(object@.last_results[[type]][[r]]) > 3)) {
-        hold[
-          , "tie" := rep(seq_len(nrow(gen_dat)),
-            each = prod(dim(object@.last_results[[type]][[r]])[-1])
-          )
-        ]
+      if (length(dim(object@.last_results[[type]][[r]])) > 2) {
+        ties <- rep(seq_len(nrow(gen_dat)),
+          each = prod(dim(object@.last_results[[type]][[r]])[-1])
+        )
+        hold[, "tie" := ties]
       }
+      hold
     }, simplify = FALSE)
   )
   full_dat <- gen_dat[raw2d, on = list(tie)]
@@ -237,7 +237,8 @@
     big_dat <- data.table::rbindlist(lapply(res, "[[", o))
     # aggregate
     agg_dat <- .aggregate_results_data_table(big_dat,
-      model = experiment@model, type = o
+      experiment@.models[[1]], # use the first model
+      type = o
     )
     agg_dat$model <- experiment@model
     agg_dat
@@ -246,11 +247,10 @@
 }
 
 # type is the type of data
-.aggregate_results_data_table <- function(dat, model, type) {
+.aggregate_results_data_table <- function(dat, object, type) {
   value <- time <- NULL # local binding
   common_terms <- c("group", "phase", "trial_type", "trial", "block_size", "s1")
-  fmap <- formula_map()
-  form <- c(common_terms, fmap[[model]][[type]])
+  form <- c(common_terms, object@.formula_map[[type]])
   dat <- data.table::data.table(dat)
   if (!("time" %in% names(dat))) {
     data.table::setDT(dat)[, list("value" = mean(value)), by = form]

@@ -1,4 +1,4 @@
-# TODO: Write more stronger expectation tests
+# TODO: Write stronger expectation tests
 
 # A basic experiment
 df <- data.frame(
@@ -7,12 +7,18 @@ df <- data.frame(
   P2 = c("!10A/10#A/10B", "!2AB/6A/6C/2#AB")
 )
 
+niter <- 2
 parsed_df <- parse_design(df)
-parameters <- get_parameters(df, model = "HD2022")
+parameters <- get_parameters(df, model = "RW1972")
 minib_args <- make_experiment(parsed_df,
   parameters = parameters,
-  model = "HD2022", iterations = 2
+  model = "RW1972", iterations = niter
 )
+
+
+test_that("the experiment generates the right number of iterations", {
+  expect_true(length(minib_args) == niter * nrow(df))
+})
 
 test_that("trials are generated in blocks", {
   blocks <- rep(1:20, each = 3)

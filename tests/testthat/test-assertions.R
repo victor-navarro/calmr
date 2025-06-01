@@ -45,17 +45,21 @@ test_that("sthrows error for nonexistent folder", {
   expect_error(.assert_filepath("my_folders/none.jpg"))
 })
 
+mod <- methods::new("RW1972")
 test_that(".sanitize_outputs returns all outputs if outputs are null", {
-  expect_setequal(model_outputs("ANCCR"), .sanitize_outputs(NULL, "ANCCR"))
+  expect_setequal(mod@outputs, .sanitize_outputs(NULL, mod@outputs))
 })
 
 test_that(".sanitize_outputs throws warning for extra outputs", {
-  expect_warning(.sanitize_outputs(c("associations", "activations"), "RW1972"))
+  expect_warning(.sanitize_outputs(
+    c("associations", "activations"),
+    mod@outputs
+  ))
 })
 
 test_that(".sanitize_outputs does not add extra outputs", {
   expect_setequal(
-    .sanitize_outputs(c("associations"), "RW1972"),
+    .sanitize_outputs(c("associations"), mod@outputs),
     "associations"
   )
 })

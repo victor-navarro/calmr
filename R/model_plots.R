@@ -1,28 +1,3 @@
-#' Create a plot with calmr data
-#'
-#' @param data A `data.table` containing aggregated
-#' data from a [CalmrExperiment-class]
-#' @param type A character specifying the type of plot.
-#' @param model A character specifying the model.
-#' @param ... Other parameters passed to plotting functions.
-#' @return A 'ggplot' object.
-#' @note You should probably be getting plots via
-#' the [plot()] method for [CalmrExperiment-class].
-#' @seealso [plotting_functions]
-#' @export
-#' @importFrom rlang .data
-calmr_model_plot <- function(data, type, model, ...) {
-  # Just serves the data depending on type/model
-  pmap <- plots_map()
-  p <- do.call(pmap[[model]][[type]], c(list(data = data), ...))
-  p <- p + ggplot2::labs(
-    y = .get_y_prettyname(type),
-    colour = .get_scale_prettyname(type),
-    fill = .get_scale_prettyname(type)
-  )
-  p
-}
-
 #' @description `plot_common_scale()` rescales a list of
 #' plots to have a common scale.
 #' @param plots A list of (named) plots, as returned by [plot()] or

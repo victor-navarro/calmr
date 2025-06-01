@@ -89,22 +89,37 @@ make_experiment <- function(
   allexps <- unlist(allexps, recursive = FALSE)
   # hack timings
   timings <- if (is.null(timings)) list() else timings
+  # make parameters
+  allpars <- stats::setNames(rep(
+    list(parameters),
+    length(group_names)
+  ), group_names)
+  # repeat group labels
+  allgroups <- rep(group_names, iterations)
+  # set iteration numbers
+  alliters <- rep(seq_len(iterations), each = length(group_names))
+  # make models
+  allmodels <- replicate(length(allexps),
+    methods::new(model),
+    simplify = FALSE
+  )
+  # set parameters for the models
+  for (i in seq_along(allmodels)) {
+    allmodels[[i]]@parameters <- allpars[[allgroups[i]]]
+  }
 
   # return experiment
   methods::new("CalmrExperiment",
     design = design,
     model = model,
     groups = group_names,
-    parameters = stats::setNames(rep(
-      list(parameters),
-      length(group_names)
-    ), group_names),
+    parameters = allpars,
     timings = timings,
     experiences = allexps,
     results = methods::new("CalmrExperimentResult"),
-    .model = rep(model, length(allexps)),
-    .group = rep(group_names, iterations),
-    .iter = rep(seq_len(iterations), each = length(group_names)),
+    .models = allmodels,
+    .group = allgroups,
+    .iter = alliters,
     .seed = seed
   )
 }

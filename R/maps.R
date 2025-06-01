@@ -1,36 +1,10 @@
 formula_map <- function() {
   list(
-    "HDI2020" = list(
-      "associations" = "s2",
-      "activations" = c(),
-      "pools" = c("s2", "type"),
-      "responses" = "s2"
-    ),
-    "HD2022" = list(
-      "associations" = "s2",
-      "activations" = c(),
-      "pools" = c("s2", "type"),
-      "responses" = "s2"
-    ),
-    "RW1972" = list(
-      "responses" = "s2",
-      "associations" = "s2"
-    ),
-    "MAC1975" = list(
-      "responses" = "s2",
-      "associations" = "s2",
-      "associabilities" = c()
-    ),
     "SM2007" = list(
       "activations" = "s2",
       "relative_activations" = "s2",
       "associations" = "s2",
       "operator_switches" = c("s2", "comparison")
-    ),
-    "PKH1982" = list(
-      "responses" = "s2",
-      "associabilities" = c(),
-      "associations" = c("s2", "type")
     ),
     "ANCCR" = list(
       "ij_eligibilities" = c(),
@@ -59,37 +33,11 @@ formula_map <- function() {
 
 parse_map <- function() {
   list(
-    "HDI2020" = list(
-      "activations" = .parse_2d,
-      "pools" = .parse_typed_ragged,
-      "responses" = .parse_nd,
-      "associations" = .parse_nd
-    ),
-    "HD2022" = list(
-      "activations" = .parse_2d,
-      "pools" = .parse_typed_ragged,
-      "responses" = .parse_nd,
-      "associations" = .parse_nd
-    ),
-    "RW1972" = list(
-      "responses" = .parse_nd,
-      "associations" = .parse_nd
-    ),
-    "MAC1975" = list(
-      "responses" = .parse_nd,
-      "associations" = .parse_nd,
-      "associabilities" = .parse_2d
-    ),
     "SM2007" = list(
       "activations" = .parse_nd,
       "relative_activations" = .parse_nd,
       "associations" = .parse_nd,
       "operator_switches" = .parse_nd
-    ),
-    "PKH1982" = list(
-      "responses" = .parse_nd,
-      "associabilities" = .parse_2d,
-      "associations" = .parse_typed
     ),
     "ANCCR" = list(
       "ij_eligibilities" = .parse_2d,
@@ -118,37 +66,11 @@ parse_map <- function() {
 
 dnames_map <- function() {
   list(
-    "HDI2020" = list(
-      "activations" = c("s1"),
-      "pools" = c("s1", "s2"),
-      "responses" = c("s1", "s2"),
-      "associations" = c("s1", "s2")
-    ),
-    "HD2022" = list(
-      "activations" = c("s1"),
-      "pools" = c("s1", "s2"),
-      "responses" = c("s1", "s2"),
-      "associations" = c("s1", "s2")
-    ),
-    "RW1972" = list(
-      "responses" = c("s1", "s2"),
-      "associations" = c("s1", "s2")
-    ),
-    "MAC1975" = list(
-      "responses" = c("s1", "s2"),
-      "associations" = c("s1", "s2"),
-      "associabilities" = c("s1")
-    ),
     "SM2007" = list(
       "activations" = c("s1", "s2"),
       "relative_activations" = c("s1", "s2"),
       "associations" = c("s1", "s2"),
       "operator_switches" = c("s1", "comparison", "s2")
-    ),
-    "PKH1982" = list(
-      "responses" = c("s1", "s2"),
-      "associabilities" = c("s1"),
-      "associations" = c("s1", "s2")
     ),
     "ANCCR" = list(
       "ij_eligibilities" = c("s1"),
@@ -177,27 +99,6 @@ dnames_map <- function() {
 
 plots_map <- function() {
   list(
-    "HDI2020" = list(
-      "associations" = plot_targetted_trials,
-      "pools" = plot_targetted_typed_trials,
-      "responses" = plot_targetted_trials,
-      "activations" = plot_trials
-    ),
-    "HD2022" = list(
-      "associations" = plot_targetted_trials,
-      "pools" = plot_targetted_typed_trials,
-      "responses" = plot_targetted_trials,
-      "activations" = plot_trials
-    ),
-    "RW1972" = list(
-      "responses" = plot_targetted_trials,
-      "associations" = plot_targetted_trials
-    ),
-    "MAC1975" = list(
-      "responses" = plot_targetted_trials,
-      "associations" = plot_targetted_trials,
-      "associabilities" = plot_trials
-    ),
     "SM2007" = list(
       "activations" = plot_targetted_trials,
       "relative_activations" = plot_targetted_trials,
@@ -205,11 +106,6 @@ plots_map <- function() {
       "operator_switches" = function(data) {
         plot_targetted_complex_trials(data, "comparison")
       }
-    ),
-    "PKH1982" = list(
-      "responses" = plot_targetted_trials,
-      "associabilities" = plot_trials,
-      "associations" = plot_targetted_typed_trials
     ),
     "ANCCR" = list(
       "ij_eligibilities" = plot_trials,

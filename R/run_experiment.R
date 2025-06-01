@@ -52,8 +52,8 @@ run_experiment <- function(
     "parameters", "timings",
     "experience", "mapping"
   ))]
-  # sanitize outputs
-  outputs <- .sanitize_outputs(outputs, experiment@model)
+  # sanitize outputs using the first model
+  outputs <- .sanitize_outputs(outputs, experiment@.models[[1]]@outputs)
 
   # check if experiment needs (can) to be run
   .assert_experiment(experiment)
@@ -74,23 +74,17 @@ run_experiment <- function(
         timings = experiment@timings
       ), nargs)
 
-      # create model instance
-      mod <- methods::new(
-        experiment@.model[i],
-        parameters = args$parameters
-      )
-      # run model
-      mod <- calmr::run(mod,
+      experiment@.models[[i]] <- calmr::run(experiment@.models[[i]],
         experience = args$experience,
         mapping = args$mapping,
         timings = args$timings,
         nargs
       )
       # get results
-      raw <- results(mod)
+      raw <- results(experiment@.models[[i]])
       parsed <- NULL
       if (parse) {
-        parsed <- parse(mod, outputs)
+        parsed <- parse(experiment@.models[[i]], outputs)
       }
       pb(message = "Running experiment")
       list(raw = raw, parsed = parsed)

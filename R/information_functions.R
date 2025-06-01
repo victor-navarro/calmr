@@ -21,9 +21,9 @@ NULL
 #' @export
 supported_models <- function() {
   c(
-    "RW1972"
-    # "HDI2020", "HD2022", "RW1972", "MAC1975",
-    # "PKH1982", "SM2007", "RAND", "ANCCR",
+    "RW1972", "HDI2020", "HD2022",
+    "MAC1975", "PKH1982"
+    # "SM2007", "RAND", "ANCCR",
     # "TD"
   )
 }
@@ -84,38 +84,12 @@ model_parameters <- function(model = NULL) {
   )
   names(parameter_map) <- supported_models()
   # parameter_map <- list(
-  #   "HDI2020" = list(
-  #     name = c("alphas"),
-  #     default_value = c(0.4)
-  #   ),
-  #   "HD2022" = list(
-  #     name = c("alphas"),
-  #     default_value = c(0.4)
-  #   ),
-  #   "RW1972" = list(
-  #     name = c("alphas", "betas_on", "betas_off", "lambdas"),
-  #     default_value = c(0.4, 0.4, 0.4, 1)
-  #   ),
-  #   "MAC1975" = list(
-  #     name = c(
-  #       "alphas", "min_alphas", "max_alphas",
-  #       "betas_on", "betas_off", "lambdas", "thetas", "gammas"
-  #     ),
-  #     default_value = c(0.4, 0.1, 1.0, 0.4, 0.4, 1, .2, 0.3)
-  #   ),
   #   "SM2007" = list(
   #     name = c(
   #       "alphas", "lambdas", "omegas", "rhos",
   #       "gammas", "taus", "order"
   #     ),
   #     default_value = c(0.4, 1, 0.2, 1, 1, 0.2, 1)
-  #   ),
-  #   "PKH1982" = list(
-  #     name = c(
-  #       "alphas", "min_alphas", "max_alphas",
-  #       "betas_ex", "betas_in", "lambdas", "thetas", "gammas"
-  #     ),
-  #     default_value = c(0.4, 0.1, 1.0, 0.4, 0.3, 1, 1, 0.3)
   #   ),
   #   "ANCCR" = list(
   #     name = c(
@@ -189,27 +163,27 @@ model_parameters <- function(model = NULL) {
 #' list (if model is NULL).
 #' @export
 model_outputs <- function(model = NULL) {
-  output_info <- list(
-    "HDI2020" = c("activations", "associations", "pools", "responses"),
-    "HD2022" = c("activations", "associations", "pools", "responses"),
-    "RW1972" = c("associations", "responses"),
-    "MAC1975" = c("associabilities", "associations", "responses"),
-    "SM2007" = c(
-      "activations", "associations",
-      "relative_activations", "operator_switches"
-    ),
-    "PKH1982" = c("associabilities", "associations", "responses"),
-    "ANCCR" = c(
-      "action_values", "anccrs",
-      "causal_weights", "dopamines",
-      "ij_eligibilities", "i_eligibilities",
-      "i_base_rate", "ij_base_rate",
-      "net_contingencies", "probabilities",
-      "representation_contingencies"
-    ),
-    "TD" = c("values", "associations", "eligibilities"),
-    "RAND" = c("associations", "responses")
+  output_info <- lapply(
+    supported_models(),
+    function(m) methods::new(m)@outputs
   )
+  names(output_info) <- supported_models()
+  # output_info <- list(
+  #   "SM2007" = c(
+  #     "activations", "associations",
+  #     "relative_activations", "operator_switches"
+  #   ),
+  #   "ANCCR" = c(
+  #     "action_values", "anccrs",
+  #     "causal_weights", "dopamines",
+  #     "ij_eligibilities", "i_eligibilities",
+  #     "i_base_rate", "ij_base_rate",
+  #     "net_contingencies", "probabilities",
+  #     "representation_contingencies"
+  #   ),
+  #   "TD" = c("values", "associations", "eligibilities"),
+  #   "RAND" = c("associations", "responses")
+  # )
   if (is.null(model)) {
     output_info
   } else {
@@ -220,16 +194,16 @@ model_outputs <- function(model = NULL) {
 
 # defining where the associations are in each model
 .model_associations <- function(model) {
-  assoc_map <- c(
-    "HDI2020" = "associations",
-    "HD2022" = "associations",
-    "RW1972" = "associations",
-    "MAC1975" = "associations",
-    "SM2007" = "associations",
-    "PKH1982" = "associations",
-    "ANCCR" = "anccrs",
-    "TD" = "associations",
-    "RAND" = "associations"
+  assoc_map <- lapply(
+    supported_models(),
+    function(m) methods::new(m)@.associations
   )
-  assoc_map[model]
+  names(assoc_map) <- supported_models()
+  # assoc_map <- c(
+  #   "SM2007" = "associations",
+  #   "ANCCR" = "anccrs",
+  #   "TD" = "associations",
+  #   "RAND" = "associations"
+  # )
+  assoc_map[[model]]
 }

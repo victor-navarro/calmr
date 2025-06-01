@@ -1,3 +1,4 @@
+#' @noRd
 methods::setClass("RW1972",
   representation(v = "matrix"),
   contains = "CalmrModel",
@@ -27,8 +28,7 @@ methods::setClass("RW1972",
     .plots_map = list(
       "responses" = plot_targetted_trials,
       "associations" = plot_targetted_trials
-    ),
-    .last_results = list()
+    )
   )
 )
 
@@ -36,10 +36,9 @@ methods::setClass("RW1972",
 setMethod(
   "run", "RW1972", function(object, experience, mapping, ...) {
     # assert the model has parameters
-    if (is.null(object@parameters) || length(object@parameters) == 0) {
-      stop("Model parameters are not set. Use `parameters<-` to set them.")
-    }
+    .assert_has_parameters(object)
     parameters <- object@parameters
+
     # No functional stimuli check
     .assert_no_functional(mapping)
 
