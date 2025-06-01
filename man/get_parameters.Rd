@@ -4,7 +4,7 @@
 \alias{get_parameters}
 \title{Get model parameters}
 \usage{
-get_parameters(design, model = NULL)
+get_parameters(design, model)
 }
 \arguments{
 \item{design}{A \code{data.frame} containing the experimental design.}

@@ -19,14 +19,14 @@ test_that("run_experiment asserts correctly", {
   # warning for not passing parameters
   expect_warning(run_experiment(
     df,
-    model = "HD2022"
+    model = "RW1972"
   ))
 })
 
 test_that("run_experiment runs with split args", {
   res <- run_experiment(df,
-    parameters = get_parameters(df, model = "HD2022"),
-    model = "HD2022"
+    parameters = get_parameters(df, model = "RW1972"),
+    model = "RW1972"
   )
   expect_named(
     results(res)
@@ -35,8 +35,8 @@ test_that("run_experiment runs with split args", {
 
 test_that("run_experiment runs with bundled args", {
   args <- make_experiment(df,
-    parameters = get_parameters(df, model = "HD2022"),
-    model = "HD2022"
+    parameters = get_parameters(df, model = "RW1972"),
+    model = "RW1972"
   )
   res <- run_experiment(args)
   expect_named(
@@ -52,10 +52,10 @@ test_that("run_experiment works with simple cells", {
     P1 = c("1AB(US)", "1A(US)"),
     P2 = c("1A", "1A")
   )
-  simple_pars <- get_parameters(simple_df, model = "HD2022")
+  simple_pars <- get_parameters(simple_df, model = "RW1972")
   res <- run_experiment(
     simple_df,
-    parameters = simple_pars, model = "HD2022"
+    parameters = simple_pars, model = "RW1972"
   )
   expect_named(
     results(res)
@@ -66,7 +66,7 @@ test_that("run_experiment stops overly minimal experiments", {
   df <- data.frame(group = "A", p1 = "!1A")
   expect_error(run_experiment(
     df,
-    model = "HD2022",
-    parameters = get_parameters(df, model = "HD2022")
+    model = "RW1972",
+    parameters = get_parameters(df, model = "RW1972")
   ))
 })

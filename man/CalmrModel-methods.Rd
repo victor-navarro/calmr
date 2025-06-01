@@ -8,6 +8,7 @@
 \alias{parameters<-,CalmrModel-method}
 \alias{results,CalmrModel-method}
 \alias{show,CalmrModel-method}
+\alias{parse,CalmrModel-method}
 \title{CalmrModel methods}
 \usage{
 \S4method{run}{CalmrModel}(object, experience, mapping, ...)
@@ -19,6 +20,8 @@
 \S4method{results}{CalmrModel}(object)
 
 \S4method{show}{CalmrModel}(object)
+
+\S4method{parse}{CalmrModel}(object, outputs = object@outputs)
 }
 \arguments{
 \item{object}{A \link{CalmrModel} object.}
@@ -41,6 +44,8 @@ as returned by \code{make_experiment()}.}
 results() returns the last results of the \link{CalmrModel} object.
 
 show() returns NULL (invisibly).
+
+parse() returns a list with parsed results.
 }
 \description{
 S4 methods for \code{CalmrModel} class.

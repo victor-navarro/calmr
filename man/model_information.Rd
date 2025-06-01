@@ -64,4 +64,5 @@ head(pkh_func, 10)
 
 # Getting the parameters required by SM2007
 model_parameters("SM2007")
+model_parameters("RW1972")
 }

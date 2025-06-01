@@ -79,6 +79,7 @@ run_experiment <- function(
         experiment@.model[i],
         parameters = args$parameters
       )
+      # run model
       mod <- calmr::run(mod,
         experience = args$experience,
         mapping = args$mapping,
@@ -89,12 +90,7 @@ run_experiment <- function(
       raw <- results(mod)
       parsed <- NULL
       if (parse) {
-        parsed <- .parse_model(
-          raw = raw,
-          experience = args$experience,
-          model = experiment@.model[i],
-          outputs = outputs
-        )
+        parsed <- parse(mod, outputs)
       }
       pb(message = "Running experiment")
       list(raw = raw, parsed = parsed)

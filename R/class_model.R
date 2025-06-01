@@ -137,3 +137,27 @@ methods::setMethod(
     )
   }
 )
+
+#' @export
+#' @return parse() returns a list with parsed results.
+#' @rdname CalmrModel-methods
+methods::setMethod(
+  "parse", "CalmrModel",
+  function(object, outputs = object@outputs) {
+    if (length(object@.last_results) == 0) {
+      stop("No results available. Run the model first.")
+    }
+    if (!all(outputs %in% object@outputs)) {
+      stop("Requested outputs are not available in the model.")
+    }
+    # parse results
+    parsed_results <- lapply(outputs, function(o) {
+      if (is.null(object@.parse_map[[o]])) {
+        stop(paste("No parse function defined for output:", o))
+      }
+      object@.parse_map[[o]](object, o)
+    })
+    names(parsed_results) <- outputs
+    parsed_results
+  }
+)

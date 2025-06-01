@@ -71,3 +71,11 @@ test_that("can resume training", {
   second <- mod@v["N", "US"]
   expect_true(second > first)
 })
+
+test_that("can parse results", {
+  mod <- methods::new("RW1972")
+  parameters(mod) <- pars
+  mod <- run(mod, experience = exper, mapping = mapp)
+  parsed_results <- parse(mod, outputs = c("associations", "responses"))
+  expect_true(length(parsed_results) > 0)
+})

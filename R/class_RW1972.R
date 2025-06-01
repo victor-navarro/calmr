@@ -115,6 +115,7 @@ setMethod(
     }
     object@parameters <- parameters
     object@v <- v
+    object@.last_experience <- experience
     object@.last_results <- list(associations = vs, responses = rs)
     object
   }

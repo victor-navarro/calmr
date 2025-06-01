@@ -74,81 +74,88 @@ get_model <- function(model) {
 #' @rdname model_information
 #' @return `model_parameters()` returns a list or a
 #' list of lists (if model is NULL).
+#' @examples
+#' model_parameters("RW1972")
 #' @export
 model_parameters <- function(model = NULL) {
-  parameter_map <- list(
-    "HDI2020" = list(
-      name = c("alphas"),
-      default_value = c(0.4)
-    ),
-    "HD2022" = list(
-      name = c("alphas"),
-      default_value = c(0.4)
-    ),
-    "RW1972" = list(
-      name = c("alphas", "betas_on", "betas_off", "lambdas"),
-      default_value = c(0.4, 0.4, 0.4, 1)
-    ),
-    "MAC1975" = list(
-      name = c(
-        "alphas", "min_alphas", "max_alphas",
-        "betas_on", "betas_off", "lambdas", "thetas", "gammas"
-      ),
-      default_value = c(0.4, 0.1, 1.0, 0.4, 0.4, 1, .2, 0.3)
-    ),
-    "SM2007" = list(
-      name = c(
-        "alphas", "lambdas", "omegas", "rhos",
-        "gammas", "taus", "order"
-      ),
-      default_value = c(0.4, 1, 0.2, 1, 1, 0.2, 1)
-    ),
-    "PKH1982" = list(
-      name = c(
-        "alphas", "min_alphas", "max_alphas",
-        "betas_ex", "betas_in", "lambdas", "thetas", "gammas"
-      ),
-      default_value = c(0.4, 0.1, 1.0, 0.4, 0.3, 1, 1, 0.3)
-    ),
-    "ANCCR" = list(
-      name = c(
-        "reward_magnitude",
-        "betas", "cost", "temperature",
-        "threshold", "k",
-        "w", "minimum_rate", "sampling_interval",
-        "use_exact_mean",
-        "t_ratio", "t_constant",
-        "alpha", "alpha_reward", "use_timed_alpha",
-        "alpha_exponent", "alpha_init", "alpha_min",
-        "add_beta", "jitter"
-      ),
-      default_value = c(
-        1,
-        1, 0, 1,
-        0.6, 1,
-        0.5, 1e-3, 0.2,
-        FALSE,
-        1.2, NA,
-        0.02, 0.2, FALSE,
-        1, 1, 0,
-        FALSE, 1
-      )
-    ),
-    "TD" = list(
-      name = c(
-        "alphas", "betas_on", "betas_off",
-        "lambdas", "gamma", "sigma"
-      ),
-      default_value = c(
-        0.05, 0.4, 0.4,
-        1, 0.95, 0.90
-      )
-    ),
-    "RAND" = list(
-      name = c("alphas"),
-      default_value = c(0.4)
-    )
+  parameter_map <- lapply(
+    supported_models(),
+    function(m) methods::new(m)@default_parameters
   )
+  names(parameter_map) <- supported_models()
+  # parameter_map <- list(
+  #   "HDI2020" = list(
+  #     name = c("alphas"),
+  #     default_value = c(0.4)
+  #   ),
+  #   "HD2022" = list(
+  #     name = c("alphas"),
+  #     default_value = c(0.4)
+  #   ),
+  #   "RW1972" = list(
+  #     name = c("alphas", "betas_on", "betas_off", "lambdas"),
+  #     default_value = c(0.4, 0.4, 0.4, 1)
+  #   ),
+  #   "MAC1975" = list(
+  #     name = c(
+  #       "alphas", "min_alphas", "max_alphas",
+  #       "betas_on", "betas_off", "lambdas", "thetas", "gammas"
+  #     ),
+  #     default_value = c(0.4, 0.1, 1.0, 0.4, 0.4, 1, .2, 0.3)
+  #   ),
+  #   "SM2007" = list(
+  #     name = c(
+  #       "alphas", "lambdas", "omegas", "rhos",
+  #       "gammas", "taus", "order"
+  #     ),
+  #     default_value = c(0.4, 1, 0.2, 1, 1, 0.2, 1)
+  #   ),
+  #   "PKH1982" = list(
+  #     name = c(
+  #       "alphas", "min_alphas", "max_alphas",
+  #       "betas_ex", "betas_in", "lambdas", "thetas", "gammas"
+  #     ),
+  #     default_value = c(0.4, 0.1, 1.0, 0.4, 0.3, 1, 1, 0.3)
+  #   ),
+  #   "ANCCR" = list(
+  #     name = c(
+  #       "reward_magnitude",
+  #       "betas", "cost", "temperature",
+  #       "threshold", "k",
+  #       "w", "minimum_rate", "sampling_interval",
+  #       "use_exact_mean",
+  #       "t_ratio", "t_constant",
+  #       "alpha", "alpha_reward", "use_timed_alpha",
+  #       "alpha_exponent", "alpha_init", "alpha_min",
+  #       "add_beta", "jitter"
+  #     ),
+  #     default_value = c(
+  #       1,
+  #       1, 0, 1,
+  #       0.6, 1,
+  #       0.5, 1e-3, 0.2,
+  #       FALSE,
+  #       1.2, NA,
+  #       0.02, 0.2, FALSE,
+  #       1, 1, 0,
+  #       FALSE, 1
+  #     )
+  #   ),
+  #   "TD" = list(
+  #     name = c(
+  #       "alphas", "betas_on", "betas_off",
+  #       "lambdas", "gamma", "sigma"
+  #     ),
+  #     default_value = c(
+  #       0.05, 0.4, 0.4,
+  #       1, 0.95, 0.90
+  #     )
+  #   ),
+  #   "RAND" = list(
+  #     name = c("alphas"),
+  #     default_value = c(0.4)
+  #   )
+  # )
   if (is.null(model)) {
     return(parameter_map)
   } else {

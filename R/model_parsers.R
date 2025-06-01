@@ -1,21 +1,21 @@
-#' Parse raw model results
-#' @param raw A list with raw model results as returned by model functions
-#' @param experience A data.frame containing the model experience
-#'  (from CalmrExperiment)
-#' @param model A model name string.
-#' @param outputs A character vector specifying the model outputs to parse.
-#' @return A list with each parsed model output
-#' @noRd
 #' @import data.table
-.parse_model <- function(raw, experience, model, outputs) {
-  sapply(outputs, function(o) {
-    .parse_raw_data_table(raw[[o]],
-      type = o,
-      experience = experience,
-      model = model
-    )
-  }, simplify = FALSE)
-}
+# #' Parse raw model results
+# #' @param raw A list with raw model results as returned by model functions
+# #' @param experience A data.frame containing the model experience
+# #'  (from CalmrExperiment)
+# #' @param model A model name string.
+# #' @param outputs A character vector specifying the model outputs to parse.
+# #' @return A list with each parsed model output
+# #' @noRd
+# .parse_model <- function(raw, experience, model, outputs) {
+#   sapply(outputs, function(o) {
+#     .parse_raw_data_table(raw[[o]],
+#       type = o,
+#       experience = experience,
+#       model = model
+#     )
+#   }, simplify = FALSE)
+# }
 
 # unnests a list containing named lists of ragged arrays
 .unnest_nested_raw_list <- function(raw) {
@@ -58,100 +58,102 @@
     rep(matches[[d]], each = prod(udims[[d]]))
   })))
   # put them into the data
-  raw[, "V1" := tps]
+  raw[, "V1" := tps] # nolint
   names(raw)[names(raw) == "V1"] <- "tie" # rename
   raw
 }
 
 # for outputs containing ND arrays (e.g., trial, s, s)
-.parse_nd <- function(raw, type, experience, model) {
+.parse_nd <- function(object, type) {
   # local bindings
   tie <- NULL
   # generic data
-  gen_dat <- .get_gen_dat(experience, model)
+  gen_dat <- .get_gen_dat(object)
   # join with general data
-  raw2d <- .make_raw_2d(raw, gen_dat)
+  raw2d <- .make_raw_2d(object@.last_results[[type]], gen_dat)
   full_dat <- gen_dat[raw2d, on = list(tie)]
   # post process
-  full_dat <- .post_process_data_table(full_dat, model, type)
+  full_dat <- .post_process_data_table(full_dat, object, type)
   full_dat
 }
 
 
-.parse_typed_ragged <- function(raw, type, experience, model) {
+.parse_typed_ragged <- function(object, type) {
   # local bindings
   tie <- NULL
   # generic data
-  gen_dat <- .get_gen_dat(experience, model)
+  gen_dat <- .get_gen_dat(object)
   # join with general data
   raw2d <- data.table::rbindlist(
-    sapply(names(raw), function(r) {
-      hold <- .unnest_raw_list(raw[[r]])
+    sapply(names(object@.last_results[[type]]), function(r) {
+      hold <- .unnest_raw_list(object@.last_results[[type]][[r]])
       hold[, "type" := r]
     }, simplify = FALSE)
   )
   full_dat <- gen_dat[raw2d, on = list(tie)]
   # post process
-  full_dat <- .post_process_data_table(full_dat, model, type)
+  full_dat <- .post_process_data_table(full_dat, object, type)
   full_dat
 }
 
-.parse_nested_ragged <- function(raw, type, experience, model) {
+.parse_nested_ragged <- function(object, type) {
   # local bindings
   tie <- NULL
   # generic data
-  gen_dat <- .get_gen_dat(experience, model)
+  gen_dat <- .get_gen_dat(object)
   # join with general data
-  raw2d <- .unnest_nested_raw_list(raw)
+  raw2d <- .unnest_nested_raw_list(object@.last_results[[type]])
   full_dat <- gen_dat[raw2d, on = list(tie)]
   # post process
-  full_dat <- .post_process_data_table(full_dat, model, type)
+  full_dat <- .post_process_data_table(full_dat, object, type)
   full_dat
 }
 
-.parse_typed <- function(raw, type, experience, model) {
+.parse_typed <- function(object, type) {
   # local bindings
   tie <- NULL
   # generic data
-  gen_dat <- .get_gen_dat(experience, model)
+  gen_dat <- .get_gen_dat(object)
   # join with general data
   raw2d <- data.table::rbindlist(
-    sapply(names(raw), function(r) {
-      hold <- data.table::as.data.table(raw[[r]])
+    sapply(names(object@.last_results[[type]]), function(r) {
+      hold <- data.table::as.data.table(object@.last_results[[type]][[r]])
       hold[, "type" := r]
-      if (length(dim(raw[[r]]) > 3)) {
-        hold[, "tie" := rep(seq_len(nrow(gen_dat)),
-          each = prod(dim(raw[[r]])[-1])
-        )]
+      if (length(dim(object@.last_results[[type]][[r]]) > 3)) {
+        hold[
+          , "tie" := rep(seq_len(nrow(gen_dat)),
+            each = prod(dim(object@.last_results[[type]][[r]])[-1])
+          )
+        ]
       }
     }, simplify = FALSE)
   )
   full_dat <- gen_dat[raw2d, on = list(tie)]
   # post process
-  full_dat <- .post_process_data_table(full_dat, model, type)
+  full_dat <- .post_process_data_table(full_dat, object, type)
   full_dat
 }
 
 # for outputs containing 2D arrays (e.g., trial, s)
-.parse_2d <- function(raw, type, experience, model) {
+.parse_2d <- function(object, type) {
   # generic data
-  gen_dat <- .get_gen_dat(experience, model)
-  raw2d <- data.table::as.data.table(raw)
+  gen_dat <- .get_gen_dat(object)
+  raw2d <- data.table::as.data.table(object@.last_results[[type]])
   # need to melt, but no need to name
   full_dat <- cbind(gen_dat, raw2d)
   full_dat <- data.table::melt(full_dat,
     id.vars = names(gen_dat),
-    measure.vars = names(raw),
+    measure.vars = names(object@.last_results[[type]]),
     variable.name = "s1"
   )
   # post process
-  full_dat <- .post_process_data_table(full_dat, model, type)
+  full_dat <- .post_process_data_table(full_dat, object, type)
   full_dat
 }
 
-.post_process_data_table <- function(dat, model, type) {
+.post_process_data_table <- function(dat, object, type) {
   # renaming
-  dat <- .name_data(dat, model, type)
+  dat <- .name_data(dat, object, type)
   # get rid of tie columns
   if ("tie" %in% names(dat)) {
     dat <- dat[, -c("tie")]
@@ -167,9 +169,8 @@
   dat
 }
 
-.name_data <- function(dat, model, type) {
-  dname_map <- dnames_map()
-  newnames <- dname_map[[model]][[type]]
+.name_data <- function(dat, object, type) {
+  newnames <- object@.dnames_map[[type]]
   dat <- .rename(
     dat,
     paste0("V", seq_along(newnames) + 1),
@@ -179,9 +180,9 @@
   dat
 }
 
-.get_gen_dat <- function(experience, model) {
-  gen_dat <- data.table::as.data.table(experience)
-  if (model == "TD") {
+.get_gen_dat <- function(object) {
+  gen_dat <- data.table::as.data.table(object@.last_experience)
+  if (object@model_name == "TD") {
     # deal with experiences for the TD model
     gen_dat[, c(
       "stimulus", "time", "rtime",
@@ -200,15 +201,6 @@
     each = prod(dim(raw)[-1])
   )]
   raw2d
-}
-
-.parse_raw_data_table <- function(raw, type, experience, model) {
-  # this function just redirects raw data to its parser
-  parse_fn_map <- parse_map()
-  do.call(
-    parse_fn_map[[model]][[type]],
-    list(raw = raw, type = type, experience = experience, model = model)
-  )
 }
 
 #' Aggregate CalmrExperiment results

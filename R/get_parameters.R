@@ -6,7 +6,7 @@
 #' @examples
 #' block <- get_design("blocking")
 #' get_parameters(block, model = "SM2007")
-get_parameters <- function(design, model = NULL) {
+get_parameters <- function(design, model) {
   # Assert the model is supported in the package
   model <- .assert_model(model)
   # Assert design
