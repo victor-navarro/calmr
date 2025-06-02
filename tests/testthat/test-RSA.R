@@ -10,7 +10,7 @@ comparisons <- list(
 )
 
 # TODO: There is a bug when one includes
-# more than one output for a model and tehre are multiple models
+# more than one output for a model and there are multiple models
 
 test_that("rsa fails if comparisons is unnamed", {
   expect_error(rsa(comp, unname(comparisons)))

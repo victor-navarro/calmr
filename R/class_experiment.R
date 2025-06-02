@@ -42,8 +42,7 @@ methods::setClass(
 #' @param type A character vector specifying the type(s) of plots to create.
 #' Defaults to NULL. See [supported_plots].
 #' @param value A list of parameters (or list of parameter lists).
-#' @param ... Extra arguments passed to [calmr_model_graph()]
-#' and [calmr_model_plot()].
+#' @param ... Extra arguments passed to [calmr_model_graph()].
 #' @name CalmrExperiment-methods
 #' @seealso [plotting_functions()],[calmr_model_plot()],[calmr_model_graph()]
 NULL

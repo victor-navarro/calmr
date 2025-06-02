@@ -3,20 +3,22 @@
 #' @param t A numeric vector specifying the trial(s) to plot.
 #' Defaults to the last trial in data.
 #' @name plotting_functions
-#' @note All data must be organised as
+#' @note These functions are not meant to be used by non-developers.
+#' If you want to plot data from a model or an experiment,
+#' see the `plot()` method.
+#' All data must be parsed or aggregated, as
 #' returned by [results()] or [parsed_results()].
 #' @importFrom rlang .data
 NULL
 #> NULL
 
-
-#' @description `plot_targetted_tbins()` plots targetted time data on a trial.
-#' @returns `plot_targetted_tbins()` returns 'ggplot' object.
+#' @description `plot_targeted_tbins()` plots targeted time data on a trial.
+#' @returns `plot_targeted_tbins()` returns 'ggplot' object.
 #' @rdname plotting_functions
 #' @export
 
-# A general plot for targetted (s2) time data
-plot_targetted_tbins <- function(data, t = max(data$trial)) {
+# A general plot for targeted (s2) time data
+plot_targeted_tbins <- function(data, t = max(data$trial)) {
   ggplot2::ggplot(
     data = data[data$trial == t, ],
     mapping = ggplot2::aes(
@@ -32,12 +34,12 @@ plot_targetted_tbins <- function(data, t = max(data$trial)) {
     ggplot2::facet_grid(.data$s1 ~ .data$phase + .data$trial_type)
 }
 
-#' @description `plot_tbins()` plots non-targetted time data on a trial.
+#' @description `plot_tbins()` plots non-targeted time data on a trial.
 #' @returns `plot_tbins()` returns 'ggplot' object.
 #' @rdname plotting_functions
 #' @export
 
-# A general plot for non-targetted time data
+# A general plot for non-targeted time data
 plot_tbins <- function(data, t = max(data$trial)) {
   ggplot2::ggplot(
     data = data[data$trial %in% t, ],
@@ -54,13 +56,13 @@ plot_tbins <- function(data, t = max(data$trial)) {
     ggplot2::facet_grid(~ .data$phase + .data$trial_type + .data$trial)
 }
 
-#' @description `plot_targetted_trials()` plots targetted trial data.
-#' @returns `plot_targetted_trials()` returns 'ggplot' object.
+#' @description `plot_targeted_trials()` plots targeted trial data.
+#' @returns `plot_targeted_trials()` returns 'ggplot' object.
 #' @rdname plotting_functions
 #' @export
 
-# A general plot for trial-based, targetted data
-plot_targetted_trials <- function(data) {
+# A general plot for trial-based, targeted data
+plot_targeted_trials <- function(data) {
   ggplot2::ggplot(
     data = data,
     mapping = ggplot2::aes(
@@ -77,11 +79,11 @@ plot_targetted_trials <- function(data) {
       scales = "free_x"
     )
 }
-#' @description `plot_trials()` plots non-targetted trial data.
+#' @description `plot_trials()` plots non-targeted trial data.
 #' @returns `plot_trials()` returns 'ggplot' object.
 #' @rdname plotting_functions
 #' @export
-# A general plot for trial-based, targetted data
+# A general plot for trial-based, targeted data
 plot_trials <- function(data) {
   ggplot2::ggplot(
     data = data,
@@ -100,13 +102,13 @@ plot_trials <- function(data) {
     )
 }
 
-#' @description `plot_targetted_typed_trials()` plots
-#' targetted trial data with a type.
-#' @returns `plot_targetted_typed_trials()` returns 'ggplot' object.
+#' @description `plot_targeted_typed_trials()` plots
+#' targeted trial data with a type.
+#' @returns `plot_targeted_typed_trials()` returns 'ggplot' object.
 #' @rdname plotting_functions
 #' @export
-# A general plot for trial-based, targetted data
-plot_targetted_typed_trials <- function(data) {
+# A general plot for trial-based, targeted data
+plot_targeted_typed_trials <- function(data) {
   ggplot2::ggplot(
     data = data,
     mapping = ggplot2::aes(
@@ -124,14 +126,14 @@ plot_targetted_typed_trials <- function(data) {
     )
 }
 
-#' @description `plot_targetted_complex_trials()` plots
-#' targetted data with a third variable.
+#' @description `plot_targeted_complex_trials()` plots
+#' targeted data with a third variable.
 #' @param col A string specifying the column of the third variable.
-#' @returns `plot_targetted_complex_trials()` returns 'ggplot' object.
+#' @returns `plot_targeted_complex_trials()` returns 'ggplot' object.
 #' @rdname plotting_functions
 #' @export
-# A general plot for trial-based, targetted data with an extra column.
-plot_targetted_complex_trials <- function(data, col) {
+# A general plot for trial-based, targeted data with an extra column.
+plot_targeted_complex_trials <- function(data, col) {
   ggplot2::ggplot(
     data = data,
     mapping = ggplot2::aes(

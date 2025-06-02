@@ -1,11 +1,5 @@
 formula_map <- function() {
   list(
-    "SM2007" = list(
-      "activations" = "s2",
-      "relative_activations" = "s2",
-      "associations" = "s2",
-      "operator_switches" = c("s2", "comparison")
-    ),
     "ANCCR" = list(
       "ij_eligibilities" = c(),
       "i_eligibilities" = c(),
@@ -23,22 +17,12 @@ formula_map <- function() {
       "associations" = c("s2", "t_bin"),
       "eligibilities" = "t_bin",
       "values" = "t_bin"
-    ),
-    "RAND" = list(
-      "responses" = "s2",
-      "associations" = "s2"
     )
   )
 }
 
 parse_map <- function() {
   list(
-    "SM2007" = list(
-      "activations" = .parse_nd,
-      "relative_activations" = .parse_nd,
-      "associations" = .parse_nd,
-      "operator_switches" = .parse_nd
-    ),
     "ANCCR" = list(
       "ij_eligibilities" = .parse_2d,
       "i_eligibilities" = .parse_2d,
@@ -56,22 +40,12 @@ parse_map <- function() {
       "values" = .parse_nd,
       "eligibilities" = .parse_nested_ragged,
       "associations" = .parse_nested_ragged
-    ),
-    "RAND" = list(
-      "responses" = .parse_nd,
-      "associations" = .parse_nd
     )
   )
 }
 
 dnames_map <- function() {
   list(
-    "SM2007" = list(
-      "activations" = c("s1", "s2"),
-      "relative_activations" = c("s1", "s2"),
-      "associations" = c("s1", "s2"),
-      "operator_switches" = c("s1", "comparison", "s2")
-    ),
     "ANCCR" = list(
       "ij_eligibilities" = c("s1"),
       "i_eligibilities" = c("s1"),
@@ -89,40 +63,28 @@ dnames_map <- function() {
       "associations" = c("s1", "s2", "t_bin", "value"),
       "eligibilities" = c("s1", "t_bin", "value"),
       "values" = c("s1", "t_bin")
-    ),
-    "RAND" = list(
-      "responses" = c("s1", "s2"),
-      "associations" = c("s1", "s2")
     )
   )
 }
 
 plots_map <- function() {
   list(
-    "SM2007" = list(
-      "activations" = plot_targetted_trials,
-      "relative_activations" = plot_targetted_trials,
-      "associations" = plot_targetted_trials,
-      "operator_switches" = function(data) {
-        plot_targetted_complex_trials(data, "comparison")
-      }
-    ),
     "ANCCR" = list(
       "ij_eligibilities" = plot_trials,
       "i_eligibilities" = plot_trials,
       "i_base_rate" = plot_trials,
-      "ij_base_rate" = plot_targetted_trials,
-      "representation_contingencies" = plot_targetted_typed_trials,
-      "net_contingencies" = plot_targetted_trials,
-      "anccrs" = plot_targetted_trials,
-      "causal_weights" = plot_targetted_trials,
-      "dopamines" = plot_targetted_trials,
-      "action_values" = plot_targetted_trials,
-      "probabilities" = plot_targetted_trials
+      "ij_base_rate" = plot_targeted_trials,
+      "representation_contingencies" = plot_targeted_typed_trials,
+      "net_contingencies" = plot_targeted_trials,
+      "anccrs" = plot_targeted_trials,
+      "causal_weights" = plot_targeted_trials,
+      "dopamines" = plot_targeted_trials,
+      "action_values" = plot_targeted_trials,
+      "probabilities" = plot_targeted_trials
     ),
     "TD" = list(
       "associations" = function(data, ...) {
-        p <- plot_targetted_tbins(data, ...)
+        p <- plot_targeted_tbins(data, ...)
         # change x-label label
         t <- max(p$data$trial)
         p + ggplot2::labs(
@@ -131,10 +93,6 @@ plots_map <- function() {
       },
       "values" = plot_tbins,
       "eligibilities" = plot_tbins
-    ),
-    "RAND" = list(
-      "responses" = plot_targetted_trials,
-      "associations" = plot_targetted_trials
     )
   )
 }

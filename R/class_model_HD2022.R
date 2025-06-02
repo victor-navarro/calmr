@@ -32,9 +32,9 @@ methods::setClass("HD2022",
       "responses" = "s2"
     ),
     .plots_map = list(
-      "associations" = plot_targetted_trials,
-      "pools" = plot_targetted_typed_trials,
-      "responses" = plot_targetted_trials,
+      "associations" = plot_targeted_trials,
+      "pools" = plot_targeted_typed_trials,
+      "responses" = plot_targeted_trials,
       "activations" = plot_trials
     )
   )
@@ -55,8 +55,9 @@ setMethod(
     if (!nrow(v)) {
       v <- .gen_ss_weights(fsnames)
     } else {
-      v <- .expand_ss_weights(object@v, fsnames)
+      v <- .expand_ss_weights(v, fsnames)
     }
+    fsnames <- rownames(v)
     vs <- array(NA,
       dim = c(ntrials, dim(v)),
       dimnames = list(NULL, fsnames, fsnames)

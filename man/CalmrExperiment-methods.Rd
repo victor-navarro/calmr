@@ -84,8 +84,7 @@
 \item{type}{A character vector specifying the type(s) of plots to create.
 Defaults to NULL. See \link{supported_plots}.}
 
-\item{...}{Extra arguments passed to \code{\link[=calmr_model_graph]{calmr_model_graph()}}
-and \code{\link[=calmr_model_plot]{calmr_model_plot()}}.}
+\item{...}{Extra arguments passed to \code{\link[=calmr_model_graph]{calmr_model_graph()}}.}
 
 \item{trial_types}{A character vector with trial types to filter.}
 

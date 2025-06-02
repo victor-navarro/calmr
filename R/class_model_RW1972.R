@@ -26,8 +26,8 @@ methods::setClass("RW1972",
       "associations" = "s2"
     ),
     .plots_map = list(
-      "responses" = plot_targetted_trials,
-      "associations" = plot_targetted_trials
+      "responses" = plot_targeted_trials,
+      "associations" = plot_targeted_trials
     )
   )
 )
@@ -49,8 +49,9 @@ setMethod(
     if (!nrow(v)) {
       v <- .gen_ss_weights(stim_names)
     } else {
-      v <- .expand_ss_weights(object@v, stim_names)
+      v <- .expand_ss_weights(v, stim_names)
     }
+    stim_names <- rownames(v)
 
     vs <- array(NA,
       dim = c(ntrials, dim(v)),

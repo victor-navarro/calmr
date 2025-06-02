@@ -32,9 +32,9 @@ methods::setClass("PKH1982",
       "associations" = c("s2", "type")
     ),
     .plots_map = list(
-      "responses" = plot_targetted_trials,
+      "responses" = plot_targeted_trials,
       "associabilities" = plot_trials,
-      "associations" = plot_targetted_typed_trials
+      "associations" = plot_targeted_typed_trials
     )
   )
 )
@@ -51,32 +51,33 @@ setMethod(
 
     # data initialization
     ntrials <- length(experience$tp)
-    fsnames <- mapping$unique_functional_stimuli
+    stim_names <- mapping$unique_nominal_stimuli
 
     ev <- object@ev
     iv <- object@iv
     if (!nrow(ev)) {
-      ev <- .gen_ss_weights(fsnames)
+      ev <- .gen_ss_weights(stim_names)
     } else {
-      ev <- .expand_ss_weights(object@ev, fsnames)
+      ev <- .expand_ss_weights(object@ev, stim_names)
     }
     if (!nrow(iv)) {
-      iv <- .gen_ss_weights(fsnames)
+      iv <- .gen_ss_weights(stim_names)
     } else {
-      iv <- .expand_ss_weights(object@iv, fsnames)
+      iv <- .expand_ss_weights(object@iv, stim_names)
     }
+    stim_names <- rownames(ev)
 
     rs <- array(NA,
       dim = c(ntrials, dim(ev)),
-      dimnames = list(NULL, fsnames, fsnames)
+      dimnames = list(NULL, stim_names, stim_names)
     )
     as <- array(NA,
       dim = c(ntrials, nrow(ev)),
-      dimnames = list(NULL, fsnames)
+      dimnames = list(NULL, stim_names)
     )
     evs <- ivs <- array(NA,
       dim = c(ntrials, dim(ev)),
-      dimnames = list(NULL, fsnames, fsnames)
+      dimnames = list(NULL, stim_names, stim_names)
     )
 
     for (t in 1:ntrials) {
@@ -84,10 +85,6 @@ setMethod(
       tn <- experience$tn[t]
       # get nominal, and onehot stimuli
       oh_fstims <- mapping$trial_ohs[[tn]]
-
-      # generate expectations
-      ee <- oh_fstims %*% ev
-      ie <- oh_fstims %*% iv
 
       # generate responses
       r <- (ev * oh_fstims) - (iv * oh_fstims)
@@ -112,22 +109,19 @@ setMethod(
 
           # set parameters for learning
           plambdas <-
-            stats::setNames(rep(0, length(fsnames)), fsnames)
+            stats::setNames(rep(0, length(stim_names)), stim_names)
           # populate lambdas
           plambdas[mapping$nomi2func[pnominals]] <-
             parameters$lambdas[pnominals]
 
-
           # get period onehot stimuli
           p_ohs <- mapping$period_ohs[[tn]][[p]]
-          # gather onehot stimuli for both periods
-          ps_ohs <- mapping$period_ohs[[tn]][[p]] |
-            mapping$period_ohs[[tn]][[p2]]
 
           # calculate period expectation
           pee <- p_ohs %*% ev
           pie <- p_ohs %*% iv
           pne <- pee - pie # net
+
           # association deltas
           # excitatory
           ed <- p_ohs * parameters$alphas %*% t(
@@ -141,7 +135,6 @@ setMethod(
           id <- p_ohs * parameters$alphas %*% t(
             (plambdas - as.numeric(pne)) * parameters$betas_in
           )
-
           # only learn when expectation is higher than lambda
           id[id > 0] <- 0
           id <- abs(id)
@@ -154,20 +147,25 @@ setMethod(
           # alpha deltas
           alphasd <- p_ohs %*% abs(parameters$gammas * (plambdas - pne))
           diag(alphasd) <- 0
-
           # Need to be careful here, as there is no decay for absent stimuli
           talphasd <- (1 - parameters$thetas) *
             parameters$alphas + parameters$thetas * rowSums(alphasd)
           # update just what was seen
           parameters$alphas[pnominals] <- talphasd[pnominals]
           # apply lower limit on parameters$alphas
-          parameters$alphas[] <- sapply(seq_len(length(fsnames)), function(i) {
-            max(parameters$min_alphas[i], parameters$alphas[i])
-          })
+          parameters$alphas[] <- sapply(
+            seq_len(length(stim_names)),
+            function(i) {
+              max(parameters$min_alphas[i], parameters$alphas[i])
+            }
+          )
           # apply upper limit on parameters$alphas
-          parameters$alphas[] <- sapply(seq_len(length(fsnames)), function(i) {
-            min(parameters$max_alphas[i], parameters$alphas[i])
-          })
+          parameters$alphas[] <- sapply(
+            seq_len(length(stim_names)),
+            function(i) {
+              min(parameters$max_alphas[i], parameters$alphas[i])
+            }
+          )
         }
       }
     }

@@ -2,25 +2,25 @@
 % Please edit documentation in R/plotting_functions.R
 \name{plotting_functions}
 \alias{plotting_functions}
-\alias{plot_targetted_tbins}
+\alias{plot_targeted_tbins}
 \alias{plot_tbins}
-\alias{plot_targetted_trials}
+\alias{plot_targeted_trials}
 \alias{plot_trials}
-\alias{plot_targetted_typed_trials}
-\alias{plot_targetted_complex_trials}
+\alias{plot_targeted_typed_trials}
+\alias{plot_targeted_complex_trials}
 \title{General plotting functions}
 \usage{
-plot_targetted_tbins(data, t = max(data$trial))
+plot_targeted_tbins(data, t = max(data$trial))
 
 plot_tbins(data, t = max(data$trial))
 
-plot_targetted_trials(data)
+plot_targeted_trials(data)
 
 plot_trials(data)
 
-plot_targetted_typed_trials(data)
+plot_targeted_typed_trials(data)
 
-plot_targetted_complex_trials(data, col)
+plot_targeted_complex_trials(data, col)
 }
 \arguments{
 \item{data}{A \code{data.frame}-like with data to plot.}
@@ -31,34 +31,37 @@ Defaults to the last trial in data.}
 \item{col}{A string specifying the column of the third variable.}
 }
 \value{
-\code{plot_targetted_tbins()} returns 'ggplot' object.
+\code{plot_targeted_tbins()} returns 'ggplot' object.
 
 \code{plot_tbins()} returns 'ggplot' object.
 
-\code{plot_targetted_trials()} returns 'ggplot' object.
+\code{plot_targeted_trials()} returns 'ggplot' object.
 
 \code{plot_trials()} returns 'ggplot' object.
 
-\code{plot_targetted_typed_trials()} returns 'ggplot' object.
+\code{plot_targeted_typed_trials()} returns 'ggplot' object.
 
-\code{plot_targetted_complex_trials()} returns 'ggplot' object.
+\code{plot_targeted_complex_trials()} returns 'ggplot' object.
 }
 \description{
-\code{plot_targetted_tbins()} plots targetted time data on a trial.
+\code{plot_targeted_tbins()} plots targeted time data on a trial.
 
-\code{plot_tbins()} plots non-targetted time data on a trial.
+\code{plot_tbins()} plots non-targeted time data on a trial.
 
-\code{plot_targetted_trials()} plots targetted trial data.
+\code{plot_targeted_trials()} plots targeted trial data.
 
-\code{plot_trials()} plots non-targetted trial data.
+\code{plot_trials()} plots non-targeted trial data.
 
-\code{plot_targetted_typed_trials()} plots
-targetted trial data with a type.
+\code{plot_targeted_typed_trials()} plots
+targeted trial data with a type.
 
-\code{plot_targetted_complex_trials()} plots
-targetted data with a third variable.
+\code{plot_targeted_complex_trials()} plots
+targeted data with a third variable.
 }
 \note{
-All data must be organised as
+These functions are not meant to be used by non-developers.
+If you want to plot data from a model or an experiment,
+see the \code{plot()} method.
+All data must be parsed or aggregated, as
 returned by \code{\link[=results]{results()}} or \code{\link[=parsed_results]{parsed_results()}}.
 }

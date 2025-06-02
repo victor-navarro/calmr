@@ -1,10 +1,14 @@
+#' General plotting options
+#' @name plotting_options
+NULL
+#> NULL
+
 #' @description `plot_common_scale()` rescales a list of
 #' plots to have a common scale.
-#' @param plots A list of (named) plots, as returned by [plot()] or
-#' [calmr_model_plot()]
+#' @param plots A list of (named) plots, as returned by [plot()].
 #' @returns `plot_common_scale()` returns a list of plots.
 #' @aliases plot_common_scale
-#' @rdname calmr_model_plot
+#' @rdname plotting_options
 #' @export
 plot_common_scale <- function(plots) {
   # get min and max y-scale
@@ -26,7 +30,7 @@ plot_common_scale <- function(plots) {
 #' @return `get_plot_opts()` returns a list.
 #' @aliases get_plot_opts
 #' @export
-#' @rdname calmr_model_plot
+#' @rdname plotting_options
 get_plot_opts <- function(common_scale = TRUE) {
   return(list(common_scale = common_scale))
 }
@@ -35,7 +39,7 @@ get_plot_opts <- function(common_scale = TRUE) {
 #' @param selection A character or numeric vector determining the plots to patch
 #' @param plot_options A list of plot options as returned by [get_plot_opts()]
 #' @aliases patch_plots
-#' @rdname calmr_model_plot
+#' @rdname plotting_options
 #' @export
 #' @return `patch_plots()` returns a `patchwork` object.
 

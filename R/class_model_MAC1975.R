@@ -32,8 +32,8 @@ methods::setClass("MAC1975",
       "associabilities" = c()
     ),
     .plots_map = list(
-      "responses" = plot_targetted_trials,
-      "associations" = plot_targetted_trials,
+      "responses" = plot_targeted_trials,
+      "associations" = plot_targeted_trials,
       "associabilities" = plot_trials
     )
   )
@@ -60,8 +60,9 @@ setMethod(
     if (!nrow(v)) {
       v <- .gen_ss_weights(stim_names)
     } else {
-      v <- .expand_ss_weights(object@v, stim_names)
+      v <- .expand_ss_weights(v, stim_names)
     }
+    stim_names <- rownames(v)
     vs <- rs <- array(NA,
       dim = c(ntrials, dim(v)),
       dimnames = list(NULL, stim_names, stim_names)

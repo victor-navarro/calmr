@@ -50,6 +50,8 @@ test_that("run method fails without parameters", {
   expect_error(run(mod, experience = exper, mapping = mapp))
 })
 
+
+# TODO: Make this a comprehensive test for all models
 test_that("can resume training", {
   # Note: this test assumes that the model in question
   # can resume training from its current state.
@@ -57,6 +59,25 @@ test_that("can resume training", {
   des <- get_design("blocking")[1, 1:2]
   pars <- get_parameters(des, model = "RW1972")
   exp <- make_experiment(des, parameters = pars, model = "RW1972")
+  parameters(mod) <- pars
+  exper <- exp@experiences[[1]]
+  mapp <- exp@design@mapping
+  mod <- run(mod,
+    experience = exper,
+    mapping = mapp
+  )
+  first <- mod@v["N", "US"]
+  expect_true(first > 0)
+  # Resume training
+  mod <- run(mod, experience = exper, mapping = mapp)
+  second <- mod@v["N", "US"]
+  expect_true(second > first)
+
+  # same with SM2007
+  mod <- methods::new("SM2007")
+  des <- get_design("blocking")[1, 1:2]
+  pars <- get_parameters(des, model = "SM2007")
+  exp <- make_experiment(des, parameters = pars, model = "SM2007")
   parameters(mod) <- pars
   exper <- exp@experiences[[1]]
   mapp <- exp@design@mapping
