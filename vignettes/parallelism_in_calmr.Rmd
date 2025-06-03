@@ -74,7 +74,7 @@ plan(multisession)
 
 ```{r, include = FALSE}
 if (Sys.info()[["sysname"]] == "Darwin") {
-  plan(sequential) # weird patch for github runners
+  plan(multisession(workers = 1)) # weird patch for github runners
 } else {
   plan(multisession)
 }
