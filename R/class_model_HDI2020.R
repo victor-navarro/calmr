@@ -42,7 +42,7 @@ methods::setClass("HDI2020",
 
 
 
-#' @noRd
+#' @rdname CalmrModel-methods
 setMethod(
   "run", "HDI2020", function(object, experience, mapping, ...) {
     # assert the model has parameters
@@ -131,7 +131,7 @@ setMethod(
     object@parameters <- parameters
     object@v <- v
     object@.last_experience <- experience
-    object@.last_results <- list(
+    object@.last_raw_results <- list(
       associations = vs,
       responses = rs,
       activations = as,

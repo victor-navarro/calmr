@@ -116,9 +116,8 @@ make_experiment <- function(
     parameters = allpars,
     timings = timings,
     experiences = allexps,
-    results = methods::new("CalmrExperimentResult"),
-    .models = allmodels,
-    .group = allgroups,
+    models = allmodels,
+    .groups = allgroups,
     .iter = alliters,
     .seed = seed
   )

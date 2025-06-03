@@ -70,7 +70,7 @@
   # generic data
   gen_dat <- .get_gen_dat(object)
   # join with general data
-  raw2d <- .make_raw_2d(object@.last_results[[type]], gen_dat)
+  raw2d <- .make_raw_2d(object@.last_raw_results[[type]], gen_dat)
   full_dat <- gen_dat[raw2d, on = list(tie)]
   # post process
   full_dat <- .post_process_data_table(full_dat, object, type)
@@ -85,8 +85,8 @@
   gen_dat <- .get_gen_dat(object)
   # join with general data
   raw2d <- data.table::rbindlist(
-    sapply(names(object@.last_results[[type]]), function(r) {
-      hold <- .unnest_raw_list(object@.last_results[[type]][[r]])
+    sapply(names(object@.last_raw_results[[type]]), function(r) {
+      hold <- .unnest_raw_list(object@.last_raw_results[[type]][[r]])
       hold[, "type" := r]
     }, simplify = FALSE)
   )
@@ -102,7 +102,7 @@
   # generic data
   gen_dat <- .get_gen_dat(object)
   # join with general data
-  raw2d <- .unnest_nested_raw_list(object@.last_results[[type]])
+  raw2d <- .unnest_nested_raw_list(object@.last_raw_results[[type]])
   full_dat <- gen_dat[raw2d, on = list(tie)]
   # post process
   full_dat <- .post_process_data_table(full_dat, object, type)
@@ -116,12 +116,12 @@
   gen_dat <- .get_gen_dat(object)
   # join with general data
   raw2d <- data.table::rbindlist(
-    sapply(names(object@.last_results[[type]]), function(r) {
-      hold <- data.table::as.data.table(object@.last_results[[type]][[r]])
+    sapply(names(object@.last_raw_results[[type]]), function(r) {
+      hold <- data.table::as.data.table(object@.last_raw_results[[type]][[r]])
       hold[, "type" := r]
-      if (length(dim(object@.last_results[[type]][[r]])) > 2) {
+      if (length(dim(object@.last_raw_results[[type]][[r]])) > 2) {
         ties <- rep(seq_len(nrow(gen_dat)),
-          each = prod(dim(object@.last_results[[type]][[r]])[-1])
+          each = prod(dim(object@.last_raw_results[[type]][[r]])[-1])
         )
         hold[, "tie" := ties]
       }
@@ -138,12 +138,12 @@
 .parse_2d <- function(object, type) {
   # generic data
   gen_dat <- .get_gen_dat(object)
-  raw2d <- data.table::as.data.table(object@.last_results[[type]])
+  raw2d <- data.table::as.data.table(object@.last_raw_results[[type]])
   # need to melt, but no need to name
   full_dat <- cbind(gen_dat, raw2d)
   full_dat <- data.table::melt(full_dat,
     id.vars = names(gen_dat),
-    measure.vars = names(object@.last_results[[type]]),
+    measure.vars = names(object@.last_raw_results[[type]]),
     variable.name = "s1"
   )
   # post process
@@ -214,7 +214,7 @@
     .callback_fn = NULL) {
   # throw error if outputs requested are not in parsed_results
   # or if parsed_results do not exist
-  res <- experiment@results@parsed_results
+  res <- parsed_results(experiment)
   if (
     !all(sapply(
       res,
@@ -237,7 +237,7 @@
     big_dat <- data.table::rbindlist(lapply(res, "[[", o))
     # aggregate
     agg_dat <- .aggregate_results_data_table(big_dat,
-      experiment@.models[[1]], # use the first model
+      experiment@models[[1]], # use the first model
       type = o
     )
     agg_dat$model <- experiment@model

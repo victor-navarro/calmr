@@ -43,7 +43,7 @@ model_outputs(model = NULL)
 \code{supported_plots()} returns a character vector or list
 (if model is NULL).
 
-\code{get_model()} returns a model function.
+\code{get_model()} returns a \linkS4class{CalmrModel} model instance.
 
 \code{model_parameters()} returns a list or a
 list of lists (if model is NULL).
@@ -58,9 +58,11 @@ An assortment of functions to return model information.
 # Outputs and plots supported by the RW1972 model
 model_outputs("RW1972")
 
-# Getting the model function implementing the PKH1982 model
-pkh_func <- get_model("PKH1982")
-head(pkh_func, 10)
+# Getting a model instance of the PKH1982 model
+pkh_inst <- get_model("PKH1982")
+
+# Getting the `run` method for the MAC1975
+head(methods::getMethod("run", "MAC1975"), 10)
 
 # Getting the parameters required by SM2007
 model_parameters("SM2007")

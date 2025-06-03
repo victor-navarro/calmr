@@ -83,14 +83,6 @@ calmr_model_graph <- function(
 #' @return `patch_graphs()` returns a 'patchwork' object
 
 patch_graphs <- function(graphs, selection = names(graphs)) {
-  # unlist graphs
-  gnames <- unlist(unname(lapply(graphs, names)))
-  graphs <- stats::setNames(
-    unlist(graphs,
-      recursive = FALSE,
-      use.names = FALSE
-    ), gnames
-  )
   graphs <- graphs[selection]
   patch <- patchwork::wrap_plots(graphs)
   patch

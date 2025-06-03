@@ -183,3 +183,59 @@ plot_targeted_complex_trials <- function(data, col) {
     ))
   }
 }
+
+.get_y_prettyname <- function(output) {
+  prettynames <- c(
+    "associations" = "Association Strength",
+    "responses" = "Response Strength",
+    "pools" = "Pooled Association Strength",
+    "associabilities" = "Associability",
+    "operator_switches" = "Switch Value",
+    "activations" = "Activation Strength",
+    "relative_activations" = "Relative Activation Strength",
+    "ij_eligibilities" = "Event-contingent Eleg. Trace",
+    "i_eligibilities" = "Eleg. Trace",
+    "i_base_rate" = "Baseline Predecessor Representation",
+    "ij_base_rate" = "Predecessor Representation",
+    "net_contingencies" = "Net Contingency Strength",
+    "anccrs" = "Adjusted Net Contingency Strength",
+    "representation_contingencies" = "Representation Strength",
+    "dopamines" = "DA Strength",
+    "causal_weights" = "Causal Weights",
+    "action_values" = "Action Value",
+    "action_probabilities" = "Action Probabilities",
+    "values" = "Expected Value",
+    "eligibilities" = "Eligibility Trace",
+    "probabilities" = "Response Probability"
+  )
+  prettynames[output]
+}
+
+.get_scale_prettyname <- function(output) {
+  prettynames <- c(
+    "responses" = "Target",
+    "operator_switches" = "Target",
+    "associations" = "Target",
+    "associabilities" = "Stimulus",
+    "values" = "Target",
+    "eligibilities" = "Stimulus",
+    "activations" = "Target",
+    "pools" = "Target",
+    "relative_activations" = "Target",
+    "ij_eligibilities" = "Stimulus",
+    "i_eligibilities" = "Stimulus",
+    "i_base_rate" = "Stimulus",
+    "ij_base_rate" = "Target",
+    "net_contingencies" = "Target",
+    "anccrs" = "Target",
+    "representation_contingencies" = "Target",
+    "dopamines" = "Target",
+    "causal_weights" = "Target",
+    "action_values" = "Target",
+    "action_probabilities" = "Target",
+    "values" = "Target",
+    "eligibilities" = "Stimulus",
+    "probabilities" = "Target"
+  )
+  prettynames[output]
+}

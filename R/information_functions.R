@@ -7,9 +7,11 @@
 #' # Outputs and plots supported by the RW1972 model
 #' model_outputs("RW1972")
 #'
-#' # Getting the model function implementing the PKH1982 model
-#' pkh_func <- get_model("PKH1982")
-#' head(pkh_func, 10)
+#' # Getting a model instance of the PKH1982 model
+#' pkh_inst <- get_model("PKH1982")
+#'
+#' # Getting the `run` method for the MAC1975
+#' head(methods::getMethod("run", "MAC1975"), 10)
 #'
 #' # Getting the parameters required by SM2007
 #' model_parameters("SM2007")
@@ -23,8 +25,7 @@ supported_models <- function() {
   c(
     "RW1972", "HDI2020", "HD2022",
     "MAC1975", "PKH1982", "RAND",
-    "SM2007" # , "ANCCR",
-    # "TD"
+    "SM2007", "TD", "ANCCR"
   )
 }
 #' @rdname model_information
@@ -63,12 +64,12 @@ supported_plots <- function(model = NULL) {
 }
 
 #' @rdname model_information
-#' @return `get_model()` returns a model function.
+#' @return `get_model()` returns a [CalmrModel-class] model instance.
 #' @export
 get_model <- function(model) {
   # Check model is supported
   .assert_model(model)
-  get(model)
+  methods::new(model)
 }
 
 #' @rdname model_information
@@ -83,49 +84,12 @@ model_parameters <- function(model = NULL) {
     function(m) methods::new(m)@default_parameters
   )
   names(parameter_map) <- supported_models()
-  # parameter_map <- list(
-  #   "ANCCR" = list(
-  #     name = c(
-  #       "reward_magnitude",
-  #       "betas", "cost", "temperature",
-  #       "threshold", "k",
-  #       "w", "minimum_rate", "sampling_interval",
-  #       "use_exact_mean",
-  #       "t_ratio", "t_constant",
-  #       "alpha", "alpha_reward", "use_timed_alpha",
-  #       "alpha_exponent", "alpha_init", "alpha_min",
-  #       "add_beta", "jitter"
-  #     ),
-  #     default_value = c(
-  #       1,
-  #       1, 0, 1,
-  #       0.6, 1,
-  #       0.5, 1e-3, 0.2,
-  #       FALSE,
-  #       1.2, NA,
-  #       0.02, 0.2, FALSE,
-  #       1, 1, 0,
-  #       FALSE, 1
-  #     )
-  #   ),
-  #   "TD" = list(
-  #     name = c(
-  #       "alphas", "betas_on", "betas_off",
-  #       "lambdas", "gamma", "sigma"
-  #     ),
-  #     default_value = c(
-  #       0.05, 0.4, 0.4,
-  #       1, 0.95, 0.90
-  #     )
-  #   ),
-  # )
   if (is.null(model)) {
     return(parameter_map)
   } else {
     return(parameter_map[[model]])
   }
 }
-
 
 # Returns whether a parameter is a global parameter
 .is_global_parameter <- function(parameter, model) {
@@ -157,17 +121,6 @@ model_outputs <- function(model = NULL) {
     function(m) methods::new(m)@outputs
   )
   names(output_info) <- supported_models()
-  # output_info <- list(
-  #   "ANCCR" = c(
-  #     "action_values", "anccrs",
-  #     "causal_weights", "dopamines",
-  #     "ij_eligibilities", "i_eligibilities",
-  #     "i_base_rate", "ij_base_rate",
-  #     "net_contingencies", "probabilities",
-  #     "representation_contingencies"
-  #   ),
-  #   "TD" = c("values", "associations", "eligibilities"),
-  # )
   if (is.null(model)) {
     output_info
   } else {
@@ -183,9 +136,5 @@ model_outputs <- function(model = NULL) {
     function(m) methods::new(m)@.associations
   )
   names(assoc_map) <- supported_models()
-  # assoc_map <- c(
-  #   "ANCCR" = "anccrs",
-  #   "TD" = "associations",
-  # )
   assoc_map[[model]]
 }

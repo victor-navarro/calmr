@@ -18,8 +18,7 @@
 #' @noRd
 methods::setClass("SM2007",
   representation(
-    v = "matrix", o = "array", debug = "logical",
-    comparator_func = "function"
+    v = "matrix", o = "array"
   ),
   contains = "CalmrModel",
   prototype = methods::prototype(
@@ -64,26 +63,25 @@ methods::setClass("SM2007",
       "operator_switches" = function(data) {
         plot_targeted_complex_trials(data, "comparison")
       }
-    ),
-    debug = FALSE,
-    comparator_func = .witnauer_comparator_proc
+    )
   )
 )
 
 
-#' @noRd
+#' @rdname CalmrModel-methods
+#' @param debug A logical to print debugging messages.
+#' @param comparator_func The function for the comparator process.
 setMethod(
-  "run", "SM2007", function(object, experience, mapping, ...) {
+  "run", "SM2007", function(object, experience,
+                            mapping, ...,
+                            debug = FALSE,
+                            comparator_func = .witnauer_comparator_proc) {
     # assert the model has parameters
     .assert_has_parameters(object)
     parameters <- object@parameters
 
     # No functional stimuli check
     .assert_no_functional(mapping)
-
-    # extra bits
-    debug <- object@debug
-    comparator_func <- object@comparator_func
 
     # data initialization
     ntrials <- length(experience$tp) # max trials
@@ -211,7 +209,7 @@ setMethod(
     object@v <- v
     object@o <- o
     object@.last_experience <- experience
-    object@.last_results <- list(
+    object@.last_raw_results <- list(
       associations = vs,
       activations = acts,
       relative_activations = relacts,

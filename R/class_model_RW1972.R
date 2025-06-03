@@ -32,7 +32,7 @@ methods::setClass("RW1972",
   )
 )
 
-#' @noRd
+#' @rdname CalmrModel-methods
 setMethod(
   "run", "RW1972", function(object, experience, mapping, ...) {
     # assert the model has parameters
@@ -116,7 +116,7 @@ setMethod(
     object@parameters <- parameters
     object@v <- v
     object@.last_experience <- experience
-    object@.last_results <- list(associations = vs, responses = rs)
+    object@.last_raw_results <- list(associations = vs, responses = rs)
     object
   }
 )

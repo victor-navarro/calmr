@@ -32,7 +32,7 @@ methods::setClass("RAND",
   )
 )
 
-#' @noRd
+#' @rdname CalmrModel-methods
 setMethod(
   "run", "RAND", function(object, experience, mapping, ...) {
     # assert the model has parameters
@@ -79,7 +79,7 @@ setMethod(
     object@parameters <- parameters
     object@v <- v
     object@.last_experience <- experience
-    object@.last_results <- list(associations = vs, responses = rs)
+    object@.last_raw_results <- list(associations = vs, responses = rs)
     object
   }
 )

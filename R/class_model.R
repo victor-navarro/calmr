@@ -2,8 +2,20 @@
 #'
 #' @section Slots:
 #' \describe{
-#' \item{model}{A model name string}
+#' \item{model_name}{A model name string}
+#' \item{outputs}{A character vector with model outputs}
 #' \item{parameters}{A list with the model with model parameters}
+#' \item{default_parameters}{A list with the default model parameters}
+#' \item{.internal_states}{A character vector with internal states}
+#' \item{.is_timed}{A logical indicating if the model is timed}
+#' \item{.associations}{A character vector with associations output name}
+#' \item{.dnames_map}{A list with data names mapping for outputs}
+#' \item{.parse_map}{A list with parse functions for outputs}
+#' \item{.formula_map}{A list with formula mapping for outputs}
+#' \item{.plots_map}{A list with plot functions for outputs}
+#' \item{.last_experience}{A data.frame with the last experience run}
+#' \item{.last_raw_results}{A list with the last raw results}
+#' \item{.last_parsed_results}{A list with the last parsed results}
 #' }
 #' @name CalmrModel-class
 #' @rdname CalmrModel-class
@@ -23,13 +35,14 @@ methods::setClass(
     .formula_map = "list",
     .plots_map = "list",
     .last_experience = "data.frame",
-    .last_results = "list"
+    .last_raw_results = "list",
+    .last_parsed_results = "list"
   )
 )
 
 #' CalmrModel methods
-#' @description S4 methods for `CalmrModel` class.
-#' @param object A [CalmrModel] object.
+#' @description S4 methods for [CalmrModel-class]
+#' @param object A [CalmrModel-class] object.
 #' @name CalmrModel-methods
 NULL
 #> NULL
@@ -38,29 +51,31 @@ NULL
 setGeneric("run", function(object, ...) standardGeneric("run")) # nocov
 
 #' @aliases run
-#' @description Run a [CalmrModel] object with the given parameters,
-#' experience, and mapping.
-#'
 #' @param experience A data.frame specifying trials as rows,
 #' as returned by `make_experiment()`.
 #' @param mapping A named list specifying trial and stimulus mapping,
 #' as returned by `make_experiment()`.
+#' @param timings A named list specifying timings for the model. Only used
+#' for timed models.
 #' @param ... Additional named arguments.
-#' @return `run()` returns the updated [CalmrModel] object.
+#' @return `run()` returns the [CalmrModel-class] after
+#' running the phases in the design.
 #' @note The `run` method changes some internal
 #' states of the model (if appropriate) and
-#' populates the `.last_results` slot with the results of the run.
+#' populates the `.last_raw_results` slot with the results of the run.
 #' @rdname CalmrModel-methods
 #' @export
 setMethod(
   "run", "CalmrModel",
-  function(object, experience, mapping, ...) {
+  function(object, experience, mapping, timings, ...) {
     stop("`run` method not implemented for this model")
   }
 )
 
 #' @export
-#' @return `parameters()` returns the parameters of the [CalmrModel] object.
+#' @param x A [CalmrModel-class] object.
+#' @return `parameters()` returns the parameters
+#' of the [CalmrModel-class] object.
 #' @rdname CalmrModel-methods
 methods::setMethod(
   "parameters", "CalmrModel",
@@ -73,7 +88,8 @@ methods::setMethod(
 )
 
 #' @export
-#' @return `parameters()<-` sets the parameters of a [CalmrModel] object.
+#' @param value A list of parameters to set.
+#' @return `parameters()<-` sets the parameters of a [CalmrModel-class] object.
 #' @rdname CalmrModel-methods
 methods::setMethod(
   "parameters<-", "CalmrModel",
@@ -92,20 +108,35 @@ methods::setMethod(
 )
 
 #' @export
-#' @return results() returns the last results of the [CalmrModel] object.
+#' @return `raw_results()` returns the last
+#' raw results of the [CalmrModel-class] object.
 #' @rdname CalmrModel-methods
 methods::setMethod(
-  "results", "CalmrModel",
+  "raw_results", "CalmrModel",
   function(object) {
-    if (length(object@.last_results) == 0) {
-      stop("No results available. Run the model first.")
+    if (length(object@.last_raw_results) == 0) {
+      stop("No raw results available. Run the model first.")
     }
-    object@.last_results
+    object@.last_raw_results
   }
 )
 
 #' @export
-#' @return show() returns NULL (invisibly).
+#' @return `parsed_results()` returns the last
+#' parsed results of the [CalmrModel-class] object.
+#' @rdname CalmrModel-methods
+methods::setMethod(
+  "parsed_results", "CalmrModel",
+  function(object) {
+    if (length(object@.last_parsed_results) == 0) {
+      stop("No parsed results available. Parse the model first.")
+    }
+    object@.last_parsed_results
+  }
+)
+
+#' @export
+#' @return `show()` returns NULL (invisibly).
 #' @rdname CalmrModel-methods
 methods::setMethod(
   "show", "CalmrModel",
@@ -139,12 +170,14 @@ methods::setMethod(
 )
 
 #' @export
-#' @return parse() returns a list with parsed results.
+#' @param outputs A character vector specifying the outputs to parse.
+#' If not specified, all outputs of the model will be parsed.
+#' @return `parse()` returns [CalmrModel-class] with parsed results.
 #' @rdname CalmrModel-methods
 methods::setMethod(
   "parse", "CalmrModel",
   function(object, outputs = object@outputs) {
-    if (length(object@.last_results) == 0) {
+    if (length(object@.last_raw_results) == 0) {
       stop("No results available. Run the model first.")
     }
     if (!all(outputs %in% object@outputs)) {
@@ -158,6 +191,75 @@ methods::setMethod(
       object@.parse_map[[o]](object, o)
     })
     names(parsed_results) <- outputs
-    parsed_results
+    object@.last_parsed_results <- parsed_results
+    object
   }
 )
+
+#' @export
+#' @param type A character vector specifying the
+#' types of plots to generate (should be model outputs).
+#' @return `plot()` returns a list of 'ggplot' plot objects.
+#' @rdname CalmrModel-methods
+setMethod(
+  "plot", "CalmrModel",
+  function(x, type = NULL, ...) {
+    # Assert type is valid
+    model_plots <- .sanitize_outputs(type, x@outputs)
+    # Check parsed results are available
+    res <- parsed_results(x)
+    if (length(res) == 0) {
+      stop(c(
+        "Experiment must have parsed results. ",
+        "Use `parse` on your model first."
+      ))
+    }
+    # assert outputs are in aggregated results
+    stopifnot(
+      "Some outputs are not available in aggregated results.
+      Use aggregate on your experiment." =
+        all(model_plots %in% names(res))
+    )
+
+    # make plots
+    plots <- list()
+    for (p in model_plots) {
+      odat <- res[[p]]
+      group <- unique(odat$group)
+      plot_name <- sprintf(
+        "%s - %s (%s)", group,
+        .get_y_prettyname(p), x@model_name
+      )
+      # get plot
+      plots[[plot_name]] <- x@.plots_map[[p]](odat, ...) +
+        ggplot2::labs(title = plot_name)
+    }
+    plots
+  }
+)
+
+
+#' @rdname CalmrModel-methods
+#' @return `graph()` returns a 'ggplot' object.
+#' @export
+setMethod("graph", "CalmrModel", function(x, ...) {
+  # get parsed results
+  res <- parsed_results(x)
+  if (length(res) == 0) {
+    stop("Model does not contain parsed results.
+      Please parse model beforehand.")
+  }
+  weights <- res[[x@.associations]]
+  if (x@model_name == "PKH1982") {
+    evs <- weights[weights$type == "EV", ]
+    ivs <- weights[weights$type == "IV", ]
+    weights <- evs
+    weights$value <- weights$value - ivs$value
+  }
+  group <- unique(weights$group)
+  graph_name <- sprintf("%s - Associations (%s)", group, x@model_name)
+  g <- calmr_model_graph(
+    weights[weights$group == group, ], ...
+  ) + ggplot2::labs(title = graph_name)
+  g
+})

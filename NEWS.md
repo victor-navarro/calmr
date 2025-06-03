@@ -1,10 +1,10 @@
 # calmr 0.8.0
 * Added `CalmrModel` class.
-    - This class is contains information about the model, including, among other thigs, its name, (current) parameters, default_parameters, and several lists pointing to internal functions used to name, parse, and plot results. See `?CalmrModel` for more information on the slots.
-    - Model logic is now encapsulated within `run,CalmrModel-method`. This method modifies the `CalmrModel` to populate the `.last_raw_results` slot with lists of raw results, and overwrite internals such as model parameters.
+    - This class is contains information about the model, including, among other things, its name, (current) parameters, default_parameters, and several lists pointing to internal functions used to name, parse, and plot results. See `help("CalmrModel-class")` for more information on the slots.
+    - Model logic is now encapsulated within `help("run,CalmrModel-method")`. This method modifies the `CalmrModel` to populate the `.last_raw_results` slot with lists of raw results, and overwrite internals such as model parameters.
     - The class has its own methods (including `plot()` and `graph()`). See `?CalmrModel-methods` for more information.
 * Removed `CalmrResults` class. Raw and parsed results are now stored in the `CalmrModel` class' `.last_raw_results` and `.last_parsed_results` slots, respectively. Aggregated results are now stored in the `CalmrExperiment` class' `results` slot.
-* Added `CalmrExperiment` slot `models` to store the models used in the experiment.
+* Added `CalmrExperiment` slot `models` to store the `CalmrModel` instances used in the experiment.
 * Added functionality to resume training a model across different experiments. If necessary, the objects representing the internal states of a model (e.g., a matrix of associations) will be expanded to accommodate new stimuli. This feature should be treated as experimental, and casual users should instead specify different phases in a single experiment.
 
 # calmr 0.7.1
@@ -60,7 +60,7 @@
 # calmr 0.4.0
 * Major refactoring of classes and models. This should help development moving forward.
 * Added several methods for access to CalmrExperiment contents, including `c` (to bind experiments) `results`, `plot`, `graph`, `design`, and `parameters`.
-* Created CalmrDesign and CalmrResult classes. 
+* Created `CalmrDesign` and `CalmrResults` classes. 
 * Rewrote parsers to be less verbose and to rely less on the `tidyverse` suite and piping.
 * Substantially reduced the complexity of `make_experiment` function (previous `make_experiment`).
 * Introduced distinction between stimulus-specific and global parameters.

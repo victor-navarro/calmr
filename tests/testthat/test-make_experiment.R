@@ -39,7 +39,7 @@ test_that("no miniblocks", {
   expect_no_error(
     make_experiment(parsed_df,
       parameters = parameters,
-      model = "HD2022",
+      model = "RW1972",
       miniblocks = FALSE
     )
   )

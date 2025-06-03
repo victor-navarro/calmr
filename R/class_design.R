@@ -43,7 +43,7 @@ methods::setMethod(
 #' @noRd
 methods::setGeneric(
   "mapping",
-  function(object) methods::standardGeneric("mapping") # nocov
+  function(object) standardGeneric("mapping") # nocov
 )
 #' @export
 #' @aliases mapping
@@ -56,7 +56,7 @@ methods::setMethod(
 #' @noRd
 methods::setGeneric(
   "trials",
-  function(object) methods::standardGeneric("trials") # nocov
+  function(object) standardGeneric("trials") # nocov
 )
 #' @export
 #' @return `trials()` returns NULL (invisibly).

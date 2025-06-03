@@ -33,14 +33,14 @@ test_that("can run model with parameters", {
   mod <- methods::new("RW1972")
   parameters(mod) <- pars
   mod <- run(mod, experience = exper, mapping = mapp)
-  expect_true(length(mod@.last_results) > 0)
+  expect_true(length(mod@.last_raw_results) > 0)
 })
 
-test_that("results method returns last results", {
+test_that("raw_results method returns last results", {
   mod <- methods::new("RW1972")
   parameters(mod) <- pars
   mod <- run(mod, experience = exper, mapping = mapp)
-  results_mod <- results(mod)
+  results_mod <- raw_results(mod)
   expect_true(length(results_mod) > 0)
   expect_true(all(names(results_mod) %in% mod@outputs))
 })
@@ -99,4 +99,29 @@ test_that("can parse results", {
   mod <- run(mod, experience = exper, mapping = mapp)
   parsed_results <- parse(mod, outputs = c("associations", "responses"))
   expect_true(length(parsed_results) > 0)
+})
+
+test_that("can plot results", {
+  mod <- methods::new("RW1972")
+  parameters(mod) <- pars
+  mod <- run(mod, experience = exper, mapping = mapp)
+  # can't plot without parsing the model
+  expect_error(plot(mod, outputs = "associations"))
+  # can plot after parsing
+  mod <- parse(mod, outputs = c("associations"))
+  expect_true(length(plot(mod, type = "associations")) > 0)
+  # can't plot without some parsed results
+  expect_error(plot(mod, outputs = "responses"))
+})
+
+test_that("can graph results", {
+  mod <- methods::new("RW1972")
+  parameters(mod) <- pars
+  mod <- run(mod, experience = exper, mapping = mapp)
+  # can't graph without parsing the model
+  expect_error(graph(mod, outputs = "associations"))
+  # can graph after parsing
+  mod <- parse(mod, outputs = c("associations"))
+  g <- graph(mod)
+  expect_true(length(g) > 0)
 })

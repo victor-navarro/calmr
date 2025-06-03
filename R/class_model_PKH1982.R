@@ -39,7 +39,7 @@ methods::setClass("PKH1982",
   )
 )
 
-#' @noRd
+#' @rdname CalmrModel-methods
 setMethod(
   "run", "PKH1982", function(object, experience, mapping, ...) {
     # assert the model has parameters
@@ -173,7 +173,7 @@ setMethod(
     object@ev <- ev
     object@iv <- iv
     object@.last_experience <- experience
-    object@.last_results <- list(
+    object@.last_raw_results <- list(
       associations = list(EV = evs, IV = ivs),
       associabilities = as,
       responses = rs

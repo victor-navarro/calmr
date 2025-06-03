@@ -53,53 +53,69 @@ run_experiment <- function(
     "experience", "mapping"
   ))]
   # sanitize outputs using the first model
-  outputs <- .sanitize_outputs(outputs, experiment@.models[[1]]@outputs)
+  outputs <- .sanitize_outputs(outputs, experiment@models[[1]]@outputs)
 
   # check if experiment needs (can) to be run
   .assert_experiment(experiment)
+
+  # check model/experiment parameters
+  experiment <- .assert_model_exp_parameters(experiment)
 
   # now run the experiment
   exp_length <- length(experiment)
   pb <- progressr::progressor(exp_length)
   .parallel_standby(pb) # print parallel backend message
   # get results
-  all_results <- future.apply::future_sapply(
+  experiment@models <- future.apply::future_sapply(
     seq_len(exp_length), function(i) {
       if (!is.null(nargs$.callback_fn)) nargs$.callback_fn() # nocov
       # bundle arguments
       args <- c(list(
         experience = experiment@experiences[[i]],
         mapping = experiment@design@mapping,
-        parameters = experiment@parameters[[experiment@.group[i]]],
+        parameters = experiment@parameters[[experiment@.groups[i]]],
         timings = experiment@timings
       ), nargs)
 
-      experiment@.models[[i]] <- calmr::run(experiment@.models[[i]],
+      mod <- calmr::run(experiment@models[[i]],
         experience = args$experience,
         mapping = args$mapping,
         timings = args$timings,
         nargs
       )
-      # get results
-      raw <- results(experiment@.models[[i]])
-      parsed <- NULL
+      # parse results
       if (parse) {
-        parsed <- parse(experiment@.models[[i]], outputs)
+        mod <- parse(mod, outputs)
       }
       pb(message = "Running experiment")
-      list(raw = raw, parsed = parsed)
+      mod
     },
     simplify = FALSE,
     future.seed = TRUE
   )
-  experiment@results@raw_results <- lapply(all_results, "[[", "raw")
-  if (parse) {
-    experiment@results@parsed_results <- lapply(all_results, "[[", "parsed")
-  }
   # aggregate
   if (aggregate) {
     experiment <- aggregate(experiment, outputs = outputs)
   }
 
   return(experiment)
+}
+
+.assert_model_exp_parameters <- function(experiment) {
+  # here we check whether the model parameters match
+  # the ones set in the experiment
+
+  # if the user modifies the parameters after the experiment is created,
+  # then the parameters will not match
+
+  # the parameters are named after the group names
+  for (i in seq_len(length(experiment))) {
+    epars <- experiment@parameters[[experiment@.groups[i]]]
+    mpars <- experiment@models[[i]]@parameters
+    matches <- mapply(function(a, b) all(a %in% b), epars, mpars)
+    if (!all(matches)) {
+      experiment@models[[i]]@parameters <- epars
+    }
+  }
+  experiment
 }

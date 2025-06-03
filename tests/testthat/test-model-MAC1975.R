@@ -155,7 +155,9 @@ test_that("gammas work", {
   )
   pars <- get_parameters(des, model = test_model)
   exp <- make_experiment(des, model = test_model, parameters = pars)
-  exp@parameters$off$gammas["B"] <- 0
+  pars <- parameters(exp)
+  pars$off$gammas["B"] <- 0
+  parameters(exp) <- pars
   exp <- run_experiment(exp, outputs = "associabilities")
 
   assocs <- results(exp)$associabilities

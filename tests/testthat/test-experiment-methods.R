@@ -83,11 +83,6 @@ test_that("plot method throws error when missing aggregated results", {
   expect_error(plot(raw_exper, type = "associations"))
 })
 
-test_that("plot method warns when missing aggregated output", {
-  pagg <- aggregate(parse(raw_exper), outputs = "responses")
-  expect_warning(plot(pagg, type = "associations"))
-})
-
 test_that("graph method throws error when there are no agregated_results", {
   expect_error(graph(parse(raw_exper)))
 })
@@ -97,19 +92,6 @@ test_that("parse method will return only some outputs", {
     names(
       parsed_results(parse(raw_exper, outputs = "associations"))[[1]]
     ),
-    c("associations")
-  )
-})
-
-test_that("parse method is able to parse partially parsed experiments", {
-  pparsed <- parse(raw_exper, outputs = "associations")
-  expect_setequal(
-    names(parsed_results(parse(pparsed, outputs = "responses"))[[1]]),
-    c("associations", "responses")
-  )
-  # can skip parsing
-  expect_setequal(
-    names(parsed_results(parse(pparsed, outputs = "associations"))[[1]]),
     c("associations")
   )
 })
@@ -129,7 +111,10 @@ test_that("aggregate method throws errors with bad outputs", {
 test_that("aggregate method is able to agg partially parsed experiments", {
   pparsed <- parse(raw_exper, outputs = "associations")
   # can aggregate existing parsed_results
-  expect_setequal("associations", names(results(aggregate(pparsed, outputs = "associations"))))
+  expect_setequal(
+    "associations",
+    names(results(aggregate(pparsed, outputs = "associations")))
+  )
   # should aggregate nonexisting parsed results (would involve parallel woes)
   expect_error(aggregate(pparsed, outputs = "responses"))
   # uses output sanitization

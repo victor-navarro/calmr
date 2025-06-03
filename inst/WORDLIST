@@ -8,9 +8,8 @@ CSC
 CalmrDesign
 CalmrExperiment
 CalmrFit
+CalmrModel
 CalmrRSA
-CalmrResult
-CalmrResults
 Dwyer
 Eq
 Github
@@ -87,7 +86,6 @@ nloglikelihood
 nosepokes
 np
 odot
-organised
 overexpectation
 overline
 parallelization
@@ -107,7 +105,6 @@ saliencies
 saliency
 softmax
 summarise
-targeted
 textbf
 th
 uk

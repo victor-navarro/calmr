@@ -23,6 +23,6 @@ for (m in supported_mods) {
       model = m
     )
     res <- run_experiment(args)
-    expect_named(res@results@aggregated_results)
+    expect_named(res@results)
   })
 }
