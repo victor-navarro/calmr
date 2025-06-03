@@ -148,9 +148,6 @@ is_design <- function(object) {
 }
 
 .assert_valid_palette <- function(palette) {
-  if (is.null(palette)) {
-    return("viridis")
-  }
   stopifnot(
     "Palette must be one returned by `set_calmr_palette()`" =
       palette %in% set_calmr_palette()

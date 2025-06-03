@@ -28,3 +28,14 @@ test_that("augmenting ANCCR design with jitter creates different timestamps", {
   ))[[1]]
   expect_true(length(unique(exp_jit$time)) != length(unique(exp_nojit$time)))
 })
+
+
+test_that("can get TD design with no sampling", {
+  pars <- get_parameters(df, model = "TD")
+  tims <- get_timings(df, model = "TD")
+  tims$sample_timings <- FALSE
+  expect_no_error(make_experiment(df,
+    parameters = pars,
+    timings = tims, model = "TD"
+  ))
+})

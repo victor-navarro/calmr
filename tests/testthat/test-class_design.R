@@ -1,6 +1,11 @@
 df <- get_design("blocking")
 parsed_df <- parse_design(df)
 
+
+test_that("can't parse an invalid design", {
+  expect_error(parse_design(df[, 1]))
+})
+
 test_that("show method works", {
   expect_no_error(capture_message(show(parsed_df)))
 })

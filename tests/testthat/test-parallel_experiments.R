@@ -1,5 +1,3 @@
-## Disabled due to slowness ###
-
 df <- data.frame(
   Group = c("True"),
   P1 = c("!2AB(US)/2AC")
