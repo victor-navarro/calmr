@@ -71,18 +71,14 @@ run_experiment <- function(
       if (!is.null(nargs$.callback_fn)) nargs$.callback_fn() # nocov
       # bundle arguments
       args <- c(list(
+        object = experiment@models[[i]],
         experience = experiment@experiences[[i]],
         mapping = experiment@design@mapping,
-        parameters = experiment@parameters[[experiment@.groups[i]]],
         timings = experiment@timings
       ), nargs)
 
-      mod <- calmr::run(experiment@models[[i]],
-        experience = args$experience,
-        mapping = args$mapping,
-        timings = args$timings,
-        nargs
-      )
+      mod <- do.call(calmr::run, args)
+
       # parse results
       if (parse) {
         mod <- parse(mod, outputs)

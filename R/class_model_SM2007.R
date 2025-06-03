@@ -73,9 +73,8 @@ methods::setClass("SM2007",
 #' @param comparator_func The function for the comparator process.
 setMethod(
   "run", "SM2007", function(object, experience,
-                            mapping, ...,
-                            debug = FALSE,
-                            comparator_func = .witnauer_comparator_proc) {
+                            mapping, debug = FALSE,
+                            comparator_func = .witnauer_comparator_proc, ...) {
     # assert the model has parameters
     .assert_has_parameters(object)
     parameters <- object@parameters
@@ -141,7 +140,7 @@ setMethod(
       absent <- setdiff(stim_names, present)
       for (j in absent) {
         for (i in present) {
-          if (debug) message("\nActivating", j, "via", i, "\n\n")
+          if (debug) message("\nActivating ", j, " via ", i, "\n\n")
           relact[i, j] <- comparator_func(
             act = act, i = i, j = j,
             K = stim_names, o = o,

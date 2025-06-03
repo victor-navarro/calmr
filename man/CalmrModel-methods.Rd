@@ -62,9 +62,9 @@
   object,
   experience,
   mapping,
-  ...,
   debug = FALSE,
-  comparator_func = .witnauer_comparator_proc
+  comparator_func = .witnauer_comparator_proc,
+  ...
 )
 
 \S4method{run}{TD}(object, experience, mapping, timings, ...)

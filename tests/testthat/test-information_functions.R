@@ -21,3 +21,7 @@ test_that("supported_plots returns full information", {
 test_that("model_outputs returns full information", {
   expect_true(length(model_outputs()) > 6)
 })
+
+test_that("can get a model by name", {
+  expect_true(inherits(get_model("RW1972"), "CalmrModel"))
+})

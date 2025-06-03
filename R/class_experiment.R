@@ -315,7 +315,12 @@ setMethod(
         plot_name <- sprintf("%s - %s (%s)", g, .get_y_prettyname(p), x@model)
         # get plot
         plots[[plot_name]] <- pfuncs[[p]](pdat[pdat$group == g, ], ...) +
-          ggplot2::labs(title = plot_name)
+          ggplot2::labs(title = plot_name) +
+          ggplot2::labs(
+            y = .get_y_prettyname(p),
+            colour = .get_scale_prettyname(p),
+            fill = .get_scale_prettyname(p)
+          )
       }
     }
     plots

@@ -128,13 +128,3 @@ model_outputs <- function(model = NULL) {
     output_info[[model]]
   }
 }
-
-# defining where the associations are in each model
-.model_associations <- function(model) {
-  assoc_map <- lapply(
-    supported_models(),
-    function(m) methods::new(m)@.associations
-  )
-  names(assoc_map) <- supported_models()
-  assoc_map[[model]]
-}

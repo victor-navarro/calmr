@@ -68,7 +68,7 @@ setGeneric("run", function(object, ...) standardGeneric("run")) # nocov
 setMethod(
   "run", "CalmrModel",
   function(object, experience, mapping, timings, ...) {
-    stop("`run` method not implemented for this model")
+    stop("`run` method not implemented for this model") # nocov
   }
 )
 
@@ -80,7 +80,7 @@ setMethod(
 methods::setMethod(
   "parameters", "CalmrModel",
   function(x) {
-    if (is.null(x@parameters)) {
+    if (length(x@parameters) == 0) {
       stop("Model parameters are not set. Use `parameters<-` to set them.")
     }
     x@parameters
@@ -141,7 +141,7 @@ methods::setMethod(
 methods::setMethod(
   "show", "CalmrModel",
   function(object) {
-    if (length(parameters(object)) > 0) {
+    if (length(object@parameters) > 0) {
       par_text <- c(
         "-----------------------------\n",
         "Parameters:\n",
@@ -208,12 +208,6 @@ setMethod(
     model_plots <- .sanitize_outputs(type, x@outputs)
     # Check parsed results are available
     res <- parsed_results(x)
-    if (length(res) == 0) {
-      stop(c(
-        "Experiment must have parsed results. ",
-        "Use `parse` on your model first."
-      ))
-    }
     # assert outputs are in aggregated results
     stopifnot(
       "Some outputs are not available in aggregated results.
@@ -232,7 +226,12 @@ setMethod(
       )
       # get plot
       plots[[plot_name]] <- x@.plots_map[[p]](odat, ...) +
-        ggplot2::labs(title = plot_name)
+        ggplot2::labs(title = plot_name) +
+        ggplot2::labs(
+          y = .get_y_prettyname(p),
+          colour = .get_scale_prettyname(p),
+          fill = .get_scale_prettyname(p)
+        )
     }
     plots
   }
@@ -245,10 +244,6 @@ setMethod(
 setMethod("graph", "CalmrModel", function(x, ...) {
   # get parsed results
   res <- parsed_results(x)
-  if (length(res) == 0) {
-    stop("Model does not contain parsed results.
-      Please parse model beforehand.")
-  }
   weights <- res[[x@.associations]]
   if (x@model_name == "PKH1982") {
     evs <- weights[weights$type == "EV", ]

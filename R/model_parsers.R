@@ -1,22 +1,5 @@
 #' @import data.table
-# #' Parse raw model results
-# #' @param raw A list with raw model results as returned by model functions
-# #' @param experience A data.frame containing the model experience
-# #'  (from CalmrExperiment)
-# #' @param model A model name string.
-# #' @param outputs A character vector specifying the model outputs to parse.
-# #' @return A list with each parsed model output
-# #' @noRd
-# .parse_model <- function(raw, experience, model, outputs) {
-#   sapply(outputs, function(o) {
-#     .parse_raw_data_table(raw[[o]],
-#       type = o,
-#       experience = experience,
-#       model = model
-#     )
-#   }, simplify = FALSE)
-# }
-
+#' @noRd
 # unnests a list containing named lists of ragged arrays
 .unnest_nested_raw_list <- function(raw) {
   data.table::rbindlist(lapply(seq_along(raw), function(tr) {

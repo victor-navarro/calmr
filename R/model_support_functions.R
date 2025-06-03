@@ -57,7 +57,7 @@
     act, i, j, K, o,
     gammas, order, debug = FALSE) {
   ks <- setdiff(K, c(i, j))
-  if (order) { # order > 0
+  if (order && length(ks) > 0) { # order > 0
     val <- act[i, j] -
       sum(gammas[ks] * o[i, ks, j] *
         # recursion from i to k (link 2)
@@ -98,7 +98,6 @@
     )
   }
   if (debug) message("Link value:", val, "\n")
-
   val
 }
 
@@ -108,7 +107,7 @@
     act, i, j, K, o,
     gammas, order, debug = FALSE) {
   ks <- setdiff(K, c(i, j))
-  if (order) { # order > 0
+  if (order && length(ks) > 0) { # order > 0
     val <- act[i, j] -
       sum(gammas[ks] * o[i, ks, j] *
         # recursion from i to k (link 2)
@@ -149,7 +148,6 @@
     )
   }
   if (debug) message("Link value:", val, "\n")
-
   val
 }
 
