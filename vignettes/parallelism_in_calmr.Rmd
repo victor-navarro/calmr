@@ -69,7 +69,7 @@ Regardless, if you are running `calmr` on a single computer, you'll be using `pl
 
 ```{r}
 library(future)
-plan(multisession)
+plan(multisession, workers = 2)
 start <- proc.time()
 pav_res <- run_experiment(exp)
 end <- proc.time() - start

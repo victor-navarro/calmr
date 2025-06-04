@@ -6,8 +6,8 @@
 * Removed `CalmrResults` class. Raw and parsed results are now stored in the `CalmrModel` class' `.last_raw_results` and `.last_parsed_results` slots, respectively. Aggregated results are now stored in the `CalmrExperiment` class' `results` slot.
 * Added `CalmrExperiment` slot `models` to store the `CalmrModel` instances used in the experiment.
 * Added functionality to resume training a model across different experiments. If necessary, the objects representing the internal states of a model (e.g., a matrix of associations) will be expanded to accommodate new stimuli. This feature should be treated as experimental, and casual users should instead specify different phases in a single experiment.
-* Minor bugfixes:
-    - Fixed bug in witnauer's comparator procedure form `SM2007` for higher order comparisons.
+* Minor bug fixes:
+    - Fixed bug in Witnauer's comparator procedure form `SM2007` for higher order comparisons.
 
 # calmr 0.7.1
 * Fixed bug in usage of beta parameters in the RW1972 model. Added tests for all model parameters. Additionally, disabled functional stimuli for RW1972.
