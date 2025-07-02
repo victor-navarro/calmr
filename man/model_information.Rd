@@ -15,7 +15,7 @@
 \usage{
 supported_models()
 
-add_model(model_name)
+add_model(new_model)
 
 supported_timed_models()
 
@@ -32,6 +32,8 @@ model_parameters(model = NULL)
 model_outputs(model = NULL)
 }
 \arguments{
+\item{new_model}{A string specifying the name of the custom model class}
+
 \item{model}{A string specifying a model. One from \code{supported_models()}.}
 }
 \value{
