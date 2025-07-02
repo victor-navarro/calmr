@@ -22,12 +22,29 @@ NULL
 #' @return `supported_models()` returns a character vector.
 #' @export
 supported_models <- function() {
-  c(
+  default_mods <- c(
     "RW1972", "HDI2020", "HD2022",
     "MAC1975", "PKH1982", "RAND",
     "SM2007", "TD", "ANCCR"
   )
+  getOption("calmr_supported_models", default = default_mods)
 }
+
+#' @rdname model_information
+#' @return `add_model()` returns a character
+#' vector with the old supported models (invisibly).
+#' @export
+add_model <- function(model_name) {
+  current_mods <- supported_models()
+  stopifnot(
+    "Model name already exists. See `supported_models()`" =
+      !(model_name %in% current_mods)
+  )
+  old <- options("calmr_supported_models" = c(current_mods, model_name))
+  invisible(old)
+}
+
+
 #' @rdname model_information
 #' @return `supported_timed_models()` returns a character vector.
 #' @export

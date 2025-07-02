@@ -3,6 +3,7 @@
 \name{model_information}
 \alias{model_information}
 \alias{supported_models}
+\alias{add_model}
 \alias{supported_timed_models}
 \alias{supported_optimizers}
 \alias{supported_families}
@@ -13,6 +14,8 @@
 \title{Model information functions}
 \usage{
 supported_models()
+
+add_model(model_name)
 
 supported_timed_models()
 
@@ -33,6 +36,9 @@ model_outputs(model = NULL)
 }
 \value{
 \code{supported_models()} returns a character vector.
+
+\code{add_model()} returns a character
+vector with the old supported models (invisibly).
 
 \code{supported_timed_models()} returns a character vector.
 

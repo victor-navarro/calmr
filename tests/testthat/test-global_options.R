@@ -23,3 +23,15 @@ test_that("set_calmr_palette throws error with weird palette", {
   on.exit(options("calmr_palette" = NULL))
   expect_error(set_calmr_palette("huehue"))
 })
+
+
+test_that("add_model actually adds a model", {
+  on.exit(options("calmr_supported_models" = NULL))
+  add_model("TEST")
+  expect_true("TEST" %in% supported_models())
+})
+
+test_that("add_model throws error if adding an existing model", {
+  on.exit(options("calmr_supported_models" = NULL))
+  expect_error(add_model("RW1972"))
+})
