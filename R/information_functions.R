@@ -31,16 +31,17 @@ supported_models <- function() {
 }
 
 #' @rdname model_information
+#' @param new_model A string specifying the name of the custom model class
 #' @return `add_model()` returns a character
 #' vector with the old supported models (invisibly).
 #' @export
-add_model <- function(model_name) {
+add_model <- function(new_model) {
   current_mods <- supported_models()
   stopifnot(
     "Model name already exists. See `supported_models()`" =
-      !(model_name %in% current_mods)
+      !(new_model %in% current_mods)
   )
-  old <- options("calmr_supported_models" = c(current_mods, model_name))
+  old <- options("calmr_supported_models" = c(current_mods, new_model))
   invisible(old)
 }
 
