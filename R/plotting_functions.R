@@ -113,12 +113,17 @@ plot_targeted_typed_trials <- function(data) {
     data = data,
     mapping = ggplot2::aes(
       x = ceiling(.data$trial / .data$block_size), y = .data$value,
-      colour = .data$s2, linetype = .data$type
+      colour = .data$s2,
+      linetype = .data$type,
+      shape = .data$type
     )
   ) +
     ggplot2::stat_summary(geom = "line", fun = "mean") +
     ggplot2::stat_summary(geom = "point", fun = "mean") +
-    ggplot2::labs(x = "Trial/Miniblock", linetype = "Type") +
+    ggplot2::labs(
+      x = "Trial/Miniblock", linetype = "Type",
+      shape = "Type"
+    ) +
     ggplot2::theme_bw() +
     .calmr_scales("colour_d") +
     ggplot2::facet_grid(.data$s1 ~ .data$phase + .data$trial_type,
@@ -138,12 +143,16 @@ plot_targeted_complex_trials <- function(data, col) {
     data = data,
     mapping = ggplot2::aes(
       x = ceiling(.data$trial / .data$block_size), y = .data$value,
-      colour = .data$s2, linetype = .data[[col]]
+      colour = .data$s2, linetype = .data[[col]],
+      shape = .data[[col]]
     )
   ) +
     ggplot2::stat_summary(geom = "line", fun = "mean") +
     ggplot2::stat_summary(geom = "point", fun = "mean") +
-    ggplot2::labs(x = "Trial/Miniblock", linetype = tools::toTitleCase(col)) +
+    ggplot2::labs(
+      x = "Trial/Miniblock",
+      linetype = tools::toTitleCase(col), shape = tools::toTitleCase(col)
+    ) +
     ggplot2::theme_bw() +
     .calmr_scales("colour_d") +
     ggplot2::facet_grid(.data$s1 ~ .data$phase + .data$trial_type,
