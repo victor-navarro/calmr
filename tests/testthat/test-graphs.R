@@ -12,7 +12,7 @@ test_that("calmr_model_graph works", {
     parameters = get_parameters(design = df, model = models[1])
   )
   g <- calmr_model_graph(results(res)$associations)
-  expect_named(g)
+  expect_true(inherits(g, c("ggplot", "ggplot2::ggplot")))
 })
 
 res <- run_experiment(
@@ -22,7 +22,7 @@ res <- run_experiment(
 )
 test_that("calmr_model_graph takes a trial", {
   g <- calmr_model_graph(results(res)$associations, t = 1)
-  expect_named(g)
+  expect_true(inherits(g, c("ggplot", "ggplot2::ggplot")))
 })
 
 test_that("calmr_model_graph throws a warning if trial exceeds data", {
@@ -44,7 +44,7 @@ for (m in models) {
       timings = tims
     )
     g <- graph(res)
-    expect_named(g)
+    expect_true(inherits(g[[1]], c("ggplot", "ggplot2::ggplot")))
   })
 }
 

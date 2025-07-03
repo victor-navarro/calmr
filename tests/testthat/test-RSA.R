@@ -56,12 +56,12 @@ test_that("test method for CalmrRSA works", {
 
 test_that("plotting RSA works", {
   plt <- plot(res)
-  expect_named(plt)
+  expect_true(inherits(plt, c("ggplot", "ggplot2::ggplot")))
 })
 
 test_that("plotting RSA with a test works", {
   plt <- plot(test_res)
-  expect_named(plt)
+  expect_true(inherits(plt, c("ggplot", "ggplot2::ggplot")))
 })
 
 test_that("show method works without test results", {
