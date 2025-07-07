@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">calmr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,6 +54,20 @@
       <small>Source: <a href="https://github.com/victor-navarro/calmr/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.8.0" id="calmr-080">calmr 0.8.0<a class="anchor" aria-label="anchor" href="#calmr-080"></a></h2>
+<ul><li>Added <code>CalmrModel</code> class.
+<ul><li>This class is contains information about the model, including, among other things, its name, (current) parameters, default_parameters, and several lists pointing to internal functions used to name, parse, and plot results. See <code><a href="../reference/CalmrModel-class.html">help("CalmrModel-class")</a></code> for more information on the slots.</li>
+<li>Model logic is now encapsulated within <code><a href="../reference/CalmrModel-methods.html">help("run,CalmrModel-method")</a></code>. This method modifies the <code>CalmrModel</code> to populate the <code>.last_raw_results</code> slot with lists of raw results, and overwrite internals such as model parameters.</li>
+<li>The class has its own methods (including <code><a href="../reference/CalmrExperiment-methods.html">plot()</a></code> and <code><a href="../reference/CalmrExperiment-methods.html">graph()</a></code>). See <code>?CalmrModel-methods</code> for more information.</li>
+</ul></li>
+<li>Removed <code>CalmrResults</code> class. Raw and parsed results are now stored in the <code>CalmrModel</code> class’ <code>.last_raw_results</code> and <code>.last_parsed_results</code> slots, respectively. Aggregated results are now stored in the <code>CalmrExperiment</code> class’ <code>results</code> slot.</li>
+<li>Added <code>CalmrExperiment</code> slot <code>models</code> to store the <code>CalmrModel</code> instances used in the experiment.</li>
+<li>Added functionality to resume training a model across different experiments. If necessary, the objects representing the internal states of a model (e.g., a matrix of associations) will be expanded to accommodate new stimuli. This feature should be treated as experimental, and casual users should instead specify different phases in a single experiment.</li>
+<li>Minor bug fixes:
+<ul><li>Fixed bug in Witnauer’s comparator procedure form <code>SM2007</code> for higher order comparisons.</li>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.1" id="calmr-071">calmr 0.7.1<a class="anchor" aria-label="anchor" href="#calmr-071"></a></h2>
 <ul><li>Fixed bug in usage of beta parameters in the RW1972 model. Added tests for all model parameters. Additionally, disabled functional stimuli for RW1972.</li>
@@ -115,7 +129,7 @@
 <h2 class="pkg-version" data-toc-text="0.4.0" id="calmr-040">calmr 0.4.0<a class="anchor" aria-label="anchor" href="#calmr-040"></a></h2>
 <ul><li>Major refactoring of classes and models. This should help development moving forward.</li>
 <li>Added several methods for access to CalmrExperiment contents, including <code>c</code> (to bind experiments) <code>results</code>, <code>plot</code>, <code>graph</code>, <code>design</code>, and <code>parameters</code>.</li>
-<li>Created CalmrDesign and CalmrResult classes.</li>
+<li>Created <code>CalmrDesign</code> and <code>CalmrResults</code> classes.</li>
 <li>Rewrote parsers to be less verbose and to rely less on the <code>tidyverse</code> suite and piping.</li>
 <li>Substantially reduced the complexity of <code>make_experiment</code> function (previous <code>make_experiment</code>).</li>
 <li>Introduced distinction between stimulus-specific and global parameters.</li>
@@ -155,7 +169,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

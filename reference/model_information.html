@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">calmr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,6 +63,8 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">supported_models</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">add_model</span><span class="op">(</span><span class="va">new_model</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">supported_timed_models</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">supported_optimizers</span><span class="op">(</span><span class="op">)</span></span>
@@ -82,19 +84,25 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
+<dl><dt id="arg-new-model">new_model<a class="anchor" aria-label="anchor" href="#arg-new-model"></a></dt>
+<dd><p>A string specifying the name of the custom model class</p></dd>
+
+
+<dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
 <dd><p>A string specifying a model. One from <code>supported_models()</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p><code>supported_models()</code> returns a character vector.</p>
+<p><code>add_model()</code> returns a character
+vector with the old supported models (invisibly).</p>
 <p><code>supported_timed_models()</code> returns a character vector.</p>
 <p><code>supported_optimizers()</code> returns a character vector.</p>
 <p><code>supported_families()</code> returns a character vector.</p>
 <p><code>supported_plots()</code> returns a character vector or list
 (if model is NULL).</p>
-<p><code>get_model()</code> returns a model function.</p>
+<p><code>get_model()</code> returns a <a href="CalmrModel-class.html">CalmrModel</a> model instance.</p>
 <p><code>model_parameters()</code> returns a list or a
 list of lists (if model is NULL).</p>
 <p><code>model_outputs()</code> returns a character vector or
@@ -107,20 +115,22 @@ list (if model is NULL).</p>
 <span class="r-in"><span><span class="fu">model_outputs</span><span class="op">(</span><span class="st">"RW1972"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "associations" "responses"   </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Getting the model function implementing the PKH1982 model</span></span></span>
-<span class="r-in"><span><span class="va">pkh_func</span> <span class="op">&lt;-</span> <span class="fu">get_model</span><span class="op">(</span><span class="st">"PKH1982"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pkh_func</span>, <span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  function (ev = NULL, iv = NULL, parameters, experience, mapping, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2      ...)                                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  {                                                                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4      .assert_no_functional(mapping)                               </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5      ntrials &lt;- length(experience$tp)                             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6      fsnames &lt;- mapping$unique_functional_stimuli                 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7      if (is.null(ev)) {                                           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8          ev &lt;- gen_ss_weights(fsnames)                            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9      }                                                            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10     if (is.null(iv)) {                                           </span>
+<span class="r-in"><span><span class="co"># Getting a model instance of the PKH1982 model</span></span></span>
+<span class="r-in"><span><span class="va">pkh_inst</span> <span class="op">&lt;-</span> <span class="fu">get_model</span><span class="op">(</span><span class="st">"PKH1982"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Getting the `run` method for the MAC1975</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">methods</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/methods/getMethod.html" class="external-link">getMethod</a></span><span class="op">(</span><span class="st">"run"</span>, <span class="st">"MAC1975"</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  new("MethodDefinition", .Data = function (object, ...)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  {                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      .local &lt;- function (object, experience, mapping, ...) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      {                                                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          .assert_has_parameters(object)                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          parameters &lt;- object@parameters                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7          .assert_no_functional(mapping)                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8          .assert_no_functional(mapping)                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9          ntrials &lt;- length(experience$tp)                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10         stim_names &lt;- mapping$unique_nominal_stimuli      </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Getting the parameters required by SM2007</span></span></span>
 <span class="r-in"><span><span class="fu">model_parameters</span><span class="op">(</span><span class="st">"SM2007"</span><span class="op">)</span></span></span>
@@ -129,6 +139,13 @@ list (if model is NULL).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $default_value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4 1.0 0.2 1.0 1.0 0.2 1.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="fu">model_parameters</span><span class="op">(</span><span class="st">"RW1972"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "alphas"    "betas_on"  "betas_off" "lambdas"  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $default_value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4 0.4 0.4 1.0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
@@ -141,7 +158,7 @@ list (if model is NULL).</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

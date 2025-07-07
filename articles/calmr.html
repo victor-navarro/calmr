@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">calmr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -221,8 +221,8 @@ wall of text, your phase string is working.</p>
 call <code><a href="../reference/model_information.html">supported_models()</a></code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/model_information.html">supported_models</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "HDI2020" "HD2022"  "RW1972"  "MAC1975" "PKH1982" "SM2007"  "RAND"   </span></span>
-<span><span class="co">#&gt; [8] "ANCCR"   "TD"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "RW1972"  "HDI2020" "HD2022"  "MAC1975" "PKH1982" "RAND"    "SM2007" </span></span>
+<span><span class="co">#&gt; [8] "TD"      "ANCCR"</span></span></code></pre></div>
 <p>After choosing a model, you can get some default parameters for your
 design with <code><a href="../reference/get_parameters.html">get_parameters()</a></code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -274,8 +274,8 @@ iteration.</p>
 <span><span class="co">#&gt; [1] "calmr"</span></span>
 <span><span class="co"># CalmrExperiment is an S4 class, so it has slots</span></span>
 <span><span class="fu">slotNames</span><span class="op">(</span><span class="va">my_experiment</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] "design"      "model"       "groups"      "parameters"  "timings"    </span></span>
-<span><span class="co">#&gt;  [6] "experiences" "results"     ".model"      ".group"      ".iter"      </span></span>
+<span><span class="co">#&gt;  [1] "design"      "groups"      "model"       "parameters"  "timings"    </span></span>
+<span><span class="co">#&gt;  [6] "experiences" "results"     "models"      ".groups"     ".iter"      </span></span>
 <span><span class="co">#&gt; [11] ".seed"</span></span>
 <span><span class="co"># some of the experience given to group Exp on the first (and only) iteration</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">my_experiment</span><span class="op">@</span><span class="va">experiences</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
@@ -291,11 +291,9 @@ iteration.</p>
 <span><span class="co">#&gt; [1] 2</span></span>
 <span><span class="co"># an experiment has results with different levels of aggregation</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">my_experiment</span><span class="op">@</span><span class="va">results</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "CalmrExperimentResult"</span></span>
-<span><span class="co">#&gt; attr(,"package")</span></span>
-<span><span class="co">#&gt; [1] "calmr"</span></span>
+<span><span class="co">#&gt; [1] "list"</span></span>
 <span><span class="fu">slotNames</span><span class="op">(</span><span class="va">my_experiment</span><span class="op">@</span><span class="va">results</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "aggregated_results" "parsed_results"     "raw_results"</span></span>
+<span><span class="co">#&gt; NULL</span></span>
 <span><span class="co"># shorthand method to access aggregated_results</span></span>
 <span><span class="fu"><a href="../reference/CalmrExperiment-methods.html">results</a></span><span class="op">(</span><span class="va">my_experiment</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $associations</span></span>
@@ -426,7 +424,7 @@ when you are ready.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>

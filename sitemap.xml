@@ -25,16 +25,14 @@
 <url><loc>https://victornavarro.org/calmr/reference/CalmrDesign-methods.html</loc></url>
 <url><loc>https://victornavarro.org/calmr/reference/CalmrExperiment-methods.html</loc></url>
 <url><loc>https://victornavarro.org/calmr/reference/CalmrExperiment.html</loc></url>
-<url><loc>https://victornavarro.org/calmr/reference/CalmrExperimentResult.html</loc></url>
 <url><loc>https://victornavarro.org/calmr/reference/CalmrFit-class.html</loc></url>
 <url><loc>https://victornavarro.org/calmr/reference/CalmrFit-methods.html</loc></url>
+<url><loc>https://victornavarro.org/calmr/reference/CalmrModel-class.html</loc></url>
+<url><loc>https://victornavarro.org/calmr/reference/CalmrModel-methods.html</loc></url>
 <url><loc>https://victornavarro.org/calmr/reference/CalmrRSA-class.html</loc></url>
 <url><loc>https://victornavarro.org/calmr/reference/CalmrRSA-methods.html</loc></url>
-<url><loc>https://victornavarro.org/calmr/reference/CalmrResult-methods.html</loc></url>
-<url><loc>https://victornavarro.org/calmr/reference/CalmrResult.html</loc></url>
 <url><loc>https://victornavarro.org/calmr/reference/calmr-package.html</loc></url>
 <url><loc>https://victornavarro.org/calmr/reference/calmr_model_graph.html</loc></url>
-<url><loc>https://victornavarro.org/calmr/reference/calmr_model_plot.html</loc></url>
 <url><loc>https://victornavarro.org/calmr/reference/calmr_verbosity.html</loc></url>
 <url><loc>https://victornavarro.org/calmr/reference/compare_models.html</loc></url>
 <url><loc>https://victornavarro.org/calmr/reference/fit_model.html</loc></url>
@@ -49,6 +47,7 @@
 <url><loc>https://victornavarro.org/calmr/reference/pati.html</loc></url>
 <url><loc>https://victornavarro.org/calmr/reference/phase_parser.html</loc></url>
 <url><loc>https://victornavarro.org/calmr/reference/plotting_functions.html</loc></url>
+<url><loc>https://victornavarro.org/calmr/reference/plotting_options.html</loc></url>
 <url><loc>https://victornavarro.org/calmr/reference/rsa.html</loc></url>
 <url><loc>https://victornavarro.org/calmr/reference/run_experiment.html</loc></url>
 <url><loc>https://victornavarro.org/calmr/reference/set_calmr_palette.html</loc></url>
