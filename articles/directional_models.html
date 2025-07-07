@@ -128,7 +128,7 @@ second period.</li>
 first, followed by B, and then A again.</li>
 </ul>
 <p>There is technically no limitation in the number of periods one could
-specify, but keep in mind that the number of periods will lengthen model
+specify, but keep in mind that the number of periods will increase model
 runtime.</p>
 </div>
 <div class="section level2">
@@ -195,7 +195,6 @@ associations in each group.</p>
 <p>As the graphs above show, only the A to B association is positive in
 the Directional group, but both the A to B and B to A associations are
 positive in the Simultaneous group.</p>
-<p>Let’s have a look at the responses.</p>
 </div>
 <div class="section level2">
 <h2 id="a-more-complex-example">A more complex example<a class="anchor" aria-label="anchor" href="#a-more-complex-example"></a>
@@ -212,7 +211,6 @@ the US in both groups.</p>
 <span>  phase1 <span class="op">=</span> <span class="st">"10A&gt;(US)"</span>,</span>
 <span>  phase2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"10B&gt;A/10#A"</span>, <span class="st">"10BA/10#A"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="../reference/parse_design.html">parse_design</a></span><span class="op">(</span><span class="va">design</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_parameters.html">get_parameters</a></span><span class="op">(</span><span class="va">design</span>, model <span class="op">=</span> <span class="st">"RW1972"</span><span class="op">)</span></span>
 <span><span class="va">exp_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_experiment.html">run_experiment</a></span><span class="op">(</span><span class="va">design</span>, parameters <span class="op">=</span> <span class="va">pars</span>, model <span class="op">=</span> <span class="st">"RW1972"</span><span class="op">)</span></span>
 <span><span class="va">plots</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CalmrExperiment-methods.html">plot</a></span><span class="op">(</span><span class="va">exp_res</span>, type <span class="op">=</span> <span class="st">"responses"</span><span class="op">)</span></span>
