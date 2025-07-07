@@ -67,9 +67,25 @@ A "plan" is one of many ways the `future` package can parallelize things
 (you should really consult their documentation).
 Regardless, if you are running `calmr` on a single computer, you'll be using `plan(multisession)`
 
-```{r}
+```{r, include = FALSE}
+# work around for macos github runners
 library(future)
-plan(multisession)
+if (
+  nchar(Sys.getenv("GITHUB_PAT")) > 0 &&
+    Sys.info()["sysname"] == "Darwin") {
+  future::plan(future::sequential)
+} else {
+  future::plan(future::multisession(workers = 2))
+}
+```
+
+
+```{r, eval = FALSE}
+library(future)
+plan(multisession, workers = 2)
+```
+
+```{r}
 start <- proc.time()
 pav_res <- run_experiment(exp)
 end <- proc.time() - start
