@@ -1,6 +1,6 @@
 ---
 title: "directional_models"
-authod: "Victor Navarro"
+author: "Victor Navarro"
 output: rmarkdown::html_vignette
 bibliography: references.bib
 vignette: >
