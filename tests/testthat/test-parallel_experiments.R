@@ -12,7 +12,7 @@ args <- make_experiment(df,
 
 test_that("make_experiment can be run in parallel", {
   on.exit(future::plan(future::sequential))
-  future::plan(future::multisession, workers = 2)
+  future::plan(future::multisession)
   args <- make_experiment(df,
     model = "RW1972",
     parameters = pars,
@@ -23,7 +23,7 @@ test_that("make_experiment can be run in parallel", {
 
 test_that("run_experiment can be run/parsed/aggregated in parallel", {
   on.exit(future::plan(future::sequential))
-  future::plan(future::multisession, workers = 2)
+  future::plan(future::multisession)
   exp <- run_experiment(args)
   expect_named(results(exp))
 })
@@ -31,7 +31,7 @@ test_that("run_experiment can be run/parsed/aggregated in parallel", {
 
 test_that(".parallel_standby message works", {
   on.exit(future::plan(future::sequential))
-  future::plan(future::multisession, workers = 2)
+  future::plan(future::multisession)
   pb <- progressr::progressor(1)
   expect_silent(progressr::with_progress({
     calmr:::.parallel_standby(pb)
