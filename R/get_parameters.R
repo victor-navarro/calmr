@@ -16,7 +16,7 @@ get_parameters <- function(design, model) {
   # Get stimulus names from design
   stimuli <- mapping(parsed_design)$unique_nominal_stimuli
   # Determine stimulus typing
-  globalpars <- sapply(par_info$name, .is_global_parameter, model = model)
+  globalpars <- par_info$is_global
   stimpars <- !globalpars
   # filter information
   gpar_info <- lapply(par_info, function(x) x[globalpars])
@@ -40,7 +40,7 @@ get_parameters <- function(design, model) {
   c(stim_pars, global_pars)
 }
 
-.named_pars <- function(name, default_value, stimuli) {
+.named_pars <- function(name, default_value, stimuli, ...) {
   pars <- list()
   n <- length(stimuli)
   for (i in seq_along(name)) {

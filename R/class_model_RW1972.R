@@ -8,7 +8,8 @@ methods::setClass("RW1972",
     parameters = list(),
     default_parameters = list(
       name = c("alphas", "betas_on", "betas_off", "lambdas"),
-      default_value = c(0.4, 0.4, 0.4, 1)
+      default_value = c(0.4, 0.4, 0.4, 1),
+      is_global = c(FALSE, FALSE, FALSE, FALSE)
     ),
     .internal_states = c("parameters", "v"),
     .is_timed = FALSE,

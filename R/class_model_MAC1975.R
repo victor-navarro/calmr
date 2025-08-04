@@ -11,7 +11,11 @@ methods::setClass("MAC1975",
         "alphas", "min_alphas", "max_alphas",
         "betas_on", "betas_off", "lambdas", "thetas", "gammas"
       ),
-      default_value = c(0.4, 0.1, 1.0, 0.4, 0.4, 1, .2, 0.3)
+      default_value = c(0.4, 0.1, 1.0, 0.4, 0.4, 1, .2, 0.3),
+      is_global = c(
+        FALSE, FALSE, FALSE,
+        FALSE, FALSE, FALSE, FALSE, FALSE
+      )
     ),
     .internal_states = c("parameters", "v"),
     .is_timed = FALSE,

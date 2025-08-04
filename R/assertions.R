@@ -29,17 +29,44 @@ is_design <- function(object) {
 }
 
 .assert_model <- function(model) {
+  # check if the model class exists
+  tryCatch(
+    {
+      obj <- methods::new(model)
+    },
+    error = function(e) {
+      stop(sprintf("Model class '%s' does not exist in the namespace.
+      Check `supported_models()`", model), call. = FALSE)
+    }
+  )
+  # check that the model inherits from CalmrModel
   stopifnot(
-    "Model must be one returned by `supported_models()`" =
-      (model %in% supported_models())
+    "User models must inherit from CalmrModel" =
+      methods::is(obj, "CalmrModel")
   )
   model
 }
 
 .assert_timed_model <- function(model) {
+  tryCatch(
+    {
+      obj <- methods::new(model)
+    },
+    error = function(e) {
+      stop(paste(
+        sprintf(
+          "Model class '%s' does not exist in the namespace.",
+          model
+        ), "Check `supported_timed_models()`"
+      ), call. = FALSE)
+    }
+  )
+  if (!obj@.is_timed) {
+
+  }
   stopifnot(
-    "Model must be one returned by `supported_timed_models()`" =
-      (model %in% supported_timed_models())
+    "Class definition must have .is_timed flag set to TRUE" =
+      obj@.is_timed
   )
   model
 }

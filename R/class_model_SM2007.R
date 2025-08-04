@@ -33,7 +33,8 @@ methods::setClass("SM2007",
         "alphas", "lambdas", "omegas", "rhos",
         "gammas", "taus", "order"
       ),
-      default_value = c(0.4, 1, 0.2, 1, 1, 0.2, 1)
+      default_value = c(0.4, 1, 0.2, 1, 1, 0.2, 1),
+      is_global = c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE)
     ),
     .internal_states = c("parameters", "v", "o"),
     .is_timed = FALSE,

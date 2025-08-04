@@ -34,10 +34,15 @@ methods::setClass("ANCCR",
         0.02, 0.2, FALSE,
         1, 1, 0,
         FALSE, 1
+      ),
+      is_global = c(
+        FALSE, FALSE, TRUE, TRUE, TRUE, TRUE,
+        TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE,
+        TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE
       )
     ),
     .internal_states = c("parameters", "v"),
-    .is_timed = FALSE,
+    .is_timed = TRUE,
     .associations = "anccrs",
     .dnames_map = list(
       "ij_eligibilities" = c("s1"),

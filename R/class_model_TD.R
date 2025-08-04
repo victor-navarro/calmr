@@ -14,10 +14,11 @@ methods::setClass("TD",
       default_value = c(
         0.05, 0.4, 0.4,
         1, 0.95, 0.90
-      )
+      ),
+      is_global = c(FALSE, FALSE, FALSE, FALSE, TRUE, TRUE)
     ),
     .internal_states = c("parameters", "v"),
-    .is_timed = FALSE,
+    .is_timed = TRUE,
     .associations = "associations",
     .dnames_map = list(
       "associations" = c("s1", "s2", "t_bin", "value"),

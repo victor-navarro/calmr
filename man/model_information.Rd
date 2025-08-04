@@ -3,7 +3,6 @@
 \name{model_information}
 \alias{model_information}
 \alias{supported_models}
-\alias{add_model}
 \alias{supported_timed_models}
 \alias{supported_optimizers}
 \alias{supported_families}
@@ -14,8 +13,6 @@
 \title{Model information functions}
 \usage{
 supported_models()
-
-add_model(new_model)
 
 supported_timed_models()
 
@@ -32,15 +29,10 @@ model_parameters(model = NULL)
 model_outputs(model = NULL)
 }
 \arguments{
-\item{new_model}{A string specifying the name of the custom model class}
-
 \item{model}{A string specifying a model. One from \code{supported_models()}.}
 }
 \value{
 \code{supported_models()} returns a character vector.
-
-\code{add_model()} returns a character
-vector with the old supported models (invisibly).
 
 \code{supported_timed_models()} returns a character vector.
 

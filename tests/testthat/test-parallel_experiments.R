@@ -1,13 +1,13 @@
 # use a sequential plan if there is a ENV variable for github actions and
 # the platform is mac-os, because the github runner fails with multisession
 
-set_plan <- function() {
+set_plan <- function(...) {
   if (
     nchar(Sys.getenv("GITHUB_PAT")) > 0 &&
       Sys.info()["sysname"] == "Darwin") {
     future::plan(future::sequential)
   } else {
-    future::plan(future::multisession(workers = 2))
+    future::plan(future::multisession(workers = 2, ...))
   }
 }
 
@@ -52,4 +52,22 @@ test_that(".parallel_standby message works", {
       pb()
     }
   }))
+})
+
+test_that("parallel experiments can be run with custom models", {
+  on.exit(future::plan(future::sequential))
+  set_plan()
+  # read model definition from file
+  mod_path <- "../../inst/OJA_demo_class.R"
+  source(mod_path)
+  exp <- make_experiment(df,
+    model = "OJA",
+    parameters = get_parameters(df, model = "OJA"),
+    iterations = 10
+  )
+  expect_named(results(run_experiment(exp,
+    .callback_fn = function() {
+      source(mod_path)
+    }
+  )))
 })

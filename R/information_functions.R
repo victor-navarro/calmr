@@ -22,28 +22,13 @@ NULL
 #' @return `supported_models()` returns a character vector.
 #' @export
 supported_models <- function() {
-  default_mods <- c(
+  c(
     "RW1972", "HDI2020", "HD2022",
     "MAC1975", "PKH1982", "RAND",
     "SM2007", "TD", "ANCCR"
   )
-  getOption("calmr_supported_models", default = default_mods)
 }
 
-#' @rdname model_information
-#' @param new_model A string specifying the name of the custom model class
-#' @return `add_model()` returns a character
-#' vector with the old supported models (invisibly).
-#' @export
-add_model <- function(new_model) {
-  current_mods <- supported_models()
-  stopifnot(
-    "Model name already exists. See `supported_models()`" =
-      !(new_model %in% current_mods)
-  )
-  old <- options("calmr_supported_models" = c(current_mods, new_model))
-  invisible(old)
-}
 
 
 #' @rdname model_information
@@ -97,38 +82,16 @@ get_model <- function(model) {
 #' model_parameters("RW1972")
 #' @export
 model_parameters <- function(model = NULL) {
-  parameter_map <- lapply(
-    supported_models(),
-    function(m) methods::new(m)@default_parameters
-  )
-  names(parameter_map) <- supported_models()
   if (is.null(model)) {
+    parameter_map <- lapply(
+      supported_models(),
+      function(m) methods::new(m)@default_parameters
+    )
+    names(parameter_map) <- supported_models()
     return(parameter_map)
-  } else {
-    return(parameter_map[[model]])
   }
+  methods::new(model)@default_parameters
 }
-
-# Returns whether a parameter is a global parameter
-.is_global_parameter <- function(parameter, model) {
-  global_pars <- list(
-    "SM2007" = c("order"),
-    "ANCCR" = c(
-      "cost", "temperature",
-      "threshold", "k",
-      "w", "minimum_rate",
-      "sampling_interval",
-      "use_exact_mean",
-      "t_ratio", "t_constant",
-      "alpha", "alpha_reward", "use_timed_alpha",
-      "alpha_exponent", "alpha_init", "alpha_min",
-      "add_beta", "jitter"
-    ),
-    "TD" = c("gamma", "sigma")
-  )
-  parameter %in% global_pars[[model]]
-}
-
 #' @rdname model_information
 #' @return `model_outputs()` returns a character vector or
 #' list (if model is NULL).

@@ -8,7 +8,8 @@ methods::setClass("HD2022",
     parameters = list(),
     default_parameters = list(
       name = c("alphas"),
-      default_value = c(0.4)
+      default_value = c(0.4),
+      is_global = c(FALSE)
     ),
     .internal_states = c("parameters", "v"),
     .is_timed = FALSE,

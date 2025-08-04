@@ -11,7 +11,11 @@ methods::setClass("PKH1982",
         "alphas", "min_alphas", "max_alphas",
         "betas_ex", "betas_in", "lambdas", "thetas", "gammas"
       ),
-      default_value = c(0.4, 0.1, 1.0, 0.4, 0.3, 1, 1, 0.3)
+      default_value = c(0.4, 0.1, 1.0, 0.4, 0.3, 1, 1, 0.3),
+      is_global = c(
+        FALSE, FALSE, FALSE,
+        FALSE, FALSE, FALSE, FALSE, FALSE
+      )
     ),
     .internal_states = c("parameters", "ev", "iv"),
     .is_timed = FALSE,
