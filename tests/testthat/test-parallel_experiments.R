@@ -58,7 +58,7 @@ test_that("parallel experiments can be run with custom models", {
   on.exit(future::plan(future::sequential))
   set_plan()
   # read model definition from file
-  mod_path <- "../../inst/OJA_demo_class.R"
+  mod_path <- "support_files/OJA_demo_class.R"
   source(mod_path)
   exp <- make_experiment(df,
     model = "OJA",

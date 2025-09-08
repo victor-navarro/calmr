@@ -1,5 +1,5 @@
 # testing that custom models can be loaded and run
-source("../../inst/OJA_demo_class.R")
+source("support_files/OJA_demo_class.R")
 
 df <- data.frame(
   Group = c("True"),
