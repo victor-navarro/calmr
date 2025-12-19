@@ -1,0 +1,37 @@
+# calmr_app
+
+## A companion package for calmr
+
+If you are not a programmer or simply want a GUI to get quick
+simulations done, you might be interested in using the `calmr.app`
+package.
+
+The `calmr.app` package offers a GUI that allows you to simulate
+experiments without writing any code.
+
+If you are new to the app, make sure to activate the *help* mode. Under
+that mode, the app will display descriptive text explaining the basics.
+
+#### For non-programmers
+
+If you want to use the online app, you can find it at
+<https://victor-navarro.shinyapps.io/calmr_app/>.
+
+#### For programmers
+
+You can install the package from its [Github
+repository](https://github.com/victor-navarro/calmr.app), while also
+making sure you’re running the last version of the `calmr` package:
+
+    devtools::install_github("victor-navarro/calmr") #CRAN version lags behind
+    devtools::install_github("victor-navarro/calmr.app")
+
+Afterwards, you can launch the app via :
+
+`calmr.app::launch_app()`
+
+#### A final message
+
+Hope you enjoy the app! If you find any bugs, have comments, or would
+like something implemented, feel free to post a message on the package’s
+Github repository or drop me a line at navarrov \[at\] cardiff.ac.uk.

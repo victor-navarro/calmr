@@ -1,0 +1,85 @@
+# parallelism_in_calmr
+
+## Running experiments in parallel
+
+With the advent of time-based models, version 0.51 of `calmr` uses the
+`future` package to parallelize some operations. Thanks to the design
+philosophy of `future`, running things in parallel will take you a
+single line of code.
+
+### Why run things in parallel?
+
+In many situations we find ourselves having to run a model over many
+iterations, either because our design contains enough kinds of trials so
+that order effects are a worry, or because we want to run the same model
+with different parameters.
+
+Let’s run the HeiDI model (Honey et al., 2020) over a long, random
+design. Let’s also enable verbosity via
+[`calmr_verbosity()`](https://victornavarro.org/calmr/reference/calmr_verbosity.md),
+which uses the `progressr` package.
+
+``` r
+library(calmr)
+# enables progress bars (try it on your computer)
+# calmr_verbosity(TRUE)
+pav_inhib <- data.frame(
+  group = "group",
+  phase1 = "!50(US)/50AB/50#A"
+)
+# set options to introduce more randomness
+pars <- get_parameters(pav_inhib, model = "HDI2020")
+exp <- make_experiment(pav_inhib,
+  parameters = pars,
+  model = "HDI2020",
+  iterations = 100,
+  miniblocks = FALSE
+)
+
+# time it
+start <- proc.time()
+pav_res <- run_experiment(exp)
+end <- proc.time() - start
+end
+#>    user  system elapsed 
+#>   6.811   0.089   4.820
+```
+
+Let’s try parallelizing now.
+
+### Running an experiment in parallel
+
+To run the same experiment, but in parallel, you need to enable a
+`future` plan. A “plan” is one of many ways the `future` package can
+parallelize things (you should really consult their documentation).
+Regardless, if you are running `calmr` on a single computer, you’ll be
+using `plan(multisession)`
+
+``` r
+library(future)
+plan(multisession, workers = 2)
+```
+
+``` r
+start <- proc.time()
+pav_res <- run_experiment(exp)
+end <- proc.time() - start
+end
+#>    user  system elapsed 
+#>   0.946   0.119   3.723
+
+# go back to non-parallel evaluations
+plan(sequential)
+```
+
+In this case, the parallel evaluation was faster (see *user* time
+above).
+
+The `future` package trades off ease of use for bulkier overheads, but
+as the overheads tend to be constant, the parallelization will have a
+better payoff once you run more and more iterations.
+
+Honey, R. C., Dwyer, D. M., & Iliescu, A. F. (2020). HeiDI: A model for
+Pavlovian learning and performance with reciprocal associations.
+*Psychological Review*, *127*, 829–852.
+<https://doi.org/10.1037/rev0000196>

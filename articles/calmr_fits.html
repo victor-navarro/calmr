@@ -79,7 +79,7 @@
 Navarro</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/victor-navarro/calmr/blob/v0.8.1/vignettes/calmr_fits.Rmd" class="external-link"><code>vignettes/calmr_fits.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/victor-navarro/calmr/blob/main/vignettes/calmr_fits.Rmd" class="external-link"><code>vignettes/calmr_fits.Rmd</code></a></small>
       <div class="d-none name"><code>calmr_fits.Rmd</code></div>
     </div>
 
@@ -89,7 +89,7 @@ Navarro</h4>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/victor-navarro/calmr" class="external-link">calmr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/get_theme.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">pati</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2022</span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
@@ -132,7 +132,7 @@ two different food rewards (pellets or sucrose).</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/stat_summary.html" class="external-link">stat_summary</a></span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"line"</span>, fun <span class="op">=</span> <span class="st">"mean"</span>, linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Block"</span>, y <span class="op">=</span> <span class="st">"Responses per trial"</span>, colour <span class="op">=</span> <span class="st">"US"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="op">~</span><span class="va">response</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calmr_fits_files/figure-html/unnamed-chunk-2-1.png" width="672"></p>
+<p><img src="calmr_fits_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="672"></p>
 <p>The thicker lines are group averages; the rest are individual
 subjects. We ignore the specific mapping between levers and USs here
 because that was counterbalanced across subjects. However, we will not
@@ -504,7 +504,7 @@ the model via the <code>predict</code> function.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">us</span> <span class="op">~</span> <span class="va">response</span><span class="op">)</span></span></code></pre></div>
-<p><img src="calmr_fits_files/figure-html/unnamed-chunk-13-1.png" width="672"></p>
+<p><img src="calmr_fits_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" width="672"></p>
 <p>This looks pretty good! Save from some blatant misfits, of
 course.</p>
 <p>Now you know everything you need to fit <code>calmr</code> to your
@@ -531,7 +531,7 @@ line.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

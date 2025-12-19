@@ -1,0 +1,487 @@
+# calmr_fits
+
+``` r
+library(calmr)
+library(ggplot2)
+library(data.table)
+theme_set(theme_bw())
+data(pati)
+set.seed(2022)
+```
+
+## Fitting HeiDI to empirical data
+
+In this demo, I fit HeiDI to some empirical data (Patitucci et al.,
+2016, Experiment 1). This will involve writing a function that produces
+model responses organized as the empirical data, so we can use that
+function for maximum likelihood estimation (MLE). We begin with a short
+overview of the data, then move to the model function, and finally the
+fit.
+
+### The data
+
+The data (`pati`) contains the responses (lever presses or lp, and nose
+pokes or np) for 32 rats, across 6 blocks of training (2 sessions per
+block). The animals were trained to associate two levers to two
+different food rewards (pellets or sucrose).
+
+Let’s have a glance.
+
+``` r
+summary(pati)
+#>     subject        block     lever        us            response
+#>  1      : 24   Min.   :1.0   B:  0   Length:768         lp:384  
+#>  2      : 24   1st Qu.:2.0   L:384   Class :character   np:384  
+#>  3      : 24   Median :3.5   R:384   Mode  :character           
+#>  4      : 24   Mean   :3.5                                      
+#>  5      : 24   3rd Qu.:5.0                                      
+#>  6      : 24   Max.   :6.0                                      
+#>  (Other):624                                                    
+#>      rpert       
+#>  Min.   :0.0000  
+#>  1st Qu.:0.9437  
+#>  Median :2.2500  
+#>  Mean   :2.4806  
+#>  3rd Qu.:3.8000  
+#>  Max.   :8.4500  
+#> 
+pati |> ggplot(aes(x = block, y = rpert, colour = us)) +
+  geom_line(aes(group = interaction(us, subject)), alpha = .3) +
+  stat_summary(geom = "line", fun = "mean", linewidth = 1) +
+  labs(x = "Block", y = "Responses per trial", colour = "US") +
+  facet_grid(~response)
+```
+
+![](calmr_fits_files/figure-html/unnamed-chunk-2-1.png)
+
+The thicker lines are group averages; the rest are individual subjects.
+We ignore the specific mapping between levers and USs here because that
+was counterbalanced across subjects. However, we will not ignore the
+counterbalancing when writing the model function (see ahead).
+
+### Writing the model function
+
+The biggest hurdle in fitting the model to empirical data is to write a
+function that, **given a vector of parameters and an experiment,
+generates responses that are organized as the empirical data**. Let’s
+begin by summarizing the data first, so we know what to aim for.
+
+``` r
+pati_summ <- setDT(pati)[,
+  list("rpert" = mean(rpert)),
+  by = c("block", "us", "response")
+]
+# set order (relevant for the future)
+setorder(pati_summ, block, response, us)
+head(pati_summ)
+#>    block     us response     rpert
+#>    <num> <char>   <fctr>     <num>
+#> 1:     1      P       lp 0.8195313
+#> 2:     1      S       lp 0.5609375
+#> 3:     1      P       np 3.4109375
+#> 4:     1      S       np 3.2796875
+#> 5:     2      P       lp 1.5738281
+#> 6:     2      S       lp 0.6406250
+```
+
+So what do we have to design? The experiment presented by Patitucci et
+al. (2016) was fairly simple, and it can be reduced to the presentations
+of two levers, each followed by a different appetitive outcome. Here, we
+will assume that the two outcomes are independent from each other. We
+will also take some liberties with the number of trials we specify to
+reduce computing time.
+
+But beware: HeiDI, like many learning models, is sensitive to order
+effects. We do not want the model to misfit the data because we happened
+to run our simulations with an unlucky run of trials. The arguments we
+prepare must reflect the behavior of the model after a “general”
+experimental procedure, and so, we address that issue by running several
+iterations of the experiment (each with random order of trials) and
+averaging all experiments before evaluating the likelihood of the
+parameters.
+
+With that in mind, we now will prepare the experiment as you would pass
+to
+[`run_experiment()`](https://victornavarro.org/calmr/reference/run_experiment.md).
+
+``` r
+# The design data.frame
+des_df <- data.frame(
+  group = c("CB1", "CB2"),
+  training = c(
+    "12L>(Pellet)/12R>(Sucrose)/12#L/12#R",
+    "12L>(Sucrose)/12R>(Pellet)/12#L/12#R"
+  )
+)
+# The parameters
+# the actual parameter values don't matter,
+# as our function will re-write them inside the optimizer call
+parameters <- get_parameters(des_df,
+  model = "HD2022"
+)
+# The arguments
+experiment <- make_experiment(des_df,
+  parameters = parameters, model = "HD2022",
+  iterations = 4
+)
+experiment
+```
+
+Note we specified two counterbalancings as groups.
+
+We must reproduce the counterbalancings in the data we are trying to fit
+as close as possible. Otherwise, the optimization process might latch
+onto experimentally-irrelevant variables. For example, it can be seen in
+`pati` that there was more lever pressing whenever a lever was paired
+with pellets. If we didn’t counterbalance the identities of the levers
+and food rewards, the optimization might result in one of the levers
+being less salient than the other!
+
+We can now begin to write the model function. First, it would be a good
+to see what results
+[`run_experiment()`](https://victornavarro.org/calmr/reference/run_experiment.md)
+returns.
+
+``` r
+exp_res <- run_experiment(experiment)
+results(exp_res)
+#> $activations
+#>       group    phase  trial_type trial block_size      s1     value  model
+#>      <char>   <char>      <char> <int>      <num>  <fctr>     <num> <char>
+#>   1:    CB1 training  L>(Pellet)     1          4       L 0.4000000 HD2022
+#>   2:    CB1 training R>(Sucrose)     2          4       L 0.0000000 HD2022
+#>   3:    CB1 training          #L     3          4       L 0.4000000 HD2022
+#>   4:    CB1 training          #R     4          4       L 0.0000000 HD2022
+#>   5:    CB1 training  L>(Pellet)     5          4       L 0.4000000 HD2022
+#>  ---                                                                      
+#> 380:    CB2 training          #R    44          4 Sucrose 0.0000000 HD2022
+#> 381:    CB2 training L>(Sucrose)    45          4 Sucrose 0.4000000 HD2022
+#> 382:    CB2 training  R>(Pellet)    46          4 Sucrose 0.0000000 HD2022
+#> 383:    CB2 training          #L    47          4 Sucrose 0.3991293 HD2022
+#> 384:    CB2 training          #R    48          4 Sucrose 0.0000000 HD2022
+#> 
+#> $associations
+#>        group    phase trial_type trial block_size      s1      s2     value
+#>       <char>   <char>     <char> <int>      <num>  <char>  <char>     <num>
+#>    1:    CB1 training L>(Pellet)     1          4       L       L 0.0000000
+#>    2:    CB1 training L>(Pellet)     1          4       L  Pellet 0.0000000
+#>    3:    CB1 training L>(Pellet)     1          4       L       R 0.0000000
+#>    4:    CB1 training L>(Pellet)     1          4       L Sucrose 0.0000000
+#>    5:    CB1 training L>(Pellet)     1          4  Pellet       L 0.0000000
+#>   ---                                                                      
+#> 1532:    CB2 training         #R    48          4       R Sucrose 0.0000000
+#> 1533:    CB2 training         #R    48          4 Sucrose       L 0.3991293
+#> 1534:    CB2 training         #R    48          4 Sucrose  Pellet 0.0000000
+#> 1535:    CB2 training         #R    48          4 Sucrose       R 0.0000000
+#> 1536:    CB2 training         #R    48          4 Sucrose Sucrose 0.0000000
+#>        model
+#>       <char>
+#>    1: HD2022
+#>    2: HD2022
+#>    3: HD2022
+#>    4: HD2022
+#>    5: HD2022
+#>   ---       
+#> 1532: HD2022
+#> 1533: HD2022
+#> 1534: HD2022
+#> 1535: HD2022
+#> 1536: HD2022
+#> 
+#> $pools
+#>       group    phase  trial_type trial block_size        s1      s2    type
+#>      <char>   <char>      <char> <int>      <num>    <char>  <char>  <char>
+#>   1:    CB1 training  L>(Pellet)     1          4  L,Pellet       L  combvs
+#>   2:    CB1 training  L>(Pellet)     1          4  L,Pellet  Pellet  combvs
+#>   3:    CB1 training  L>(Pellet)     1          4  L,Pellet       R  combvs
+#>   4:    CB1 training  L>(Pellet)     1          4  L,Pellet Sucrose  combvs
+#>   5:    CB1 training R>(Sucrose)     2          4 R,Sucrose       L  combvs
+#>  ---                                                                       
+#> 764:    CB2 training          #L    47          4         L Sucrose chainvs
+#> 765:    CB2 training          #R    48          4         R       L chainvs
+#> 766:    CB2 training          #R    48          4         R  Pellet chainvs
+#> 767:    CB2 training          #R    48          4         R       R chainvs
+#> 768:    CB2 training          #R    48          4         R Sucrose chainvs
+#>      value  model
+#>      <num> <char>
+#>   1:     0 HD2022
+#>   2:     0 HD2022
+#>   3:     0 HD2022
+#>   4:     0 HD2022
+#>   5:     0 HD2022
+#>  ---             
+#> 764:     0 HD2022
+#> 765:     0 HD2022
+#> 766:     0 HD2022
+#> 767:     0 HD2022
+#> 768:     0 HD2022
+#> 
+#> $responses
+#>        group    phase trial_type trial block_size      s1      s2 value  model
+#>       <char>   <char>     <char> <int>      <num>  <char>  <char> <num> <char>
+#>    1:    CB1 training L>(Pellet)     1          4       L       L     0 HD2022
+#>    2:    CB1 training L>(Pellet)     1          4       L  Pellet     0 HD2022
+#>    3:    CB1 training L>(Pellet)     1          4       L       R     0 HD2022
+#>    4:    CB1 training L>(Pellet)     1          4       L Sucrose     0 HD2022
+#>    5:    CB1 training L>(Pellet)     1          4  Pellet       L     0 HD2022
+#>   ---                                                                         
+#> 1532:    CB2 training         #R    48          4       R Sucrose     0 HD2022
+#> 1533:    CB2 training         #R    48          4 Sucrose       L     0 HD2022
+#> 1534:    CB2 training         #R    48          4 Sucrose  Pellet     0 HD2022
+#> 1535:    CB2 training         #R    48          4 Sucrose       R     0 HD2022
+#> 1536:    CB2 training         #R    48          4 Sucrose Sucrose     0 HD2022
+```
+
+Although
+[`results()`](https://victornavarro.org/calmr/reference/CalmrExperiment-methods.md)
+returns many model outputs, as I said earlier, we only care about one of
+them: `responses` (the model responses). With them, we can write our
+model function.
+
+``` r
+my_model_function <- function(pars, exper, full = FALSE) {
+  # extract the parameters from the model
+  new_parameters <- parameters(exper)[[1]]
+  # assign alphas
+  new_parameters$alphas[] <- pars
+  # reassign parameters to the experiment
+  parameters(exper) <- new_parameters # note parameters method
+  # running the model and selecting responses
+  exp_res <- run_experiment(exper)
+  # summarizing the model
+  responses <- results(exp_res)$responses
+  # calculate extra variables
+  responses$response <- ifelse(responses$s1 %in% c("Pellet", "Sucrose"),
+    "np", "lp"
+  )
+  responses$block <- ceiling(responses$trial / 8)
+  # filtering
+  # only probe trials
+  responses <- responses[grepl("#", trial_type)]
+  # only available responses
+  responses <- responses[s2 %in% c("Pellet", "Sucrose") &
+    (response == "np" | (response == "lp" &
+      mapply(grepl, s1, trial_type)))]
+  # aggregate
+  responses <- responses[, list(value = mean(value)), by = c("block", "s2", "response")]
+  if (full) {
+    return(responses)
+  }
+  responses$value
+}
+```
+
+Let’s dissect the function above in its three parts.
+
+1.  We get the parameters from the experiment, via the
+    [`parameters()`](https://victornavarro.org/calmr/reference/CalmrExperiment-methods.md)
+    method and store them in `new_parameters`.[¹](#fn1)
+
+2.  We put `pars` (the parameters provided by the optimizer) into the
+    `alphas` of `new_parameters`.
+
+3.  We run the experiment and store it in `exp_res`.
+
+4.  We select the model responses (`responses`) from the model results
+    and store them in `responses`.
+
+5.  Lastly. We summarise the model responses and return them.[²](#fn2)
+
+That’s a lot to digest, so let’s see the function in action.
+
+``` r
+my_model_function(c(.1, .2, .4, .3), experiment)
+#>  [1] 0.028557609 0.040188221 0.004008696 0.008429327 0.045573899 0.061933782
+#>  [7] 0.010480790 0.021230102 0.053426837 0.070862133 0.015100913 0.029677071
+#> [13] 0.057584182 0.074995358 0.018328387 0.035165746 0.059994400 0.077081202
+#> [19] 0.020711121 0.039013071 0.061492438 0.078227391 0.022547790 0.041891069
+```
+
+Just numbers!
+
+The order of the empirical data and model responses must match. I cannot
+emphasize this point enough: there is nothing within the fit function
+that checks or reorders the data for you.
+
+You are the sole responsible for making sure both of these pieces of
+data are in the same order. A simple way would be to print the model
+results before the return and compare them against the data. That’s the
+reason for the `full` parameter in the function definition.
+
+``` r
+head(my_model_function(c(.1, .2, .4, .3), experiment, full = TRUE))
+#>    block      s2 response       value
+#>    <num>  <char>   <char>       <num>
+#> 1:     1  Pellet       lp 0.028557609
+#> 2:     1 Sucrose       lp 0.040188221
+#> 3:     1  Pellet       np 0.004008696
+#> 4:     1 Sucrose       np 0.008429327
+#> 5:     2  Pellet       lp 0.045573899
+#> 6:     2 Sucrose       lp 0.061933782
+head(pati_summ)
+#>    block     us response     rpert
+#>    <num> <char>   <fctr>     <num>
+#> 1:     1      P       lp 0.8195313
+#> 2:     1      S       lp 0.5609375
+#> 3:     1      P       np 3.4109375
+#> 4:     1      S       np 3.2796875
+#> 5:     2      P       lp 1.5738281
+#> 6:     2      S       lp 0.6406250
+```
+
+Once we have made sure everything is looking good, we can fit the model.
+
+### Fitting the model
+
+We fit models using the
+[`fit_model()`](https://victornavarro.org/calmr/reference/fit_model.md)
+function. This function requires 4 arguments:
+
+1.  The (empirical) data.
+2.  A model function.
+3.  The arguments with which to run the model function.
+4.  The optimizer options.
+
+We have done a great job taking care of the first three, so let’s tackle
+the last.
+
+``` r
+my_optimizer_opts <- get_optimizer_opts(
+  model_pars = names(parameters$alphas),
+  optimizer = "ga",
+  ll = c(0, 0, 0, 0),
+  ul = c(1, 1, 1, 1),
+  family = "normal"
+)
+my_optimizer_opts
+#> $model_pars
+#> [1] "L"       "Pellet"  "R"       "Sucrose"
+#> 
+#> $optimizer
+#> [1] "ga"
+#> 
+#> $family
+#> [1] "normal"
+#> 
+#> $family_pars
+#> [1] "normal_scale"
+#> 
+#> $all_pars
+#> [1] "L"            "Pellet"       "R"            "Sucrose"      "normal_scale"
+#> 
+#> $initial_pars
+#> [1] NA NA NA NA  1
+#> 
+#> $ll
+#>            L       Pellet            R      Sucrose normal_scale 
+#>            0            0            0            0            0 
+#> 
+#> $ul
+#>            L       Pellet            R      Sucrose normal_scale 
+#>            1            1            1            1          100 
+#> 
+#> $verbose
+#> [1] FALSE
+```
+
+The
+[`get_optimizer_opts()`](https://victornavarro.org/calmr/reference/get_optimizer_opts.md)
+function returns many things:
+
+1.  model_pars: The name of the model parameters (name of the alpha for
+    each stimulus).
+2.  ll and ul: The lower and upper limits for the parameter search.
+3.  optimizer: The numerical optimization technique we wish to use
+    during MLE estimation.
+4.  family: The family distribution we assume for our model. In
+    practice, what you request here will be used to determine the link
+    function to transform model responses, and the likelihood function
+    used in the objective function. The normal family here does nothing
+    fancy to the model responses but will estimate an extra parameter,
+    scale, which scales the model responses into the scale of the
+    empirical data. When it comes to likelihood functions, this family
+    will use the normal density of the data and model differences.
+5.  family_pars: The family-specific parameter being estimated alongside
+    salience parameters.
+6.  verbose: Whether to print parameters and objective function values
+    as we optimize.
+
+You are free to modify these; just make sure the structure of the list
+returned by
+[`get_optimizer_opts()`](https://victornavarro.org/calmr/reference/get_optimizer_opts.md)
+remains the same.
+
+We can also pass extra parameters to the optimizer call we are using
+(e.g., the `par` argument for `optim`, or `parallel` for `ga`). Here, we
+fit the model in parallel with `ga`, and for only 10 iterations.
+
+And with that, we can fit the model! (be patient if you are following
+along)
+
+``` r
+the_fit <- fit_model(pati_summ$rpert,
+  model_function = my_model_function,
+  exper = experiment,
+  optimizer_options = my_optimizer_opts,
+  maxiter = 10,
+  parallel = TRUE
+)
+```
+
+The `fit_model` function returns a lot of information to track what we
+put in and what we got out. However, typing the model in the console
+will show the MLE parameters we obtained this time and their negative
+log-likelihood, given the data:
+
+``` r
+the_fit
+# the BIC and AIC
+BIC(the_fit)
+#> [1] 102.484
+AIC(the_fit)
+#> [1] 96.5937
+```
+
+That’s good and all, but how well does a model run with those parameters
+“visually” fit the data? We can obtain the predictions from the model
+via the `predict` function.
+
+``` r
+pati_summ$prediction <- predict(the_fit, exper = experiment)
+pati_summ[, data := rpert][, rpert := NULL]
+pati_summ <- melt(pati_summ, measure.vars = c("prediction", "data"))
+pati_summ |>
+  ggplot(ggplot2::aes(
+    x = block, y = value,
+    colour = us,
+    linetype = variable
+  )) +
+  geom_line() +
+  theme_bw() +
+  facet_grid(us ~ response)
+```
+
+![](calmr_fits_files/figure-html/unnamed-chunk-13-1.png)
+
+This looks pretty good! Save from some blatant misfits, of course.
+
+Now you know everything you need to fit `calmr` to your empirical data.
+Go forth!
+
+#### A final note
+
+This vignette was pre-generated, as I don’t want the user to fit the
+model at the time of installation. I will try to keep up with it as the
+package develops, but if you spot any inconsistencies, please drop me a
+line.
+
+------------------------------------------------------------------------
+
+1.  Note the `[[1]]` to get the first parameter lists; by default,
+    `parameters` returns a named list after each group
+
+2.  Within this step, we also filter all output nodes that are not
+    related to expecting one of the USs, we classify responses as being
+    nosepokes (produced by the food reward) or lever presses (produced
+    by the levers), and calculate the mean across blocks of trials.
+    Fitting a model is no trivial task!
