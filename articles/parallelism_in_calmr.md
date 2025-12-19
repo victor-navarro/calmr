@@ -42,7 +42,7 @@ pav_res <- run_experiment(exp)
 end <- proc.time() - start
 end
 #>    user  system elapsed 
-#>   6.811   0.089   4.820
+#>   6.379   0.072   4.431
 ```
 
 Let’s try parallelizing now.
@@ -66,7 +66,7 @@ pav_res <- run_experiment(exp)
 end <- proc.time() - start
 end
 #>    user  system elapsed 
-#>   0.946   0.119   3.723
+#>   0.889   0.109   3.581
 
 # go back to non-parallel evaluations
 plan(sequential)
