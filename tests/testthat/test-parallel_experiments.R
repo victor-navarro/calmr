@@ -63,11 +63,10 @@ test_that("parallel experiments can be run with custom models", {
   exp <- make_experiment(df,
     model = "OJA",
     parameters = get_parameters(df, model = "OJA"),
-    iterations = 10
-  )
-  expect_named(results(run_experiment(exp,
+    iterations = 10,
     .callback_fn = function() {
       source(mod_path)
     }
-  )))
+  )
+  expect_named(results(run_experiment(exp)))
 })
