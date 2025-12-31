@@ -20,7 +20,7 @@ get_timings <- function(design, model) {
   # global parameters
   global_pars <- NULL
   if (length(mod_timings$global$name)) {
-    global_pars <- setNames(
+    global_pars <- stats::setNames(
       mod_timings$global$default_value,
       mod_timings$global$name
     )
