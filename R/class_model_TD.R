@@ -53,6 +53,7 @@ methods::setClass("TD",
         )
       )
     ),
+    .exp_augmentation_fn = .tdrize_experience,
     .associations = "associations",
     .dnames_map = list(
       "associations" = c("s1", "s2", "t_bin", "value"),

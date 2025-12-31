@@ -38,6 +38,7 @@ methods::setClass("SM2007",
     ),
     .internal_states = c("parameters", "v", "o"),
     .is_timed = FALSE,
+    .exp_augmentation_fn = NULL,
     .associations = "associations",
     .dnames_map = list(
       "activations" = c("s1", "s2"),

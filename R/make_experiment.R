@@ -210,17 +210,34 @@ make_experiment <- function(
 .augment_experience <- function(
     exper, model,
     design, parameters, timings, ...) {
-  if (model == "ANCCR") {
-    exper <- .anccrize_experience(
-      exper, design,
-      parameters, timings, ...
+  modobj <- methods::new(model)
+  if (!is.null(modobj@.exp_augmentation_fn)) {
+    exper <- do.call(
+      modobj@.exp_augmentation_fn,
+      c(
+        list(
+          exper,
+          design,
+          parameters,
+          timings
+        ),
+        list(...)
+      )
     )
   }
-  if (model == "TD") {
-    exper <- .tdrize_experience(
-      exper, design, parameters, timings, ...
-    )
-  }
+
+
+  # if (model == "ANCCR") {
+  #   exper <- .anccrize_experience(
+  #     exper, design,
+  #     parameters, timings, ...
+  #   )
+  # }
+  # if (model == "TD") {
+  #   exper <- .tdrize_experience(
+  #     exper, design, parameters, timings, ...
+  #   )
+  # }
   exper
 }
 

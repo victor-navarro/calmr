@@ -13,6 +13,7 @@ methods::setClass("HD2022",
     ),
     .internal_states = c("parameters", "v"),
     .is_timed = FALSE,
+    .exp_augmentation_fn = NULL,
     .associations = "associations",
     .dnames_map = list(
       "activations" = c("s1"),

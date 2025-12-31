@@ -29,6 +29,7 @@ methods::setClass(
     default_parameters = "list",
     .internal_states = "character",
     .is_timed = "logical",
+    .exp_augmentation_fn = "function",
     .associations = "character",
     .dnames_map = "list",
     .parse_map = "list",

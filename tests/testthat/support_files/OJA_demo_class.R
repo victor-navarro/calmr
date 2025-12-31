@@ -12,6 +12,7 @@ methods::setClass("OJA",
     ),
     .internal_states = c("parameters", "v"),
     .is_timed = FALSE,
+    .exp_augmentation_fn = NULL,
     .associations = "associations",
     .dnames_map = list(
       "responses" = c("s1", "s2"),

@@ -58,6 +58,7 @@ methods::setClass("ANCCR",
         default_value = c(1, 30, 90)
       )
     ),
+    .exp_augmentation_fn = .anccrize_experience,
     .associations = "anccrs",
     .dnames_map = list(
       "ij_eligibilities" = c("s1"),
