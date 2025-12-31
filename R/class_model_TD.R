@@ -19,6 +19,40 @@ methods::setClass("TD",
     ),
     .internal_states = c("parameters", "v"),
     .is_timed = TRUE,
+    timing_parameters = list(
+      global = list(
+        name = c(
+          "use_exponential",
+          "time_resolution",
+          "sample_timings"
+        ),
+        default_value = c(
+          TRUE,
+          0.5,
+          TRUE
+        )
+      ),
+      transitions = list(
+        name = c("transition_delay"),
+        default_value = c(1)
+      ),
+      periods = list(
+        name = c("stimulus_duration"),
+        default_value = c(1)
+      ),
+      trials = list(
+        name = c(
+          "post_trial_delay",
+          "mean_ITI",
+          "max_ITI"
+        ),
+        default_value = c(
+          1,
+          30,
+          90
+        )
+      )
+    ),
     .associations = "associations",
     .dnames_map = list(
       "associations" = c("s1", "s2", "t_bin", "value"),

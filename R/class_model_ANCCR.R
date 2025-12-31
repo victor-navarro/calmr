@@ -43,6 +43,21 @@ methods::setClass("ANCCR",
     ),
     .internal_states = c("parameters", "v"),
     .is_timed = TRUE,
+    timing_parameters = list(
+      global = list(
+        name = c("use_exponential", "sample_timings"),
+        default_value = c(TRUE, TRUE)
+      ),
+      transitions = list(
+        name = c("transition_delay"),
+        default_value = c(1)
+      ),
+      periods = list(),
+      trials = list(
+        name = c("post_trial_delay", "mean_ITI", "max_ITI"),
+        default_value = c(1, 30, 90)
+      )
+    ),
     .associations = "anccrs",
     .dnames_map = list(
       "ij_eligibilities" = c("s1"),
