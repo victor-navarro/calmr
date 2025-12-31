@@ -73,6 +73,7 @@ methods::setClass("ANCCR",
       "action_values" = c("s1", "s2"),
       "probabilities" = c("s1", "s2")
     ),
+    .parse_generic_cols = c("time"),
     .parse_map = list(
       "ij_eligibilities" = .parse_2d,
       "i_eligibilities" = .parse_2d,

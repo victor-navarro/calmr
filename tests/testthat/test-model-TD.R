@@ -32,7 +32,6 @@ test_that("can run with nested trials", {
   tims$transition_ts$transition_delay[] <- 0
   pars <- get_parameters(df, model = "TD")
   pars$alphas[] <- .3
-
   expect_no_error(run_experiment(df,
     model = "TD",
     timings = tims,
@@ -40,4 +39,30 @@ test_that("can run with nested trials", {
     parse = TRUE,
     aggregate = TRUE
   ))
+})
+
+# Simple discrimination
+df <- data.frame(
+  group = "G",
+  p1 = "!10A>(US)/10B"
+)
+
+test_that("does a simple discrimination", {
+  tims <- get_timings(df, "TD")
+  tims$period_ts$stimulus_duration[c(1:3)][] <- 6
+  tims$period_ts$stimulus_duration[2] <- 1
+  tims$transition_ts$transition_delay[] <- 0
+  pars <- get_parameters(df, model = "TD")
+  exp <- make_experiment(
+    design = df,
+    timings = tims,
+    parameters = pars,
+    model = "TD"
+  )
+  res <- results(run_experiment(exp,
+    parse = TRUE,
+    aggregate = TRUE
+  ))
+  vals <- with(subset(res$values, s1 == "US"), tapply(value, trial_type, max))
+  expect_true(vals["A>(US)"] > vals["B"])
 })

@@ -228,7 +228,7 @@ setMethod(
             w[[stim]][] <- w[[stim]] + dd[[stim]]
             # decay eligibilities by 1 timestep
             e[[stim]] <- e[[stim]] * parameters$sigma * parameters$gamma
-            # Add event to
+            # Add event to eligibility trace
             e[[stim]][sum(omat[stim, 1:ti])][] <-
               e[[stim]][sum(omat[stim, 1:ti])][] +
               omat[, ti][stim]

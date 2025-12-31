@@ -164,14 +164,16 @@
 }
 
 # gets generic data based on the last experience
+.gen_cols <- c(
+  "model", "group", "phase",
+  "tp", "tn", "is_test",
+  "block_size", "trial"
+)
 .get_gen_dat <- function(object) {
   gen_dat <- data.table::as.data.table(object@.last_experience)
   # pick generic columns only
-  gen_dat <- gen_dat[, c(
-    "model", "group", "phase",
-    "tp", "tn", "is_test",
-    "block_size", "trial"
-  ), with = FALSE]
+  sel_cols <- c(.gen_cols, object@.parse_generic_cols)
+  gen_dat <- gen_dat[, sel_cols, with = FALSE]
   gen_dat <- unique(gen_dat)
   gen_dat[, "tie" := seq_len(nrow(gen_dat))]
   gen_dat

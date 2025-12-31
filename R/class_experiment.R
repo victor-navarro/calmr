@@ -318,8 +318,7 @@ setMethod(
           ggplot2::labs(title = plot_name) +
           ggplot2::labs(
             y = .get_y_prettyname(p),
-            colour = .get_scale_prettyname(p),
-            fill = .get_scale_prettyname(p)
+            colour = .get_scale_prettyname(p)
           )
       }
     }

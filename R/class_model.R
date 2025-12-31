@@ -32,6 +32,7 @@ methods::setClass(
     .exp_augmentation_fn = "function",
     .associations = "character",
     .dnames_map = "list",
+    .parse_generic_cols = "character",
     .parse_map = "list",
     .formula_map = "list",
     .plots_map = "list",
@@ -230,8 +231,7 @@ setMethod(
         ggplot2::labs(title = plot_name) +
         ggplot2::labs(
           y = .get_y_prettyname(p),
-          colour = .get_scale_prettyname(p),
-          fill = .get_scale_prettyname(p)
+          colour = .get_scale_prettyname(p)
         )
     }
     plots
