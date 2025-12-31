@@ -83,5 +83,19 @@ get_timings <- function(design, model) {
 }
 
 .model_timings <- function(model) {
-  methods::new(model)@timing_parameters
+  tryCatch(
+    {
+      obj <- methods::new(model)
+      tims <- obj@timing_parameters
+      return(tims)
+    },
+    error = function(e) {
+      stop(paste(
+        sprintf(
+          "Model class '%s' does not have timing_parameters slot.",
+          model
+        ), "Check your model implementation."
+      ), call. = FALSE)
+    }
+  )
 }
