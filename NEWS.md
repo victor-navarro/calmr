@@ -1,3 +1,16 @@
+# calmr 0.8.2
+Support for timed models required expansion of the `CalmrModel` class in order to expose the hacks required for those models.
+
+* Major changes:
+    * Class `CalmrModel` gets three new slots:
+        - `timing_parameters`: A list with `global`, `trial`, `period`, and `transition` parameters. Only required for timed models.
+        - `.exp_augmentation_fn`: A function to augment model experience with additional information. Currently only required for timed models; optional for other models.
+        - `parse_generic_cols`: A concatenation of characters with the name of the columns to resolve trial ties for generic trial data (i.e., when there are 2+ unique entries per trial; e.g., for ANCCR).
+
+* Minor changes:
+    * Removed fill label (unused and raising warnings)
+    * Refactored `.get_gen_dat` to be model agnostic, and accept more "generic" data columns if specified in model class definition.
+
 # calmr 0.8.1
 * Minor patch for ggplot2 v4.0.0 compatibility.
 
