@@ -8,8 +8,11 @@
 #' \item{default_parameters}{A list with the default model parameters}
 #' \item{.internal_states}{A character vector with internal states}
 #' \item{.is_timed}{A logical indicating if the model is timed}
+#' \item{timing_parameters}{A list with timing parameters for timed models}
+#' \item{.exp_augmentation_fn}{A function to augment experiences}
 #' \item{.associations}{A character vector with associations output name}
 #' \item{.dnames_map}{A list with data names mapping for outputs}
+#' \item{.parse_generic_cols}{A character vector with generic columns to parse}
 #' \item{.parse_map}{A list with parse functions for outputs}
 #' \item{.formula_map}{A list with formula mapping for outputs}
 #' \item{.plots_map}{A list with plot functions for outputs}
